@@ -1,0 +1,57 @@
+---
+- name: Proxmox VE Playbook
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Add repositories
+      ansible.builtin.include_role:
+        name: distro-repos
+        apply:
+          become: true
+
+    - name: Install Docker
+      include_role:
+        name: geerlingguy.docker
+        apply:
+          become: true
+      vars:
+        docker_add_repo: false
+        docker_edition: 'ce'
+        docker_packages:
+            - "docker-{{ docker_edition }}"
+            - "docker-{{ docker_edition }}-cli"
+            - "docker-{{ docker_edition }}-rootless-extras"
+        docker_packages_state: latest
+        docker_install_compose_plugin: true
+        docker_compose_package: "docker-compose-plugin"
+        docker_compose_package_state: latest
+        docker_install_compose: false
+        docker_service_enabled: true
+        docker_users: ["{{ ansible_user_id }}"]
+
+    - name: Install packages
+      ansible.builtin.include_role:
+        name: install-packages
+
+    - name: Hold packages
+      ansible.builtin.include_role:
+        name: hold-packages
+
+    - name: Upgrade packages
+      ansible.builtin.include_role:
+        name: install-packages
+
+    - name: Add users and groups
+      ansible.builtin.include_role:
+        name: users-and-groups
+        apply:
+          become: true
+
+    - name: Set a hostname (based on inventory alias)
+      ansible.builtin.include_role:
+        name: hostname
+
+    - name: Sync files
+      ansible.builtin.include_role:
+        name: sync
