@@ -8,10 +8,6 @@
 *.bkp
 *.*~
 
-# Tower runtime roles
-roles/**
-!roles/requirements.yml
-
 # Avoid plain-text passwords
 *pwd*
 *pass*

@@ -1,0 +1,26 @@
+---
+- name: Add DNF repositories
+  when: ansible_distribution == 'Fedora' and ansible_cmdline.ostree is not defined
+  become: true
+
+  block:
+    - name: Add docker-ce repository
+      ansible.builtin.yum_repository:
+        name: docker-ce-stable
+        file: docker-ce
+        description: Docker CE Stable - $basearch
+        baseurl: "https://download.docker.com/linux/{{ ansible_distribution|lower }}/$releasever/$basearch/stable"
+        gpgcheck: yes
+        gpgkey: "https://download.docker.com/linux/{{ ansible_distribution|lower }}/gpg"
+        enabled: yes
+
+    - name: Add Tailscale stable repository
+      ansible.builtin.yum_repository:
+        name: tailscale-stable
+        file: tailscale
+        description: Tailscale stable
+        baseurl: "https://pkgs.tailscale.com/stable/{{ ansible_distribution|lower }}/$basearch"
+        repo_gpgcheck: yes
+        gpgcheck: yes
+        gpgkey: "https://pkgs.tailscale.com/stable/{{ ansible_distribution|lower }}/repo.gpg"
+        enabled: yes

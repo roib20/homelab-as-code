@@ -1,0 +1,7 @@
+---
+- name: "Upgrade YUM packages"
+  become: true
+  ansible.builtin.yum:
+    name: "*"
+    state: latest
+    update_cache: true

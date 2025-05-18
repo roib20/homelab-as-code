@@ -1,0 +1,7 @@
+---
+- name: Hold packages
+  become: true
+  ansible.builtin.dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop: "{{ apt_packages }}"
