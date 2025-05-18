@@ -21,7 +21,7 @@ resource "proxmox_virtual_environment_vm" "truenas" {
   description = "Managed by Terraform"
 
   agent {
-    enabled = false
+    enabled = true
   }
 
   operating_system {
