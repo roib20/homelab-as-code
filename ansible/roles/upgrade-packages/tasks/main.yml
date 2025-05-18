@@ -10,4 +10,4 @@
         file: rpm/dnf-upgrade.yml
 
 - ansible.builtin.include_tasks:
-    file: package.yml
+    file: package/package.yml

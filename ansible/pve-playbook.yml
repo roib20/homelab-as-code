@@ -40,7 +40,7 @@
 
     - name: Upgrade packages
       ansible.builtin.include_role:
-        name: install-packages
+        name: upgrade-packages
 
     - name: Add users and groups
       ansible.builtin.include_role:
