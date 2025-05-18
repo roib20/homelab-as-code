@@ -1,0 +1,15 @@
+---
+- name: Set APT repository priorities
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  become: true
+  block:
+    - name: Set Backports priority
+      ansible.builtin.copy:
+        dest: "/etc/apt/preferences.d/99{{ ansible_distribution|lower }}-backports"
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          Package: *
+          Pin: release n={{ ansible_distribution_release|lower }}-backports
+          Pin-Priority: 900

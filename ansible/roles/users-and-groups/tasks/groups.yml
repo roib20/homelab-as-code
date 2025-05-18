@@ -1,0 +1,22 @@
+---
+# - name: Ensure that necessary groups exist
+#   become: true
+#   ansible.builtin.group:
+#     name: "{{ item }}"
+#     state: present
+#     system: true
+#   loop:
+#     - docker
+
+- name: Ensure group "gdocker" exists with correct gid
+  ansible.builtin.group:
+    name: gdocker
+    state: present
+    system: true
+    gid: 1000
+
+- name: Ensure group "docker" exists with correct gid
+  ansible.builtin.group:
+    name: docker
+    state: present
+    system: true

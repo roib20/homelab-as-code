@@ -1,0 +1,24 @@
+---
+flatpak_packages:
+- org.videolan.VLC
+
+dnf_packages:
+- curl
+- git
+
+apt_packages:
+- curl
+- git
+
+dnf_groups:
+- "@Multimedia"
+- "@sound-and-video"
+- "@Development tools"
+
+dnf5_groups:
+- "@multimedia"
+- "@sound-and-video"
+- "@development-tools"
+
+brew_packages:
+- topgrade

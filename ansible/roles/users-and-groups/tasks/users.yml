@@ -1,0 +1,27 @@
+---
+- name: Add user for running containers
+  become: true
+  ansible.builtin.user:
+    comment: "User for running containers"
+    name: "udocker"
+    uid: 1000
+    password: "!"
+    update_password: on_create    
+    create_home: false
+    shell: /bin/bash
+    system: true
+    groups: ["docker", "gdocker", "render", "video"]
+    append: yes
+
+- name: Add a personal user with a home directory and bash shell
+  become: true
+  ansible.builtin.user:
+    comment: "Personal User"
+    name: "{{ ansible_user_id }}"
+    password: "!"
+    update_password: on_create    
+    create_home: true
+    shell: /bin/bash
+    system: true
+    groups: ["sudo", "docker"]
+    append: yes

@@ -1,0 +1,16 @@
+---
+apt_packages:
+- containerd.io
+- docker-buildx-plugin
+- docker-ce
+- docker-ce-cli
+- docker-ce-rootless-extras
+- docker-compose-plugin
+
+dnf_packages:
+- containerd.io
+- docker-buildx-plugin
+- docker-ce
+- docker-ce-cli
+- docker-ce-rootless-extras
+- docker-compose-plugin
