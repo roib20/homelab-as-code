@@ -83,3 +83,9 @@ variable "username" {
   type        = string
   default     = "ubuntu"
 }
+
+variable "agent" {
+  description = "Enable the QEMU guest agent"
+  type        = bool
+  default     = false
+}
