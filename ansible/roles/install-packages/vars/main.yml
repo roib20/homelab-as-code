@@ -14,11 +14,16 @@ apt_packages:
 - open-iscsi
 - chrony
 - proxmox-kernel-6.14 # https://forum.proxmox.com/tags/opt-in-kernel/
+# Other packages
+- guestfs-tools
 
 dnf_packages:
+# Docker packages
 - containerd.io
 - docker-buildx-plugin
 - docker-ce
 - docker-ce-cli
 - docker-ce-rootless-extras
 - docker-compose-plugin
+# Other packages
+- guestfs-tools
