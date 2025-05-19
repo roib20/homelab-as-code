@@ -43,7 +43,7 @@ resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
   }
 
   agent {
-    enabled = true  # sudo apt-get install --assume-yes qemu-guest-agent
+    enabled = var.agent
   }
 
   operating_system {
@@ -85,5 +85,22 @@ resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
   ##### Network device #####
   network_device {
     bridge = var.bridge
+  }
+}
+
+resource "terraform_data" "qemu-guest-agent" {
+  depends_on = [proxmox_virtual_environment_vm.ubuntu_vm]
+
+  connection {
+    type        = "ssh"
+    host        = var.ipv4_address
+    user        = var.username
+    agent       = true
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update && sudo apt-get install --assume-yes qemu-guest-agent"
+    ]
   }
 }
