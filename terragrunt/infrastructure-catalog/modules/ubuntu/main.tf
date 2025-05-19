@@ -43,7 +43,7 @@ resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
   }
 
   agent {
-    enabled = false
+    enabled = true  # sudo apt-get install --assume-yes qemu-guest-agent
   }
 
   operating_system {
