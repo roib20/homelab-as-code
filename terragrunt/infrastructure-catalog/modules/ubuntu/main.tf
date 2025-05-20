@@ -36,9 +36,9 @@ resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
         address = "${var.ipv4_address}/24"
         gateway = var.ipv4_gateway
       }
-    }
-    ipv6 {
-      address = "dhcp"
+      ipv6 {
+        address = "dhcp"
+      }
     }
     user_account {
       username = var.username
