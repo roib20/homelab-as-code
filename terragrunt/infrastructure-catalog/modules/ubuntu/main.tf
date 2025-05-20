@@ -30,17 +30,20 @@ resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
   tags        = ["terragrunt"]
 
   initialization {
-      datastore_id = var.vm_datastore_id
-      ip_config {
-        ipv4 {
-          address = "${var.ipv4_address}/24"
-          gateway = var.ipv4_gateway
-        }
+    datastore_id = var.vm_datastore_id
+    ip_config {
+      ipv4 {
+        address = "${var.ipv4_address}/24"
+        gateway = var.ipv4_gateway
       }
-      user_account {
-        username = var.username
-        keys     = [trimspace(data.local_file.ssh_public_key.content)]
-      }
+    }
+    ipv6 {
+      address = "dhcp"
+    }
+    user_account {
+      username = var.username
+      keys     = [trimspace(data.local_file.ssh_public_key.content)]
+    }
   }
 
   agent {
