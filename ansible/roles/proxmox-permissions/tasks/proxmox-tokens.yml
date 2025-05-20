@@ -42,4 +42,4 @@
 
   - name: Output formatted Proxmox API token
     debug:
-      msg: "{{ full_tokenid }}!token={{ token_value }}"
+      msg: "{{ full_tokenid }}={{ token_value }}"
