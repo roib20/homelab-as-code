@@ -27,6 +27,7 @@ resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
   machine     = "q35"
   bios        = "ovmf"
   description = "Managed by Terragrunt"
+  tags        = ["terragrunt"]
 
   initialization {
       datastore_id = var.vm_datastore_id

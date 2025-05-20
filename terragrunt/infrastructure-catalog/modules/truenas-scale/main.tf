@@ -23,6 +23,7 @@ resource "proxmox_virtual_environment_vm" "truenas" {
   machine     = "q35"
   bios        = "ovmf"
   description = "Managed by Terragrunt"
+  tags        = ["terragrunt"]
 
   agent {
     enabled = true
