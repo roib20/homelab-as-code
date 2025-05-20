@@ -14,7 +14,7 @@ inputs = {
   iso_datastore_id       = "local"
 
   # VM identity
-  vm_name = ""          # leave empty or set e.g. "truenas"
+  vm_name = ""          # leave empty or set e.g. "ubuntu"
   vm_id   = 4000        # override as needed
 
   # Storage & resources
