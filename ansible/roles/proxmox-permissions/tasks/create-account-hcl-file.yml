@@ -25,5 +25,5 @@
       ansible.builtin.lineinfile:
         path: "{{ target_hcl }}"
         regexp: '^\s*virtual_environment_api_token\s*=.*$'
-        line:  '  virtual_environment_api_token               = "{{ full_tokenid }}!token={{ token_value }}"'
+        line:  '  virtual_environment_api_token               = "{{ full_tokenid }}={{ token_value }}"'
         backrefs: false
