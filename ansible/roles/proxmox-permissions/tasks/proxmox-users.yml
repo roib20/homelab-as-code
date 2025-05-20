@@ -1,0 +1,6 @@
+- name: Create Proxmox user 'terraformer@pve'
+  ansible.builtin.command:
+    cmd: "pveum user add terraformer@pve"
+  register: user_add_result
+  failed_when: user_add_result.rc != 0 and 'already exists' not in user_add_result.stderr
+  changed_when: "'already exists' not in user_add_result.stderr"
