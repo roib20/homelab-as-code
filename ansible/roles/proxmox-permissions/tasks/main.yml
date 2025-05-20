@@ -1,0 +1,15 @@
+---
+- name: Configure Proxmox API Token Authentication
+  become: true
+  block:
+    - ansible.builtin.include_tasks:
+        file: proxmox-users.yml
+    - ansible.builtin.include_tasks:
+        file: proxmox-roles.yml
+    - ansible.builtin.include_tasks:
+        file: proxmox-tokens.yml
+      vars:
+        recreate_token: true
+        hide_token: true
+    - ansible.builtin.include_tasks:
+        file: create-account-hcl-file.yml

@@ -1,0 +1,29 @@
+############################
+#  Ensure local account.hcl
+############################
+- name: Ensure account.hcl exists on control machine
+  delegate_to: localhost
+  become: false
+  block:
+
+    # Paths relative to where the playbook is located
+    - set_fact:
+        example_hcl: "../terragrunt/infrastructure-live/prod/account.hcl.example"
+        target_hcl : "../terragrunt/infrastructure-live/prod/account.hcl"
+
+    # Copy the example if the real file is missing
+    - name: Copy example to account.hcl if it doesn't exist
+      ansible.builtin.copy:
+        src:  "{{ example_hcl }}"
+        dest: "{{ target_hcl }}"
+        remote_src: true             # src is already on localhost
+        force: false                 # don't overwrite if file already exists
+
+    # Replace the virtual_environment_api_token line
+    - name: Inject new API token into account.hcl
+      when: token.changed
+      ansible.builtin.lineinfile:
+        path: "{{ target_hcl }}"
+        regexp: '^\s*virtual_environment_api_token\s*=.*$'
+        line:  '  virtual_environment_api_token               = "{{ full_tokenid }}!token={{ token_value }}"'
+        backrefs: false
