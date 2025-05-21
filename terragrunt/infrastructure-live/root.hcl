@@ -1,6 +1,5 @@
 locals {
-  root = dirname(find_in_parent_folders("root.hcl"))
-  envcommon = "${local.root}/_envcommon"
+  envcommon = "${get_parent_terragrunt_dir()}/_envcommon"
 
   # Automatically load account-level variables
   account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl"))
