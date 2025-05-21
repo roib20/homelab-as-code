@@ -13,7 +13,7 @@ include "root" {
 # Include the envcommon configuration for the component. The envcommon configuration contains settings that are common
 # for the component across all environments.
 include "envcommon" {
-  path = "${dirname(find_in_parent_folders("root.hcl"))}/_envcommon/talos.hcl"
+  path = "${dirname(find_in_parent_folders("root.hcl"))}/_envcommon/talos-vm.hcl"
   # We want to reference the variables from the included config in this configuration, so we expose it.
   expose = true
 }
@@ -28,7 +28,7 @@ locals {
 
 # Configure the module to use in this environment.
 terraform {
-  source = "${get_repo_root()}/terragrunt/infrastructure-catalog/modules/talos"
+  source = "${get_repo_root()}/terragrunt/infrastructure-catalog/modules/talos-vm"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
