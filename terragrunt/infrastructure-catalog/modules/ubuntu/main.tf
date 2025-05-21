@@ -13,7 +13,11 @@ resource "proxmox_virtual_environment_download_file" "ubuntu_cloud_image" {
 }
 
 data "local_file" "ssh_public_key" {
-  filename = "./id_rsa.pub"
+  filename = pathexpand("~/.ssh/id_rsa.pub")
+}
+
+output "ssh_key_content" {
+  value = data.local_file.ssh_public_key.content
 }
 
 resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
