@@ -1,10 +1,18 @@
-# ---------------------------------------------------------------------------------------------------------------------
-# MODULE PARAMETERS
-# These are the variables we have to pass in to use the module. This defines the parameters that are common across all
-# environments.
-# ---------------------------------------------------------------------------------------------------------------------
+include "root" {
+  path = find_in_parent_folders("root.hcl")
+}
+
+locals {
+  # Root "terragrunt" directory, containing "infrastructure-catalog" and "infrastructure-live" directories
+  terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
+}
+
+terraform {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/modules/ubuntu"
+}
+
 inputs = {
-    # Proxmox target
+  # Proxmox target
   node_name = "pve"
 
   # ISO download
@@ -15,7 +23,7 @@ inputs = {
 
   # VM identity
   vm_name = ""          # leave empty or set e.g. "ubuntu"
-  vm_id   = 4000        # override as needed
+  vm_id   = 4001        # override as needed
 
   # Storage & resources
   vm_datastore_id  = "VM"
@@ -23,5 +31,5 @@ inputs = {
   disk_size_gb     = 32
 
   # IPv4
-  ipv4_address = "192.168.1.20"
+  ipv4_address = "192.168.1.21"
 }

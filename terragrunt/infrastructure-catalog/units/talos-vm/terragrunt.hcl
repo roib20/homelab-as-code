@@ -1,14 +1,22 @@
-# ---------------------------------------------------------------------------------------------------------------------
-# MODULE PARAMETERS
-# These are the variables we have to pass in to use the module. This defines the parameters that are common across all
-# environments.
-# ---------------------------------------------------------------------------------------------------------------------
+include "root" {
+  path = find_in_parent_folders("root.hcl")
+}
+
+locals {
+  # Root "terragrunt" directory, containing "infrastructure-catalog" and "infrastructure-live" directories
+  terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
+}
+
+terraform {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/modules/talos-vm"
+}
+
 inputs = {
   # Proxmox target
   node_name = "pve"
 
   # ISO download
-  iso_url                = "https://download.sys.truenas.net/TrueNAS-SCALE-Fangtooth/25.04.0/TrueNAS-SCALE-25.04.0.iso"
+  iso_url                = "https://download.sys.truenas.net/talos-vm-Fangtooth/25.04.0/talos-vm-25.04.0.iso"
   iso_checksum           = "ede23d4c70a7fde6674879346c1307517be9854dc79f6a5e016814226457f359"
   iso_checksum_algorithm = "sha256"
   iso_datastore_id       = "local"
