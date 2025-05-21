@@ -15,6 +15,7 @@ resource "proxmox_virtual_environment_vm" "talos_vm" {
   description = "Managed by Terragrunt"
   tags        = ["terragrunt", "talos"]
   on_boot     = false
+  started     = true
 
   cpu {
     cores = var.cpu_cores

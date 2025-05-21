@@ -83,3 +83,15 @@ variable "ipv4_gateway" {
   type        = string
   default     = "192.168.1.1"
 }
+
+variable "cluster_name" {
+  description = "Talos Cluster"
+  type        = string
+  default     = "talos"
+}
+
+variable "talos_machine_type" {
+  description = "Talos Machine Type, either 'controlplane' or 'worker'"
+  type        = string
+  default     = "controlplane"
+}
