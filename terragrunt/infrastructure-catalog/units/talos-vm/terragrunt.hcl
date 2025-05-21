@@ -16,22 +16,18 @@ inputs = {
   node_name = "pve"
 
   # ISO download
-  iso_url                = "https://download.sys.truenas.net/talos-vm-Fangtooth/25.04.0/talos-vm-25.04.0.iso"
-  iso_checksum           = "ede23d4c70a7fde6674879346c1307517be9854dc79f6a5e016814226457f359"
-  iso_checksum_algorithm = "sha256"
-  iso_datastore_id       = "local"
+  talos_version                      = "v1.10.2"
+  talos_image_schematic_id           = "ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515"
 
   # VM identity
-  vm_name = ""          # leave empty or set e.g. "truenas"
-  vm_id   = 2000        # override as needed
+  vm_name = "talos"          # leave empty or set e.g. "truenas"
+  vm_id   = 4000        # override as needed
 
   # Storage & resources
-  vm_datastore_id  = "TrueNAS"
-  memory_dedicated = 24576
-  disk_size_gb     = 64
+  vm_datastore_id  = "VM"
+  memory_dedicated = 4096
+  disk_size_gb     = 32
 
-  # Networking & PCI passthrough
-  bridge      = "vmbr0"
-  pci_device  = "hostpci0"
-  pci_mapping = "LSI"
+  # IPv4
+  ipv4_address = "192.168.1.20"
 }
