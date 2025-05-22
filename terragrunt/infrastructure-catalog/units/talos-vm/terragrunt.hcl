@@ -13,21 +13,21 @@ terraform {
 
 inputs = {
   # Proxmox target
-  node_name = "pve"
+  node_name = try(values.node_name, "pve")
 
   # ISO download
-  talos_version                      = "v1.10.2"
-  talos_image_schematic_id           = "ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515"
+  talos_version            = try(values.talos_version, "v1.10.2")
+  talos_image_schematic_id = try(values.talos_image_schematic_id, "ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515")
 
   # VM identity
-  vm_name = "talos"          # leave empty or set e.g. "truenas"
-  vm_id   = 4000        # override as needed
+  vm_name = try(values.vm_name, "talos-vm")
+  vm_id   = try(values.vm_id, 4000)
 
   # Storage & resources
-  vm_datastore_id  = "VM"
-  memory_dedicated = 4096
-  disk_size_gb     = 32
+  vm_datastore_id  = try(values.vm_datastore_id, "VM")
+  memory_dedicated = try(values.memory_dedicated, 4096)
+  disk_size_gb     = try(values.disk_size_gb, 32)
 
   # IPv4
-  ipv4_address = "192.168.1.20"
+  ipv4_address = try(values.ipv4_address, "192.168.1.20")
 }
