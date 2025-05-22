@@ -44,66 +44,66 @@ resource "proxmox_virtual_environment_vm" "vm" {
   dynamic "agent" {
     for_each = var.optional_blocks.agent ? [1] : []
     content {
-      enabled = try(var.agent_enabled, false)
-      timeout = try(var.agent_timeout, "15m")
-      trim    = try(var.agent_trim, false)
-      type    = try(var.agent_type, "virtio")
+      enabled = try(agent.value.enabled, false)
+      timeout = try(agent.value.timeout, "15m")
+      trim    = try(agent.value.trim, false)
+      type    = try(agent.value.type, "virtio")
     }
   }
 
   dynamic "amd_sev" {
     for_each = var.optional_blocks.amd_sev ? [1] : []
     content {
-      type            = try(var.amd_sev_type, "std")
-      allow_smt       = try(var.amd_sev_allow_smt, true)
-      kernel_hashes   = try(var.amd_sev_kernel_hashes, false)
-      no_debug        = try(var.amd_sev_no_debug, false)
-      no_key_sharing  = try(var.amd_sev_no_key_sharing, false)
+      type            = try(amd_sev.value.type, "std")
+      allow_smt       = try(amd_sev.value.allow_smt, true)
+      kernel_hashes   = try(amd_sev.value.kernel_hashes, false)
+      no_debug        = try(amd_sev.value.no_debug, false)
+      no_key_sharing  = try(amd_sev.value.no_key_sharing, false)
     }
   }
 
   dynamic "audio_device" {
     for_each = var.optional_blocks.audio_device ? [1] : []
     content {
-      device  = try(var.audio_device_device, "intel-hda")
-      driver  = try(var.audio_device_driver, "spice")
-      enabled = try(var.audio_device_enabled, true)
+      device  = try(audio_device.value.device, "intel-hda")
+      driver  = try(audio_device.value.driver, "spice")
+      enabled = try(audio_device.value.enabled, true)
     }
   }
 
   dynamic "cdrom" {
     for_each = var.optional_blocks.cdrom ? [1] : []
     content {
-      enabled   = try(var.cdrom_enabled, false)
-      file_id   = try(var.cdrom_file_id, null)
-      interface = try(var.cdrom_interface, "ide0")
+      enabled   = try(cdrom.value.enabled, false)
+      file_id   = try(cdrom.value.file_id, null)
+      interface = try(cdrom.value.interface, "ide0")
     }
   }
 
   dynamic "clone" {
     for_each = var.optional_blocks.clone ? [1] : []
     content {
-      datastore_id = try(var.clone_datastore_id, null)
-      node_name    = try(var.clone_node_name, null)
-      retries      = try(var.clone_retries, null)
-      vm_id        = var.clone_source_vm_id
-      full         = try(var.clone_full, true)
+      datastore_id = try(clone.value.datastore_id, null)
+      node_name    = try(clone.value.node_name, null)
+      retries      = try(clone.value.retries, null)
+      vm_id        = clone.value.source_vm_id
+      full         = try(clone.value.full, true)
     }
   }
 
   dynamic "cpu" {
     for_each = var.optional_blocks.cpu ? [1] : []
     content {
-      architecture = try(var.cpu_architecture, "x86_64")
-      cores        = try(var.cpu_cores, 1)
-      flags        = try(var.cpu_flags, null)
-      hotplugged   = try(var.cpu_hotplugged, 0)
-      limit        = try(var.cpu_limit, 0)
-      numa         = try(var.cpu_numa, false)
-      sockets      = try(var.cpu_sockets, 1)
-      type         = try(var.cpu_type, "x86-64-v2-AES")
-      units        = try(var.cpu_units, 1024)
-      affinity     = try(var.cpu_affinity, null)
+      architecture = try(cpu.value.architecture, "x86_64")
+      cores        = try(cpu.value.cores, 1)
+      flags        = try(cpu.value.flags, null)
+      hotplugged   = try(cpu.value.hotplugged, 0)
+      limit        = try(cpu.value.limit, 0)
+      numa         = try(cpu.value.numa, false)
+      sockets      = try(cpu.value.sockets, 1)
+      type         = try(cpu.value.type, "x86-64-v2-AES")
+      units        = try(cpu.value.units, 1024)
+      affinity     = try(cpu.value.affinity, null)
     }
   }
 
@@ -143,10 +143,10 @@ resource "proxmox_virtual_environment_vm" "vm" {
   dynamic "efi_disk" {
     for_each = var.optional_blocks.efi_disk && var.efi_disk != null ? [1] : []
     content {
-      datastore_id      = try(var.efi_disk.datastore_id, "local-lvm")
-      file_format       = try(var.efi_disk.file_format, "raw")
-      type              = try(var.efi_disk.type, "2m")
-      pre_enrolled_keys = try(var.efi_disk.pre_enrolled_keys, false)
+      datastore_id      = try(efi_disk.value.datastore_id, "local-lvm")
+      file_format       = try(efi_disk.value.file_format, "raw")
+      type              = try(efi_disk.value.type, "2m")
+      pre_enrolled_keys = try(efi_disk.value.pre_enrolled_keys, false)
     }
   }
 
@@ -174,24 +174,24 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "initialization" {
-    for_each = var.optional_blocks.initialization ? [1] : []
+    for_each = var.optional_blocks.initialization && var.initialization != null ? [var.initialization] : []
     content {
-      datastore_id = try(var.initialization.datastore_id, "local-lvm")
-      interface    = try(var.initialization.interface, "ide2")
+      datastore_id = try(initialization.value.datastore_id, "local-lvm")
+      interface    = try(initialization.value.interface, "ide2")
 
       dynamic "dns" {
-        for_each = lookup(var.initialization, "dns", null) != null ? [1] : []
+        for_each = initialization.value.dns != null ? [1] : []
         content {
-          domain  = try(var.initialization.dns.domain, null)
-          servers = try(var.initialization.dns.servers, [])
+          domain  = try(initialization.value.dns.domain, null)
+          servers = try(initialization.value.dns.servers, [])
         }
       }
 
       dynamic "ip_config" {
-        for_each = try(var.initialization.ip_config, [])
+        for_each = try(initialization.value.ip_config, [])
         content {
           dynamic "ipv4" {
-            for_each = lookup(ip_config.value, "ipv4", null) != null ? [1] : []
+            for_each = try(ip_config.value.ipv4 != null ? [1] : [], [])
             content {
               address = try(ip_config.value.ipv4.address, null)
               gateway = try(ip_config.value.ipv4.gateway, null)
@@ -199,7 +199,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
           }
 
           dynamic "ipv6" {
-            for_each = lookup(ip_config.value, "ipv6", null) != null ? [1] : []
+            for_each = try(ip_config.value.ipv6 != null ? [1] : [], [])
             content {
               address = try(ip_config.value.ipv6.address, null)
               gateway = try(ip_config.value.ipv6.gateway, null)
@@ -209,29 +209,29 @@ resource "proxmox_virtual_environment_vm" "vm" {
       }
 
       dynamic "user_account" {
-        for_each = lookup(var.initialization, "user_account", null) != null ? [1] : []
+        for_each = initialization.value.user_account != null ? [1] : []
         content {
-          username = try(var.initialization.user_account.username, null)
-          password = try(var.initialization.user_account.password, null)
-          keys     = try(var.initialization.user_account.keys, null)
+          username = try(initialization.value.user_account.username, null)
+          password = try(initialization.value.user_account.password, null)
+          keys     = try(initialization.value.user_account.keys, null)
         }
       }
 
-      network_data_file_id = try(var.initialization.network_data_file_id, null)
-      user_data_file_id    = try(var.initialization.user_data_file_id, null)
-      vendor_data_file_id  = try(var.initialization.vendor_data_file_id, null)
-      meta_data_file_id    = try(var.initialization.meta_data_file_id, null)
+      network_data_file_id = try(initialization.value.network_data_file_id, null)
+      user_data_file_id    = try(initialization.value.user_data_file_id, null)
+      vendor_data_file_id  = try(initialization.value.vendor_data_file_id, null)
+      meta_data_file_id    = try(initialization.value.meta_data_file_id, null)
     }
   }
 
   dynamic "memory" {
     for_each = var.optional_blocks.memory ? [1] : []
     content {
-      dedicated      = try(var.memory.dedicated, 512)
-      floating       = try(var.memory.floating, 0)
-      shared         = try(var.memory.shared, 0)
-      hugepages      = try(var.memory.hugepages, null)
-      keep_hugepages = try(var.memory.keep_hugepages, false)
+      dedicated      = try(memory.value.dedicated, 512)
+      floating       = try(memory.value.floating, 0)
+      shared         = try(memory.value.shared, 0)
+      hugepages      = try(memory.value.hugepages, null)
+      keep_hugepages = try(memory.value.keep_hugepages, false)
     }
   }
 
@@ -239,7 +239,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
     for_each = var.optional_blocks.numa ? [1] : []
     content {
       device     = numa.value.device
-      cpus       = numa.value.cpus
+      cpus       = numa.value.cpu.cpus
       memory     = numa.value.memory
       hostnodes  = try(numa.value.hostnodes, null)
       policy     = try(numa.value.policy, "preferred")
@@ -266,9 +266,9 @@ resource "proxmox_virtual_environment_vm" "vm" {
   dynamic "rng" {
     for_each = var.optional_blocks.rng ? [1] : []
     content {
-      source     = try(var.rng_source, "/dev/urandom")
-      max_bytes  = try(var.rng_max_bytes, 1024)
-      period     = try(var.rng_period, 1000)
+      source     = try(rng.value.source, "/dev/urandom")
+      max_bytes  = try(rng.value.max_bytes, 1024)
+      period     = try(rng.value.period, 1000)
     }
   }
 
@@ -295,26 +295,26 @@ resource "proxmox_virtual_environment_vm" "vm" {
   dynamic "startup" {
     for_each = var.optional_blocks.startup ? [1] : []
     content {
-      order      = var.startup_order
-      up_delay   = try(var.startup_up_delay, 0)
-      down_delay = try(var.startup_down_delay, 0)
+      order      = startup.value.order
+      up_delay   = try(startup.value.up_delay, 0)
+      down_delay = try(startup.value.down_delay, 0)
     }
   }
 
   dynamic "tpm_state" {
     for_each = var.optional_blocks.tpm_state ? [1] : []
     content {
-      datastore_id = try(var.tpm_state.datastore_id, "local-lvm")
-      version      = try(var.tpm_state.version, "v2.0")
+      datastore_id = try(tpm_state.value.datastore_id, "local-lvm")
+      version      = try(tpm_state.value.version, "v2.0")
     }
   }
 
   dynamic "vga" {
     for_each = var.optional_blocks.vga ? [1] : []
     content {
-      memory    = try(var.vga_memory, 16)
-      type      = try(var.vga_type, "std")
-      clipboard = try(var.vga_clipboard, null)
+      memory    = try(vga.value.memory, 16)
+      type      = try(vga.value.type, "std")
+      clipboard = try(vga.value.clipboard, null)
     }
   }
 
@@ -332,9 +332,9 @@ resource "proxmox_virtual_environment_vm" "vm" {
   dynamic "watchdog" {
     for_each = var.optional_blocks.watchdog ? [1] : []
     content {
-      enabled = try(var.watchdog_enabled, false)
-      model   = try(var.watchdog_model, "i6300esb")
-      action  = try(var.watchdog_action, "none")
+      enabled = try(watchdog.value.enabled, false)
+      model   = try(watchdog.value.model, "i6300esb")
+      action  = try(watchdog.value.action, "none")
     }
   }
 }
