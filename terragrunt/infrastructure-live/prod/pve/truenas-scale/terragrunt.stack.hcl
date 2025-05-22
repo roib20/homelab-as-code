@@ -16,7 +16,7 @@ unit "truenas-scale" {
 
   values = {
     node_name = "${local.node_name}"
-    vm_name   = "truenas-scale"
-    vm_id     = 2000
+    # vm_name   = "truenas-scale"
+    vm_id     = 2001
   }
 }
