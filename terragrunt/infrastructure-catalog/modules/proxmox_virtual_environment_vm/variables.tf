@@ -188,34 +188,6 @@ variable "hook_script_file_id" {
   default     = null
 }
 
-# Control structure for dynamic blocks
-variable "optional_blocks" {
-  description = "Map of booleans to enable optional dynamic blocks"
-  type = object({
-    agent           = optional(bool, false)
-    amd_sev         = optional(bool, false)
-    audio_device    = optional(bool, false)
-    cdrom           = optional(bool, false)
-    clone           = optional(bool, false)
-    cpu             = optional(bool, false)
-    disk            = optional(bool, false)
-    efi_disk        = optional(bool, false)
-    hostpci         = optional(bool, false)
-    initialization  = optional(bool, false)
-    memory          = optional(bool, false)
-    network_device  = optional(bool, false)
-    numa            = optional(bool, false)
-    rng             = optional(bool, false)
-    serial_device   = optional(bool, false)
-    smbios          = optional(bool, false)
-    startup         = optional(bool, false)
-    tpm_state       = optional(bool, false)
-    usb             = optional(bool, false)
-    vga             = optional(bool, false)
-    watchdog        = optional(bool, false)
-  })
-}
-
 # ----- Agent block -----
 variable "agent" {
   description = "(Optional) The QEMU agent configuration."
@@ -253,16 +225,16 @@ variable "audio_device" {
 }
 
 # ----- Clone block -----
-variable "clones" {
-  description = "(Optional) List of cloning configurations."
-  type = list(object({
+variable "clone" {
+  description = "(Optional) The cloning configuration."
+  type = object({
     datastore_id = optional(string)      # (Optional) The identifier for the target datastore.
-    node_name    = optional(string)      # (Optional) The name of the source node (leave blank, if equal to the node_name argument).
-    retries      = optional(number)      # (Optional) Number of retries in Proxmox for clone vm. Sometimes Proxmox errors with timeout when creating multiple clones at once.
-    vm_id        = number                # (Required) The identifier for the source VM.
-    full         = optional(bool, true)  # (Optional) Full or linked clone (defaults to true).
-  }))
-  default = []
+    node_name    = optional(string)      # (Optional) The name of the source node (leave blank if equal to the `node_name` argument).
+    retries      = optional(number)      # (Optional) Number of retries in Proxmox for clone VM. Sometimes Proxmox errors with timeout when creating multiple clones at once.
+    source_vm_id = number                # (Required) The identifier for the source VM.
+    full         = optional(bool, true)  # (Optional) Full or linked clone (defaults to `true`).
+  })
+  default = null
 }
 
 # ----- CPU block -----
@@ -353,7 +325,7 @@ variable "hostpci_devices" {
   default = []
 }
 
-# ----- Network Device block -----
+# ----- Network Devices block -----
 variable "network_devices" {
   description = "(Optional) List of network device configurations."
   type = list(object({
@@ -370,6 +342,17 @@ variable "network_devices" {
     trunks       = optional(string)            # (Optional) Semicolon-separated list of VLAN trunks, e.g. `"10;20;30"`.
   }))
   default = []
+}
+
+# ----- RNG block -----
+variable "rng" {
+  description = "(Optional) The random number generator configuration. Can only be set by `root@pam`."
+  type = object({
+    source     = optional(string, "/dev/urandom")  # (Optional) The file on the host to gather entropy from (defaults to `/dev/urandom`).
+    max_bytes  = optional(number, 1024)            # (Optional) Maximum bytes of entropy injected into the guest every `period` milliseconds (defaults to `1024`).
+    period     = optional(number, 1000)            # (Optional) Interval in milliseconds after which the entropy quota is reset (defaults to `1000`).
+  })
+  default = null
 }
 
 # ----- NUMA block -----
@@ -476,6 +459,28 @@ variable "smbios" {
     sku          = optional(string)        # (Optional) SKU number.
     uuid         = optional(string)        # (Optional) UUID (defaults to randomly generated).
     version      = optional(string)        # (Optional) Version string.
+  })
+  default = null
+}
+
+# ----- Startup block -----
+variable "startup" {
+  description = "(Optional) Defines startup and shutdown behavior of the VM."
+  type = object({
+    order      = number               # (Required) A non-negative number defining the general startup order.
+    up_delay   = optional(number, 0)  # (Optional) Delay in seconds before the next VM is started (defaults to `0`).
+    down_delay = optional(number, 0)  # (Optional) Delay in seconds before the next VM is shut down (defaults to `0`).
+  })
+  default = null
+}
+
+# ----- VGA block -----
+variable "vga" {
+  description = "(Optional) The VGA configuration."
+  type = object({
+    memory    = optional(number, 16)     # (Optional) The VGA memory in megabytes (defaults to `16`).
+    type      = optional(string, "std")  # (Optional) The VGA type (defaults to `std`). Valid values include `std`, `virtio`, `qxl`, `vmware`, etc.
+    clipboard = optional(string)         # (Optional) Enable VNC clipboard by setting to `vnc`.
   })
   default = null
 }
