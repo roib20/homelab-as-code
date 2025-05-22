@@ -241,7 +241,7 @@ variable "clone" {
 variable "cpu" {
   description = "(Optional) The CPU configuration."
   type = object({
-    architecture = optional(string, "x86_64")         # (Optional) The CPU architecture (defaults to `x86_64`).
+    architecture = optional(string, null)             # (Optional) The CPU architecture. NOTE: Can only be set by the root account.
     cores        = optional(number, 1)                # (Optional) The number of CPU cores (defaults to `1`).
     flags        = optional(list(string))             # (Optional) The CPU flags.
     hotplugged   = optional(number, 0)                # (Optional) The number of hotplugged vCPUs (defaults to `0`).
