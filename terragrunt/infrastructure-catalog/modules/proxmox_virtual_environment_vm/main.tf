@@ -42,7 +42,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   # ------------------------------
 
   dynamic "agent" {
-    for_each = var.optional_blocks.agent ? [1] : []
+    for_each = var.agent != null ? [var.agent] : []
     content {
       enabled = try(agent.value.enabled, false)
       timeout = try(agent.value.timeout, "15m")
@@ -52,7 +52,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "amd_sev" {
-    for_each = var.optional_blocks.amd_sev ? [1] : []
+    for_each = var.amd_sev != null ? [var.amd_sev] : []
     content {
       type            = try(amd_sev.value.type, "std")
       allow_smt       = try(amd_sev.value.allow_smt, true)
@@ -63,7 +63,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "audio_device" {
-    for_each = var.optional_blocks.audio_device ? [1] : []
+    for_each = var.audio_device != null ? [var.audio_device] : []
     content {
       device  = try(audio_device.value.device, "intel-hda")
       driver  = try(audio_device.value.driver, "spice")
@@ -72,7 +72,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "cdrom" {
-    for_each = var.optional_blocks.cdrom ? [1] : []
+    for_each = var.cdrom != null ? [var.cdrom] : []
     content {
       enabled   = try(cdrom.value.enabled, false)
       file_id   = try(cdrom.value.file_id, null)
@@ -81,7 +81,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "clone" {
-    for_each = var.optional_blocks.clone ? [1] : []
+    for_each = var.clone != null ? [var.clone] : []
     content {
       datastore_id = try(clone.value.datastore_id, null)
       node_name    = try(clone.value.node_name, null)
@@ -92,9 +92,9 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "cpu" {
-    for_each = var.optional_blocks.cpu ? [1] : []
+    for_each = var.cpu != null ? [var.cpu] : []
     content {
-      architecture = try(cpu.value.architecture, "x86_64")
+      architecture = try(cpu.value.architecture, null)
       cores        = try(cpu.value.cores, 1)
       flags        = try(cpu.value.flags, null)
       hotplugged   = try(cpu.value.hotplugged, 0)
@@ -108,7 +108,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "disk" {
-    for_each = var.optional_blocks.disk ? var.disks : []
+    for_each = var.disks != null && length(var.disks) > 0 ? var.disks : []
     content {
       aio               = try(disk.value.aio, "io_uring")
       backup            = try(disk.value.backup, true)
@@ -141,7 +141,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "efi_disk" {
-    for_each = var.optional_blocks.efi_disk && var.efi_disk != null ? [1] : []
+    for_each = var.efi_disk != null ? [var.efi_disk] : []
     content {
       datastore_id      = try(efi_disk.value.datastore_id, "local-lvm")
       file_format       = try(efi_disk.value.file_format, "raw")
@@ -151,7 +151,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "hostpci" {
-    for_each = var.optional_blocks.hostpci ? var.hostpci_devices : []
+    for_each = var.hostpci_devices != null && length(var.hostpci_devices) > 0 ? var.hostpci_devices : []
     content {
       device   = hostpci.value.device
       id       = try(hostpci.value.id, null)
@@ -165,7 +165,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "usb" {
-    for_each = var.optional_blocks.usb ? var.usb_devices : []
+    for_each = var.usb_devices != null && length(var.usb_devices) > 0 ? var.usb_devices : []
     content {
       host    = try(usb.value.host, null)
       mapping = try(usb.value.mapping, null)
@@ -174,7 +174,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "initialization" {
-    for_each = var.optional_blocks.initialization && var.initialization != null ? [var.initialization] : []
+    for_each = var.initialization != null ? [var.initialization] : []
     content {
       datastore_id = try(initialization.value.datastore_id, "local-lvm")
       interface    = try(initialization.value.interface, "ide2")
@@ -225,7 +225,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "memory" {
-    for_each = var.optional_blocks.memory ? [1] : []
+    for_each = var.memory != null ? [var.memory] : []
     content {
       dedicated      = try(memory.value.dedicated, 512)
       floating       = try(memory.value.floating, 0)
@@ -236,7 +236,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "numa" {
-    for_each = var.optional_blocks.numa ? [1] : []
+    for_each = var.numa != null ? [var.numa] : []
     content {
       device     = numa.value.device
       cpus       = numa.value.cpu.cpus
@@ -247,7 +247,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "network_device" {
-    for_each = var.optional_blocks.network_device ? var.network_devices : []
+    for_each = var.network_devices != null && length(var.network_devices) > 0 ? var.network_devices : []
     content {
       bridge      = try(network_device.value.bridge, "vmbr0")
       disconnected = try(network_device.value.disconnected, false)
@@ -264,7 +264,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "rng" {
-    for_each = var.optional_blocks.rng ? [1] : []
+    for_each = var.rng != null ? [var.rng] : []
     content {
       source     = try(rng.value.source, "/dev/urandom")
       max_bytes  = try(rng.value.max_bytes, 1024)
@@ -273,14 +273,14 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "serial_device" {
-    for_each = var.optional_blocks.serial_device ? var.serial_devices : []
+    for_each = var.serial_devices != null && length(var.serial_devices) > 0 ? var.serial_devices : []
     content {
       device = try(serial_device.value.device, "socket")
     }
   }
 
   dynamic "smbios" {
-    for_each = var.optional_blocks.smbios ? [1] : []
+    for_each = var.smbios != null ? [var.smbios] : []
     content {
       family       = try(serial_device.value.family)
       manufacturer = try(serial_device.value.manufacturer)
@@ -293,7 +293,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "startup" {
-    for_each = var.optional_blocks.startup ? [1] : []
+    for_each = var.startup != null ? [var.startup] : []
     content {
       order      = startup.value.order
       up_delay   = try(startup.value.up_delay, 0)
@@ -302,7 +302,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "tpm_state" {
-    for_each = var.optional_blocks.tpm_state ? [1] : []
+    for_each = var.tpm_state != null ? [var.tpm_state] : []
     content {
       datastore_id = try(tpm_state.value.datastore_id, "local-lvm")
       version      = try(tpm_state.value.version, "v2.0")
@@ -310,7 +310,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "vga" {
-    for_each = var.optional_blocks.vga ? [1] : []
+    for_each = var.vga != null ? [var.vga] : []
     content {
       memory    = try(vga.value.memory, 16)
       type      = try(vga.value.type, "std")
@@ -319,22 +319,13 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   dynamic "virtiofs" {
-    for_each = var.virtiofs != null ? var.virtiofs : []
+    for_each = var.virtiofs != null && length(var.virtiofs) > 0 ? var.virtiofs : []
     content {
       mapping       = virtiofs.value.mapping
       cache         = try(virtiofs.value.cache, null)
       direct_io     = try(virtiofs.value.direct_io, null)
       expose_acl    = try(virtiofs.value.expose_acl, null)
       expose_xattr  = try(virtiofs.value.expose_xattr, null)
-    }
-  }
-
-  dynamic "watchdog" {
-    for_each = var.optional_blocks.watchdog ? [1] : []
-    content {
-      enabled = try(watchdog.value.enabled, false)
-      model   = try(watchdog.value.model, "i6300esb")
-      action  = try(watchdog.value.action, "none")
     }
   }
 }
