@@ -27,20 +27,21 @@ dependency "download_file" {
   }
 }
 
-dependency "cloud-config" {
-  config_path = "../cloud-config"
-
-  mock_outputs = {
-      user_data_cloud_config = "user-data-cloud-config.yaml"
-  }
-}
-
 inputs = {
   # Proxmox target
   node_name = try(values.node_name, "pve")
 
   agent = {
     enabled = local.agent
+  }
+
+  bios = "ovmf"
+
+  # EFI Disk
+  efi_disk = {
+    datastore_id      = try(values.vm_datastore_id, "VM")
+    type              = "4m"
+    pre_enrolled_keys = true
   }
 
   stop_on_destroy = local.agent ? false : true
@@ -71,26 +72,4 @@ inputs = {
       size         = try(values.disk_size_gb, 64)
     },
   ]
-
-  # Cloud-init
-  initialization = {
-    datastore_id = try(values.vm_datastore_id, "VM")
-    # user_data_file_id = dependency.cloud_init_config.outputs.user_data_cloud_config
-    ip_config = [
-      {
-        ipv4 = {
-          address = "${try("${values.ipv4_address}", "192.168.1.20")}/24"
-          gateway = try(values.ipv4_gateway, "192.168.1.1")
-        }
-        ipv6 = {
-          address = "dhcp"
-        }
-      }
-    ]
-    user_account = {
-      username = try(values.username, "user")
-      password = "123"
-      keys     = "${local.ssh_public_key}"
-    }
-  }
 }
