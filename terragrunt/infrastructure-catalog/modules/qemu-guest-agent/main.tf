@@ -9,8 +9,6 @@ resource "terraform_data" "qemu-guest-agent" {
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update && sudo apt-get upgrade --assume-yes && sudo apt-get install --assume-yes qemu-guest-agent",
-      "sudo systemctl enable qemu-guest-agent",
-      "sudo systemctl start qemu-guest-agent",
       "sudo systemctl reboot",
     ]
   }

@@ -37,6 +37,10 @@ inputs = {
   # Proxmox target
   node_name = try(values.node_name, "pve")
 
+  agent = {
+    enabled = true
+  }
+
   # VM identity
   vm_name = try(values.vm_name, null)      # leave empty or override via values
   vm_id   = try(values.vm_id, null)        # leave empty or override via values
