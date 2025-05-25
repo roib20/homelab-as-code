@@ -213,7 +213,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
         content {
           username = try(initialization.value.user_account.username, null)
           password = try(initialization.value.user_account.password, null)
-          keys     = try(initialization.value.user_account.keys, null)
+          keys     = [trimspace(try(initialization.value.user_account.keys, null))]
         }
       }
 

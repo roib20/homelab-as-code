@@ -23,10 +23,10 @@ unit "download_file" {
   }
 }
 
-unit "truenas-scale" {
+unit "vm" {
   source = "${local.terragrunt_dir}/infrastructure-catalog/units/truenas-scale"
 
-  path = "truenas-scale"
+  path = "vm"
 
   values = {
     node_name = "${local.node_name}"

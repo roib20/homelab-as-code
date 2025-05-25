@@ -7,6 +7,19 @@ locals {
 
   # Root "terragrunt" directory, containing "infrastructure-catalog" and "infrastructure-live" directories
   terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
+
+  ipv4_address = "192.168.1.22"
+}
+
+unit "cloud-config" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-config"
+
+  path = "cloud-config"
+
+  values = {
+    node_name = "${local.node_name}"
+    user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
+  }
 }
 
 unit "download_file" {
@@ -23,12 +36,25 @@ unit "download_file" {
   }
 }
 
-unit "ubuntu" {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/units/ubuntu"
+unit "vm" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-init-vm"
 
-  path = "ubuntu"
+  path = "vm"
 
   values = {
     node_name = "${local.node_name}"
+    ipv4_address = "${local.ipv4_address}"
+  }
+}
+
+unit "qemu-guest-agent" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/qemu-guest-agent"
+
+  path = "qemu-guest-agent"
+
+  values = {
+    node_name = "${local.node_name}"
+    host = "${local.ipv4_address}"
+    user = "user"
   }
 }
