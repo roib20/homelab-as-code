@@ -69,12 +69,15 @@ inputs = {
 
   disks = [
     {
-      interface    = "virtio0"
-      file_id      = dependency.download_file.outputs.downloaded_file_id
+      interface    = "scsi0"
       datastore_id = try(values.vm_datastore_id, "VM")
       iothread     = true
       discard      = "on"
       size         = try(values.disk_size_gb, 64)
     },
   ]
+
+  cdrom = {
+    file_id      = dependency.download_file.outputs.downloaded_file_id
+  }
 }
