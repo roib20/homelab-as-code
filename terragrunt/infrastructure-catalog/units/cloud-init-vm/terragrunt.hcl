@@ -5,6 +5,8 @@ include "root" {
 locals {
   # Root "terragrunt" directory, containing "infrastructure-catalog" and "infrastructure-live" directories
   terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
+
+  ssh_public_key = file(pathexpand("~/.ssh/id_rsa.pub"))
 }
 
 terraform {
@@ -23,18 +25,28 @@ dependency "download_file" {
   }
 }
 
+dependency "cloud-config" {
+  config_path = "../cloud-config"
+
+  mock_outputs = {
+      user_data_cloud_config = "user-data-cloud-config.yaml"
+  }
+}
+
 inputs = {
   # Proxmox target
   node_name = try(values.node_name, "pve")
 
   # VM identity
-  vm_name = try(values.vm_name, "talos-vm")
-  vm_id   = try(values.vm_id, 4000)
+  vm_name = try(values.vm_name, null)      # leave empty or override via values
+  vm_id   = try(values.vm_id, null)        # leave empty or override via values
 
-  # Storage & resources
-  vm_datastore_id  = try(values.vm_datastore_id, "VM")
-  memory_dedicated = try(values.memory_dedicated, 4096)
-  disk_size_gb     = try(values.disk_size_gb, 32)
+  # Networking
+  network_devices = [
+    {
+      bridge = try(values.bridge, "vmbr0")
+    },
+  ]
 
   disks = [
     {
@@ -46,4 +58,25 @@ inputs = {
       size         = try(values.disk_size_gb, 64)
     },
   ]
+
+  # Cloud-init
+  initialization = {
+    datastore_id = try(values.vm_datastore_id, "VM")
+    # user_data_file_id = dependency.cloud_init_config.outputs.user_data_cloud_config
+    ip_config = [
+      {
+        ipv4 = {
+          address = "${try("${values.ipv4_address}", "192.168.1.20")}/24"
+          gateway = try(values.ipv4_gateway, "192.168.1.1")
+        }
+        ipv6 = {
+          address = "dhcp"
+        }
+      }
+    ]
+    user_account = {
+      username = try(values.username, "user")
+      keys     = "${local.ssh_public_key}"
+    }
+  }
 }
