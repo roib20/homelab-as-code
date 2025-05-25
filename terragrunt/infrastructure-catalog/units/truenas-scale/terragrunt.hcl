@@ -73,23 +73,12 @@ inputs = {
     },
   ]
 
-  # Optional block toggles
-  optional_blocks = {
-    agent     = true
-    cpu       = true
-    memory    = true
-    disk      = true
-    efi_disk  = true
-    hostpci   = true
-    network_device = true
-  }
-
-  # CPU (example values; customize if needed)
+  # CPU
   cpu = {
     type = "host"
   }
 
-  # EFI Disk (optional customization)
+  # EFI Disk
   efi_disk = {
     datastore_id      = try(values.vm_datastore_id, "TrueNAS")
     type              = "4m"
