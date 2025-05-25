@@ -61,6 +61,11 @@ inputs = {
     type = "host"
   }
 
+  # Memory
+  memory = {
+    dedicated = 2048
+  }
+
   disks = [
     {
       interface    = "virtio0"
