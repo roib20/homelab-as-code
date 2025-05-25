@@ -81,11 +81,13 @@ resource "proxmox_virtual_environment_vm" "truenas" {
     bridge = var.bridge
   }
 
-  ##### PCI passthrough #####
-  hostpci {
-    device  = var.pci_device
-    mapping = var.pci_mapping
-    pcie    = true
-    rombar  = true
+  dynamic "hostpci" {
+    for_each = var.enable_pci_passthrough ? [1] : []
+    content {
+      device  = var.pci_device
+      mapping = var.pci_mapping
+      pcie    = true
+      rombar  = true
+    }
   }
 }

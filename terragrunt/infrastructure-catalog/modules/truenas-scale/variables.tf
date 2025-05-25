@@ -77,3 +77,8 @@ variable "pci_mapping" {
   type        = string
   default     = "LSI"
 }
+
+variable "enable_pci_passthrough" {
+  type    = bool
+  default = false
+}
