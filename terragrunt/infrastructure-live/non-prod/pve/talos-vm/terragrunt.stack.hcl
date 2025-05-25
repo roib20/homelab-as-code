@@ -24,10 +24,10 @@ unit "download_file" {
   }
 }
 
-unit "talos-vm" {
+unit "vm" {
   source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
 
-  path = "talos-vm"
+  path = "vm"
 
   values = {
     node_name = "${local.node_name}"
