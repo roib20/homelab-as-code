@@ -27,7 +27,7 @@ Other settings are kept mostly default or sane defaults/fallbacks, requiring min
 7. Continue with the installation. I will need to choose a password for the default user (for security reasons, a password is not included in the public `preseed.cfg` file).
 8. Assuming the preseed file is correct and the correct drive exists on the system, the rest of the installation should continue automatically with no further input needed.
 9. Once the installation completes succefuly, Debian will automatically reboot. If the UEFI boot order is correct, the new Debian installation will automatically boot.
-10. **I** can login into the system for its DHCP IP using my SSH keys.
+10. **I** can login into the system from its DHCP IP using my SSH keys.
 
 ## Other solutions for automating installs
 
@@ -43,4 +43,4 @@ I considered other solutions for automating OS installs:
 
 * [**bootc**](https://bootc-dev.github.io/bootc/): This is an exciting "bootable containers" project which I experimented a bit with and hope to work more with in the future. Over on the Fedora and Red Hat side, bootc is progressing rapidly. I experimented with [uBlue](https://universal-blue.org/) and even ran a custom built [Bluefin](https://projectbluefin.io/) desktop for a few months (built with [ublue-os/image-template](https://github.com/ublue-os/image-template) and later [BlueBuild](https://blue-build.org/)). I hope Debian also supports bootc in the future more directly.
 
-* [**PXE**]: This in theory allows fully automating installation without even touching the machine. This may be something I experiment with in the future in my homelab.
+* **PXE**: This in theory allows fully automating installation without even touching the machine. This may be something I experiment with in the future in my homelab.
