@@ -1,6 +1,6 @@
 locals {
   # Environment, such as "prod" or "non-prod"
-  environment = "prod"
+  environment = "non-prod"
   
   # Root "terragrunt/infrastructure-live" directory, containing "prod" and "non-prod" directories
   root_dir = "${dirname(find_in_parent_folders("root.hcl"))}"
