@@ -69,7 +69,7 @@ inputs = {
 
   disks = [
     {
-      interface    = "scsi0"
+      interface    = "virtio0"
       datastore_id = try(values.vm_datastore_id, "VM")
       iothread     = true
       discard      = "on"
