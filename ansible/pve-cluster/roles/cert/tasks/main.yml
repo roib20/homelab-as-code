@@ -1,0 +1,4 @@
+---
+- name: Use Tailscale to generate a certificate for the Proxmox host and install it in the Proxmox certificate store. 
+  ansible.builtin.include_tasks:
+    file: tailscale-pve-cert.yml

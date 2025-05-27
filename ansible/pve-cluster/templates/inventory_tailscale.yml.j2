@@ -1,0 +1,16 @@
+---
+all:
+  children:
+{% for group in pve_groups %}
+    {{ group }}:
+      hosts:
+{%   for host in groups[group] | default([]) %}
+        {{ hostvars[host].tailscale_node_hostname_short }}:
+          ansible_host: {{ hostvars[host].tailscale_node_hostname_short }}
+{%   endfor %}
+      vars:
+        ansible_connection: ssh
+        ansible_port: 22
+        ansible_ssh_common_args: -o StrictHostKeyChecking=no
+        ansible_user: debian
+{% endfor %}

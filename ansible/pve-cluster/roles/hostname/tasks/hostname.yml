@@ -1,0 +1,6 @@
+---
+- name: Set a hostname
+  become: true
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+    use: systemd
