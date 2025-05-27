@@ -1,0 +1,3 @@
+---
+renew_before_expiry_days: 30
+force_renew_cert: false

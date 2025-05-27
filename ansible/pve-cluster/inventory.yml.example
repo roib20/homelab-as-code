@@ -1,0 +1,16 @@
+---
+all:
+  children:
+    pve:
+      hosts:
+        pve-node-01:
+          ansible_host: 192.168.1.x
+        pve-node-02:
+          ansible_host: 192.168.1.y
+        pve-node-03:
+          ansible_host: 192.168.1.z
+      vars:
+        ansible_connection: ssh
+        ansible_port: 22
+        ansible_ssh_common_args: -o StrictHostKeyChecking=no
+        ansible_user: debian
