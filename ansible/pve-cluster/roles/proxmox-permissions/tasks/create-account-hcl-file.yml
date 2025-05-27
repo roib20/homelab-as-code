@@ -10,11 +10,11 @@
     - set_fact:
         environments:
           - name: "prod"
-            example_hcl: "../terragrunt/infrastructure-live/prod/account.hcl.example"
-            account_hcl: "../terragrunt/infrastructure-live/prod/account.hcl"
+            example_hcl: "../../terragrunt/infrastructure-live/prod/account.hcl.example"
+            account_hcl: "../../terragrunt/infrastructure-live/prod/account.hcl"
           - name: "non-prod"
-            example_hcl: "../terragrunt/infrastructure-live/non-prod/account.hcl.example"
-            account_hcl: "../terragrunt/infrastructure-live/non-prod/account.hcl"
+            example_hcl: "../../terragrunt/infrastructure-live/non-prod/account.hcl.example"
+            account_hcl: "../../terragrunt/infrastructure-live/non-prod/account.hcl"
 
     # Loop through each environment to copy example if needed
     - name: Copy example to account.hcl if it doesn't exist
