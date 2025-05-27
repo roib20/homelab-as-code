@@ -2,12 +2,12 @@
     ansible.builtin.include_role:
       name: hostname
 
-  - name: Log in to Tailscale
+  - name: Install and login into Tailscale
     ansible.builtin.include_role:
       name: artis3n.tailscale.machine
     vars:
       tailscale_authkey: "{{ lookup('env', TS_KEY') }}"
-      state: absent
+      state: latest
       verbose: true
 
   - name: Gather the generated Tailscale facts
