@@ -49,7 +49,6 @@ unit "download_file" {
     talos_version             = "v1.10.2"
     talos_platform            = "nocloud"
     talos_arch                = "amd64"
-    decompression_algorithm   = "gz"
   }
 }
 
