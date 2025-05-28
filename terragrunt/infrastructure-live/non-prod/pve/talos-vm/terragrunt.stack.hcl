@@ -30,13 +30,46 @@ unit "download_file" {
   }
 }
 
-unit "vm" {
+unit "vtalos-controlplane-01" {
   source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
 
-  path = "vm"
+  path = "talos-controlplane-01"
 
   values = {
     node_name = "${local.node_name}"
-    vm_name   = "talos-vm"
+    vm_name   = "talos-controlplane-01"
+  }
+}
+
+unit "talos-controlplane-02" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
+
+  path = "talos-controlplane-02"
+
+  values = {
+    node_name = "${local.node_name}"
+    vm_name   = "talos-controlplane-02"
+  }
+}
+
+unit "talos-controlplane-03" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
+
+  path = "talos-controlplane-03"
+
+  values = {
+    node_name = "${local.node_name}"
+    vm_name   = "talos-controlplane-03"
+  }
+}
+
+unit "talos-cluster" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos"
+
+  path = "talos-cluster"
+
+  values = {
+    node_name = "${local.node_name}"
+    vm_name   = "talos-controlplane-03"
   }
 }
