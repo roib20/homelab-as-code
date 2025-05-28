@@ -1,24 +1,4 @@
-locals {
-  factory_url = "https://factory.talos.dev"
-
-  platform = try(var.talos_platform, null)
-  arch     = try(var.talos_arch, null)
-  version  = try(var.talos_version, null)
-  schematic = file("${path.module}/image/schematic.yaml")
-
-  # schematic_id = try(try(var.talos_schematic_id, jsondecode(data.http.schematic_id.response_body)["id"]), null)
-  schematic_id = try(jsondecode(data.http.schematic_id.response_body)["id"], null)
-  image_id     = try("${local.schematic_id}_${local.version}", null)
-}
-
-data "http" "schematic_id" {
-  url          = "${local.factory_url}/schematics"
-  method       = "POST"
-  request_body = local.schematic
-}
-
 resource "proxmox_virtual_environment_download_file" "download" {
-  depends_on              = [ data.http.schematic_id ]
   content_type            = try(var.content_type, "iso")               # Required: "iso" for VM images or "vztmpl" for LXC images
   datastore_id            = var.datastore_id                           # Required: Target datastore ID
   node_name               = var.node_name                              # Required: Proxmox node name
