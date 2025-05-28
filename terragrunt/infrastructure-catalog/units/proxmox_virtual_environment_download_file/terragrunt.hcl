@@ -15,7 +15,7 @@ inputs = {
   content_type            = try(values.content_type, "iso")               # Required: "iso" for VM images or "vztmpl" for LXC images
   datastore_id            = values.datastore_id                           # Required: Target datastore ID
   node_name               = values.node_name                              # Required: Proxmox node name
-  url                     = values.url                                    # Required: HTTP/HTTPS URL
+  url                     = try(values.url, null)                         # Required: HTTP/HTTPS URL
 
   checksum                = try(values.checksum, null)                    # Optional: Expected checksum of the file (nullable)
   checksum_algorithm      = try(values.checksum_algorithm, null)          # Optional: md5 | sha1 | sha224 | sha256 | sha384 | sha512
@@ -25,4 +25,10 @@ inputs = {
   overwrite_unmanaged     = try(values.overwrite_unmanaged, false)        # Optional: Delete and redownload if file exists and is unmanaged
   upload_timeout          = try(values.upload_timeout, 600)               # Optional: Timeout in seconds (default 600)
   verify                  = try(values.verify, true)                      # Optional: Verify SSL/TLS (default true)
+
+  # Talos Image Factory
+  talos_platform          = try(values.talos_platform, null)
+  talos_arch              = try(values.talos_arch, null)
+  talos_version           = try(values.talos_version, null)
+  talos_schematic_id      = try(values.talos_schematic_id, null)
 }
