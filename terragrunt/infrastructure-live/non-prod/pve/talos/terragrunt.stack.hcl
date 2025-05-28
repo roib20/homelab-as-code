@@ -90,7 +90,7 @@ unit "talos-cluster" {
   values = {
     node_name = "${local.node_name}"
 
-    cluster_endpoint = "https://${local.controlplane_nodes[0].ip}:6443"
+    cluster_endpoint = "${local.controlplane_nodes[0].ip}"
 
     node_data = {
       controlplanes = {

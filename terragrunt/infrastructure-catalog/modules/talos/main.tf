@@ -2,14 +2,14 @@ resource "talos_machine_secrets" "this" {}
 
 data "talos_machine_configuration" "controlplane" {
   cluster_name     = var.cluster_name
-  cluster_endpoint = var.cluster_endpoint
+  cluster_endpoint = "https://${var.cluster_endpoint}:8006"
   machine_type     = "controlplane"
   machine_secrets  = talos_machine_secrets.this.machine_secrets
 }
 
 data "talos_machine_configuration" "worker" {
   cluster_name     = var.cluster_name
-  cluster_endpoint = var.cluster_endpoint
+  cluster_endpoint = "https://${var.cluster_endpoint}:8006"
   machine_type     = "worker"
   machine_secrets  = talos_machine_secrets.this.machine_secrets
 }
@@ -51,7 +51,7 @@ resource "talos_machine_configuration_apply" "worker" {
 resource "talos_machine_bootstrap" "this" {
   depends_on           = [talos_machine_configuration_apply.controlplane]
   client_configuration = talos_machine_secrets.this.client_configuration
-  endpoint             = regex("https://([0-9.]+):[0-9]+", var.cluster_endpoint)[0]
+  endpoint             = var.cluster_endpoint
   node                 = [for k, v in var.node_data.controlplanes : k][0]
 }
 
