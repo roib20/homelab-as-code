@@ -46,9 +46,10 @@ unit "download_file" {
     datastore_id        = "local"
 
     # Talos Image Factory
-    talos_version       = "v1.10.2"
-    talos_platform      = "nocloud"
-    talos_arch          = "amd64"
+    talos_version             = "v1.10.2"
+    talos_platform            = "nocloud"
+    talos_arch                = "amd64"
+    decompression_algorithm   = "gz"
   }
 }
 
