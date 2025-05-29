@@ -3,7 +3,7 @@ locals {
   terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
 
   cluster_name     = "${basename(get_terragrunt_dir())}"
-  cluster_endpoint = "192.168.1.51" #"${local.cluster_name}.k8s.lan}"
+  cluster_endpoint = "192.168.1.60" #"${local.cluster_name}.k8s.lan}"
 #   tld              = ""
 }
 
@@ -26,7 +26,7 @@ inputs = {
     cluster_endpoint = local.cluster_endpoint
     # tld              = local.tld
 
-    cluster_vip            = "192.168.1.60"
+    cluster_vip            = local.cluster_endpoint
     cluster_node_subnet    = "192.168.1.0/24"
     cluster_pod_subnet     = "172.22.0.0/16"
     cluster_service_subnet = "172.23.0.0/16"
