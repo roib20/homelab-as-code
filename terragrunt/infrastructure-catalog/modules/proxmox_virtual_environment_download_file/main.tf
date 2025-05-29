@@ -1,7 +1,12 @@
 resource "proxmox_virtual_environment_download_file" "download" {
+  for_each = toset(var.nodes)
+
+  node_name = each.key                                                 # Required: Proxmox node name
+
+  
   content_type            = try(var.content_type, "iso")               # Required: "iso" for VM images or "vztmpl" for LXC images
   datastore_id            = var.datastore_id                           # Required: Target datastore ID
-  node_name               = var.node_name                              # Required: Proxmox node name
+  # node_name               = var.node_name                              # Required: Proxmox node name
   # url                     = var.url                                    # Required: HTTP/HTTPS URL
 
   checksum                = try(var.checksum, null)                    # Optional: Expected checksum of the file (nullable)

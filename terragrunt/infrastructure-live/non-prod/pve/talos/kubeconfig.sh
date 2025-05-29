@@ -5,7 +5,7 @@ mkdir -p ~/.kube
 mkdir -p ~/.talos
 
 # Write kubeconfig to default location
-terragrunt stack output --json | jq -r '."talos-cluster".kubeconfig' > ~/.kube/config
+terragrunt stack output --format="json" | jq -r '."talos-cluster".kubeconfig' > ~/.kube/config
 chmod 600 ~/.kube/config
 
 # Write talosconfig to default location
