@@ -1,21 +1,19 @@
 locals {
+  # Root "terragrunt" directory, containing "infrastructure-catalog" and "infrastructure-live" directories
+  terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
+
   cluster_name     = "${basename(get_terragrunt_dir())}"
   cluster_endpoint = "192.168.1.51" #"${local.cluster_name}.k8s.lan}"
 #   tld              = ""
 }
 
-# include "root" {
-#   path = find_in_parent_folders("root.hcl")
-# }
+terraform {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/modules/cluster"
+}
 
 include "common" {
   path   = "${dirname(find_in_parent_folders("root.hcl"))}/_envcommon/common.hcl"
   expose = true
-}
-
-terraform {
-#   source = "${include.common.locals.base_source_url}"
-    source = "/home/roib/github/homelab-as-code/terragrunt/infrastructure-catalog/modules/cluster"
 }
 
 dependencies {
@@ -62,9 +60,17 @@ inputs = {
         node1 = {
             type = "controlplane"
             install = {
-                disk = "/dev/vda"
+                disk       = "/dev/vda"
+                extensions = [
+                    "siderolabs/i915",
+                    "siderolabs/intel-ucode",
+                    "siderolabs/iscsi-tools",
+                    "siderolabs/qemu-guest-agent",
+                    "siderolabs/tailscale",
+                    "siderolabs/util-linux-tools",
+                    "siderolabs/gvisor"
+                ]
             }
-            disks = []
             interfaces = [{
                 addresses    = ["192.168.1.51"]
             }]
@@ -72,19 +78,33 @@ inputs = {
         node2 = {
             type = "controlplane"
             install = {
-                disk = "/dev/vda"
+                disk       = "/dev/vda"
+                extensions = [
+                    "siderolabs/i915",
+                    "siderolabs/intel-ucode",
+                    "siderolabs/iscsi-tools",
+                    "siderolabs/qemu-guest-agent",
+                    "siderolabs/tailscale",
+                    "siderolabs/util-linux-tools",
+                ]
             }
-            disks = []
             interfaces = [{
-                addresses    = ["192.168.1.52"]
+                addresses  = ["192.168.1.52"]
             }]
         }
         node3 = {
             type = "controlplane"
             install = {
-                disk = "/dev/vda"
+                disk       = "/dev/vda"
+                extensions = [
+                    "siderolabs/i915",
+                    "siderolabs/intel-ucode",
+                    "siderolabs/iscsi-tools",
+                    "siderolabs/qemu-guest-agent",
+                    "siderolabs/tailscale",
+                    "siderolabs/util-linux-tools",
+                ]
             }
-            disks = []
             interfaces = [{
                 addresses    = ["192.168.1.53"]
             }]

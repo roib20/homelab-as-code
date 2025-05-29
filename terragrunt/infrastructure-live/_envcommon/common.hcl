@@ -1,6 +1,4 @@
 locals {
-  version = "v0.41.0"
-  base_source_url = "git::git@github.com:ionfury/homelab-modules.git//modules/cluster?ref=${local.version}"
 }
 
 inputs = {
@@ -8,6 +6,6 @@ inputs = {
   kube_config_path    = "~/.kube"
   nameservers         = ["192.168.1.1"]
   timeservers         = ["0.pool.ntp.org", "1.pool.ntp.org"]
-  cluster_node_subnet = "192.168.10.0/24"
+  cluster_node_subnet = "192.168.1.0/24"
   timeout             = "10m"
 }
