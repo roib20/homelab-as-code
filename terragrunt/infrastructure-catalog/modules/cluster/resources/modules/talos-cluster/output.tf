@@ -12,7 +12,7 @@ output "machineconf_filenames" {
 
 resource "local_sensitive_file" "talosconfig" {
   content         = data.talos_client_configuration.this.talos_config
-  filename        = pathexpand("${var.talos_config_path}/${local.cluster_name}.yaml")
+  filename        = pathexpand("${var.talos_config_path}/config")
   file_permission = "0644"
 }
 
@@ -27,7 +27,7 @@ output "talosconfig_raw" {
 
 resource "local_sensitive_file" "kubeconfig" {
   content         = talos_cluster_kubeconfig.this.kubeconfig_raw
-  filename        = pathexpand("${var.kubernetes_config_path}/${local.cluster_name}.yaml")
+  filename        = pathexpand("${var.kubernetes_config_path}/config")
   file_permission = "0644"
 }
 
