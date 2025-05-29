@@ -1,9 +1,9 @@
 # This completes when the cluster is ready to be upgraded.
-resource "null_resource" "talos_cluster_health" {
+resource "terraform_data" "talos_cluster_health" {
   depends_on = [talos_machine_bootstrap.this, talos_machine_configuration_apply.machines]
   for_each   = { for k, v in var.machines : k => v if yamldecode(v.talos_config) == "controlplane" }
 
-  triggers = {
+  triggers_replace = {
     always_run = timestamp()
   }
 
@@ -19,11 +19,11 @@ resource "null_resource" "talos_cluster_health" {
 }
 
 # This completes when the upgrade is complete.
-resource "null_resource" "talos_cluster_health_upgrade" {
-  depends_on = [null_resource.talos_upgrade_trigger]
+resource "terraform_data" "talos_cluster_health_upgrade" {
+  depends_on = [terraform_data.talos_upgrade_trigger]
   for_each   = { for k, v in var.machines : k => v if yamldecode(v.talos_config) == "controlplane" }
 
-  triggers = {
+  triggers_replace = {
     always_run = timestamp()
   }
 

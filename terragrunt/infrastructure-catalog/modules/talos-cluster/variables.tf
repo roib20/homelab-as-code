@@ -21,7 +21,7 @@ variable "machines" {
     extra_kernel_args = optional(list(string), [])
     secureboot        = optional(bool, false)
     architecture      = optional(string, "amd64")
-    platform          = optional(string, "metal")
+    platform          = optional(string, "nocloud")
     sbc               = optional(string, "")
   }))
 
