@@ -6,7 +6,7 @@ This is a generic terraform module for deploying and managing a talos cluster vi
 * **Assumed Interfaces**: The module assumes that the primary ip interface for all nodes is at `machines[*].talos_config.network.interfaces[0].addresses[0]`.  Additionally, the same interface on `machines[0]`, where `type == controlplane` will be used for the bootstrap node.
 * **Inline helm chart functionality**:  The `inline_manifests` functionality is overridden and populated via `var.bootstrap_charts`.
 * **Talos Imagefactory**: `machine.install.image` is automatically populated via the arguments provided in each `machine` variable via integration with [talos image factory](https://factory.talos.dev/).
-* **Opinionated Upgrades**: The native terraform module does not yet implement `talos upgrade` functionality.  This is implemented in this module via a `null_resource` provider to execute a script to upgrade each node in order.  This introduces a number of external dependencies on this provider, namely:
+* **Opinionated Upgrades**: The native terraform module does not yet implement `talos upgrade` functionality.  This is implemented in this module via a `terraform_data` provider to execute a script to upgrade each node in order.  This introduces a number of external dependencies on this provider, namely:
   * [flock](https://www.man7.org/linux/man-pages/man2/flock.2.html)
   * [talosctl]()
   * [yq]()
