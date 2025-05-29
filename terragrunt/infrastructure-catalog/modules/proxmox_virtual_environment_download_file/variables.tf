@@ -11,9 +11,9 @@ variable "datastore_id" {
   type        = string
 }
 
-variable "node_name" {
-  description = "The name of the Proxmox node where the file will be stored."
-  type        = string
+variable "nodes" {
+  description = "List of Proxmox node names where the file will be stored."
+  type        = list(string)
 }
 
 # Only set if not using Talos Image Factory

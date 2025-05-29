@@ -13,6 +13,8 @@ locals {
 
   # Extract the variables we need for easy access
   node_name = local.node_vars.locals.node_name
+  
+  talos_version = "1.10.3"
 
   controlplane_nodes = [
     {
@@ -41,12 +43,12 @@ unit "download_file" {
   path = "download_file"
 
   values = {
-    node_name = "${local.node_name}"
+    nodes = ["${local.node_name}"]
     
     datastore_id        = "local"
 
     # Talos Image Factory
-    talos_version             = "v1.10.2"
+    talos_version             = "${local.talos_version}"
     talos_platform            = "nocloud"
     talos_arch                = "amd64"
   }
@@ -91,6 +93,8 @@ unit "talos-cluster" {
     node_name = "${local.node_name}"
 
     cluster_endpoint = "${local.controlplane_nodes[0].ip}"
+
+    talos_version    = "${local.talos_version}"
 
     node_data = {
       controlplanes = {

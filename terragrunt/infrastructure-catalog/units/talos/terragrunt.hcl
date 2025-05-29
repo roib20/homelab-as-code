@@ -5,8 +5,6 @@
 locals {
   # Root "terragrunt" directory, containing "infrastructure-catalog" and "infrastructure-live" directories
   terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
-
-  ref = "67448934914a003afc42052f0ddf708a684228da"
 }
 
 terraform {
@@ -23,6 +21,7 @@ inputs = {
 
   cluster_name      = try(values.cluster_name, "talos-cluster")
   cluster_endpoint  = try(values.cluster_endpoint)
+  talos_version     = try(values.talos_version, null)
 
   node_data = jsonencode(values.node_data)
 
