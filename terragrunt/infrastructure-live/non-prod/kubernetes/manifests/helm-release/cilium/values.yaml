@@ -2,7 +2,7 @@
 # https://docs.cilium.io/en/stable/network/kubernetes/configuration/#configmap-options
 ---
 autoDirectNodeRoutes: true
-ipv4NativeRoutingCIDR: ${cluster_pod_subnet}
+ipv4NativeRoutingCIDR: 192.168.1.0/24 #${cluster_pod_subnet}
 bandwidthManager:
   bbr: true
   enabled: true
