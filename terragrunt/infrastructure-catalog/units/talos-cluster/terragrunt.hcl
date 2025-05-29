@@ -68,7 +68,6 @@ inputs = {
                     "siderolabs/qemu-guest-agent",
                     "siderolabs/tailscale",
                     "siderolabs/util-linux-tools",
-                    "siderolabs/gvisor"
                 ]
             }
             interfaces = [{
