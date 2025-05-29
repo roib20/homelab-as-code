@@ -1,0 +1,55 @@
+# Talos and Kubernetes versions
+talos_version       = "v1.10.3"
+kubernetes_version  = "v1.33.1"
+
+# Talos cluster config YAML string
+talos_cluster_config = <<EOT
+cluster:
+  clusterName: "talos-cluster"
+  controlPlane:
+    endpoint: "https://192.168.1.51:6443"
+EOT
+
+# Machine definitions
+machines = [
+  {
+    talos_config      = <<EOT
+machine:
+    type: controlplane
+    install:
+        disk: /dev/vda
+EOT
+    extensions        = ["extension1", "extension2"]
+    extra_kernel_args = ["arg1", "arg2"]
+    secureboot        = false
+    architecture      = "amd64"
+    platform          = "metal"
+    sbc               = ""
+  }
+]
+
+# Helm charts to bootstrap
+bootstrap_charts = [
+  {
+    repository = "https://helm.cilium.io/"
+    chart      = "cilium"
+    name       = "cilium"
+    version    = ${local.cilium_version}
+    namespace  = "kube-system"
+    values     = ${local.cilium_helm_values}
+  }
+]
+
+# Node destruction behavior
+on_destroy = {
+  graceful = false
+  reboot   = true
+  reset    = true
+}
+
+# Config output paths
+talos_config_path      = "~/.talos"
+kubernetes_config_path = "~/.kube"
+
+# Cluster creation timeout
+timeout = "10m"
