@@ -6,7 +6,7 @@ locals {
   # Root "terragrunt" directory, containing "infrastructure-catalog" and "infrastructure-live" directories
   terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
 
-  agent = try(values.agent.enabled, false)
+  agent = try(values.agent.enabled, true)
 }
 
 terraform {
