@@ -21,11 +21,13 @@ variable "cluster_node_subnet" {
 variable "cluster_pod_subnet" {
   description = "The pod subnet to use for pods on the Talos cluster."
   type        = string
+  default     = "10.244.0.0/16"
 }
 
 variable "cluster_service_subnet" {
   description = "The pod subnet to use for services on the Talos cluster."
   type        = string
+  default     = "10.96.0.0/12"
 }
 
 variable "cluster_on_destroy" {
