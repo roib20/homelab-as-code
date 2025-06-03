@@ -1,0 +1,7 @@
+# https://www.talos.dev/latest/kubernetes-guides/network/deploying-cilium/#known-issues
+---
+machine:
+  features:
+    hostDNS:
+      enabled: true
+      forwardKubeDNSToHost: ${forwardKubeDNSToHost}

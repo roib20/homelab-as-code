@@ -17,6 +17,7 @@ network:
       dhcp: true
       dhcpOptions:
         routeMetric: ${interface.dhcp_routeMetric}
+        ipv4: true
 %{ if cluster_vip != "" ~}
 %{ if machine_type == "controlplane" ~}
       vip:

@@ -28,8 +28,8 @@ inputs = {
 
     cluster_vip            = "192.168.1.60"
     cluster_node_subnet    = "192.168.1.0/24"
-    cluster_pod_subnet     = "172.22.0.0/16"
-    cluster_service_subnet = "172.23.0.0/16"
+    cluster_pod_subnet     = "10.244.0.0/16"
+    cluster_service_subnet = "10.96.0.0/12"
 
     kubernetes_version = try(value.kubernetes_version, "1.33.1")
     talos_version      = try(value.talos_version, "v1.10.3")
@@ -55,7 +55,7 @@ inputs = {
                 ]
             }
             interfaces = [{
-                addresses    = ["192.168.1.51"]
+                addresses  = ["192.168.1.51"]
             }]
         }
         node2 = {
@@ -89,7 +89,7 @@ inputs = {
                 ]
             }
             interfaces = [{
-                addresses    = ["192.168.1.53"]
+                addresses  = ["192.168.1.53"]
             }]
         }
     }
