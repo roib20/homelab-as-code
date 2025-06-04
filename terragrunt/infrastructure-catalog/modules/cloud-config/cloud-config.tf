@@ -4,8 +4,8 @@ resource "proxmox_virtual_environment_file" "user_data_cloud_config" {
   node_name    = var.node_name
 
   source_file {
-    path      = var.user_data_cloud_config
     file_name = "user-data-cloud-config.yaml"
+    path      = var.user_data_cloud_config
   }
 }
 
@@ -15,13 +15,14 @@ resource "proxmox_virtual_environment_file" "meta_data_cloud_config" {
   node_name    = var.node_name
 
   source_raw {
-    data      = templatefile("${path.module}/meta-data-cloud-config.yaml.tftpl", {
-      hostname      = var.hostname
-      vm_id         = var.vm_id
-      instance_type = var.instance_type
-      cluster_name  = var.cluster_name
-      zone          = var.zone
-    })
     file_name = "meta-data-cloud-config.yaml"
+    data      = templatefile("${path.module}/meta-data-cloud-config.yaml.tftpl", {
+      hostname : var.hostname,
+      id : var.vm_id,
+      providerID : "proxmox://${var.region}/${var.vm_id}",
+      type : "${var.cpu}VCPU-${floor(var.memory / 1024)}GB",
+      zone : var.zone,
+      region : var.region,
+    })
   }
 }
