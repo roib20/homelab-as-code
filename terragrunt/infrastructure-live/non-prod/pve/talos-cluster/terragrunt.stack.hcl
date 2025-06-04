@@ -1,3 +1,5 @@
+# Dynamic Terragrunt Stack for Talos Kubernetes cluster on Proxmox
+
 locals {
   # ─── Directory discovery ─────────────────────────────────────────────────────
   environment    = "non-prod"
@@ -17,26 +19,34 @@ locals {
 
   # ─── Machines / IP layout ────────────────────────────────────────────────────
   controlplane_nodes = [
-    { 
-      name = "talos-control-plane-01", 
-      ip = "192.168.1.51"
+    {
+      name   = "control-plane-01"
+      ip     = "192.168.1.51"
+      vm_id  = 101
+      cpu    = 2
+      memory = 2048
     },
-    { 
-      name = "talos-control-plane-02", 
-      ip = "192.168.1.52"
+    {
+      name   = "control-plane-02"
+      ip     = "192.168.1.52"
+      vm_id  = 102
+      cpu    = 2
+      memory = 2048
     },
-    { 
-      name = "talos-control-plane-03", 
-      ip = "192.168.1.53"
+    {
+      name   = "control-plane-03"
+      ip     = "192.168.1.53"
+      vm_id  = 103
+      cpu    = 2
+      memory = 2048
     },
   ]
 
   worker_nodes = []
 
-  # Build the map the **cluster** unit expects
   machines = {
-    for index, node in concat(local.controlplane_nodes, local.worker_nodes) :
-    "node${index + 1}" => {
+    for node in concat(local.controlplane_nodes, local.worker_nodes) :
+    node.name => {
       type = contains(local.controlplane_nodes, node) ? "controlplane" : "worker"
 
       install = {
@@ -54,11 +64,16 @@ locals {
       interfaces = [{
         addresses = [node.ip]
       }]
+
+      hostname = node.name
+      vm_id    = node.vm_id
+      region   = "${local.cluster_name}"
+      zone     = local.node_name
+      cpu      = node.cpu
+      memory   = node.memory
     }
   }
 
-
-  # ─── Cluster-wide networking ─────────────────────────────────────────────────
   cluster_name            = "talos"
   cluster_endpoint        = local.controlplane_nodes[0].ip
   cluster_vip             = "192.168.1.60"
@@ -66,84 +81,65 @@ locals {
   cluster_pod_subnet      = "10.244.0.0/16"
   cluster_service_subnet  = "10.96.0.0/12"
 
-  # Extra files / timeouts
   cilium_helm_values = file("${local.terragrunt_dir}/infrastructure-live/non-prod/kubernetes/manifests/helm-release/cilium/values.yaml")
   timeout            = "10m"
 }
 
-# ─── Shared artefact download (raw Talos image) ────────────────────────────────
 unit "download_file" {
   source = "${local.terragrunt_dir}/infrastructure-catalog/units/proxmox_virtual_environment_download_file"
   path   = "download_file"
 
   values = {
-    nodes                = ["${local.node_name}"]
-    datastore_id         = "local"
-    talos_version        = "${local.talos_version}"
-    talos_platform       = "nocloud"
-    talos_arch           = "amd64"
+    nodes          = ["${local.node_name}"]
+    datastore_id   = "local"
+    talos_version  = "${local.talos_version}"
+    talos_platform = "nocloud"
+    talos_arch     = "amd64"
   }
 }
 
-unit "cloud-config" {
+unit "cloud-config-$${local.controlplane_nodes[0].name}" {
   source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-config"
-
-  path = "cloud-config"
+  path   = "cloud-config-${local.controlplane_nodes[0].name}"
 
   values = {
     node_name              = "${local.node_name}"
     datastore_id           = "local"
     user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
-    hostname               = "talos"
-    vm_id                  = "100"
+
+    hostname               = "${local.controlplane_nodes[0].name}"
+    vm_id                  = "${local.controlplane_nodes[0].vm_id}"
     region                 = "${local.cluster_name}"
     zone                   = "${local.node_name}"
-    cpu                    = 2
-    memory                 = 2048
+    cpu                    = "${local.controlplane_nodes[0].cpu}"
+    memory                 = "${local.controlplane_nodes[0].memory}"
   }
-  }
+}
 
-# ─── One VM unit per control-plane node ────────────────────────────────────────
-# (copy-paste & alter if you add workers later)
 unit "$${local.controlplane_nodes[0].name}" {
   source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
-  path   = local.controlplane_nodes[0].name
+  path   = "${local.controlplane_nodes[0].name}"
+
   values = {
-    node_name    = local.node_name
-    vm_name      = local.controlplane_nodes[0].name
-    ipv4_address = local.controlplane_nodes[0].ip
+    node_name    = "${local.node_name}"
+    vm_name      = "${local.controlplane_nodes[0].name}"
+    ipv4_address = "${local.controlplane_nodes[0].ip}"
+
+    hostname     = "${local.controlplane_nodes[0].name}"
+    vm_id        = "${local.controlplane_nodes[0].vm_id}"
+    region       = "${local.cluster_name}"
+    zone         = "${local.node_name}"
+    cpu          = "${local.controlplane_nodes[0].cpu}"
+    memory       = "${local.controlplane_nodes[0].memory}"
   }
 }
 
-unit "$${local.controlplane_nodes[1].name}" {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
-  path   = local.controlplane_nodes[1].name
-  values = {
-    node_name    = local.node_name
-    vm_name      = local.controlplane_nodes[1].name
-    ipv4_address = local.controlplane_nodes[1].ip
-  }
-}
-
-unit "$${local.controlplane_nodes[2].name}" {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
-  path   = local.controlplane_nodes[2].name
-  values = {
-    node_name    = local.node_name
-    vm_name      = local.controlplane_nodes[2].name
-    ipv4_address = local.controlplane_nodes[2].ip
-  }
-}
-
-# ─── The cluster itself (generates the Talos manifests) ────────────────────────
 unit "talos-cluster" {
   source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-cluster"
   path   = "talos-cluster"
 
   values = {
-    nodes                  = ["${local.node_name}"]
-
-    # cluster id / addressing
+    nodes                  = [local.node_name]
     cluster_name           = local.cluster_name
     cluster_endpoint       = local.cluster_endpoint
     cluster_vip            = local.cluster_vip
@@ -151,7 +147,6 @@ unit "talos-cluster" {
     cluster_pod_subnet     = local.cluster_pod_subnet
     cluster_service_subnet = local.cluster_service_subnet
 
-    # versions
     kubernetes_version     = local.kubernetes_version
     talos_version          = local.talos_version
     flux_version           = local.flux_version
@@ -159,7 +154,6 @@ unit "talos-cluster" {
     cilium_version         = local.cilium_version
     cilium_helm_values     = local.cilium_helm_values
 
-    # misc
     timeout   = local.timeout
     machines  = local.machines
   }
