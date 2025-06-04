@@ -91,15 +91,17 @@ unit "cloud-config" {
   path = "cloud-config"
 
   values = {
-    node_name = "${local.node_name}"
+    node_name              = "${local.node_name}"
+    datastore_id           = "local"
     user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
-    cluster_name = "talos"
-    zone = "${local.node_name}"
-    hostname = "talos"
-    vm_id = "100"
-    instance_type = "nocloud"
+    hostname               = "talos"
+    vm_id                  = "100"
+    region                 = "${local.cluster_name}"
+    zone                   = "${local.node_name}"
+    cpu                    = 2
+    memory                 = 2048
   }
-}
+  }
 
 # ─── One VM unit per control-plane node ────────────────────────────────────────
 # (copy-paste & alter if you add workers later)

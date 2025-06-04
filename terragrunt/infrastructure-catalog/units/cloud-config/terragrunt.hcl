@@ -12,11 +12,14 @@ terraform {
 }
 
 inputs = {
-  node_name = values.node_name
+  node_name              = values.node_name
+  datastore_id           = values.datastore_id
+  content_type           = try(values.content_type, "snippets")
   user_data_cloud_config = try(values.user_data_cloud_config, "user-data-cloud-config.yaml")
-  cluster_name = values.cluster_name
-  zone = values.zone
-  hostname = values.hostname
-  vm_id = values.vm_id
-  instance_type = values.instance_type
+  hostname               = values.hostname
+  vm_id                  = values.vm_id
+  region                 = values.region
+  zone                   = values.zone
+  cpu                    = values.cpu
+  memory                 = values.memory
 }
