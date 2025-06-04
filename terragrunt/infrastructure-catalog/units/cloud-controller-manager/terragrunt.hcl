@@ -24,5 +24,5 @@ inputs = {
   cpu                    = values.cpu
   memory                 = values.memory
   
-  meta_data_cloud_config_file_name = try(values.meta_data_cloud_config_file_name, "meta-data-cloud-config.yaml")
+  meta_data_cloud_config = try(values.meta_data_cloud_config_file_name, "meta-data-cloud-config.yaml")
 }
