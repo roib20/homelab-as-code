@@ -120,7 +120,7 @@ unit "cloud-config-$${local.controlplane_nodes[0].name}" {
 
 unit "$${local.controlplane_nodes[0].name}" {
   source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
-  path   = "vm/${local.controlplane_nodes[0].name}"
+  path   = "${local.controlplane_nodes[0].name}"
 
   values = {
     node_name    = "${local.node_name}"
@@ -160,7 +160,7 @@ unit "cloud-config-$${local.controlplane_nodes[1].name}" {
 
 unit "$${local.controlplane_nodes[1].name}" {
   source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
-  path   = "vm/${local.controlplane_nodes[1].name}"
+  path   = "${local.controlplane_nodes[1].name}"
 
   values = {
     node_name    = "${local.node_name}"
@@ -200,7 +200,7 @@ unit "cloud-config-$${local.controlplane_nodes[2].name}" {
 
 unit "$${local.controlplane_nodes[2].name}" {
   source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
-  path   = "vm/${local.controlplane_nodes[2].name}"
+  path   = "${local.controlplane_nodes[2].name}"
 
   values = {
     node_name    = "${local.node_name}"
