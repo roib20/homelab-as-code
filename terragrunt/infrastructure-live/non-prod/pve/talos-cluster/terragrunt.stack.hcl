@@ -35,9 +35,9 @@ locals {
 
   # Build the map the **cluster** unit expects
   machines = {
-    for idx, n in concat(local.controlplane_nodes, local.worker_nodes) :
+    for index, node in concat(local.controlplane_nodes, local.worker_nodes) :
     "node${idx+1}" => {
-      type = contains(local.controlplane_nodes, n) ? "controlplane" : "worker"
+      type = contains(local.controlplane_nodes, node) ? "controlplane" : "worker"
 
       install = {
         disk       = "/dev/vda"
@@ -51,7 +51,7 @@ locals {
         ]
       }
 
-      interfaces = [{ addresses = [n.ip] }]
+      interfaces = [{ addresses = [node.ip] }]
     }
   }
 
