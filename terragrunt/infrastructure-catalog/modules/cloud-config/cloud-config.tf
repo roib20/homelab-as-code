@@ -20,8 +20,8 @@ resource "proxmox_virtual_environment_file" "meta_data_cloud_config" {
       vm_id         = var.vm_id
       instance_type = var.instance_type
       cluster_name  = var.cluster_name
-      zone          = var.node_name
+      zone          = var.zone
     })
-    file_name = "${var.hostname}.metadata.yaml"
+    file_name = "meta-data-cloud-config.yaml"
   }
 }
