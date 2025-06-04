@@ -112,12 +112,6 @@ unit "$${local.controlplane_nodes[0].name}" {
     node_name    = local.node_name
     vm_name      = local.controlplane_nodes[0].name
     ipv4_address = local.controlplane_nodes[0].ip
-
-    # initialization = {
-    #   meta_data_file_id = module.cloud_config.meta_data_file_id
-    #   user_data_file_id = module.cloud_config.user_data_file_id
-    #   datastore_id      = var.datastore_id
-    # }
   }
 }
 
@@ -128,12 +122,6 @@ unit "$${local.controlplane_nodes[1].name}" {
     node_name    = local.node_name
     vm_name      = local.controlplane_nodes[1].name
     ipv4_address = local.controlplane_nodes[1].ip
-
-    # initialization = {
-    #   meta_data_file_id = module.cloud_config.meta_data_file_id
-    #   user_data_file_id = module.cloud_config.user_data_file_id
-    #   datastore_id      = var.datastore_id
-    # }
   }
 }
 
@@ -144,12 +132,6 @@ unit "$${local.controlplane_nodes[2].name}" {
     node_name    = local.node_name
     vm_name      = local.controlplane_nodes[2].name
     ipv4_address = local.controlplane_nodes[2].ip
-
-    # initialization = {
-    #   meta_data_file_id = module.cloud_config.meta_data_file_id
-    #   user_data_file_id = module.cloud_config.user_data_file_id
-    #   datastore_id      = var.datastore_id
-    # }
   }
 }
 
