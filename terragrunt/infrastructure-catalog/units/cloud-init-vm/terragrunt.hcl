@@ -31,7 +31,7 @@ dependency "cloud-config" {
   config_path = "../cloud-config"
 
   mock_outputs = {
-      user_data_cloud_config = "user-data-cloud-config.yaml"
+      user_data_cloud_config = "datastore-name:iso/some-file.img"
   }
 }
 
