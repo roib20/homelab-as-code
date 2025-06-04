@@ -10,7 +10,6 @@ variable "content_type" {
   default     = "snippets"
 }
 
-
 variable "node_name" {
   description = "The name of the Proxmox node"
   type        = string
@@ -33,4 +32,18 @@ variable "vendor_data_cloud_config" {
   description = "Path to the Cloud-init vendor-data YAML file"
   type        = string
   default     = "vendor-data-cloud-config.yaml"
+}
+
+variable "hostname" {
+  type        = string
+}
+variable "vm_id" {
+  type        = string
+}
+variable "instance_type" { 
+  type        = string
+}
+variable "cluster_name" {
+  type        = string
+  default     = "talos"
 }
