@@ -4,7 +4,7 @@ resource "proxmox_virtual_environment_file" "meta_data_cloud_config" {
   node_name    = var.node_name
 
   source_raw {
-    file_name = "meta-data-cloud-config.yaml"
+    file_name = var.meta_data_cloud_config
     data      = templatefile("${path.module}/meta-data-cloud-config.yaml.tftpl", {
       hostname : var.hostname,
       id : var.vm_id,
