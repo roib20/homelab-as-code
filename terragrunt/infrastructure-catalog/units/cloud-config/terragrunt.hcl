@@ -14,4 +14,9 @@ terraform {
 inputs = {
   node_name = values.node_name
   user_data_cloud_config = try(values.user_data_cloud_config, "user-data-cloud-config.yaml")
+  cluster_name = values.cluster_name
+  zone = values.zone
+  hostname = values.hostname
+  vm_id = values.vm_id
+  instance_type = values.instance_type
 }
