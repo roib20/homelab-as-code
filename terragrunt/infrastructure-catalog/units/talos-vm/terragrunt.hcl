@@ -25,6 +25,15 @@ dependency "download_file" {
   }
 }
 
+dependency "cloud-config" {
+  config_path = "../cloud-config"
+
+  mock_outputs = {
+      user_data_cloud_config = "datastore-name:iso/some-file.img"
+      meta_data_cloud_config = "datastore-name:iso/some-file.img"
+  }
+}
+
 inputs = {
   # Proxmox target
   node_name = try(values.node_name, "pve")
@@ -76,7 +85,8 @@ inputs = {
   # Cloud-init
   initialization = {
     datastore_id = try(values.vm_datastore_id, "VM")
-    # user_data_file_id = dependency.cloud_init_config.outputs.user_data_cloud_config
+    # user_data_file_id = dependency.cloud-config.outputs.user_data_cloud_config
+    meta_data_file_id = dependency.cloud-config.outputs.meta_data_cloud_config
 
     dns = {
       servers = ["1.1.1.1", "1.0.0.1"]
