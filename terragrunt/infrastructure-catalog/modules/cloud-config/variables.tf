@@ -10,6 +10,7 @@ variable "content_type" {
   default     = "snippets"
 }
 
+
 variable "node_name" {
   description = "The name of the Proxmox node"
   type        = string
@@ -32,34 +33,4 @@ variable "vendor_data_cloud_config" {
   description = "Path to the Cloud-init vendor-data YAML file"
   type        = string
   default     = "vendor-data-cloud-config.yaml"
-}
-
-variable "hostname" {
-  description = "The hostname to set in the cloud-config"
-  type        = string
-}
-
-variable "vm_id" {
-  description = "The ID of the virtual machine"
-  type        = string
-}
-
-variable "region" {
-  description = "The region label used in the provider ID and metadata"
-  type        = string
-}
-
-variable "cpu" {
-  description = "Number of virtual CPUs allocated to the VM"
-  type        = number
-}
-
-variable "memory" {
-  description = "Memory allocated to the VM in megabytes"
-  type        = number
-}
-
-variable "zone" {
-  description = "The zone the VM is placed in"
-  type        = string
 }
