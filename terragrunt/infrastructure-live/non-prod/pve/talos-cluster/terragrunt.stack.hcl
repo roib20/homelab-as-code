@@ -99,8 +99,8 @@ unit "download_file" {
 }
 
 unit "cloud-config-$${local.controlplane_nodes[0].name}" {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-config"
-  path   = "cloud-config/${local.controlplane_nodes[0].name}"
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-controller-manager"
+  path   = "cloud-config_${local.controlplane_nodes[0].name}"
 
   values = {
     node_name              = "${local.node_name}"
@@ -139,8 +139,8 @@ unit "$${local.controlplane_nodes[0].name}" {
 }
 
 unit "cloud-config-$${local.controlplane_nodes[1].name}" {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-config"
-  path   = "cloud-config/${local.controlplane_nodes[1].name}"
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-controller-manager"
+  path   = "cloud-config_${local.controlplane_nodes[1].name}"
 
   values = {
     node_name              = "${local.node_name}"
@@ -179,8 +179,8 @@ unit "$${local.controlplane_nodes[1].name}" {
 }
 
 unit "cloud-config-$${local.controlplane_nodes[2].name}" {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-config"
-  path   = "cloud-config/${local.controlplane_nodes[2].name}"
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-controller-manager"
+  path   = "cloud-config_${local.controlplane_nodes[2].name}"
 
   values = {
     node_name              = "${local.node_name}"
