@@ -36,7 +36,7 @@ locals {
   # Build the map the **cluster** unit expects
   machines = {
     for index, node in concat(local.controlplane_nodes, local.worker_nodes) :
-    "node${idx+1}" => {
+    "node${index + 1}" => {
       type = contains(local.controlplane_nodes, node) ? "controlplane" : "worker"
 
       install = {
@@ -51,13 +51,16 @@ locals {
         ]
       }
 
-      interfaces = [{ addresses = [node.ip] }]
+      interfaces = [{
+        addresses = [node.ip]
+      }]
     }
   }
 
+
   # ─── Cluster-wide networking ─────────────────────────────────────────────────
   cluster_name            = "talos"
-  cluster_endpoint        = local.controlplane_nodes[0].ip   # 192.168.1.51
+  cluster_endpoint        = local.controlplane_nodes[0].ip
   cluster_vip             = "192.168.1.60"
   cluster_node_subnet     = "192.168.1.0/24"
   cluster_pod_subnet      = "10.244.0.0/16"
@@ -82,6 +85,22 @@ unit "download_file" {
   }
 }
 
+unit "cloud-config" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-config"
+
+  path = "cloud-config"
+
+  values = {
+    node_name = "${local.node_name}"
+    user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
+    cluster_name = "talos"
+    zone = "${local.node_name}"
+    hostname = "talos"
+    vm_id = "100"
+    instance_type = "nocloud"
+  }
+}
+
 # ─── One VM unit per control-plane node ────────────────────────────────────────
 # (copy-paste & alter if you add workers later)
 unit "$${local.controlplane_nodes[0].name}" {
@@ -91,6 +110,12 @@ unit "$${local.controlplane_nodes[0].name}" {
     node_name    = local.node_name
     vm_name      = local.controlplane_nodes[0].name
     ipv4_address = local.controlplane_nodes[0].ip
+
+    # initialization = {
+    #   meta_data_file_id = module.cloud_config.meta_data_file_id
+    #   user_data_file_id = module.cloud_config.user_data_file_id
+    #   datastore_id      = var.datastore_id
+    # }
   }
 }
 
@@ -101,6 +126,12 @@ unit "$${local.controlplane_nodes[1].name}" {
     node_name    = local.node_name
     vm_name      = local.controlplane_nodes[1].name
     ipv4_address = local.controlplane_nodes[1].ip
+
+    # initialization = {
+    #   meta_data_file_id = module.cloud_config.meta_data_file_id
+    #   user_data_file_id = module.cloud_config.user_data_file_id
+    #   datastore_id      = var.datastore_id
+    # }
   }
 }
 
@@ -111,6 +142,12 @@ unit "$${local.controlplane_nodes[2].name}" {
     node_name    = local.node_name
     vm_name      = local.controlplane_nodes[2].name
     ipv4_address = local.controlplane_nodes[2].ip
+
+    # initialization = {
+    #   meta_data_file_id = module.cloud_config.meta_data_file_id
+    #   user_data_file_id = module.cloud_config.user_data_file_id
+    #   datastore_id      = var.datastore_id
+    # }
   }
 }
 

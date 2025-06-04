@@ -37,13 +37,21 @@ variable "vendor_data_cloud_config" {
 variable "hostname" {
   type        = string
 }
+
 variable "vm_id" {
   type        = string
 }
+
 variable "instance_type" { 
   type        = string
 }
+
 variable "cluster_name" {
+  type        = string
+  default     = "talos"
+}
+
+variable "zone" {
   type        = string
   default     = "talos"
 }
