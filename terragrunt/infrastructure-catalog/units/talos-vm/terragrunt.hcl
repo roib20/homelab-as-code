@@ -25,13 +25,12 @@ dependency "download_file" {
   }
 }
 
-dependency "cloud-config" {
-  config_path = "../cloud-config"
-
-  mock_outputs = {
-      user_data_cloud_config = "datastore-name:iso/some-file.img"
-      meta_data_cloud_config = "datastore-name:iso/some-file.img"
-  }
+dependencies {
+  paths = [
+            "../cloud-config/control-plane-01",
+            "../cloud-config/control-plane-02",
+            "../cloud-config/control-plane-03",
+          ]
 }
 
 inputs = {
@@ -85,8 +84,8 @@ inputs = {
   # Cloud-init
   initialization = {
     datastore_id = try(values.vm_datastore_id, "VM")
-    # user_data_file_id = dependency.cloud-config.outputs.user_data_cloud_config
-    meta_data_file_id = dependency.cloud-config.outputs.meta_data_cloud_config
+    meta_data_file_id = "${try(values.snippets_datastore_id, "local")}:snippets/${values.meta_data_cloud_config_file_name}"
+
 
     dns = {
       servers = ["1.1.1.1", "1.0.0.1"]
