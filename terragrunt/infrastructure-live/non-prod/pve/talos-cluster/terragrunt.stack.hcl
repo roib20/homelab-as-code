@@ -22,21 +22,21 @@ locals {
     {
       name   = "control-plane-01"
       ip     = "192.168.1.51"
-      vm_id  = 101
+      vm_id  = 1001
       cpu    = 2
       memory = 2048
     },
     {
       name   = "control-plane-02"
       ip     = "192.168.1.52"
-      vm_id  = 102
+      vm_id  = 1002
       cpu    = 2
       memory = 2048
     },
     {
       name   = "control-plane-03"
       ip     = "192.168.1.53"
-      vm_id  = 103
+      vm_id  = 1003
       cpu    = 2
       memory = 2048
     },
@@ -100,7 +100,7 @@ unit "download_file" {
 
 unit "cloud-config-$${local.controlplane_nodes[0].name}" {
   source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-config"
-  path   = "cloud-config-${local.controlplane_nodes[0].name}"
+  path   = "cloud-config/${local.controlplane_nodes[0].name}"
 
   values = {
     node_name              = "${local.node_name}"
@@ -113,6 +113,8 @@ unit "cloud-config-$${local.controlplane_nodes[0].name}" {
     zone                   = "${local.node_name}"
     cpu                    = "${local.controlplane_nodes[0].cpu}"
     memory                 = "${local.controlplane_nodes[0].memory}"
+
+    meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[0].name}.yaml"
   }
 }
 
@@ -131,6 +133,88 @@ unit "$${local.controlplane_nodes[0].name}" {
     zone         = "${local.node_name}"
     cpu          = "${local.controlplane_nodes[0].cpu}"
     memory       = "${local.controlplane_nodes[0].memory}"
+
+    meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[0].name}.yaml"
+  }
+}
+
+unit "cloud-config-$${local.controlplane_nodes[1].name}" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-config"
+  path   = "cloud-config/${local.controlplane_nodes[1].name}"
+
+  values = {
+    node_name              = "${local.node_name}"
+    datastore_id           = "local"
+    user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
+
+    hostname               = "${local.controlplane_nodes[1].name}"
+    vm_id                  = "${local.controlplane_nodes[1].vm_id}"
+    region                 = "${local.cluster_name}"
+    zone                   = "${local.node_name}"
+    cpu                    = "${local.controlplane_nodes[1].cpu}"
+    memory                 = "${local.controlplane_nodes[1].memory}"
+
+    meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[1].name}.yaml"
+  }
+}
+
+unit "$${local.controlplane_nodes[1].name}" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
+  path   = "${local.controlplane_nodes[1].name}"
+
+  values = {
+    node_name    = "${local.node_name}"
+    vm_name      = "${local.controlplane_nodes[1].name}"
+    ipv4_address = "${local.controlplane_nodes[1].ip}"
+
+    hostname     = "${local.controlplane_nodes[1].name}"
+    vm_id        = "${local.controlplane_nodes[1].vm_id}"
+    region       = "${local.cluster_name}"
+    zone         = "${local.node_name}"
+    cpu          = "${local.controlplane_nodes[1].cpu}"
+    memory       = "${local.controlplane_nodes[1].memory}"
+
+    meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[1].name}.yaml"
+  }
+}
+
+unit "cloud-config-$${local.controlplane_nodes[2].name}" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-config"
+  path   = "cloud-config/${local.controlplane_nodes[2].name}"
+
+  values = {
+    node_name              = "${local.node_name}"
+    datastore_id           = "local"
+    user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
+
+    hostname               = "${local.controlplane_nodes[2].name}"
+    vm_id                  = "${local.controlplane_nodes[2].vm_id}"
+    region                 = "${local.cluster_name}"
+    zone                   = "${local.node_name}"
+    cpu                    = "${local.controlplane_nodes[2].cpu}"
+    memory                 = "${local.controlplane_nodes[2].memory}"
+
+    meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[2].name}.yaml"
+  }
+}
+
+unit "$${local.controlplane_nodes[2].name}" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
+  path   = "${local.controlplane_nodes[2].name}"
+
+  values = {
+    node_name    = "${local.node_name}"
+    vm_name      = "${local.controlplane_nodes[2].name}"
+    ipv4_address = "${local.controlplane_nodes[2].ip}"
+
+    hostname     = "${local.controlplane_nodes[2].name}"
+    vm_id        = "${local.controlplane_nodes[2].vm_id}"
+    region       = "${local.cluster_name}"
+    zone         = "${local.node_name}"
+    cpu          = "${local.controlplane_nodes[2].cpu}"
+    memory       = "${local.controlplane_nodes[2].memory}"
+
+    meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[2].name}.yaml"
   }
 }
 
