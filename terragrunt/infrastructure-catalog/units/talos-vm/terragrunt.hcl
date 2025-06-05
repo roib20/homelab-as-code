@@ -39,7 +39,7 @@ inputs = {
 
   # VM identity
   vm_name = try(values.vm_name, "talos-vm")
-  # vm_id   = try(values.vm_id, 4000)
+  vm_id   = try(values.vm_id, 4000)
 
   # Storage & resources
   vm_datastore_id  = try(values.vm_datastore_id, "VM")
@@ -62,12 +62,12 @@ inputs = {
   # CPU
   cpu = {
     type = "host"
-    cores = 2
+    cores = try(values.cpu_cores, 2)
   }
 
   # Memory
   memory = {
-    dedicated = 4096
+    dedicated = try(values.memory, 4096)
   }
 
   disks = [
