@@ -43,8 +43,6 @@ inputs = {
 
   # Storage & resources
   vm_datastore_id  = try(values.vm_datastore_id, "VM")
-  memory_dedicated = try(values.memory_dedicated, 4096)
-  disk_size_gb     = try(values.disk_size_gb, 32)
 
   agent = {
     enabled = local.agent
@@ -103,3 +101,4 @@ inputs = {
     ]
   }
 }
+
