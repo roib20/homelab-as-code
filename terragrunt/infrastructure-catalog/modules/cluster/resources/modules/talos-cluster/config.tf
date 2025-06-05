@@ -61,6 +61,8 @@ data "talos_machine_configuration" "this" {
     templatefile("${path.module}/resources/talos-patches/tailscale.patch.yaml.tftpl", {
       TS_AUTHKEY = each.value.talos_config
     }),
+    templatefile("${path.module}/resources/talos-patches/ccm.yaml", {
+    }),
   ]
 }
 
