@@ -111,7 +111,7 @@ unit "cloud-config-$${local.controlplane_nodes[0].name}" {
     vm_id                  = "${local.controlplane_nodes[0].vm_id}"
     region                 = "${local.cluster_name}"
     zone                   = "${local.node_name}"
-    cpu_cores              = "${local.controlplane_nodes[0].cpu_cores}"
+    cpu                    = "${local.controlplane_nodes[0].cpu_cores}"
     memory                 = "${local.controlplane_nodes[0].memory}"
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[0].name}.yaml"
@@ -131,7 +131,7 @@ unit "$${local.controlplane_nodes[0].name}" {
     vm_id        = "${local.controlplane_nodes[0].vm_id}"
     region       = "${local.cluster_name}"
     zone         = "${local.node_name}"
-    cpu_cores     = "${local.controlplane_nodes[0].cpu_cores}"
+    cpu_cores    = "${local.controlplane_nodes[0].cpu_cores}"
     memory       = "${local.controlplane_nodes[0].memory}"
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[0].name}.yaml"
@@ -151,7 +151,7 @@ unit "cloud-config-$${local.controlplane_nodes[1].name}" {
     vm_id                  = "${local.controlplane_nodes[1].vm_id}"
     region                 = "${local.cluster_name}"
     zone                   = "${local.node_name}"
-    cpu_cores              = "${local.controlplane_nodes[1].cpu_cores}"
+    cpu                    = "${local.controlplane_nodes[1].cpu_cores}"
     memory                 = "${local.controlplane_nodes[1].memory}"
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[1].name}.yaml"
@@ -191,7 +191,7 @@ unit "cloud-config-$${local.controlplane_nodes[2].name}" {
     vm_id                  = "${local.controlplane_nodes[2].vm_id}"
     region                 = "${local.cluster_name}"
     zone                   = "${local.node_name}"
-    cpu_cores              = "${local.controlplane_nodes[2].cpu_cores}"
+    cpu                    = "${local.controlplane_nodes[2].cpu_cores}"
     memory                 = "${local.controlplane_nodes[2].memory}"
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[2].name}.yaml"
