@@ -4,6 +4,7 @@ machine:
       cloud-provider: external
       # For security reasons, it is recommended to enable the rotation of server certificates.
       rotate-server-certificates: true
+%{ if type == "controlplane" ~}
   features:
     kubernetesTalosAPIAccess:
       enabled: true
@@ -11,3 +12,4 @@ machine:
         - os:reader
       allowedKubernetesNamespaces:
         - kube-system
+%{ endif ~}
