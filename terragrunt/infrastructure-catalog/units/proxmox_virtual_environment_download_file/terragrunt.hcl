@@ -14,7 +14,7 @@ terraform {
 inputs = {
   content_type            = try(values.content_type, "iso")               # Required: "iso" for VM images or "vztmpl" for LXC images
   datastore_id            = values.datastore_id                           # Required: Target datastore ID
-  nodes                   = values.nodes                                  # Required: Proxmox node name
+  node_names              = values.node_names                             # Required: Proxmox node name
   url                     = try(values.url, null)                         # Required: HTTP/HTTPS URL
 
   checksum                = try(values.checksum, null)                    # Optional: Expected checksum of the file (nullable)

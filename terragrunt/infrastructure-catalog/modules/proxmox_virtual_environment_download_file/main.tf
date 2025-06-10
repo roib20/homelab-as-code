@@ -1,5 +1,5 @@
 resource "proxmox_virtual_environment_download_file" "download" {
-  for_each = toset(var.nodes)
+  for_each = toset(var.node_names)
 
   node_name = each.key                                                 # Required: Proxmox node name
 

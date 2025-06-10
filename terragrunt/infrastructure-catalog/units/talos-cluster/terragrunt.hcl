@@ -25,7 +25,6 @@ dependencies {
 # Pass everything through with the familiar “try(values…, fallback)” idiom
 inputs = {
   # ---------- identification ----------
-  nodes                  = try(values.nodes, ["pve"])
   cluster_name           = try(values.cluster_name)
   cluster_endpoint       = try(values.cluster_endpoint)
   cluster_vip            = try(values.cluster_vip)
