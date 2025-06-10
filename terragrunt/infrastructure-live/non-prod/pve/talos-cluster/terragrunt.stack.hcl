@@ -17,7 +17,7 @@ locals {
   flux_version        = "v2.6.0"
   prometheus_version  = "17.0.2"
   cilium_version      = "1.17.4"
-  talos_ccm_version   = "v1.10.0"
+  talos_ccm_version   = "0.4.6"
 
   # ─── Machines / IP layout ────────────────────────────────────────────────────
   controlplane_nodes = [
