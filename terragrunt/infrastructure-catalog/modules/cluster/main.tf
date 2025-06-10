@@ -36,13 +36,21 @@ locals {
 
   bootstrap_charts = [
     {
-      repository = "https://helm.cilium.io/"
+      repository = "oci://ghcr.io/home-operations/charts-mirror"
       chart      = "cilium"
       name       = "cilium"
       version    = var.cilium_version
       namespace  = "kube-system"
       values     = var.cilium_helm_values
-    }
+    },
+    {
+      repository = "oci://ghcr.io/siderolabs/charts"
+      chart      = "talos-cloud-controller-manager"
+      name       = "talos-cloud-controller-manager"
+      version    = var.talos_ccm_version
+      namespace  = "kube-system"
+      values     = var.talos_ccm_helm_values
+    },
   ]
 
   extraManifests = [
