@@ -24,21 +24,21 @@ locals {
       ip            = "192.168.1.51"
       vm_id         = 1001
       cpu_cores     = 2
-      memory        = 2048
+      memory        = 4096
     },
     {
       name         = "control-plane-02"
       ip           = "192.168.1.52"
       vm_id        = 1002
       cpu_cores    = 2
-      memory       = 2048
+      memory       = 4096
     },
     {
       name         = "control-plane-03"
       ip           = "192.168.1.53"
       vm_id        = 1003
       cpu_cores    = 2
-      memory       = 2048
+      memory       = 4096
     },
   ]
 
