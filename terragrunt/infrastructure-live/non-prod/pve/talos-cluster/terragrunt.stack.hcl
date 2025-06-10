@@ -83,10 +83,10 @@ locals {
   cluster_pod_subnet      = "10.244.0.0/16"
   cluster_service_subnet  = "10.96.0.0/12"
 
-  cilium_helm_values    = file("${local.kubernetes_dir}/cluster/addons/cilium/base/values.yaml")
-  talos_ccm_helm_values = file("${local.kubernetes_dir}/cluster/addons/talos-cloud-controller-manager/base/values.yaml")
+  cilium_helm_values      = file("${local.kubernetes_dir}/cluster/addons/cilium/base/values.yaml")
+  talos_ccm_helm_values   = file("${local.kubernetes_dir}/cluster/addons/talos-cloud-controller-manager/base/values.yaml")
   
-  timeout               = "10m"
+  timeout                 = "10m"
 }
 
 unit "download_file" {
