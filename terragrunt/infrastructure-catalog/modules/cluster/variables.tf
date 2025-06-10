@@ -45,12 +45,22 @@ variable "cluster_on_destroy" {
 }
 
 variable "cilium_helm_values" {
-  description = "The path for `values.yaml` to use for Cilium Helm chart."
+  description = "The path for `values.yaml` to use for the Cilium Helm chart."
   type        = string
 }
 
 variable "cilium_version" {
   description = "The version of Cilium to use."
+  type        = string
+}
+
+variable "talos_ccm_helm_values" {
+  description = "The path for `values.yaml` to use for the Talos CCM Helm chart."
+  type        = string
+}
+
+variable "talos_ccm_version" {
+  description = "The version of Talos CCM to use."
   type        = string
 }
 
