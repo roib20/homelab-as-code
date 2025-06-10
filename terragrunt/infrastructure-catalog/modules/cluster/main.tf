@@ -42,7 +42,15 @@ locals {
       version    = var.cilium_version
       namespace  = "kube-system"
       values     = var.cilium_helm_values
-    }
+    },
+    {
+      repository = "oci://ghcr.io/siderolabs/charts"
+      chart      = "cilium"
+      name       = "cilium"
+      version    = var.talos_ccm_version
+      namespace  = "kube-system"
+      values     = var.talos_ccm_helm_values
+    },
   ]
 
   extraManifests = [

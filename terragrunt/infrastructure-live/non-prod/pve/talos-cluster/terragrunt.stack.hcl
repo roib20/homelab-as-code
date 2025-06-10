@@ -5,6 +5,7 @@ locals {
   environment    = "non-prod"
   root_dir       = dirname(find_in_parent_folders("root.hcl"))
   terragrunt_dir = "${local.root_dir}/.."
+  kubernetes_dir = "${local.root_dir}/../../kubernetes"
 
   # ─── Proxmox node that will host the VMs ─────────────────────────────────────
   node_vars  = read_terragrunt_config("${local.root_dir}/${local.environment}/pve/node.hcl")
@@ -16,6 +17,7 @@ locals {
   flux_version        = "v2.6.0"
   prometheus_version  = "17.0.2"
   cilium_version      = "1.17.4"
+  talos_ccm_version   = "v1.10.0"
 
   # ─── Machines / IP layout ────────────────────────────────────────────────────
   controlplane_nodes = [
@@ -81,8 +83,10 @@ locals {
   cluster_pod_subnet      = "10.244.0.0/16"
   cluster_service_subnet  = "10.96.0.0/12"
 
-  cilium_helm_values = file("${local.terragrunt_dir}/infrastructure-live/non-prod/kubernetes/manifests/helm-release/cilium/values.yaml")
-  timeout            = "10m"
+  cilium_helm_values    = file("${local.kubernetes_dir}/cluster/addons/cilium/overlays/prod/values.yaml")
+  talos_ccm_helm_values = file("${local.kubernetes_dir}/cluster/addons/talos-cloud-controller-manager/overlays/prod/values.yaml")
+  
+  timeout               = "10m"
 }
 
 unit "download_file" {
@@ -237,6 +241,8 @@ unit "talos-cluster" {
     prometheus_version     = local.prometheus_version
     cilium_version         = local.cilium_version
     cilium_helm_values     = local.cilium_helm_values
+    talos_ccm_version      = local.talos_ccm_version
+    talos_ccm_helm_values  = local.talos_ccm_helm_values
 
     timeout   = local.timeout
     machines  = local.machines
