@@ -23,7 +23,7 @@ unit "download_file" {
   path = "download_file"
 
   values = {
-    node_name = "${local.node_name}"
+    node_names         = ["${local.node_name}"]
     url                = "https://enterprise.proxmox.com/iso/proxmox-ve_8.4-1.iso"
     checksum           = "d237d70ca48a9f6eb47f95fd4fd337722c3f69f8106393844d027d28c26523d8"
     checksum_algorithm = "sha256"

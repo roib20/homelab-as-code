@@ -1,0 +1,64 @@
+image:
+  # repository: ghcr.io/sergelogvinov/talos-cloud-controller-manager
+  pullPolicy: Always
+  tag: ""
+
+service:
+  containerPort: 50258
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/scheme: "https"
+    prometheus.io/port: "50258"
+
+logVerbosityLevel: 5
+
+enabledControllers:
+  - cloud-node
+  - node-csr-approval
+
+daemonSet:
+  enabled: true
+
+tolerations:
+  - effect: NoSchedule
+    operator: Exists
+
+transformations:
+  - name: web
+    nodeSelector:
+      - matchExpressions:
+          - key: hostname
+            operator: Regexp
+            values:
+              - ^web-.+$
+    labels:
+      node-role.kubernetes.io/web: ""
+  - name: worker
+    nodeSelector:
+      - matchExpressions:
+          - key: hostname
+            operator: Regexp
+            values:
+              - ^worker-.+$
+    labels:
+      node-role.kubernetes.io/worker: ""
+  - name: db
+    nodeSelector:
+      - matchExpressions:
+          - key: hostname
+            operator: Regexp
+            values:
+              - ^db-.+$
+    labels:
+      node-role.kubernetes.io/db: ""
+
+  - name: nocloud
+    nodeSelector:
+      - matchExpressions:
+          - key: platform
+            operator: In
+            values:
+              - nocloud
+    platformMetadata:
+      InstanceType: "{{ coalesce .InstanceType .SKUNumber }}"
+      ProviderID: '{{ if .SerialNumber }}proxmox://region-1/{{ getValue .SerialNumber "i" }}{{ else }}{{ .ProviderID }}{{ end }}'

@@ -11,18 +11,21 @@ variable "datastore_id" {
   type        = string
 }
 
-variable "node_name" {
-  description = "The name of the Proxmox node where the file will be stored."
-  type        = string
+variable "node_names" {
+  description = "List of Proxmox node names where the file will be stored."
+  type        = list(string)
 }
 
+# Only set if not using Talos Image Factory
 variable "url" {
   description = "The URL to download the file from. Must match regex: https?://.*."
   type        = string
   validation {
-    condition     = can(regex("^https?://.*", var.url))
+    condition     = var.url == null || can(regex("^https?://.*", var.url))
     error_message = "The URL must start with http:// or https://"
   }
+  nullable = true
+  default  = null
 }
 
 # Optional Variables
@@ -87,4 +90,30 @@ variable "verify" {
   description = "Verify SSL/TLS certificates. Defaults to `true`."
   type        = bool
   default     = true
+}
+
+# Talos Image Factory Variables
+
+variable "talos_platform" {
+  type        = string
+  nullable    = true
+  default     = null
+}
+
+variable "talos_arch" {
+  type        = string
+  nullable    = true
+  default     = null
+}
+
+variable "talos_version" {
+  type        = string
+  nullable    = true
+  default     = null
+}
+
+variable "talos_schematic_id" {
+  type        = string
+  nullable    = true
+  default     = null
 }

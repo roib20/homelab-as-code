@@ -1,0 +1,59 @@
+# https://docs.cilium.io/en/stable/helm-reference/
+# https://docs.cilium.io/en/stable/network/kubernetes/configuration/#configmap-options
+# https://docs.cilium.io/en/stable/operations/performance/tuning/
+# https://www.talos.dev/latest/kubernetes-guides/network/deploying-cilium/
+---
+autoDirectNodeRoutes: true
+routingMode: native
+ipv4NativeRoutingCIDR: 10.244.0.0/16
+# ipv6NativeRoutingCIDR: ""
+# ipv6:
+#   enabled: true
+# enableIPv6BIGTCP: true
+ipv4:
+  enabled: true
+enableIPv4BIGTCP: true
+bpf:
+  datapathMode: netkit
+  masquerade: true
+  distributedLRU:
+    enabled: true
+  mapDynamicSizeRatio: 0.08
+bpfClockProbe: true
+bandwidthManager:
+  enabled: true
+  bbr: true
+ipam:
+  mode: kubernetes
+cgroup:
+  autoMount:
+    enabled: false
+  hostRoot: /sys/fs/cgroup
+kubeProxyReplacement: true
+k8sServiceHost: localhost
+k8sServicePort: 7445
+gatewayAPI:
+  enabled: true
+  enableAppProtocol: true
+securityContext:
+  capabilities:
+    ciliumAgent:
+      - CHOWN
+      - KILL
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - PERFMON
+      - BPF
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    cleanCiliumState:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - PERFMON
+      - BPF
