@@ -11,7 +11,7 @@ variable "datastore_id" {
   type        = string
 }
 
-variable "nodes" {
+variable "node_names" {
   description = "List of Proxmox node names where the file will be stored."
   type        = list(string)
 }

@@ -46,8 +46,10 @@ locals {
 
   worker_nodes = []
 
+  talos_nodes = concat(local.controlplane_nodes, local.worker_nodes)
+
   machines = {
-    for node in concat(local.controlplane_nodes, local.worker_nodes) :
+    for node in local.talos_nodes :
     node.name => {
       type = contains(local.controlplane_nodes, node) ? "controlplane" : "worker"
 
@@ -94,7 +96,7 @@ unit "download_file" {
   path   = "download_file"
 
   values = {
-    nodes          = ["${local.node_name}"]
+    node_names     = ["${local.node_name}"]
     datastore_id   = "local"
     talos_version  = "${local.talos_version}"
     talos_platform = "nocloud"
@@ -227,7 +229,6 @@ unit "talos-cluster" {
   path   = "talos-cluster"
 
   values = {
-    nodes                  = [local.node_name]
     cluster_name           = local.cluster_name
     cluster_endpoint       = local.cluster_endpoint
     cluster_vip            = local.cluster_vip
