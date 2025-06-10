@@ -45,8 +45,8 @@ locals {
     },
     {
       repository = "oci://ghcr.io/siderolabs/charts"
-      chart      = "cilium"
-      name       = "cilium"
+      chart      = "talos-cloud-controller-manager"
+      name       = "talos-cloud-controller-manager"
       version    = var.talos_ccm_version
       namespace  = "kube-system"
       values     = var.talos_ccm_helm_values
