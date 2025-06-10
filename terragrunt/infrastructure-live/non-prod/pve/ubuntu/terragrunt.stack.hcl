@@ -34,7 +34,7 @@ unit "download_file" {
   path = "download_file"
 
   values = {
-    node_name = "${local.node_name}"
+    node_names         = ["${local.node_name}"]
     url                = "https://cloud-images.ubuntu.com/releases/noble/release-20250516/ubuntu-24.04-server-cloudimg-amd64.img"
     checksum           = "8d6161defd323d24d66f85dda40e64e2b9021aefa4ca879dcbc4ec775ad1bbc5"
     checksum_algorithm = "sha256"
