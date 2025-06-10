@@ -34,7 +34,7 @@ unit "download_file" {
   path = "download_file"
 
   values = {
-    node_name = "${local.node_name}"
+    node_names         = ["${local.node_name}"]
     url                = "https://cloud.debian.org/images/cloud/bookworm-backports/20250519-2117/debian-12-backports-genericcloud-amd64-20250519-2117.qcow2"
     file_name          = "debian-12-backports-genericcloud-amd64.img"
     checksum           = "4e1f80724daf086b784e4ff8e16051668482cd2d041762e83f8e51dbda1424f87f4bcd88a21f0814fd7c273f19b92f77519740dfbe7cd3b9402030557cec593b"
