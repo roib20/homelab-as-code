@@ -36,7 +36,7 @@ locals {
 
   bootstrap_charts = [
     {
-      repository = "https://helm.cilium.io/"
+      repository = "oci://ghcr.io/home-operations/charts-mirror"
       chart      = "cilium"
       name       = "cilium"
       version    = var.cilium_version
