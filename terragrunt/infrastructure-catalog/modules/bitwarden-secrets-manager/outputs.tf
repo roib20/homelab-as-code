@@ -14,6 +14,6 @@ output "organization_id" {
 }
 
 output "project_id" {
-  value     = data.bitwarden_secret.secret_key.project_id
+  value     = try(data.bitwarden_secret.secret_key.project_id, null)
   sensitive = true
 }
