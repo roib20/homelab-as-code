@@ -7,3 +7,13 @@ output "secret_value" {
   value     = data.bitwarden_secret.secret_key.value
   sensitive = true
 }
+
+output "organization_id" {
+  value     = var.organization_id
+  sensitive = true
+}
+
+output "project_id" {
+  value     = data.bitwarden_secret.secret_key.project_id
+  sensitive = true
+}
