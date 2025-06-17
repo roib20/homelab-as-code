@@ -1,0 +1,10 @@
+{
+  "project": "default",
+  "appName": "cert-manager",
+  "userGivenName": "cert-manager",
+  "destNamespace": "cert-manager",
+  "destName": "in-cluster",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "annotations": {}
+}
