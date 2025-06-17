@@ -1,4 +1,4 @@
 data "bitwarden_secret" "secret_key" {
-  organization_id = var.organization_id
+  organization_id = try(var.organization_id, null)
   key             = var.secret_key
 }
