@@ -83,6 +83,8 @@ locals {
   cluster_pod_subnet      = "10.244.0.0/16"
   cluster_service_subnet  = "10.96.0.0/12"
 
+  timeout                 = "10m"
+
   # Helm Charts
   helm_charts = {
     cilium = {
@@ -99,8 +101,6 @@ locals {
       values          = file("${local.kubernetes_dir}/cluster/addons/cert-manager/base/values.yaml")
     }
   }
-
-  timeout                 = "10m"
 }
 
 unit "download_file" {
