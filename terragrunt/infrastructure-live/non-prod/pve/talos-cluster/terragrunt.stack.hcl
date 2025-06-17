@@ -94,10 +94,12 @@ locals {
     }
     talos-ccm = {
       chart_version   = "0.4.6"
+      helm_repository = "oci://ghcr.io/siderolabs/charts"
       values          = file("${local.kubernetes_dir}/cluster/addons/talos-cloud-controller-manager/base/values.yaml")
     }
     cert-manager = {
       chart_version   = "1.18.0"
+      helm_repository = "https://charts.jetstack.io"
       values          = file("${local.kubernetes_dir}/cluster/addons/cert-manager/base/values.yaml")
     }
   }
