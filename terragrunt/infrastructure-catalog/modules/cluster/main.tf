@@ -51,20 +51,9 @@ locals {
       namespace  = "kube-system"
       values     = var.helm_charts["talos-ccm"].values
     },
-    {
-      repository = var.helm_charts["cert-manager"].helm_repository
-      chart      = "cert-manager"
-      name       = "cert-manager"
-      version    = var.helm_charts["cert-manager"].chart_version
-      namespace  = "cert-manager"
-      values     = var.helm_charts["cert-manager"].values
-    },
   ]
 
   extraManifests = [
-    # Namespaces
-    "https://github.com/cert-manager/cert-manager/blob/master/deploy/manifests/namespace.yaml",
-
     # Prometheus CRDs
     "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml",
     "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml",
