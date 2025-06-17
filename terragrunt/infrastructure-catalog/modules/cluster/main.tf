@@ -57,7 +57,7 @@ locals {
       name       = "cert-manager"
       version    = var.helm_charts["cert-manager"].chart_version
       namespace  = "cert-manager"
-      values     = var.helm_charts["cert-manager"].chart_version
+      values     = var.helm_charts["cert-manager"].values
     },
   ]
 
