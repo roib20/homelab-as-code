@@ -19,7 +19,7 @@ unit "bitwarden-access" {
 
   values = {
     bws_access_token = get_env("BWS_ACCESS_TOKEN")
-    secret_key       = "BWS_ACCESS_TOKEN"
+    secret_key       = "testsecret"
     organization_id  = try(get_env("ORGANIZATION_ID"), null) 
   }
 }
@@ -35,7 +35,7 @@ unit "kubernetes-manifests" {
       "${local.kubernetes_dir}/cluster/addons/external-secrets/base/namespace.yaml",
       "${local.kubernetes_dir}/secrets/bitwarden-access-token.yaml.tftpl",
       "${local.kubernetes_dir}/secrets/bitwarden-secretsmanager.yaml.tftpl",
-      # "${local.kubernetes_dir}/secrets/github-https-creds.yaml.externalsecret",
+      "${local.kubernetes_dir}/secrets/github-https-creds.yaml.externalsecret",
     ]
   }
 }
