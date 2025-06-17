@@ -51,18 +51,6 @@ variable "helm_charts" {
     chart_version   = string  # version of the chart
     helm_repository = string  # repository URL or name
   }))
-
-  default = {
-    cilium = {
-      helm_repository = "https://helm.cilium.io/"
-    }
-    talos-ccm = {
-      helm_repository = "oci://ghcr.io/siderolabs/charts"
-    }
-    cert-manager = {
-      helm_repository = "https://charts.jetstack.io"
-    }
-  }
 }
 
 variable "kubernetes_version" {
