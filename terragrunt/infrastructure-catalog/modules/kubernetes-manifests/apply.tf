@@ -12,4 +12,9 @@ resource "kubernetes_manifest" "apply" {
       ? templatefile(each.value, var.template_vars)
       : file(each.value)
   )
+
+  lifecycle {
+    # After the initial apply, the lifecycle of Kubernetes resources is managed by a GitOps tool (Argo CD or Flux)
+    ignore_changes = all
+  }
 }
