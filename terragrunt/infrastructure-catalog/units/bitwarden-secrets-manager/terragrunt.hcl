@@ -8,7 +8,7 @@ locals {
 }
 
 terraform {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/modules/cloud-config"
+  source = "${local.terragrunt_dir}/infrastructure-catalog/modules/bitwarden-secrets-manager"
 }
 
 inputs = {
