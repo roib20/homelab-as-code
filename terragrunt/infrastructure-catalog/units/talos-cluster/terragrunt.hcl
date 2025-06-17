@@ -39,12 +39,10 @@ inputs = {
   talos_version          = try(values.talos_version)
   flux_version           = try(values.flux_version)
   prometheus_version     = try(values.prometheus_version)
-  cilium_version         = try(values.cilium_version)
-  talos_ccm_version      = try(values.talos_ccm_version)
 
-  # ---------- misc ----------
-  cilium_helm_values     = try(values.cilium_helm_values)
-  talos_ccm_helm_values  = try(values.talos_ccm_helm_values)
+  # ---------- Helm Charts ----------
+  helm_charts            = try(values.helm_charts)
+
   timeout                = try(values.timeout, "10m")
 
   # machines map

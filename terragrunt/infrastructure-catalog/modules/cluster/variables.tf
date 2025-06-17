@@ -44,24 +44,25 @@ variable "cluster_on_destroy" {
   }
 }
 
-variable "cilium_helm_values" {
-  description = "The path for `values.yaml` to use for the Cilium Helm chart."
-  type        = string
-}
+variable "helm_charts" {
+  description = "Configuration for each Helm chart: values file path, chart version, and repository URL."
+  type = map(object({
+    values          = string  # path to values.yaml
+    chart_version   = string  # version of the chart
+    helm_repository = string  # repository URL or name
+  }))
 
-variable "cilium_version" {
-  description = "The version of Cilium to use."
-  type        = string
-}
-
-variable "talos_ccm_helm_values" {
-  description = "The path for `values.yaml` to use for the Talos CCM Helm chart."
-  type        = string
-}
-
-variable "talos_ccm_version" {
-  description = "The version of Talos CCM to use."
-  type        = string
+  default = {
+    cilium = {
+      helm_repository = "https://helm.cilium.io/"
+    }
+    talos-ccm = {
+      helm_repository = "oci://ghcr.io/siderolabs/charts"
+    }
+    cert-manager = {
+      helm_repository = "https://charts.jetstack.io"
+    }
+  }
 }
 
 variable "kubernetes_version" {

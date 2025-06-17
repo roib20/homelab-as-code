@@ -36,24 +36,35 @@ locals {
 
   bootstrap_charts = [
     {
-      repository = "oci://ghcr.io/home-operations/charts-mirror"
+      repository = var.helm_charts["cilium"].helm_repository
       chart      = "cilium"
       name       = "cilium"
-      version    = var.cilium_version
+      version    = var.helm_charts["cilium"].chart_version
       namespace  = "kube-system"
-      values     = var.cilium_helm_values
+      values     = var.helm_charts["cilium"].values
     },
     {
-      repository = "oci://ghcr.io/siderolabs/charts"
+      repository = var.helm_charts["talos-ccm"].helm_repository
       chart      = "talos-cloud-controller-manager"
       name       = "talos-cloud-controller-manager"
-      version    = var.talos_ccm_version
+      version    = var.helm_charts["talos-ccm"].chart_version
       namespace  = "kube-system"
-      values     = var.talos_ccm_helm_values
+      values     = var.helm_charts["talos-ccm"].values
+    },
+    {
+      repository = var.helm_charts["cert-manager"].helm_repository
+      chart      = "cert-manager"
+      name       = "cert-manager"
+      version    = var.helm_charts["cert-manager"].chart_version
+      namespace  = "cert-manager"
+      values     = var.helm_charts["cert-manager"].chart_version
     },
   ]
 
   extraManifests = [
+    # Namespaces
+    "https://github.com/cert-manager/cert-manager/blob/master/deploy/manifests/namespace.yaml",
+
     # Prometheus CRDs
     "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml",
     "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml",

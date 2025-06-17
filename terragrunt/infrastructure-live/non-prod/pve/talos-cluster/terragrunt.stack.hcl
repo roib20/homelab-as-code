@@ -16,8 +16,6 @@ locals {
   kubernetes_version  = "v1.33.1"
   flux_version        = "v2.6.0"
   prometheus_version  = "17.0.2"
-  cilium_version      = "1.17.4"
-  talos_ccm_version   = "0.4.6"
 
   # ─── Machines / IP layout ────────────────────────────────────────────────────
   controlplane_nodes = [
@@ -85,9 +83,23 @@ locals {
   cluster_pod_subnet      = "10.244.0.0/16"
   cluster_service_subnet  = "10.96.0.0/12"
 
-  cilium_helm_values      = file("${local.kubernetes_dir}/cluster/addons/cilium/base/values.yaml")
-  talos_ccm_helm_values   = file("${local.kubernetes_dir}/cluster/addons/talos-cloud-controller-manager/base/values.yaml")
-  
+  # Helm Charts
+  helm_charts = {
+    cilium = {
+      chart_version   = "1.17.4"
+      helm_repository = "oci://ghcr.io/home-operations/charts-mirror"
+      values          = file("${local.kubernetes_dir}/cluster/addons/cilium/base/values.yaml")
+    }
+    talos-ccm = {
+      chart_version   = "0.4.6"
+      values          = file("${local.kubernetes_dir}/cluster/addons/talos-cloud-controller-manager/base/values.yaml")
+    }
+    cert-manager = {
+      chart_version   = "1.18.0"
+      values          = file("${local.kubernetes_dir}/cluster/addons/cert-manager/base/values.yaml")
+    }
+  }
+
   timeout                 = "10m"
 }
 
@@ -229,6 +241,7 @@ unit "talos-cluster" {
   path   = "talos-cluster"
 
   values = {
+    # Cluster-wide settings
     cluster_name           = local.cluster_name
     cluster_endpoint       = local.cluster_endpoint
     cluster_vip            = local.cluster_vip
@@ -236,16 +249,17 @@ unit "talos-cluster" {
     cluster_pod_subnet     = local.cluster_pod_subnet
     cluster_service_subnet = local.cluster_service_subnet
 
-    kubernetes_version     = local.kubernetes_version
-    talos_version          = local.talos_version
-    flux_version           = local.flux_version
-    prometheus_version     = local.prometheus_version
-    cilium_version         = local.cilium_version
-    cilium_helm_values     = local.cilium_helm_values
-    talos_ccm_version      = local.talos_ccm_version
-    talos_ccm_helm_values  = local.talos_ccm_helm_values
+    # Versions
+    kubernetes_version = local.kubernetes_version
+    talos_version      = local.talos_version
+    flux_version       = local.flux_version
+    prometheus_version = local.prometheus_version
 
-    timeout   = local.timeout
-    machines  = local.machines
+    # Helm Charts
+    helm_charts = local.helm_charts
+
+    # other locals
+    timeout  = local.timeout
+    machines = local.machines
   }
 }
