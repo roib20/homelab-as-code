@@ -8,6 +8,11 @@ output "secret_value" {
   sensitive = true
 }
 
+output "secret_value_base64" {
+  value     = base64encode(data.bitwarden_secret.secret_key.value)
+  sensitive = true
+}
+
 output "organization_id" {
   value     = var.organization_id
   sensitive = true
