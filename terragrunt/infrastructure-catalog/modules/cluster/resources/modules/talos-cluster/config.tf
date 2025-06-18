@@ -20,12 +20,12 @@ data "helm_template" "bootstrap_charts" {
   name         = each.value.name
   version      = each.value.version
   namespace    = each.value.namespace
-  kube_version = var.kubernetes_version
+  kube_version = var.versions.kubernetes_version
   values       = [each.value.values]
 }
 
 resource "talos_machine_secrets" "this" {
-  talos_version = var.talos_version
+  talos_version = var.versions.talos_version
 }
 
 data "talos_machine_configuration" "this" {
@@ -35,8 +35,8 @@ data "talos_machine_configuration" "this" {
   cluster_endpoint   = local.cluster_endpoint
   machine_type       = yamldecode(each.value.talos_config).type
   machine_secrets    = talos_machine_secrets.this.machine_secrets
-  kubernetes_version = var.kubernetes_version
-  talos_version      = var.talos_version
+  kubernetes_version = var.versions.kubernetes_version
+  talos_version      = var.versions.talos_version
 
   config_patches = [
     templatefile("${path.module}/resources/talos-patches/cluster.yaml.tftpl", {

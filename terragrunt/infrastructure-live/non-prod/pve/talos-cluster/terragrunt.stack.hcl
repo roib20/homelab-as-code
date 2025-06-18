@@ -12,10 +12,13 @@ locals {
   node_name  = local.node_vars.locals.node_name
 
   # ─── Versions ────────────────────────────────────────────────────────────────
-  talos_version       = "v1.10.3"
-  kubernetes_version  = "v1.33.1"
-  flux_version        = "v2.6.0"
-  prometheus_version  = "17.0.2"
+  versions = {
+    kubernetes_version        = "v1.33.1",
+    talos_version             = "v1.10.3",
+    flux_version              = "v2.6.0",
+    prometheus_version        = "17.0.2",
+    external-secrets_version  = "0.18.0",
+  }
 
   # ─── Machines / IP layout ────────────────────────────────────────────────────
   controlplane_nodes = [
@@ -112,7 +115,7 @@ unit "download_file" {
   values = {
     node_names     = ["${local.node_name}"]
     datastore_id   = "local"
-    talos_version  = "${local.talos_version}"
+    talos_version  = "${local.versions.talos_version}"
     talos_platform = "nocloud"
     talos_arch     = "amd64"
   }
@@ -252,10 +255,7 @@ unit "talos-cluster" {
     cluster_service_subnet = local.cluster_service_subnet
 
     # Versions
-    kubernetes_version = local.kubernetes_version
-    talos_version      = local.talos_version
-    flux_version       = local.flux_version
-    prometheus_version = local.prometheus_version
+    versions               = local.versions
 
     # Helm Charts
     helm_charts = local.helm_charts

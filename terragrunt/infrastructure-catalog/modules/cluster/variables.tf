@@ -53,19 +53,13 @@ variable "helm_charts" {
   }))
 }
 
-variable "kubernetes_version" {
-  description = "The version of Kubernetes to use."
-  type        = string
-}
-
-variable "talos_version" {
-  description = "The version of Talos to use."
-  type        = string
-}
-
-variable "prometheus_version" {
-  description = "The version of Prometheus to use."
-  type        = string
+variable "versions" {
+  type = object({
+    kubernetes_version          = string  # The version of Kubernetes to use.
+    talos_version               = string  # The version of Talos to use.
+    prometheus_version          = string  # The version of Prometheus to use.
+    external-secrets_version    = string  # The version of External Secrets to use.
+  })
 }
 
 variable "nameservers" {

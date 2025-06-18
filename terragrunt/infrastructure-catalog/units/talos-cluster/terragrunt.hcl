@@ -35,10 +35,7 @@ inputs = {
   cluster_service_subnet = try(values.cluster_service_subnet)
 
   # ---------- versions ----------
-  kubernetes_version     = try(values.kubernetes_version)
-  talos_version          = try(values.talos_version)
-  flux_version           = try(values.flux_version)
-  prometheus_version     = try(values.prometheus_version)
+  versions               = try(values.versions)
 
   # ---------- Helm Charts ----------
   helm_charts            = try(values.helm_charts)

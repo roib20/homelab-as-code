@@ -1,11 +1,8 @@
-variable "talos_version" {
-  description = "The version of Talos to use."
-  type        = string
-}
-
-variable "kubernetes_version" {
-  description = "The version of kubernetes to deploy."
-  type        = string
+variable "versions" {
+  type = object({
+    kubernetes_version          = string  # The version of Kubernetes to use.
+    talos_version               = string  # The version of Talos to use.
+  })
 }
 
 variable "talos_cluster_config" {

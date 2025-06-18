@@ -30,7 +30,7 @@ locals {
 data "talos_image_factory_extensions_versions" "machine_version" {
   for_each = local.machines
 
-  talos_version = var.talos_version
+  talos_version = var.versions.talos_version
 
   filters = {
     names = each.value.extensions
@@ -58,7 +58,7 @@ resource "talos_image_factory_schematic" "machine_schematic" {
 data "talos_image_factory_urls" "machine_image_url_metal" {
   for_each = { for k, v in local.machines : k => v if v.platform != "" }
 
-  talos_version = var.talos_version
+  talos_version = var.versions.talos_version
   schematic_id  = talos_image_factory_schematic.machine_schematic[each.key].id
   platform      = each.value.platform
   architecture  = each.value.architecture
@@ -67,7 +67,7 @@ data "talos_image_factory_urls" "machine_image_url_metal" {
 data "talos_image_factory_urls" "machine_image_url_sbc" {
   for_each = { for k, v in local.machines : k => v if v.sbc != "" }
 
-  talos_version = var.talos_version
+  talos_version = var.versions.talos_version
   schematic_id  = talos_image_factory_schematic.machine_schematic[each.key].id
   architecture  = each.value.architecture
   sbc           = each.value.sbc

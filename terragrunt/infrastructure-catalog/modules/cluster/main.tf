@@ -36,29 +36,32 @@ locals {
 
   bootstrap_charts = [
     {
-      repository = var.helm_charts["cilium"].helm_repository
+      repository = var.helm_charts.cilium.helm_repository
       chart      = "cilium"
       name       = "cilium"
-      version    = var.helm_charts["cilium"].chart_version
+      version    = var.helm_charts.cilium.chart_version
       namespace  = "kube-system"
-      values     = var.helm_charts["cilium"].values
+      values     = var.helm_charts.cilium.values
     },
     {
-      repository = var.helm_charts["talos-ccm"].helm_repository
+      repository = var.helm_charts.talos-ccm.helm_repository
       chart      = "talos-cloud-controller-manager"
       name       = "talos-cloud-controller-manager"
-      version    = var.helm_charts["talos-ccm"].chart_version
+      version    = var.helm_charts.talos-ccm.chart_version
       namespace  = "kube-system"
-      values     = var.helm_charts["talos-ccm"].values
+      values     = var.helm_charts.talos-ccm.values
     },
   ]
 
   extraManifests = [
+    # External Secrets CRDs
+    "https://raw.githubusercontent.com/external-secrets/${var.versions.external-secrets_version}/v0.18.0/deploy/crds/bundle.yaml",
+
     # Prometheus CRDs
-    "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml",
-    "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml",
-    "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-probes.yaml",
-    "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-prometheusrules.yaml",
+    "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.versions.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml",
+    "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.versions.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml",
+    "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.versions.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-probes.yaml",
+    "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.versions.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-prometheusrules.yaml",
     # Gateway API CRDs: https://docs.cilium.io/en/latest/network/servicemesh/gateway-api/gateway-api/#prerequisites
     "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml",
     "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_gateways.yaml",
@@ -73,8 +76,7 @@ locals {
 module "talos_cluster" {
   source = "./resources/modules/talos-cluster"
 
-  talos_version          = var.talos_version
-  kubernetes_version     = var.kubernetes_version
+  versions               = var.versions
   talos_config_path      = var.talos_config_path
   kubernetes_config_path = var.kubernetes_config_path
   talos_cluster_config   = local.talos_cluster_config
