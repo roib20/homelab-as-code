@@ -14,7 +14,7 @@ output "secret_value_base64" {
 }
 
 output "organization_id" {
-  value     = var.organization_id
+  value     = try(data.bitwarden_secret.secret_key.organization_id, null)
   sensitive = true
 }
 
