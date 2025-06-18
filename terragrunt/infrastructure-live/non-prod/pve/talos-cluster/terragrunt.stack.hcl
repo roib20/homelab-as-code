@@ -15,7 +15,6 @@ locals {
   versions = {
     kubernetes_version        = "v1.33.1",
     talos_version             = "v1.10.3",
-    flux_version              = "v2.6.0",
     prometheus_version        = "17.0.2",
     external-secrets_version  = "0.18.0",
   }
