@@ -25,7 +25,7 @@ unit "bitwarden-access" {
 }
 
 unit "kubernetes-manifests" {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/units/kubernetes-manifests"
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/bootstrap-k8s-secrets"
 
   path = "kubernetes-manifests"
 
