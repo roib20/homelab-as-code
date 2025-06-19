@@ -55,7 +55,7 @@ locals {
 
   extraManifests = [
     # External Secrets CRDs
-    "https://raw.githubusercontent.com/external-secrets/${var.versions.external-secrets_version}/v0.18.0/deploy/crds/bundle.yaml",
+    "https://raw.githubusercontent.com/external-secrets/external-secrets/v${var.versions.external-secrets_version}/deploy/crds/bundle.yaml",
 
     # Prometheus CRDs
     "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-${var.versions.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml",
