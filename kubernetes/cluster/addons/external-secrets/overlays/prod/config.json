@@ -1,0 +1,10 @@
+{
+  "project": "default",
+  "appName": "external-secrets",
+  "userGivenName": "external-secrets",
+  "destNamespace": "external-secrets",
+  "destName": "in-cluster",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "annotations": {}
+}

@@ -1,0 +1,7 @@
+[
+  {
+    "op": "add",
+    "path": "/metadata/namespace",
+    "value": "external-secrets"
+  }
+]
