@@ -36,7 +36,7 @@ unit "kubernetes-manifests" {
       "${local.kubernetes_dir}/hidden-secrets/bitwarden-access-token.yaml.tftpl",
       "${local.kubernetes_dir}/hidden-secrets/bitwarden-secretsmanager.yaml.tftpl",
       "${local.kubernetes_dir}/cluster/argo/argocd/base/namespace.yaml",
-      "${local.kubernetes_dir}/hidden-secrets/github-https-creds.yaml.externalsecret",
+      "${local.kubernetes_dir}/hidden-secrets/git-credentials.yaml.externalsecret",
     ]
   }
 }
