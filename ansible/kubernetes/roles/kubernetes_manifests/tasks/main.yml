@@ -1,0 +1,15 @@
+---
+- name: Fail if no manifest files are defined
+  ansible.builtin.fail:
+    msg: "No manifest files defined. Please set 'manifest_files' variable."
+  when: manifest_files | length == 0
+
+- name: Apply Kubernetes manifests
+  kubernetes.core.k8s:
+    src: "{{ manifest }}"
+    state: present
+    wait: yes
+  loop: "{{ manifest_files }}"
+  loop_control:
+    loop_var: manifest
+    label: "{{ manifest | replace(playbook_dir ~ '/', '') }}"

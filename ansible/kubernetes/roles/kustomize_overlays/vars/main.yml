@@ -1,0 +1,3 @@
+---
+# List of Kustomize overlay directories to apply
+overlay_dirs: []

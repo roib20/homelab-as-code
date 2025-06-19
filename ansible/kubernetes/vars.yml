@@ -1,0 +1,8 @@
+---
+overlay_dirs:
+  - "{{ playbook_dir }}/../../kubernetes/cluster/addons/cert-manager/overlays/prod"
+  - "{{ playbook_dir }}/../../kubernetes/cluster/addons/external-secrets/overlays/prod"
+  - "{{ playbook_dir }}/../../kubernetes/cluster/argo/argocd/overlays/prod"
+
+manifest_files:
+  - "{{ playbook_dir }}/../../kubernetes/bootstrap/app-of-apps.yaml"

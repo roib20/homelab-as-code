@@ -1,0 +1,59 @@
+---
+- name: Check for standalone kustomize
+  ansible.builtin.command:
+    cmd: command -v kustomize
+  register: kustomize_path
+  ignore_errors: true
+  changed_when: false
+
+- name: Check for kubectl binary
+  ansible.builtin.command:
+    cmd: command -v kubectl
+  register: kubectl_path
+  ignore_errors: true
+  changed_when: false
+
+- name: Determine kustomize invocation
+  ansible.builtin.set_fact:
+    kustomizer: >-
+      {% if kustomize_path.rc == 0 %}
+        {{ kustomize_path.stdout }} build
+      {% elif kubectl_path.rc == 0 %}
+        {{ kubectl_path.stdout }} kustomize
+      {% else %}
+        false
+      {% endif %}
+
+- name: "Fail if neither `kustomize` nor `kubectl` are available"
+  ansible.builtin.fail:
+    msg: "Neither standalone `kustomize` nor `kubectl` was found on the PATH."
+  when: kustomizer == false
+
+- name: Fail if no overlays defined
+  ansible.builtin.fail:
+    msg: "No overlay directories defined. Please set 'overlay_dirs' variable."
+  when: overlay_dirs | length == 0
+
+- name: Build kustomization overlays
+  ansible.builtin.command: >-
+    {{ kustomizer }}
+    --enable-helm
+    --load-restrictor=LoadRestrictionsNone
+    {{ overlay }}
+  loop: "{{ overlay_dirs }}"
+  loop_control:
+    loop_var: overlay
+    label: "{{ overlay | replace(playbook_dir ~ '/', '') }}"
+  register: kustomize_build
+  changed_when: false
+
+- name: Apply rendered resources to the cluster
+  kubernetes.core.k8s:
+    definition: "{{ kustomize_build.results[index].stdout }}"
+    state: present
+    wait: yes
+  loop: "{{ overlay_dirs }}"
+  loop_control:
+    index_var: index
+    loop_var: overlay
+    label: "{{ overlay | replace(playbook_dir ~ '/', '') }}"
