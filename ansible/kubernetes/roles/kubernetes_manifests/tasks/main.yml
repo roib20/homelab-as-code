@@ -9,6 +9,7 @@
     src: "{{ manifest }}"
     state: present
     wait: yes
+    wait_timeout: 300
   loop: "{{ manifest_files }}"
   loop_control:
     loop_var: manifest

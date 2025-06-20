@@ -52,6 +52,7 @@
     definition: "{{ kustomize_build.results[index].stdout }}"
     state: present
     wait: yes
+    wait_timeout: 300
   loop: "{{ overlay_dirs }}"
   loop_control:
     index_var: index
