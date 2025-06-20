@@ -1,7 +1,8 @@
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Issuer
 metadata:
   name: bitwarden-bootstrap-issuer
+  namespace: external-secrets
 spec:
   selfSigned: {}
 ---
@@ -9,12 +10,12 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: bitwarden-bootstrap-certificate
-  namespace: cert-manager
+  namespace: external-secrets
 spec:
   # this is discouraged but required by ios
   commonName: cert-manager-bitwarden-tls
   isCA: true
-  secretName: bitwarden-tls-certs
+  secretName: bitwarden-tls-ca
   subject:
     organizations:
       - external-secrets.io
@@ -31,13 +32,14 @@ spec:
     size: 2048
   issuerRef:
     name: bitwarden-bootstrap-issuer
-    kind: ClusterIssuer
+    kind: Issuer
     group: cert-manager.io
 ---
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Issuer
 metadata:
   name: bitwarden-certificate-issuer
+  namespace: external-secrets
 spec:
   ca:
-    secretName: bitwarden-tls-certs
+    secretName: bitwarden-tls-ca

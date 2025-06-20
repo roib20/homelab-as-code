@@ -2,7 +2,7 @@ installCRDs: false
 bitwarden-sdk-server:
   enabled: true
   podAnnotations:
-    secret.reloader.stakater.com/reload: "bitwarden-tls-certs,bitwarden-access-token"
+    secret.reloader.stakater.com/reload: "bitwarden-tls-ca,bitwarden-tls-certs,bitwarden-access-token"
     pod-security.kubernetes.io/enforce: "privileged"
     pod-security.kubernetes.io/enforce-version: "latest"
     pod-security.kubernetes.io/audit: "privileged"
@@ -12,3 +12,21 @@ bitwarden-sdk-server:
   securityContext:
     seccompProfile:
       type: RuntimeDefault
+
+webhook:
+  certManager:
+    # -- Enabling cert-manager support will disable the built in secret and
+    # switch to using cert-manager (installed separately) to automatically issue
+    # and renew the webhook certificate. This chart does not install
+    # cert-manager for you, See https://cert-manager.io/docs/
+    enabled: true
+    addInjectorAnnotations: true
+    cert:
+      create: false
+      issuerRef:
+        group: cert-manager.io
+        kind: "Issuer"
+        name: "external-secrets-cert-issuer"
+      duration: "24h"
+certController:
+  create: false
