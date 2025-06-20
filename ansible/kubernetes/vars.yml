@@ -1,6 +1,7 @@
 ---
 overlay_dirs:
   - "{{ playbook_dir }}/../../kubernetes/cluster/addons/cert-manager/overlays/prod"
+  - "{{ playbook_dir }}/../../kubernetes/cluster/addons/cert-resources/base"
   - "{{ playbook_dir }}/../../kubernetes/cluster/addons/external-secrets/overlays/prod"
   - "{{ playbook_dir }}/../../kubernetes/cluster/argo/argocd/overlays/prod"
 
