@@ -5,5 +5,7 @@ terragrunt_stack_dir: "../../terragrunt/infrastructure-live/non-prod/pve/bootstr
 # Terragrunt binary to execute
 terragrunt_bin: "terragrunt"
 
+run_action: "apply"
+
 # OpenTofu/Terraform binary to use with Terragrunt
 tf_bin: "tofu"
