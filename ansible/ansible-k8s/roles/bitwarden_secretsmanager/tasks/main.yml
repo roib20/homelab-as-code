@@ -1,0 +1,5 @@
+---
+# entrypoint: validate inputs, then apply manifests
+
+- import_tasks: validate_vars.yml
+- import_tasks: apply.yml

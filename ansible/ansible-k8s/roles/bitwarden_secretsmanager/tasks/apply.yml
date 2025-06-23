@@ -1,0 +1,14 @@
+---
+# render & apply both templates in-memory
+
+- name: "Apply the Bitwarden access-token Secret"
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'bitwarden-access-token.yaml.j2') }}"
+    # kubeconfig: "{{ kubeconfig_path | default(omit) }}"
+
+- name: "Apply the ClusterSecretStore (in-memory render)"
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'bitwarden-secretsmanager.yaml.j2') }}"
+    # kubeconfig: "{{ kubeconfig_path | default(omit) }}"
