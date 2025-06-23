@@ -1,7 +1,7 @@
 ---
 - name: Run Terragrunt stack apply and decide changed/ok
   ansible.builtin.command: >
-    {{ terragrunt_bin }} stack run apply
+    {{ terragrunt_bin }} stack run {{ run_action }}
     --tf-path="{{ tf_bin }}"
     --non-interactive
     --log-format json
