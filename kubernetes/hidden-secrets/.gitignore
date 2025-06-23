@@ -1,2 +1,3 @@
 # Ignore non-templated secrets
 *.yaml
+*.yml
