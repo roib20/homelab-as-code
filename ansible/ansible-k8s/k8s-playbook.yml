@@ -9,5 +9,6 @@
         file: "{{ playbook_dir }}/vars.yml"
 
   roles:
-    - kustomize_overlays
-    - kubernetes_manifests
+    - role: kustomize_overlays
+    - role: bitwarden_secretsmanager
+    - role: kubernetes_manifests
