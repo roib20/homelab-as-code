@@ -1,0 +1,4 @@
+---
+# Bitwarden ClusterSecretStore – set the Org & Project IDs for the Bitwarden token secret
+organization_id: ""
+project_id:      ""
