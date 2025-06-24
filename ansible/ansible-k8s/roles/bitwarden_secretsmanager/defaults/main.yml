@@ -11,7 +11,7 @@ organization_id: ""
 project_id:  ""
 
 # Kubernetes object details
-namespace: external-secrets
+namespace: bitwarden
 token_secret_name: bitwarden-access-token
 token_key: token
 ca_secret_name: bitwarden-tls-certs

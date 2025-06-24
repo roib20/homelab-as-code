@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: bitwarden-access-token
-  namespace: external-secrets
+  namespace: bitwarden
 type: Opaque
 data:
   token: "${BWS_ACCESS_TOKEN}"

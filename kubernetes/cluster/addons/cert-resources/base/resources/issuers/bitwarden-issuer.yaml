@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: bitwarden-bootstrap-issuer
-  namespace: external-secrets
+  namespace: bitwarden
 spec:
   selfSigned: {}
 ---
@@ -10,7 +10,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: bitwarden-bootstrap-certificate
-  namespace: external-secrets
+  namespace: bitwarden
 spec:
   # this is discouraged but required by ios
   commonName: cert-manager-bitwarden-tls
@@ -20,8 +20,8 @@ spec:
     organizations:
       - external-secrets.io
   dnsNames:
-    - external-secrets-bitwarden-sdk-server.default.svc.cluster.local
-    - bitwarden-sdk-server.default.svc.cluster.local
+    - external-secrets-bitwarden-sdk-server.bitwarden.svc.cluster.local
+    - bitwarden-sdk-server.bitwarden.svc.cluster.local
     - localhost
   ipAddresses:
     - 127.0.0.1
@@ -39,7 +39,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: bitwarden-certificate-issuer
-  namespace: external-secrets
+  namespace: bitwarden
 spec:
   ca:
     secretName: bitwarden-tls-ca
