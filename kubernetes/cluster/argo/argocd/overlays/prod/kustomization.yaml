@@ -4,18 +4,13 @@ kind: Kustomization
 resources:
 - ../../base
 
-
-configMapGenerator:
-  - name: argocd-cm
-    behavior: merge
-    literals:
-      - "kustomize.buildOptions=--enable-helm --load-restrictor=LoadRestrictionsNone"
-    files:
-      # Troubleshooting Cilium deployed with Argo CD: https://docs.cilium.io/en/latest/configuration/argocd-issues/
-      - "ignoreDifferences=argocd-cm/ignoreDifferences.yaml"
-      # Default resource.exclusions configurations are included since Argo CD 3.0+: https://argo-cd.readthedocs.io/en/latest/operator-manual/upgrading/2.14-3.0/#default-resourceexclusions-configurations
-      # - "resource.exclusions=argocd-cm/resource-exclusions.yaml"
-
-# patches:
-#   - path: argocd-cm.yaml
-#   - path: kubernetes/overlays/argocd-repo-server-env-patch.yaml
+helmCharts:
+  - name: argo-cd
+    repo: oci://ghcr.io/argoproj/argo-helm
+    version: 8.1.1
+    releaseName: argocd
+    namespace: argocd
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
