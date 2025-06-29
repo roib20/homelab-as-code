@@ -1,10 +1,23 @@
 ---
-overlay_dirs:
-  - "{{ playbook_dir }}/../../kubernetes/cluster/addons/cert-manager/overlays/prod"
-  - "{{ playbook_dir }}/../../kubernetes/cluster/addons/cert-resources/base"
-  - "{{ playbook_dir }}/../../kubernetes/cluster/addons/external-secrets/overlays/prod"
-  - "{{ playbook_dir }}/../../kubernetes/cluster/argo/argocd/overlays/prod"
+kustomize_overlays:
+  - name: cert-manager
+    set: addons
+    overlay: prod
+    wait: yes
+  - name: cert-resources
+    set: addons
+    overlay: base
+    wait: yes
+  - name: external-secrets
+    set: addons
+    overlay: prod
+    wait: yes
+  - name: argocd
+    set: argo
+    overlay: prod
+    wait: no
 
-manifest_files:
-  - "{{ playbook_dir }}/../../kubernetes/hidden-secrets/git-credentials.yaml.externalsecret"
-  - "{{ playbook_dir }}/../../kubernetes/bootstrap/app-of-apps.yaml"
+kubernetes_manifests:
+  - name: app-of-apps
+    file: bootstrap/app-of-apps.yaml
+    wait: yes
