@@ -14,6 +14,7 @@ bitwarden-sdk-server:
       type: RuntimeDefault
 
 webhook:
+  lookaheadInterval: "1h"
   certManager:
     # -- Enabling cert-manager support will disable the built in secret and
     # switch to using cert-manager (installed separately) to automatically issue

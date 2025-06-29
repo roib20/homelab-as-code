@@ -31,19 +31,18 @@
 
 - name: Fail if no overlays defined
   ansible.builtin.fail:
-    msg: "No overlay directories defined. Please set 'overlay_dirs' variable."
-  when: overlay_dirs | length == 0
+    msg: "No overlay configurations defined. Please set 'kustomize_overlays' variable."
+  when: kustomize_overlays | length == 0
 
 - name: Build kustomization overlays
   ansible.builtin.command: >-
     {{ kustomizer }}
     --enable-helm
     --load-restrictor=LoadRestrictionsNone
-    {{ overlay }}
-  loop: "{{ overlay_dirs }}"
+    {{ base_path }}/kubernetes/cluster/{{ item.set }}/{{ item.name }}/overlays/{{ item.overlay }}
+  loop: "{{ kustomize_overlays }}"
   loop_control:
-    loop_var: overlay
-    label: "{{ overlay | replace(playbook_dir ~ '/', '') }}"
+    label: "{{ item.name }} ({{ item.set }}/{{ item.overlay }})"
   register: kustomize_build
   changed_when: false
 
@@ -51,10 +50,9 @@
   kubernetes.core.k8s:
     definition: "{{ kustomize_build.results[index].stdout }}"
     state: present
-    wait: yes
-    wait_timeout: 300
-  loop: "{{ overlay_dirs }}"
+    wait: "{{ item.wait | default(default_wait) }}"
+    wait_timeout: "{{ item.wait_timeout | default(default_wait_timeout) }}"
+  loop: "{{ kustomize_overlays }}"
   loop_control:
     index_var: index
-    loop_var: overlay
-    label: "{{ overlay | replace(playbook_dir ~ '/', '') }}"
+    label: "{{ item.name }} ({{ item.set }}/{{ item.overlay }})"
