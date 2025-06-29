@@ -10,5 +10,5 @@
 
   roles:
     - role: kustomize_overlays
-    - role: bitwarden_secretsmanager
+    - role: terragrunt_stack
     - role: kubernetes_manifests
