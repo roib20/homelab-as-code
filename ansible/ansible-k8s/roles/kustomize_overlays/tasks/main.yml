@@ -34,7 +34,7 @@
     msg: "No overlay configurations defined. Please set 'kustomize_overlays' variable."
   when: kustomize_overlays | length == 0
 
-- name: Build kustomization overlay for {{ item.name }}
+- name: Build kustomization overlays
   ansible.builtin.command: >-
     {{ kustomizer }}
     --enable-helm
@@ -46,7 +46,7 @@
   register: kustomize_build
   changed_when: false
 
-- name: Apply rendered resources for {{ item.name }} to the cluster
+- name: Apply rendered resources to the cluster
   kubernetes.core.k8s:
     definition: "{{ kustomize_build.results[index].stdout }}"
     state: present
