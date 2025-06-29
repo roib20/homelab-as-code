@@ -6,7 +6,7 @@ kustomize_overlays:
     wait: yes
   - name: cert-resources
     set: addons
-    overlay: base
+    overlay: bootstrap
     wait: yes
   - name: external-secrets
     set: addons
