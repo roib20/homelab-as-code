@@ -1,0 +1,37 @@
+version: '3'
+set: [pipefail]
+shopt: [globstar]
+dotenv: ['.env']
+
+## ─── prompt‐and‐run snippet ─────────────────────────────────────────────────────
+x-prompt: &prompt |
+  var="${VAR_NAME?VAR_NAME is required}"
+  # if $var is empty/unset, prompt and export it
+  if eval "test -z \"\$$var\""; then
+    printf "Enter value for $var: " >&2
+    stty -echo; read "$var"; stty echo
+    printf '\n' >&2
+  fi
+  export "$var"
+  eval "${VAR_CMD?VAR_CMD is required}"
+
+tasks:
+  ansible:
+    desc: Run Ansible playbook with one shared password
+    dir: ansible/ansible-cluster
+    interactive: true
+    env:
+      VAR_NAME: ANSIBLE_PASS
+      VAR_CMD: "ansible-playbook -i inventory.yml cluster-playbook.yml -k -K"
+    cmds:
+      - *prompt
+
+  bootstrap-k8s-secrets:
+    desc: Apply K8s-secrets bootstrap Terragrunt stack (needs BWS token)
+    dir: terragrunt/infrastructure-live/non-prod/pve/bootstrap-k8s-secrets
+    interactive: true
+    env:
+      VAR_NAME: BWS_ACCESS_TOKEN
+      VAR_CMD: "terragrunt stack run apply --non-interactive"
+    cmds:
+      - *prompt
