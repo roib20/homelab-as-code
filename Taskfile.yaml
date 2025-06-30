@@ -10,6 +10,7 @@ vars:
   ANSIBLE_DIR: '{{.ROOT_DIR}}/ansible'
   TERRAGRUNT_DIR: '{{.ROOT_DIR}}/terragrunt/infrastructure-live'
   TERRAGRUNT_ENV: 'non-prod'
+  PVE_NODE: 'pve'
 
 # ── include sub‑taskfiles ────────────────────────────────────────────────────
 includes:

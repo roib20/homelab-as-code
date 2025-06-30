@@ -8,10 +8,10 @@ shopt: [globstar]
 tasks:
   cluster:
     desc: "Apply Talos cluster via Terragrunt (non-interactive)"
-    dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/pve/talos-cluster"
+    dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster"
     interactive: false
     cmd: terragrunt stack run apply --non-interactive
     preconditions:
-      - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/pve/talos-cluster/terragrunt.stack.hcl"
+      - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster/terragrunt.stack.hcl"
       - which terragrunt
       - which tofu

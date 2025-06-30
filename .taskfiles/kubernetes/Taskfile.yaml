@@ -21,7 +21,7 @@ tasks:
 
   bootstrap-k8s-secrets:
     desc: "Apply bootstrap-k8s-secrets (Terragrunt, needs BWS token)"
-    dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/pve/bootstrap-k8s-secrets"
+    dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/bootstrap-k8s-secrets"
     interactive: false
     env:
       VAR_NAME: BWS_ACCESS_TOKEN
@@ -29,6 +29,6 @@ tasks:
     cmds:
       - sh "{{.ROOT_DIR}}/.taskfiles/common/scripts/prompt.sh"
     preconditions:
-      - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/pve/bootstrap-k8s-secrets/terragrunt.stack.hcl"
+      - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/bootstrap-k8s-secrets/terragrunt.stack.hcl"
       - which terragrunt
       - which tofu
