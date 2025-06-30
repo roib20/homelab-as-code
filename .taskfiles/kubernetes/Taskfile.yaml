@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+set: [pipefail]
+shopt: [globstar]
+
+tasks:
+  ansible-k8s:
+    desc: "Run K8s Ansible playbook (prompts for BWS token)"
+    dir: ansible/ansible-k8s
+    interactive: false
+    env:
+      VAR_NAME: BWS_ACCESS_TOKEN
+      VAR_CMD: ansible-playbook k8s-playbook.yml
+    cmds:
+      - sh "{{.ROOT_DIR}}/.taskfiles/common/scripts/prompt.sh"
+
+  bootstrap-k8s-secrets:
+    desc: "Apply bootstrap-k8s-secrets (Terragrunt, needs BWS token)"
+    dir: terragrunt/infrastructure-live/non-prod/pve/bootstrap-k8s-secrets
+    interactive: false
+    env:
+      VAR_NAME: BWS_ACCESS_TOKEN
+      VAR_CMD: terragrunt stack run apply --non-interactive
+    cmds:
+      - sh "{{.ROOT_DIR}}/.taskfiles/common/scripts/prompt.sh"
