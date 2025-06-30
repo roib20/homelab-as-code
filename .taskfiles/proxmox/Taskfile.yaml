@@ -8,10 +8,13 @@ shopt: [globstar]
 tasks:
   pve-cluster:
     desc: Run Ansible VM playbook (prompts for ANSIBLE_PASS)
-    dir: ansible/ansible-cluster
+    dir: "ansible/ansible-cluster"
     interactive: true
     env:
       VAR_NAME: ANSIBLE_PASS
       VAR_CMD: "ansible-playbook -i inventory.yml cluster-playbook.yml -k -K"
     cmds:
       - sh "{{.ROOT_DIR}}/.taskfiles/common/scripts/prompt.sh"
+    preconditions:
+      - test -f "{{.ANSIBLE_DIR}/ansible-cluster/cluster-playbook.yml"
+      - which ansible-playbook

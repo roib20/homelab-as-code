@@ -6,6 +6,11 @@ set: [pipefail]
 shopt: [globstar]
 dotenv: [".env"]
 
+vars:
+  ANSIBLE_DIR: '{{.ROOT_DIR}}/ansible'
+  TERRAGRUNT_DIR: '{{.ROOT_DIR}}/terragrunt/infrastructure-live'
+  TERRAGRUNT_ENV: 'non-prod'
+
 # ── include sub‑taskfiles ────────────────────────────────────────────────────
 includes:
   kubernetes: .taskfiles/kubernetes
