@@ -28,7 +28,7 @@ tasks:
   # ---------------------------------------------------------------------------
   cluster:up:
     desc: "Provision the non-prod cluster end-to-end"
-    interactive: false          # underlying steps are interactive
+    interactive: false
     cmds:                      # SEQUENTIAL execution
       # - task: proxmox:pve-cluster
       - task: talos:cluster
