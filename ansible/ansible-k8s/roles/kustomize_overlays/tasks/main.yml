@@ -13,6 +13,13 @@
   ignore_errors: false
   changed_when: false
 
+- name: Check for helm binary
+  ansible.builtin.command:
+    cmd: which helm
+  register: helm_path
+  ignore_errors: false
+  changed_when: false
+
 - name: Determine kustomize invocation
   ansible.builtin.set_fact:
     kustomizer: >-
