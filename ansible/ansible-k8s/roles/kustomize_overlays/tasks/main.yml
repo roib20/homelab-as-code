@@ -1,16 +1,16 @@
 ---
 - name: Check for standalone kustomize
   ansible.builtin.command:
-    cmd: command -v kustomize
+    cmd: which kustomize
   register: kustomize_path
   ignore_errors: true
   changed_when: false
 
 - name: Check for kubectl binary
   ansible.builtin.command:
-    cmd: command -v kubectl
+    cmd: which kubectl
   register: kubectl_path
-  ignore_errors: true
+  ignore_errors: false
   changed_when: false
 
 - name: Determine kustomize invocation
