@@ -52,6 +52,14 @@ target "base" {
     "org.opencontainers.image.source"      = "https://${GIT_URL}/${OWNER}/${REPOSITORY}/${IMAGE_TITLE}"
     "org.opencontainers.image.version"     = "latest"
   }
+
+  annotations = [
+    "org.opencontainers.image.title=${IMAGE_TITLE}",
+    "org.opencontainers.image.description=CLI toolchain with OpenTofu, Terragrunt, Talosctl, Kubectl, Helm, Kustomize, Ansible, jq, go-task",
+    "org.opencontainers.image.url=https://${REGISTRY}/${OWNER}/${IMAGE_TITLE}",
+    "org.opencontainers.image.source=https://${GIT_URL}/${OWNER}/${REPOSITORY}/${IMAGE_TITLE}",
+    "org.opencontainers.image.version=latest",
+  ]
 }
 
 target "multiarch-push" {
