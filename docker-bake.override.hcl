@@ -1,0 +1,12 @@
+# All versions in one place – parsed as an env‑file by Buildx Bake
+alpine="3.22"
+tofu="1.9.1"
+terragrunt="0.82.3"
+go-task="3.44.0"
+talos="1.10.5"
+yq="4.45.4"
+kubectl="1.33.0"
+helm="3.14.2"
+kustomize="5.7.0"
+jq="1.8.1"
+python="3.13"
