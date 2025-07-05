@@ -21,7 +21,7 @@ includes:
 tasks:
   default:
     desc: List all available tasks (root + included)
-    cmds: ["go-task --list-all"]
+    cmds: ["task --list-all || go-task --list-all"]
 
   # ---------------------------------------------------------------------------
   # One‑shot pipeline: VM ➜ Talos ➜ K8s
