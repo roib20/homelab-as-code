@@ -1,0 +1,5 @@
+# 1) Ignore all files and directories
+**
+# 2) Except for theses specific files
+!ansible/requirements.yml
+!ansible/requirements.txt

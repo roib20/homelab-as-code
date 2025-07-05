@@ -55,3 +55,7 @@ terragrunt-debug.tfvars.json
 # Ignore keys
 *.pub
 *.key
+
+# Ignore .env file
+.env
+*.env
