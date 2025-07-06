@@ -20,8 +20,6 @@ ARG PYTHON_VERSION=3.13
 # BuildKit automatically provides:
 #   TARGETOS   – linux
 #   TARGETARCH – amd64 | arm64
-ARG TARGETOS=linux
-ARG TARGETARCH=amd64
 
 ############################################################
 # Stage 1: tofu binary (same for every arch – no Go runtime)
@@ -132,12 +130,12 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 COPY --link ansible/pip-requirements.yml /.
 RUN python3 -m venv $VIRTUAL_ENV && \
     pip install --upgrade pip && \
-    pip install --no-cache-dir ansible-core argcomplete kubernetes
+    pip install --no-cache-dir -r "requirements.yml"
 
 FROM ansible AS ansible-requirements
 # Copy ansible-galaxy requirements
 COPY --link ansible/galaxy-requirements.yml /.
-RUN ansible-galaxy install -r requirements.yml --force
+RUN ansible-galaxy install -r "requirements.yml" --force
 
 ############################################
 # Stage 4 – Final runtime image           #
