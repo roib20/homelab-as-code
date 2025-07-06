@@ -42,7 +42,7 @@ target "base" {
   }
 
   tags = [
-    "${REGISTRY}/${REPOSITORY}/${IMAGE_TITLE}:latest",
+    "${REGISTRY}/${OWNER}/${REPOSITORY}/${IMAGE_TITLE}:latest",
   ]
 
   labels = {
