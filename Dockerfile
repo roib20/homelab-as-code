@@ -127,10 +127,10 @@ FROM python:${PYTHON_VERSION}-alpine AS ansible
 ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 # Copy pip requirements for Ansible venv
-COPY --link ansible/pip-requirements.yml /.
+COPY --link ansible/pip-requirements.txt /.
 RUN python3 -m venv $VIRTUAL_ENV && \
     pip install --upgrade pip && \
-    pip install --no-cache-dir -r "requirements.yml"
+    pip install --no-cache-dir -r "requirements.txt"
 
 FROM ansible AS ansible-requirements
 # Copy ansible-galaxy requirements
