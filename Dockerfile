@@ -133,7 +133,7 @@ RUN python3 -m venv $VIRTUAL_ENV && \
     pip install --no-cache-dir ansible-core argcomplete kubernetes
 
 FROM ansible AS ansible-requirements
-COPY ansible/requirements.yml /.
+COPY --link ansible/requirements.yml /.
 RUN ansible-galaxy install -r requirements.yml --force
 
 ############################################
@@ -143,17 +143,17 @@ FROM python:${PYTHON_VERSION}-alpine AS runtime
 ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-# Copy binaries & venv
-COPY --from=tofu /usr/local/bin/tofu /usr/local/bin/
-COPY --from=terragrunt /usr/local/bin/terragrunt /usr/local/bin/
-COPY --from=go-task /usr/local/bin/task /usr/local/bin/
-COPY --from=jq /usr/local/bin/jq /usr/local/bin/
-COPY --from=talosctl /usr/local/bin/talosctl /usr/local/bin/
-COPY --from=kubectl /usr/local/bin/kubectl /usr/local/bin/
-COPY --from=helm /usr/local/bin/helm /usr/local/bin/
-COPY --from=kustomize /usr/local/bin/kustomize /usr/local/bin/
-COPY --from=ansible $VIRTUAL_ENV $VIRTUAL_ENV
-COPY --from=ansible-requirements /root/.ansible /home/runner/.ansible
+# COPY binaries & venv
+COPY --link --from=tofu /usr/local/bin/tofu /usr/local/bin/
+COPY --link --from=terragrunt /usr/local/bin/terragrunt /usr/local/bin/
+COPY --link --from=go-task /usr/local/bin/task /usr/local/bin/
+COPY --link --from=jq /usr/local/bin/jq /usr/local/bin/
+COPY --link --from=talosctl /usr/local/bin/talosctl /usr/local/bin/
+COPY --link --from=kubectl /usr/local/bin/kubectl /usr/local/bin/
+COPY --link --from=helm /usr/local/bin/helm /usr/local/bin/
+COPY --link --from=kustomize /usr/local/bin/kustomize /usr/local/bin/
+COPY --link --from=ansible $VIRTUAL_ENV $VIRTUAL_ENV
+COPY --link --from=ansible-requirements /root/.ansible /home/runner/.ansible
 
 # Runtime dependencies only
 RUN apk add --no-cache \
