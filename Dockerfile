@@ -128,12 +128,15 @@ RUN dl-verify "${URL}/${FILE}" "${FILE}" "${URL}/${CHECKSUM_FILE}" kustomize
 FROM python:${PYTHON_VERSION}-alpine AS ansible
 ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+# Copy pip requirements for Ansible venv
+COPY --link ansible/pip-requirements.yml /.
 RUN python3 -m venv $VIRTUAL_ENV && \
     pip install --upgrade pip && \
     pip install --no-cache-dir ansible-core argcomplete kubernetes
 
 FROM ansible AS ansible-requirements
-COPY --link ansible/requirements.yml /.
+# Copy ansible-galaxy requirements
+COPY --link ansible/galaxy-requirements.yml /.
 RUN ansible-galaxy install -r requirements.yml --force
 
 ############################################
