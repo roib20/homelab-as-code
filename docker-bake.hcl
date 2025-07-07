@@ -29,7 +29,11 @@ variable "OCI_LABELS" {
 # Build targets      #
 ######################
 
+target "docker-metadata-action" {}
+
 target "base" {
+  inherits = ["docker-metadata-action"]
+
   context    = "."
   dockerfile = "Dockerfile"
 
