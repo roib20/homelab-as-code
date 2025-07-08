@@ -56,7 +56,13 @@ data "talos_machine_configuration" "this" {
     templatefile("${path.module}/resources/talos-patches/machine_hostdns.yaml.tftpl", {
       forwardKubeDNSToHost = false
     }),
-    templatefile("${path.module}/resources/talos-patches/longhorn.yaml.tftpl", {
+    templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
+      # hostpath-provisioner: https://github.com/kubevirt/hostpath-provisioner-operator/blob/main/deploy/hostpathprovisioner_cr.yaml
+      path = "/var/hpvolumes"
+    }),
+    templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
+      # Longhorn: https://longhorn.io/docs/latest/advanced-resources/os-distro-specific/talos-linux-support/
+      path = "/var/lib/longhorn"
     }),
     templatefile("${path.module}/resources/talos-patches/tailscale.patch.yaml.tftpl", {
       TS_AUTHKEY = each.value.talos_config

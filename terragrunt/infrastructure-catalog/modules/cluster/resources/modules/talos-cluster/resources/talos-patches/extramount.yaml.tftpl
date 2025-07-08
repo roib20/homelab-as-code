@@ -1,9 +1,9 @@
 machine:
   kubelet:
     extraMounts:
-      - destination: /var/lib/longhorn
+      - destination: ${path}
         type: bind
-        source: /var/lib/longhorn
+        source: ${path}
         options:
           - bind
           - rshared
