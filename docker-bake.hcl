@@ -7,17 +7,33 @@
 variable "REGISTRY"    { default = "ghcr.io" }
 variable "GIT_URL"     { default = "github.com" }
 variable "OWNER"       { default = "roib20" }
-variable "REPOSITORY"  { default = "homelab-as-code" }
+variable "REPOSITORY"  { default = "hac-actions-test" }
 variable "IMAGE_TITLE" { default = "homelab-as-code-runner" }
 variable "TAGS"        { default = ["latest"] }
 
 variable "DEFAULT_PLATFORMS" { default = ["linux/amd64,linux/arm64"] }
 
+variable "OCI_LABELS" {
+  type = map(string)
+  default = {
+    "org.opencontainers.image.authors"       = "${OWNER}"
+    "org.opencontainers.image.description"   = "CLI toolchain with OpenTofu, Terragrunt, Talosctl, Kubectl, Helm, Kustomize, Ansible, jq, go-task"
+    "org.opencontainers.image.documentation" = "https://${GIT_URL}/${OWNER}/${REPOSITORY}/blob/main/README.md"
+    "org.opencontainers.image.source"        = "https://${GIT_URL}/${OWNER}/${REPOSITORY}.git"
+    "org.opencontainers.image.title"         = "${IMAGE_TITLE}"
+    "org.opencontainers.image.url"           = "${REGISTRY}/${OWNER}/${IMAGE_TITLE}"
+  }
+}
+
 ######################
 # Build targets      #
 ######################
 
+target "docker-metadata-action" {}
+
 target "base" {
+  inherits = ["docker-metadata-action"]
+
   context    = "."
   dockerfile = "Dockerfile"
 
@@ -45,22 +61,12 @@ target "base" {
     "${REGISTRY}/${OWNER}/${REPOSITORY}/${IMAGE_TITLE}:latest",
   ]
 
-  labels = {
-    "org.opencontainers.image.title"       = "${IMAGE_TITLE}"
-    "org.opencontainers.image.authors"     = "${OWNER}"
-    "org.opencontainers.image.description" = "CLI toolchain with OpenTofu, Terragrunt, Talosctl, Kubectl, Helm, Kustomize, Ansible, jq, go-task"
-    "org.opencontainers.image.url"         = "https://${REGISTRY}/${OWNER}/${IMAGE_TITLE}"
-    "org.opencontainers.image.source"      = "https://${GIT_URL}/${OWNER}/${REPOSITORY}/${IMAGE_TITLE}"
-    "org.opencontainers.image.version"     = "latest"
-  }
+  # Same map drives both places – no duplication
+  labels      = OCI_LABELS
 
+  # Turn the map into the list of strings bake expects
   annotations = [
-    "org.opencontainers.image.title=${IMAGE_TITLE}",
-    "org.opencontainers.image.authors=${OWNER}",
-    "org.opencontainers.image.description=CLI toolchain with OpenTofu, Terragrunt, Talosctl, Kubectl, Helm, Kustomize, Ansible, jq, go-task",
-    "org.opencontainers.image.url=https://${REGISTRY}/${OWNER}/${IMAGE_TITLE}",
-    "org.opencontainers.image.source=https://${GIT_URL}/${OWNER}/${REPOSITORY}/${IMAGE_TITLE}",
-    "org.opencontainers.image.version=latest",
+    for k, v in OCI_LABELS : "index,manifest:${k}=${v}"
   ]
 }
 
