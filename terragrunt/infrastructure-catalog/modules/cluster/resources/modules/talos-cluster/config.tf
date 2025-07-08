@@ -10,6 +10,11 @@ locals {
 
   cluster_name     = try(yamldecode(var.talos_cluster_config).clusterName, "talos.local")
   cluster_endpoint = yamldecode(var.talos_cluster_config).controlPlane.endpoint
+
+  extramounts      = [
+    "/var/hpvolumes",     # hostpath-provisioner: https://github.com/kubevirt/hostpath-provisioner-operator/blob/main/deploy/hostpathprovisioner_cr.yaml
+    "/var/lib/longhorn",  # Longhorn: https://longhorn.io/docs/latest/advanced-resources/os-distro-specific/talos-linux-support/
+  ]
 }
 
 data "helm_template" "bootstrap_charts" {
@@ -57,12 +62,7 @@ data "talos_machine_configuration" "this" {
       forwardKubeDNSToHost = false
     }),
     templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
-      # hostpath-provisioner: https://github.com/kubevirt/hostpath-provisioner-operator/blob/main/deploy/hostpathprovisioner_cr.yaml
-      path = "/var/hpvolumes"
-    }),
-    templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
-      # Longhorn: https://longhorn.io/docs/latest/advanced-resources/os-distro-specific/talos-linux-support/
-      path = "/var/lib/longhorn"
+      extramounts = local.extramounts
     }),
     templatefile("${path.module}/resources/talos-patches/tailscale.patch.yaml.tftpl", {
       TS_AUTHKEY = each.value.talos_config

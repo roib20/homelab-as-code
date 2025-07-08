@@ -1,6 +1,7 @@
 machine:
   kubelet:
     extraMounts:
+%{ for path in extramounts ~}
       - destination: ${path}
         type: bind
         source: ${path}
@@ -8,3 +9,4 @@ machine:
           - bind
           - rshared
           - rw
+%{ endfor ~}
