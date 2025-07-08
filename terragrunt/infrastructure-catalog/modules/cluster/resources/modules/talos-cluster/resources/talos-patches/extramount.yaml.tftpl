@@ -1,10 +1,12 @@
 machine:
   kubelet:
     extraMounts:
-      - destination: /var/lib/longhorn
+%{ for path in extramounts ~}
+      - destination: ${path}
         type: bind
-        source: /var/lib/longhorn
+        source: ${path}
         options:
           - bind
           - rshared
           - rw
+%{ endfor ~}
