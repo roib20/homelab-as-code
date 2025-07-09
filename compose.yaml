@@ -1,5 +1,5 @@
 ---
-# Run with: `mkdir ~/.kube ~/.talos && docker compose run --user "$(id -u):$(id -g)" --rm runner`
+# Run with: `mkdir -p ~/.kube ~/.talos && docker compose run --user "$(id -u):$(id -g)" --rm runner`
 services:
   runner:
     image: homelab-as-code-runner:latest
