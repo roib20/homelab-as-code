@@ -1,5 +1,5 @@
 ---
-# Run with: `docker compose run --user "$(id -u):$(id -g)" --rm runner`
+# Run with: `mkdir ~/.kube ~/.talos && docker compose run --user "$(id -u):$(id -g)" --rm runner`
 services:
   runner:
     image: homelab-as-code-runner:latest
@@ -11,7 +11,8 @@ services:
       # Mount the locally cloned "homelab-as-code" repository, in order to be able to run IaC
       - "../homelab-as-code:/homelab-as-code:rw"
       # Mount kube and talos config files, in order to update context for the local user
-      - "${HOME}/.kube/config:/home/runner/.kube/config:rw"
-      - "${HOME}/.talos/config:/home/runner/.talos/config:rw"
+      # Make sure the directories exist on the host: `mkdir ~/.kube ~/.talos`
+      - "${HOME}/.kube:/home/runner/.kube:rw"
+      - "${HOME}/.talos:/home/runner/.talos:rw"
     # Used for file ownership for files created inside the container
     user: "${UID:-1000}:${GID:-1000}"
