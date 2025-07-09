@@ -205,6 +205,7 @@ ENV HOME="/home/${USER}"
 RUN addgroup -S runner && adduser -S runner -G runner \
     && find "/home/runner/.ansible/" -mindepth 1 -maxdepth 1 ! -name "collections" ! -name "roles" -exec rm -rf {} + \
     && chown -R runner:runner "${HOME}" \
+    && mkdir -p "${HOME}/.talos" \
     && chmod -R o+rwx "${HOME}"
 USER "${USER}"
 
