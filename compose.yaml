@@ -6,7 +6,6 @@ services:
     container_name: homelab-as-code-runner
     network_mode: host
     volumes:
-      # path is relative to the compose file’s directory
-      - "../homelab-as-code:/homelab-as-code"
-      - "${HOME}/.kube/config:/home/runner/.kube/config"
+      - "../homelab-as-code:/homelab-as-code:rw"
+      - "${HOME}/.kube/config:/home/runner/.kube/config:rw"
     user: "${UID:-1000}:${GID:-1000}"
