@@ -7,7 +7,7 @@
 variable "REGISTRY"    { default = "ghcr.io" }
 variable "GIT_URL"     { default = "github.com" }
 variable "OWNER"       { default = "roib20" }
-variable "REPOSITORY"  { default = "hac-actions-test" }
+variable "REPOSITORY"  { default = "homelab-as-code" }
 variable "IMAGE_TITLE" { default = "homelab-as-code-runner" }
 variable "TAGS"        { default = ["latest"] }
 
@@ -16,12 +16,12 @@ variable "DEFAULT_PLATFORMS" { default = ["linux/amd64,linux/arm64"] }
 variable "OCI_LABELS" {
   type = map(string)
   default = {
-    "org.opencontainers.image.authors"       = "${OWNER}"
+    # "org.opencontainers.image.authors"       = "${OWNER}"
     "org.opencontainers.image.description"   = "CLI toolchain with OpenTofu, Terragrunt, Talosctl, Kubectl, Helm, Kustomize, Ansible, jq, go-task"
-    "org.opencontainers.image.documentation" = "https://${GIT_URL}/${OWNER}/${REPOSITORY}/blob/main/README.md"
-    "org.opencontainers.image.source"        = "https://${GIT_URL}/${OWNER}/${REPOSITORY}.git"
-    "org.opencontainers.image.title"         = "${IMAGE_TITLE}"
-    "org.opencontainers.image.url"           = "${REGISTRY}/${OWNER}/${IMAGE_TITLE}"
+    # "org.opencontainers.image.documentation" = "https://${GIT_URL}/${OWNER}/${REPOSITORY}/blob/main/README.md"
+    # "org.opencontainers.image.source"        = "https://${GIT_URL}/${OWNER}/${REPOSITORY}.git"
+    # "org.opencontainers.image.title"         = "${IMAGE_TITLE}"
+    # "org.opencontainers.image.url"           = "https://${REGISTRY}/${OWNER}/${IMAGE_TITLE}"
   }
 }
 
