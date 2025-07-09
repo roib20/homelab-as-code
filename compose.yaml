@@ -4,9 +4,13 @@ services:
   runner:
     image: homelab-as-code-runner
     container_name: homelab-as-code-runner
+    # Network mode "host" is needed to access IPs on the local network, including the Tailnet
     network_mode: host
     volumes:
+      # Mount the locally cloned "homelab-as-code" repository, in order to be able to run IaC
       - "../homelab-as-code:/homelab-as-code:rw"
+      # Mount kube and talos config files, in order to update context for the local user
       - "${HOME}/.kube/config:/home/runner/.kube/config:rw"
       - "${HOME}/.talos/config:/home/runner/.talos/config:rw"
+    # Used for file ownership for files created inside the container
     user: "${UID:-1000}:${GID:-1000}"
