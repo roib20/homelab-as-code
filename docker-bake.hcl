@@ -66,7 +66,7 @@ target "base" {
 
   # Turn the map into the list of strings bake expects
   annotations = [
-    for k, v in OCI_LABELS : "index,manifest:${k}=${v}"
+    for k, v in OCI_LABELS : "manifest:${k}=${v}"
   ]
 }
 
@@ -79,6 +79,11 @@ target "multiarch-push" {
   attest = [
     "type=provenance,mode=max",
     "type=sbom",
+  ]
+
+  # Add index annotations for multi platform export
+  annotations = [
+    for k, v in OCI_LABELS : "index,manifest:${k}=${v}"
   ]
 }
 
