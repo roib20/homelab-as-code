@@ -10,6 +10,7 @@ on:
       - 'docker-bake.override.hcl'
       - '.dockerignore'
       - 'compose.yaml'
+      - '.github/workflows/bake-image.yml'
   workflow_dispatch:
 
 env:
@@ -109,3 +110,13 @@ jobs:
           ' | sort -u | while read -r ref; do
             cosign sign --yes "$ref"
           done
+
+      # 7) Post-build clean up
+      - name: Delete all containers from repository without tags
+        uses: Chizkiyahu/delete-untagged-ghcr-action@v6
+        with:
+          token: ${{ secrets.DELETE_PACKAGES }}
+          repository_owner: ${{ github.repository_owner }}
+          repository: ${{ github.repository }}
+          untagged_only: true
+          owner_type: user
