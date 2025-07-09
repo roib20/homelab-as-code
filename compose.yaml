@@ -8,4 +8,5 @@ services:
     volumes:
       - "../homelab-as-code:/homelab-as-code:rw"
       - "${HOME}/.kube/config:/home/runner/.kube/config:rw"
+      - "${HOME}/.talos/config:/home/runner/.talos/config:rw"
     user: "${UID:-1000}:${GID:-1000}"
