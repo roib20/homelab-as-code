@@ -1,0 +1,35 @@
+---
+- source:
+    kind: Ingress
+    name: argocd-server
+    fieldPath: spec.tls.0.hosts.0
+  targets:
+    - select:
+        kind: Ingress
+        name: argocd-server
+      fieldPaths:
+        - spec.rules.0.host
+- source:
+    kind: Ingress
+    name: argocd-server-grpc
+    fieldPath: spec.tls.0.hosts.0
+  targets:
+    - select:
+        kind: Ingress
+        name: argocd-server-grpc
+      fieldPaths:
+        - spec.rules.0.host
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        kind: Ingress
+        name: argocd-server-webhook
+      fieldPaths:
+        - spec.rules.0.host
+        - spec.tls.0.hosts.0
+      options:
+        delimiter: "."
+        index: 1
