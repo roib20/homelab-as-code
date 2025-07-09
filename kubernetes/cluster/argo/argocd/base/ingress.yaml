@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
   annotations:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   ingressClassName: nginx
   rules:
@@ -19,7 +19,7 @@ spec:
               service:
                 name: argocd-server # default service shipped by the chart
                 port:
-                  name: http        # forwards to port 80 inside the cluster
+                  name: https       # forwards to 443 inside the cluster
   tls:
     - hosts:
         - "*.${FQDN_01}"

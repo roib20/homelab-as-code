@@ -118,5 +118,6 @@ jobs:
           token: ${{ secrets.DELETE_PACKAGES }}
           repository_owner: ${{ github.repository_owner }}
           repository: ${{ github.repository }}
+          package_name: ''
           untagged_only: true
           owner_type: user
