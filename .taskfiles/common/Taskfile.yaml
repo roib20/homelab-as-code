@@ -10,19 +10,3 @@ tasks:
     desc: "Utility task for prompting user input (used by other taskfiles)"
     internal: true
     cmd: sh "{{.ROOT_DIR}}/.taskfiles/common/scripts/prompt.sh"
-    
-  check-tools:
-    desc: "Check if required tools are installed"
-    cmds:
-      - echo "=== Checking Required Tools ==="
-      - which task || which go-task || echo "❌ Task runner not found"
-      - which docker || echo "❌ Docker not found"
-      - which kubectl || echo "❌ kubectl not found"
-      - which terragrunt || echo "❌ Terragrunt not found"
-      - which tofu || echo "❌ OpenTofu not found"
-      - which ansible-playbook || echo "❌ Ansible not found"
-      - which talosctl || echo "❌ talosctl not found"
-      - which curl || echo "❌ curl not found"
-      - which jq || echo "❌ jq not found"
-      - echo "✅ Tool check completed"
-
