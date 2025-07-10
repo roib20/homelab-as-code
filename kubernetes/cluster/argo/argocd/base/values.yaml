@@ -1,4 +1,4 @@
-# HA mode with autoscaling
+# HA mode
 redis-ha:
   enabled: true
 
@@ -6,9 +6,7 @@ controller:
   replicas: 1
 
 server:
-  autoscaling:
-    enabled: true
-    minReplicas: 2
+  replicas: 2
 # Ingress
   ingress:
     enabled: true
@@ -28,9 +26,7 @@ applicationSet:
   replicas: 2
 
 repoServer:
-  autoscaling:
-    enabled: true
-    minReplicas: 2
+  replicas: 2
 
   # Mount env-vars
   envFrom:
