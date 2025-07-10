@@ -21,7 +21,7 @@ includes:
   docker: .taskfiles/docker
   cloudflare: .taskfiles/cloudflare
   # Infrastructure taskfiles
-  kubernetes: .taskfiles/kubernetes
+  k8s: .taskfiles/kubernetes
   talos: .taskfiles/talos
   proxmox: .taskfiles/proxmox
   argocd: .taskfiles/argocd

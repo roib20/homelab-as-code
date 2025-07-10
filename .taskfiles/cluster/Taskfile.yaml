@@ -12,7 +12,7 @@ tasks:
     interactive: false
     cmds:
       - task: :talos:apply
-      - task: :kubernetes:deploy
+      - task: :k8s:deploy
     preconditions:
       - sh: which terragrunt
         msg: "terragrunt is required"
@@ -28,7 +28,7 @@ tasks:
       - echo "Disabling Argo CD sync to prevent resource recreation..."
       - task: :argocd:disable-sync
       - echo "Deleting all ingress resources..."
-      - task: :kubernetes:delete-all-ingress
+      - task: :k8s:delete-all-ingress
       - echo "Cleaning Cloudflare resources..."
       - task: :cloudflare:clean
       - echo "Destroying cluster infrastructure..."
