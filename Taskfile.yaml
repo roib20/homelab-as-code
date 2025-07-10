@@ -19,7 +19,6 @@ includes:
   # Core taskfiles
   cluster: .taskfiles/cluster
   docker: .taskfiles/docker
-  updates: .taskfiles/updates
   cloudflare: .taskfiles/cloudflare
   # Infrastructure taskfiles
   kubernetes: .taskfiles/kubernetes
