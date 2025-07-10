@@ -50,8 +50,7 @@ tasks:
       - task: cloudflare:clean-dryrun
       - echo ""
       - echo "Would destroy the following infrastructure:"
-      - cmd: terragrunt stack run plan -destroy --queue-exclude-dir "*/download_file"
-        dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster"
+      - task: talos:plan-destroy
     preconditions:
       - sh: which terragrunt
         msg: "terragrunt is required"

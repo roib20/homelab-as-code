@@ -24,3 +24,21 @@ tasks:
       - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster/terragrunt.stack.hcl"
       - which terragrunt
       - which tofu
+
+  plan:
+    desc: "Show what would be applied (apply plan)"
+    dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster"
+    cmd: terragrunt stack run plan
+    preconditions:
+      - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster/terragrunt.stack.hcl"
+      - which terragrunt
+      - which tofu
+
+  plan-destroy:
+    desc: "Show what would be destroyed (destroy plan)"
+    dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster"
+    cmd: terragrunt stack run plan -destroy --queue-exclude-dir "*/download_file"
+    preconditions:
+      - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster/terragrunt.stack.hcl"
+      - which terragrunt
+      - which tofu
