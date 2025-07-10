@@ -5,17 +5,14 @@ version: '3'
 set: [pipefail]
 shopt: [globstar]
 
-includes:
-  talos: ../talos
-  kubernetes: ../kubernetes
 
 tasks:
   up:
     desc: "Provision the non-prod cluster end-to-end"
     interactive: false
     cmds:
-      - task: talos:apply
-      - task: kubernetes:deploy
+      - task: :talos:apply
+      - task: :kubernetes:deploy
     preconditions:
       - sh: which terragrunt
         msg: "terragrunt is required"
@@ -31,11 +28,11 @@ tasks:
       - echo "Disabling Argo CD sync to prevent resource recreation..."
       - task: :argocd:disable-sync
       - echo "Deleting all ingress resources..."
-      - task: kubernetes:delete-all-ingress
+      - task: :kubernetes:delete-all-ingress
       - echo "Cleaning Cloudflare resources..."
       - task: :cloudflare:clean
       - echo "Destroying cluster infrastructure..."
-      - task: talos:destroy
+      - task: :talos:destroy
     preconditions:
       - sh: which terragrunt
         msg: "terragrunt is required"
@@ -50,7 +47,7 @@ tasks:
       - echo "=== DRY RUN - No resources will be destroyed ==="
       - echo ""
       - echo "Would destroy the following infrastructure:"
-      - task: talos:plan-destroy
+      - task: :talos:plan-destroy
       - echo ""
       - echo "Would clean the following Cloudflare resources:"
       - task: :cloudflare:clean-dryrun
