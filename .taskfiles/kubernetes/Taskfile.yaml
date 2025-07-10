@@ -5,6 +5,9 @@ version: '3'
 set: [pipefail]
 shopt: [globstar]
 
+includes:
+  argocd: ../argocd
+
 tasks:
   deploy:
     desc: "Run K8s Ansible playbook (prompts for BWS token)"
@@ -32,3 +35,15 @@ tasks:
       - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/bootstrap-k8s-secrets/terragrunt.stack.hcl"
       - which terragrunt
       - which tofu
+
+  delete-all-ingress:
+    desc: "Delete all ingress resources (disables Argo CD sync first)"
+    cmds:
+      - echo "Disabling Argo CD sync to prevent ingress recreation..."
+      - task: argocd:disable-sync
+      - echo "Deleting all ingress resources across all namespaces..."
+      - kubectl delete ingress --all --all-namespaces
+      - echo "All ingress resources deleted."
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"

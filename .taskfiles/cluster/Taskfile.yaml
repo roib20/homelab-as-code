@@ -29,7 +29,9 @@ tasks:
     desc: "⚠️  DESTROY cluster with confirmation"
     prompt: "This will DESTROY the entire cluster and clean Cloudflare resources. Are you sure?"
     cmds:
-      - echo "Cleaning Cloudflare resources first..."
+      - echo "Deleting all ingress resources..."
+      - task: kubernetes:delete-all-ingress
+      - echo "Cleaning Cloudflare resources..."
       - task: cloudflare:clean
       - echo "Destroying cluster infrastructure..."
       - task: talos:destroy
