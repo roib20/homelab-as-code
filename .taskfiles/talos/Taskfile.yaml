@@ -6,7 +6,7 @@ set: [pipefail]
 shopt: [globstar]
 
 tasks:
-  cluster:
+  apply:
     desc: "Apply Talos cluster via Terragrunt (non-interactive)"
     dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster"
     interactive: false
