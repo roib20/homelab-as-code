@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+set: [pipefail]
+shopt: [globstar]
+
+tasks:
+  prompt:
+    desc: "Utility task for prompting user input (used by other taskfiles)"
+    internal: true
+    cmd: sh "{{.ROOT_DIR}}/.taskfiles/common/scripts/prompt.sh"
+    
+  check-tools:
+    desc: "Check if required tools are installed"
+    cmds:
+      - echo "=== Checking Required Tools ==="
+      - which task || which go-task || echo "❌ Task runner not found"
+      - which docker || echo "❌ Docker not found"
+      - which kubectl || echo "❌ kubectl not found"
+      - which terragrunt || echo "❌ Terragrunt not found"
+      - which tofu || echo "❌ OpenTofu not found"
+      - which ansible-playbook || echo "❌ Ansible not found"
+      - which talosctl || echo "❌ talosctl not found"
+      - which curl || echo "❌ curl not found"
+      - which jq || echo "❌ jq not found"
+      - echo "✅ Tool check completed"
+
+  env-check:
+    desc: "Check environment variables and configuration"
+    cmds:
+      - echo "=== Environment Check ==="
+      - echo "TERRAGRUNT_DIR{{":"}} {{.TERRAGRUNT_DIR}}"
+      - echo "TERRAGRUNT_ENV{{":"}} {{.TERRAGRUNT_ENV}}"
+      - echo "PVE_NODE{{":"}} {{.PVE_NODE}}"
+      - echo "ANSIBLE_DIR{{":"}} {{.ANSIBLE_DIR}}"
+      - test -d "{{.TERRAGRUNT_DIR}}" && echo "✅ Terragrunt directory exists" || echo "❌ Terragrunt directory missing"
+      - test -d "{{.ANSIBLE_DIR}}" && echo "✅ Ansible directory exists" || echo "❌ Ansible directory missing"
+      - test -f "{{.ROOT_DIR}}/docker-bake.hcl" && echo "✅ Docker bake config exists" || echo "❌ Docker bake config missing"

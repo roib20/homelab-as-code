@@ -1,0 +1,71 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+set: [pipefail]
+shopt: [globstar]
+
+tasks:
+  proxmox:
+    desc: "Update Proxmox hosts (Debian packages)"
+    prompt: "This will update all packages on Proxmox hosts. Continue?"
+    dir: "{{.ANSIBLE_DIR}}/pve-cluster"
+    env:
+      VAR_NAME: ANSIBLE_PASS
+      VAR_CMD: |
+        ansible-playbook -i inventory.yml update-playbook.yml -k -K --tags "update-packages"
+    cmds:
+      - sh "{{.ROOT_DIR}}/.taskfiles/common/scripts/prompt.sh"
+    preconditions:
+      - sh: test -f "{{.ANSIBLE_DIR}}/pve-cluster/inventory.yml"
+        msg: "Ansible inventory not found"
+      - sh: which ansible-playbook
+        msg: "ansible-playbook is required"
+
+  kubernetes:
+    desc: "Update Kubernetes components"
+    prompt: "This will update Kubernetes components. Continue?"
+    cmds:
+      - echo "Updating Kubernetes addons..."
+      - task: kubernetes:deploy
+      - echo "Checking cluster status after update..."
+      - kubectl get nodes
+      - kubectl get pods --all-namespaces | grep -v Running | grep -v Completed || echo "All pods are running"
+
+  talos:
+    desc: "Update Talos Linux nodes"
+    prompt: "This will update Talos Linux nodes. Continue?"
+    cmds:
+      - echo "Checking current Talos version..."
+      - talosctl version --nodes $(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}' | tr ' ' ',')
+      - echo "Note{{":"}} Talos updates should be done via Terragrunt configuration"
+      - echo "Update the TALOS_VERSION in terragrunt configuration and run 'task cluster{{":"}}up'"
+    preconditions:
+      - sh: which talosctl
+        msg: "talosctl is required"
+      - sh: which kubectl
+        msg: "kubectl is required"
+
+  container-images:
+    desc: "Update container images used by the project"
+    prompt: "This will rebuild container images with latest base images. Continue?"
+    cmds:
+      - echo "Pulling latest base images..."
+      - docker pull alpine:latest
+      - echo "Rebuilding container image..."
+      - task: docker:build
+      - echo "Container image updated"
+
+  all:
+    desc: "Update everything (Proxmox, Kubernetes, container images)"
+    prompt: "This will update ALL components. This may take a long time. Continue?"
+    cmds:
+      - task: proxmox
+      - task: kubernetes
+      - task: container-images
+      - echo "All updates completed"
+    preconditions:
+      - sh: which ansible-playbook
+        msg: "ansible-playbook is required"
+      - sh: which docker
+        msg: "docker is required"

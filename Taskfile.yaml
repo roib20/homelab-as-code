@@ -14,15 +14,14 @@ vars:
 
 # ── include sub‑taskfiles ────────────────────────────────────────────────────
 includes:
-  # Common utilities
-  common: .taskfiles/common
-  # New taskfiles
+  # Info and utilities
+  info: .taskfiles/info
+  # Core taskfiles
   cluster: .taskfiles/cluster
-  cloudflare: .taskfiles/cloudflare
   docker: .taskfiles/docker
   updates: .taskfiles/updates
-  bootstrap: .taskfiles/bootstrap
-  # Existing taskfiles
+  cloudflare: .taskfiles/cloudflare
+  # Infrastructure taskfiles
   kubernetes: .taskfiles/kubernetes
   talos: .taskfiles/talos
   proxmox: .taskfiles/proxmox

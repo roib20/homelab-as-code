@@ -1,0 +1,105 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+set: [pipefail]
+shopt: [globstar]
+
+vars:
+  IMAGE_NAME: 'homelab-as-code-runner'
+  COMPOSE_FILE: '{{.ROOT_DIR}}/compose.yaml'
+
+tasks:
+  build:
+    desc: "Build local container image"
+    dir: "{{.ROOT_DIR}}"
+    cmd: docker buildx bake local
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+      - sh: test -f docker-bake.hcl
+        msg: "docker-bake.hcl not found"
+
+  push:
+    desc: "Build and push multi-arch container image"
+    dir: "{{.ROOT_DIR}}"
+    cmd: docker buildx bake push
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+      - sh: test -f docker-bake.hcl
+        msg: "docker-bake.hcl not found"
+
+  run:
+    desc: "Run container with proper mounts and user"
+    dir: "{{.ROOT_DIR}}"
+    cmd: |
+      mkdir -p "${HOME}/.kube" "${HOME}/.talos"
+      docker compose run --user "$(id -u):$(id -g)" --rm runner
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+      - sh: test -f "{{.COMPOSE_FILE}}"
+        msg: "compose.yaml not found"
+
+  shell:
+    desc: "Interactive shell in container"
+    dir: "{{.ROOT_DIR}}"
+    cmd: |
+      mkdir -p "${HOME}/.kube" "${HOME}/.talos"
+      docker compose run --user "$(id -u):$(id -g)" --rm runner sh
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+      - sh: test -f "{{.COMPOSE_FILE}}"
+        msg: "compose.yaml not found"
+
+  clean:
+    desc: "Clean up container images and build cache"
+    prompt: "This will remove container images and build cache. Continue?"
+    cmds:
+      - docker buildx prune -f
+      - docker image rm {{.IMAGE_NAME}}:latest 2>/dev/null || true
+      - echo "Docker cleanup completed"
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+
+  logs:
+    desc: "View container logs"
+    cmd: docker compose logs -f runner
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+      - sh: test -f "{{.COMPOSE_FILE}}"
+        msg: "compose.yaml not found"
+
+  status:
+    desc: "Show container and image status"
+    cmds:
+      - echo "=== Container Images ==="
+      - docker images | grep -E "({{.IMAGE_NAME}}|REPOSITORY)" || echo "No images found"
+      - echo ""
+      - echo "=== Running Containers ==="
+      - docker ps | grep -E "({{.IMAGE_NAME}}|CONTAINER)" || echo "No running containers"
+      - echo ""
+      - echo "=== Build Cache ==="
+      - docker buildx du || echo "No build cache info available"
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+
+  info:
+    desc: "Show Docker configuration and system info"
+    cmds:
+      - echo "=== Docker Version ==="
+      - docker --version
+      - echo ""
+      - echo "=== Docker System Info ==="
+      - docker system df
+      - echo ""
+      - echo "=== Buildx Builders ==="
+      - docker buildx ls
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
