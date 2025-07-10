@@ -8,6 +8,7 @@ shopt: [globstar]
 includes:
   talos: ../talos
   kubernetes: ../kubernetes
+  cloudflare: ../cloudflare
 
 tasks:
   up:
@@ -24,11 +25,34 @@ tasks:
       - sh: which ansible-playbook
         msg: "ansible-playbook is required"
 
-  nuke:
+  down:
     desc: "⚠️  DESTROY cluster with confirmation"
-    prompt: "This will DESTROY the entire cluster. Are you sure?"
-    dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster"
-    cmd: terragrunt stack run destroy --queue-exclude-dir "*/download_file"
+    prompt: "This will DESTROY the entire cluster and clean Cloudflare resources. Are you sure?"
+    cmds:
+      - echo "Cleaning Cloudflare resources first..."
+      - task: cloudflare:clean
+      - echo "Destroying cluster infrastructure..."
+      - cmd: terragrunt stack run destroy --queue-exclude-dir "*/download_file"
+        dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster"
+    preconditions:
+      - sh: which terragrunt
+        msg: "terragrunt is required"
+      - sh: which tofu
+        msg: "tofu is required"
+      - sh: test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster/terragrunt.stack.hcl"
+        msg: "Terragrunt stack config not found"
+
+  down-dryrun:
+    desc: "Show what would be destroyed (dry run)"
+    cmds:
+      - echo "=== DRY RUN - No resources will be destroyed ==="
+      - echo ""
+      - echo "Would clean the following Cloudflare resources:"
+      - task: cloudflare:clean-dryrun
+      - echo ""
+      - echo "Would destroy the following infrastructure:"
+      - cmd: terragrunt stack run plan -destroy --queue-exclude-dir "*/download_file"
+        dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster"
     preconditions:
       - sh: which terragrunt
         msg: "terragrunt is required"
@@ -40,7 +64,7 @@ tasks:
   rebuild:
     desc: "Destroy and rebuild cluster for rapid testing"
     cmds:
-      - task: nuke
+      - task: down
       - task: up
     preconditions:
       - sh: which terragrunt
