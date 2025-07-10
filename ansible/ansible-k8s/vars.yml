@@ -14,7 +14,7 @@ kustomize_overlays:
     wait: yes
   - name: argocd
     set: argo
-    overlay: prod
+    overlay: bootstrap
     wait: no
 
 kubernetes_manifests:
