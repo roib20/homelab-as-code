@@ -48,11 +48,11 @@ tasks:
     cmds:
       - echo "=== DRY RUN - No resources will be destroyed ==="
       - echo ""
-      - echo "Would clean the following Cloudflare resources:"
-      - task: cloudflare:clean-dryrun
-      - echo ""
       - echo "Would destroy the following infrastructure:"
       - task: talos:plan-destroy
+      - echo ""
+      - echo "Would clean the following Cloudflare resources:"
+      - task: cloudflare:clean-dryrun
     preconditions:
       - sh: which terragrunt
         msg: "terragrunt is required"
