@@ -97,7 +97,7 @@ tasks:
             echo "ArgoCD admin password:"
             kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d 2>/dev/null || echo "Password secret not found"
             echo ""
-            echo "Access ArgoCD with: task cluster:argocd"
+            echo "Access ArgoCD with: task argocd:argocd"
           else
             echo "ArgoCD not installed"
           fi
@@ -105,19 +105,3 @@ tasks:
       - sh: which kubectl
         msg: "kubectl is required"
 
-  argocd:
-    desc: "Get ArgoCD admin password and start port-forward"
-    cmds:
-      - cmd: |
-          echo "ArgoCD admin password:"
-          kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-          echo
-          echo
-          echo "Starting port-forward to http://localhost:8080..."
-          echo "Press Ctrl+C to stop port-forward"
-          kubectl port-forward svc/argocd-server -n argocd 8080:443
-    preconditions:
-      - sh: which kubectl
-        msg: "kubectl is required"
-      - sh: kubectl get namespace argocd
-        msg: "ArgoCD namespace not found. Run 'task cluster:up' first."
