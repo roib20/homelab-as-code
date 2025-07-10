@@ -15,3 +15,12 @@ tasks:
       - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster/terragrunt.stack.hcl"
       - which terragrunt
       - which tofu
+
+  destroy:
+    desc: "Destroy Talos cluster infrastructure via Terragrunt"
+    dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster"
+    cmd: terragrunt stack run destroy --queue-exclude-dir "*/download_file"
+    preconditions:
+      - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster/terragrunt.stack.hcl"
+      - which terragrunt
+      - which tofu

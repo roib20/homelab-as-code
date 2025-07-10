@@ -32,8 +32,7 @@ tasks:
       - echo "Cleaning Cloudflare resources first..."
       - task: cloudflare:clean
       - echo "Destroying cluster infrastructure..."
-      - cmd: terragrunt stack run destroy --queue-exclude-dir "*/download_file"
-        dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster"
+      - task: talos:destroy
     preconditions:
       - sh: which terragrunt
         msg: "terragrunt is required"
