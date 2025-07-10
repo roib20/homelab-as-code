@@ -3,8 +3,6 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - argocd-server-webhook-ingress.yaml
-  - git-webhook.yaml.externalsecret
 
 helmCharts:
   - name: argo-cd
@@ -16,11 +14,3 @@ helmCharts:
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-
-configMapGenerator:
-  - name: env-vars
-    envs:
-      - /tmp/env-vars.env
-
-replacements:
-  - path: replacements.yaml
