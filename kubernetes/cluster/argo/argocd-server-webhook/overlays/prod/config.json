@@ -1,0 +1,10 @@
+{
+  "project": "default",
+  "appName": "argocd-server-webhook",
+  "userGivenName": "argocd-server-webhook",
+  "destNamespace": "argocd",
+  "destName": "in-cluster",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "annotations": {}
+}

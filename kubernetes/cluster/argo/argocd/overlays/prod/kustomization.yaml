@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-resources:
+resources: []
 - ../../base
 
 helmCharts:
@@ -14,11 +14,3 @@ helmCharts:
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-
-configMapGenerator:
-  - name: env-vars
-    envs:
-      - /tmp/env-vars.env
-
-replacements:
-  - path: ../../base/replacements.yaml
