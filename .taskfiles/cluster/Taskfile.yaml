@@ -8,7 +8,6 @@ shopt: [globstar]
 includes:
   talos: ../talos
   kubernetes: ../kubernetes
-  cloudflare: ../cloudflare
 
 tasks:
   up:
@@ -29,10 +28,12 @@ tasks:
     desc: "⚠️  DESTROY cluster with confirmation"
     prompt: "This will DESTROY the entire cluster and clean Cloudflare resources. Are you sure?"
     cmds:
+      - echo "Disabling Argo CD sync to prevent resource recreation..."
+      - task: :argocd:disable-sync
       - echo "Deleting all ingress resources..."
       - task: kubernetes:delete-all-ingress
       - echo "Cleaning Cloudflare resources..."
-      - task: cloudflare:clean
+      - task: :cloudflare:clean
       - echo "Destroying cluster infrastructure..."
       - task: talos:destroy
     preconditions:
@@ -52,7 +53,7 @@ tasks:
       - task: talos:plan-destroy
       - echo ""
       - echo "Would clean the following Cloudflare resources:"
-      - task: cloudflare:clean-dryrun
+      - task: :cloudflare:clean-dryrun
     preconditions:
       - sh: which terragrunt
         msg: "terragrunt is required"
