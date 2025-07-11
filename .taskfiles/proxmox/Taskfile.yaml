@@ -6,7 +6,7 @@ set: [pipefail]
 shopt: [globstar]
 
 tasks:
-  pve-cluster:
+  setup-cluster:
     desc: Run Ansible VM playbook (prompts for ANSIBLE_PASS)
     dir: "ansible/pve-cluster"
     interactive: true

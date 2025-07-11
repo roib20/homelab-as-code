@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+set: [pipefail]
+shopt: [globstar]
+
+tasks:
+  prompt:
+    desc: "Utility task for prompting user input (used by other taskfiles)"
+    internal: true
+    cmd: sh "{{.ROOT_DIR}}/.taskfiles/common/scripts/prompt.sh"

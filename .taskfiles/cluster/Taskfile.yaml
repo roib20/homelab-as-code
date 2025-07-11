@@ -1,0 +1,107 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+set: [pipefail]
+shopt: [globstar]
+
+
+tasks:
+  up:
+    desc: "Provision the non-prod cluster end-to-end"
+    interactive: false
+    cmds:
+      - task: :talos:apply
+      - task: :k8s:deploy
+    preconditions:
+      - sh: which terragrunt
+        msg: "terragrunt is required"
+      - sh: which tofu
+        msg: "tofu is required"
+      - sh: which ansible-playbook
+        msg: "ansible-playbook is required"
+
+  down:
+    desc: "⚠️  DESTROY cluster with confirmation"
+    prompt: "This will DESTROY the entire cluster and clean Cloudflare resources. Are you sure?"
+    cmds:
+      - echo "Disabling Argo CD sync to prevent resource recreation..."
+      - task: :argocd:disable-sync
+      - echo "Deleting all ingress resources..."
+      - task: :k8s:delete-all-ingress
+      - echo "Cleaning Cloudflare resources..."
+      - task: :cloudflare:clean
+      - echo "Destroying cluster infrastructure..."
+      - task: :talos:destroy
+    preconditions:
+      - sh: which terragrunt
+        msg: "terragrunt is required"
+      - sh: which tofu
+        msg: "tofu is required"
+      - sh: test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster/terragrunt.stack.hcl"
+        msg: "Terragrunt stack config not found"
+
+  down-dryrun:
+    desc: "Show what would be destroyed (dry run)"
+    cmds:
+      - echo "=== DRY RUN - No resources will be destroyed ==="
+      - echo ""
+      - echo "Would destroy the following infrastructure:"
+      - task: :talos:plan-destroy
+      - echo ""
+      - echo "Would clean the following Cloudflare resources:"
+      - task: :cloudflare:clean-dryrun
+    preconditions:
+      - sh: which terragrunt
+        msg: "terragrunt is required"
+      - sh: which tofu
+        msg: "tofu is required"
+      - sh: test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster/terragrunt.stack.hcl"
+        msg: "Terragrunt stack config not found"
+
+  rebuild:
+    desc: "Destroy and rebuild cluster for rapid testing"
+    cmds:
+      - task: down
+      - task: up
+    preconditions:
+      - sh: which terragrunt
+        msg: "terragrunt is required"
+      - sh: which tofu
+        msg: "tofu is required"
+      - sh: which ansible-playbook
+        msg: "ansible-playbook is required"
+
+  status:
+    desc: "Check cluster health and status"
+    cmds:
+      - echo "=== Cluster Nodes ==="
+      - kubectl get nodes -o wide
+      - echo "=== Cluster Pods ==="
+      - kubectl get pods --all-namespaces
+      - echo "=== ArgoCD Applications ==="
+      - kubectl get applications -n argocd 2>/dev/null || echo "ArgoCD not installed"
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+
+  info:
+    desc: "Show cluster information and ArgoCD access details"
+    cmds:
+      - echo "=== Cluster Info ==="
+      - kubectl cluster-info
+      - echo ""
+      - echo "=== ArgoCD Access ==="
+      - cmd: |
+          if kubectl get namespace argocd >/dev/null 2>&1; then
+            echo "ArgoCD admin password:"
+            kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d 2>/dev/null || echo "Password secret not found"
+            echo ""
+            echo "Access ArgoCD with: task argocd:argocd"
+          else
+            echo "ArgoCD not installed"
+          fi
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+

@@ -1,0 +1,116 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+set: [pipefail]
+shopt: [globstar]
+
+tasks:
+  default:
+    desc: "Get Argo CD admin password and start port-forward"
+    cmds:
+      - task: password
+      - task: port-forward
+
+  password:
+    desc: "Get Argo CD initial admin password"
+    cmds:
+      - cmd: |
+          echo "Argo CD initial-admin-password:"
+          kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+          echo
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+      - sh: kubectl get namespace argocd >/dev/null 2>&1
+        msg: "Argo CD namespace not found. Run 'task cluster:up' first."
+      - sh: kubectl get secret argocd-initial-admin-secret -n argocd >/dev/null 2>&1
+        msg: "Argo CD initial admin secret not found. Password may have been reset or deleted."
+
+  port-forward:
+    desc: "Start port-forward to Argo CD server"
+    cmds:
+      - cmd: |
+          echo "Starting port-forward to http://localhost:8080..."
+          echo "Press Ctrl+C to stop port-forward"
+          kubectl port-forward svc/argocd-server -n argocd 8080:443
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+      - sh: kubectl get namespace argocd >/dev/null 2>&1
+        msg: "Argo CD namespace not found. Run 'task cluster:up' first."
+      - sh: kubectl get svc argocd-server -n argocd >/dev/null 2>&1
+        msg: "Argo CD server service not found. Check if Argo CD is properly installed."
+
+  reset-password:
+    desc: "Reset Argo CD admin password (3-step process)"
+    cmds:
+      - cmd: |
+          echo "Step 1: Invalidating Admin Credentials"
+          kubectl patch secret argocd-secret -n argocd -p '{"data": {"admin.password": null, "admin.passwordMtime": null}}'
+          echo "Admin credentials invalidated."
+          echo
+      - cmd: |
+          echo "Step 2: Restarting Argo CD Server Pods"
+          kubectl delete pods -n argocd -l app.kubernetes.io/name=argocd-server
+          echo "ArgoCD server pods restarted."
+          echo
+      - cmd: |
+          echo "Step 3: Decrypting the New Password"
+          echo "Waiting for new password to be generated..."
+          sleep 10
+          echo "Argo CD initial-admin-password:"
+          kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+          echo
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+      - sh: kubectl get namespace argocd >/dev/null 2>&1
+        msg: "Argo CD namespace not found. Run 'task cluster:up' first."
+      - sh: kubectl get secret argocd-initial-admin-secret -n argocd >/dev/null 2>&1
+        msg: "Argo CD initial admin secret not found. Password may have been reset or deleted."
+
+  delete-initial-secret:
+    desc: "Delete the initial admin secret"
+    cmds:
+      - cmd: |
+          echo "Deleting argocd-initial-admin-secret..."
+          kubectl delete secret argocd-initial-admin-secret -n argocd
+          echo "Initial admin secret deleted."
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+      - sh: kubectl get namespace argocd >/dev/null 2>&1
+        msg: "Argo CD namespace not found. Run 'task cluster:up' first."
+      - sh: kubectl get secret argocd-initial-admin-secret -n argocd >/dev/null 2>&1
+        msg: "Argo CD initial admin secret not found. Password may have been reset or deleted."
+
+  disable-sync:
+    desc: "Disable Argo CD sync by scaling application controller down"
+    cmds:
+      - cmd: |
+          echo "Scaling Argo CD application controller down to disable sync..."
+          kubectl -n argocd scale statefulset/argocd-application-controller --replicas=0
+          echo "Application controller scaled down. Sync is now disabled."
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+      - sh: kubectl get namespace argocd >/dev/null 2>&1
+        msg: "Argo CD namespace not found. Run 'task cluster:up' first."
+      - sh: kubectl get statefulset argocd-application-controller -n argocd >/dev/null 2>&1
+        msg: "Argo CD application controller not found. Check if Argo CD is properly installed."
+
+  enable-sync:
+    desc: "Enable Argo CD sync by scaling application controller up"
+    cmds:
+      - cmd: |
+          echo "Scaling Argo CD application controller up to enable sync..."
+          kubectl -n argocd scale statefulset/argocd-application-controller --replicas=1
+          echo "Application controller scaled up. Sync is now enabled."
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+      - sh: kubectl get namespace argocd >/dev/null 2>&1
+        msg: "Argo CD namespace not found. Run 'task cluster:up' first."
+      - sh: kubectl get statefulset argocd-application-controller -n argocd >/dev/null 2>&1
+        msg: "Argo CD application controller not found. Check if Argo CD is properly installed."

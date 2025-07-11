@@ -14,22 +14,19 @@ vars:
 
 # ── include sub‑taskfiles ────────────────────────────────────────────────────
 includes:
-  kubernetes: .taskfiles/kubernetes
+  # Info and utilities
+  info: .taskfiles/info
+  # Core taskfiles
+  cluster: .taskfiles/cluster
+  docker: .taskfiles/docker
+  cloudflare: .taskfiles/cloudflare
+  # Infrastructure taskfiles
+  k8s: .taskfiles/kubernetes
   talos: .taskfiles/talos
   proxmox: .taskfiles/proxmox
+  argocd: .taskfiles/argocd
 
 tasks:
   default:
     desc: List all available tasks (root + included)
     cmds: ["task --list-all || go-task --list-all"]
-
-  # ---------------------------------------------------------------------------
-  # One‑shot pipeline: VM ➜ Talos ➜ K8s
-  # ---------------------------------------------------------------------------
-  cluster:up:
-    desc: "Provision the non-prod cluster end-to-end"
-    interactive: false
-    cmds:                      # SEQUENTIAL execution
-      # - task: proxmox:pve-cluster
-      - task: talos:cluster
-      - task: kubernetes:ansible-k8s

@@ -1,0 +1,111 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+set: [pipefail]
+shopt: [globstar]
+
+tasks:
+  clean:
+    desc: "Delete all Cloudflare operator resources (tunnels and DNS)"
+    prompt: "This will delete ALL Cloudflare tunnels and DNS records managed by cloudflare-operator. Are you sure?"
+    cmds:
+      - echo "Deleting namespaced Cloudflare operator resources..."
+      - cmd: |
+          kubectl delete $(kubectl api-resources \
+            --api-group=networking.cfargotunnel.com --namespaced=true -o name | paste -sd, -) \
+            --all --all-namespaces 2>/dev/null || echo "No namespaced resources found"
+      - echo "Deleting cluster-scoped Cloudflare operator resources..."
+      - cmd: |
+          kubectl delete $(kubectl api-resources \
+            --api-group=networking.cfargotunnel.com --namespaced=false -o name | paste -sd, -) \
+            --all 2>/dev/null || echo "No cluster-scoped resources found"
+      - echo "Cloudflare resources cleanup completed"
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+      - sh: kubectl api-resources --api-group=networking.cfargotunnel.com
+        msg: "cloudflare-operator CRDs not found - is cloudflare-operator installed?"
+
+  clean-dryrun:
+    desc: "Show what Cloudflare operator resources would be deleted (dry run)"
+    cmds:
+      - echo "=== DRY RUN - No resources will be deleted ==="
+      - echo ""
+      - echo "Namespaced resources that would be deleted:"
+      - cmd: |
+          kubectl delete $(kubectl api-resources \
+            --api-group=networking.cfargotunnel.com --namespaced=true -o name | paste -sd, -) \
+            --all --all-namespaces \
+            --dry-run=client -o name 2>/dev/null || echo "No namespaced resources found"
+      - echo ""
+      - echo "Cluster-scoped resources that would be deleted:"
+      - cmd: |
+          kubectl delete $(kubectl api-resources \
+            --api-group=networking.cfargotunnel.com --namespaced=false -o name | paste -sd, -) \
+            --all \
+            --dry-run=client -o name 2>/dev/null || echo "No cluster-scoped resources found"
+      - echo ""
+      - echo "=== End of dry run ==="
+      - echo "Run 'task cloudflare:clean' to actually delete these resources"
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+      - sh: kubectl api-resources --api-group=networking.cfargotunnel.com
+        msg: "cloudflare-operator CRDs not found - is cloudflare-operator installed?"
+
+  list:
+    desc: "List all Cloudflare operator resources"
+    cmds:
+      - echo "=== Namespaced Cloudflare Resources ==="
+      - cmd: |
+          for resource in $(kubectl api-resources --api-group=networking.cfargotunnel.com --namespaced=true -o name); do
+            echo "--- $resource ---"
+            kubectl get $resource --all-namespaces 2>/dev/null || echo "No $resource found"
+            echo ""
+          done
+      - echo "=== Cluster-scoped Cloudflare Resources ==="
+      - cmd: |
+          for resource in $(kubectl api-resources --api-group=networking.cfargotunnel.com --namespaced=false -o name); do
+            echo "--- $resource ---"
+            kubectl get $resource 2>/dev/null || echo "No $resource found"
+            echo ""
+          done
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+      - sh: kubectl api-resources --api-group=networking.cfargotunnel.com
+        msg: "cloudflare-operator CRDs not found - is cloudflare-operator installed?"
+
+  status:
+    desc: "Show status of Cloudflare operator and resources"
+    cmds:
+      - echo "=== Cloudflare Operator Pod Status ==="
+      - kubectl get deployment -l app.kubernetes.io/name=cloudflare-operator --all-namespaces 2>/dev/null || echo "Cloudflare Operator deployment not found"
+      - echo ""
+      - echo "=== Cloudflare CRDs ==="
+      - kubectl get crd | grep networking.cfargotunnel.com || echo "No Cloudflare CRDs found"
+      - echo ""
+      - echo "=== Resource Summary ==="
+      - cmd: |
+          for resource in $(kubectl api-resources --api-group=networking.cfargotunnel.com -o name 2>/dev/null); do
+            count=$(kubectl get $resource --all-namespaces --no-headers 2>/dev/null | wc -l)
+            echo "$resource: $count"
+          done
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+
+  info:
+    desc: "Show Cloudflare operator information and available resources"
+    cmds:
+      - echo "=== Cloudflare Operator API Groups ==="
+      - kubectl api-resources --api-group=networking.cfargotunnel.com 2>/dev/null || echo "Cloudflare operator not installed"
+      - echo ""
+      - echo "=== Usage ==="
+      - echo "• task cloudflare:list    - List all resources"
+      - echo "• task cloudflare:status  - Show operator status"
+      - echo "• task cloudflare:clean-all - Delete all resources"
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"

@@ -5,8 +5,9 @@ version: '3'
 set: [pipefail]
 shopt: [globstar]
 
+
 tasks:
-  ansible-k8s:
+  deploy:
     desc: "Run K8s Ansible playbook (prompts for BWS token)"
     dir: "ansible/ansible-k8s"
     interactive: false
@@ -19,7 +20,7 @@ tasks:
       - test -f "{{.ANSIBLE_DIR}}/ansible-k8s/k8s-playbook.yml"
       - which ansible-playbook
 
-  bootstrap-k8s-secrets:
+  bootstrap-secrets:
     desc: "Apply bootstrap-k8s-secrets (Terragrunt, needs BWS token)"
     dir: "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/bootstrap-k8s-secrets"
     interactive: false
@@ -32,3 +33,25 @@ tasks:
       - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/bootstrap-k8s-secrets/terragrunt.stack.hcl"
       - which terragrunt
       - which tofu
+
+  delete-all-ingress:
+    desc: "⚠️  Delete all ingress resources across all namespaces"
+    prompt: "This will DELETE all ingress resources across ALL namespaces. Are you sure?"
+    cmds:
+      - echo "Deleting all ingress resources across all namespaces..."
+      - kubectl delete ingress --all --all-namespaces
+      - echo "All ingress resources deleted."
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+
+  delete-all-ingress-dryrun:
+    desc: "Show what ingress resources would be deleted (dry run)"
+    cmds:
+      - echo "=== DRY RUN - No resources will be deleted ==="
+      - echo ""
+      - echo "Would delete the following ingress resources:"
+      - kubectl get ingress --all-namespaces
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"

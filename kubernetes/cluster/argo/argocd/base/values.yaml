@@ -7,20 +7,6 @@ controller:
 
 server:
   replicas: 2
-# Ingress
-  ingress:
-    enabled: true
-    ingressClassName: tailscale
-    extraTls:
-      - hosts:
-        - argocd
-
-  ingressGrpc:
-    enabled: true
-    ingressClassName: tailscale
-    extraTls:
-      - hosts:
-        - argocd-grpc
 
 applicationSet:
   replicas: 2
