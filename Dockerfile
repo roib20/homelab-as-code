@@ -242,7 +242,7 @@ echo "$TASKS_JSON" | jq -r --arg workdir "$WORK_DIR" '.tasks[] |
   "    desc: \"" + (.desc // "") + "\"\n" +
   "    interactive: true\n" +
   "    cmds:\n" +
-  "      - bash -c \"export HOME=\"/home/${USER:-runner}\" && pushd \"" + $workdir + "\" && task " + .name + "\"\n"' >> Taskfile.yml
+  "      - bash -c \"printenv && export HOME=\"/home/${USER:-runner}\" PATH=\"/opt/venv/bin:$PATH\" && pushd \"" + $workdir + "\" && task " + .name + "\"\n"' >> Taskfile.yml
 
 echo "Flattened Taskfile.yml generated with $(echo "$TASKS_JSON" | jq '.tasks | length') tasks"
 
