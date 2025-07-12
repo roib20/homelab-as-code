@@ -12,12 +12,28 @@ ARG HELM_VERSION=3.14.2
 ARG KUSTOMIZE_VERSION=5.7.0
 ARG JQ_VERSION=1.8.1
 ARG PYTHON_VERSION=3.13
+ARG GO_VERSION=1.24
+ARG TTYREC_VERSION=v1.1.7.1
 ARG CURL_FLAGS="-sSL --proto '=https' --tlsv1.3 --ciphers 'HIGH:!aNULL:!MD5' --cacert /etc/ssl/certs/ca-certificates.crt --capath /etc/ssl/certs --compressed"
 
-# Stage 1: Extract tofu binary
+# Stage 1: Build ovh-ttyrec
+FROM alpine:${ALPINE_VERSION} AS ttyrec
+ARG TTYREC_VERSION
+WORKDIR /tmp
+RUN apk --no-cache add build-base git
+RUN git clone --branch ${TTYREC_VERSION} --depth 1 https://github.com/ovh/ovh-ttyrec.git
+WORKDIR /tmp/ovh-ttyrec
+RUN STATIC=1 ./configure --bindir=/usr/local/bin && make && make install
+
+# Stage 2: Build task-ui
+FROM golang:${GO_VERSION}-alpine AS task-ui
+COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
+RUN GOBIN=/usr/local/bin CGO_ENABLED=0 go install github.com/titpetric/task-ui@latest
+
+# Stage 3: Extract tofu binary
 FROM ghcr.io/opentofu/opentofu:${TOFU_VERSION}-minimal AS tofu
 
-# Stage 0 – common downloader utilities
+# Stage 4 – common downloader utilities
 FROM alpine:${ALPINE_VERSION} AS downloader
 ARG CURL_FLAGS
 RUN apk add --no-cache curl
@@ -155,7 +171,7 @@ RUN dl-verify \
       "${URL}/${CHECKSUM_FILE}" \
       kustomize
 
-# Stage 4: Build Ansible in a venv
+# Stage 5: Build Ansible in a venv
 FROM python:${PYTHON_VERSION}-alpine AS ansible
 ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
@@ -173,7 +189,7 @@ COPY --link ansible/galaxy-requirements.yml /requirements.yml
 # RUN ansible-galaxy collection install community.general --force
 RUN ansible-galaxy install -r "requirements.yml" --force
 
-# Stage 5: Final runtime image
+# Stage 6: Final runtime image
 FROM python:${PYTHON_VERSION}-alpine AS runtime
 ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
@@ -200,11 +216,8 @@ RUN apk add --no-cache \
       git \
       bash
 
-# Install task-ui
-RUN export GOPATH=/tmp/go \
-    && go install github.com/titpetric/task-ui@latest \
-    && mv /tmp/go/bin/task-ui /usr/local/bin/ \
-    && rm -rf /tmp/go
+# Copy task-ui and ttyrec from build stage
+COPY --link --from=task-ui /usr/local/bin/tty* /usr/local/bin/
 
 # Create wrapper script that generates a flat Taskfile for task-ui
 RUN cat <<'EOF' > /usr/local/bin/task-ui-wrapper && chmod +x /usr/local/bin/task-ui-wrapper
@@ -221,7 +234,7 @@ TASKS_JSON=$(task --list-all --json 2>/dev/null || echo '{"tasks":[]}')
 
 # Create a dedicated directory for task-ui
 UI_DIR="/home/runner/task-ui"
-mkdir -p "$UI_DIR"
+mkdir -p "$UI_DIR/history"
 cd "$UI_DIR"
 
 # Create header
