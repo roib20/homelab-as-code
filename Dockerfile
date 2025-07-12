@@ -216,13 +216,14 @@ RUN apk add --no-cache \
       git \
       bash
 
-# Copy task-ui and ttyrec from build stage
-COPY --link --from=task-ui /usr/local/bin/tty* /usr/local/bin/
+# Copy task-ui and ttyrec from build stages
+COPY --link --from=task-ui /usr/local/bin/task-ui /usr/local/bin/
+COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
 
 # Create wrapper script that generates a flat Taskfile for task-ui
 RUN cat <<'EOF' > /usr/local/bin/task-ui-wrapper && chmod +x /usr/local/bin/task-ui-wrapper
 #!/bin/bash
-set -e
+set -eu
 
 WORK_DIR="/homelab-as-code"
 cd "$WORK_DIR"
@@ -255,7 +256,7 @@ echo "$TASKS_JSON" | jq -r --arg workdir "$WORK_DIR" '.tasks[] |
   "    desc: \"" + (.desc // "") + "\"\n" +
   "    interactive: true\n" +
   "    cmds:\n" +
-  "      - bash -c \"printenv && export HOME=\"/home/${USER:-runner}\" PATH=\"/opt/venv/bin:$PATH\" && pushd \"" + $workdir + "\" && task " + .name + "\"\n"' >> Taskfile.yml
+  "      - bash -c \"export HOME=\"/home/${USER:-runner}\" PATH=\"/opt/venv/bin:$PATH\" && printenv && pushd \"" + $workdir + "\" && task " + .name + "\"\n"' >> Taskfile.yml
 
 echo "Flattened Taskfile.yml generated with $(echo "$TASKS_JSON" | jq '.tasks | length') tasks"
 
