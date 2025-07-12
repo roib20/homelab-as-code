@@ -195,7 +195,60 @@ RUN apk add --no-cache \
       openssh-client \
       sshpass \
       less \
-      ca-certificates
+      ca-certificates \
+      go \
+      git \
+      bash
+
+# Install task-ui
+RUN export GOPATH=/tmp/go \
+    && go install github.com/titpetric/task-ui@latest \
+    && mv /tmp/go/bin/task-ui /usr/local/bin/ \
+    && rm -rf /tmp/go
+
+# Create wrapper script that generates a flat Taskfile for task-ui
+RUN cat <<'EOF' > /usr/local/bin/task-ui-wrapper && chmod +x /usr/local/bin/task-ui-wrapper
+#!/bin/bash
+set -e
+
+WORK_DIR="/homelab-as-code"
+cd "$WORK_DIR"
+
+echo "Generating flattened Taskfile.yml for task-ui..."
+
+# Get all tasks in JSON format
+TASKS_JSON=$(task --list-all --json 2>/dev/null || echo '{"tasks":[]}')
+
+# Create a dedicated directory for task-ui
+UI_DIR="/home/runner/task-ui"
+mkdir -p "$UI_DIR"
+cd "$UI_DIR"
+
+# Create header
+cat > Taskfile.yml << 'HEADER'
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+set: [pipefail]
+shopt: [globstar]
+
+tasks:
+HEADER
+
+# Parse JSON and create simple proxy tasks that preserve original context
+echo "$TASKS_JSON" | jq -r --arg workdir "$WORK_DIR" '.tasks[] | 
+  "  \"" + .name + "\":\n" +
+  "    desc: \"" + (.desc // "") + "\"\n" +
+  "    interactive: true\n" +
+  "    cmds:\n" +
+  "      - bash -c \"export HOME=\"/home/${USER:-runner}\" && pushd \"" + $workdir + "\" && task " + .name + "\"\n"' >> Taskfile.yml
+
+echo "Flattened Taskfile.yml generated with $(echo "$TASKS_JSON" | jq '.tasks | length') tasks"
+
+# Start task-ui from the UI directory with default Taskfile.yml
+exec task-ui "$@"
+EOF
 
 # Set rootless permissions
 WORKDIR /homelab-as-code
@@ -208,4 +261,6 @@ RUN addgroup -S runner && adduser -S runner -G runner \
     && chmod -R o+rwx "${HOME}"
 USER "${USER}"
 
-CMD ["/bin/sh"]
+EXPOSE 3000
+
+CMD ["/bin/bash"]
