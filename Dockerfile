@@ -265,7 +265,8 @@ ENV TASK_UI_WRAPPER_PATH="/usr/local/bin/task-ui-wrapper"
 RUN cat <<'EOS' > "${TASK_UI_WRAPPER_PATH}" \
  && sed -i "s|__HOME__|$HOME|g"  "${TASK_UI_WRAPPER_PATH}" \
  && sed -i "s|__PATH__|$PATH|g" "${TASK_UI_WRAPPER_PATH}"\
- && chmod +x "${TASK_UI_WRAPPER_PATH}"
+ && chmod +x "${TASK_UI_WRAPPER_PATH}" \
+ && chmod -R o+x /root
 #!/usr/bin/env bash
 set -euo pipefail
 
