@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+set: [pipefail]
+shopt: [globstar]
+
+vars:
+  COMPOSE_FILE: '{{.ROOT_DIR}}/compose.yaml'
+
+tasks:
+  start:
+    desc: "Start Task UI and expose via Tailscale"
+    cmds:
+      - task: up
+      - task: serve
+
+  up:
+    desc: "Start Task UI web interface (http://localhost:3000)"
+    dir: "{{.ROOT_DIR}}"
+    cmd: docker compose up task-ui --detach
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+      - sh: which docker compose
+        msg: "Docker Compose is required"
+      - sh: test -f "{{.COMPOSE_FILE}}"
+        msg: "compose.yaml not found"
+
+  stop:
+    desc: "Stop Task UI web interface"
+    dir: "{{.ROOT_DIR}}"
+    cmd: docker compose stop task-ui
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+      - sh: which docker compose
+        msg: "Docker Compose is required"
+      - sh: test -f "{{.COMPOSE_FILE}}"
+        msg: "compose.yaml not found"
+
+  down:
+    desc: "Stop Task UI web interface"
+    dir: "{{.ROOT_DIR}}"
+    prompt: "This will stop and remove the Task UI container. Continue?"
+    cmd: docker compose down task-ui
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+      - sh: which docker compose
+        msg: "Docker Compose is required"
+      - sh: test -f "{{.COMPOSE_FILE}}"
+        msg: "compose.yaml not found"
+
+  logs:
+    desc: "View Task UI logs"
+    dir: "{{.ROOT_DIR}}"
+    cmd: docker compose logs -f task-ui
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+      - sh: which docker compose
+        msg: "Docker Compose is required"
+      - sh: test -f "{{.COMPOSE_FILE}}"
+        msg: "compose.yaml not found"
+
+  status:
+    desc: "Check Task UI status"
+    dir: "{{.ROOT_DIR}}"
+    cmd: docker compose ps task-ui
+    preconditions:
+      - sh: which docker
+        msg: "Docker is required"
+      - sh: which docker compose
+        msg: "Docker Compose is required"
+      - sh: test -f "{{.COMPOSE_FILE}}"
+        msg: "compose.yaml not found"
+
+  serve:
+    desc: "Expose Task UI via Tailscale serve"
+    cmd: tailscale serve --yes --https=443 --bg 3000
+    preconditions:
+      - sh: which tailscale
+        msg: "Tailscale is required"
+
+  serve-off:
+    desc: "Disable Tailscale serve for Task UI"
+    cmd: tailscale serve --yes --https=443 off
+    preconditions:
+      - sh: which tailscale
+        msg: "Tailscale is required"
+
+  teardown:
+    desc: "Stop Task UI and disable Tailscale serve"
+    cmds:
+      - task: down
+      - task: serve-off
