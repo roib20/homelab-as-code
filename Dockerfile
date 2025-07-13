@@ -241,6 +241,7 @@ WORKDIR /homelab-as-code
 ENV USER="runner"
 ENV LOGNAME="${USER}"
 ENV HOME="/home/${USER}"
+ENV WORKDIR="/homelab-as-code"
 RUN addgroup -S runner && adduser -S runner -G runner \
     && find "/home/runner/.ansible/" -mindepth 1 -maxdepth 1 ! -name "collections" ! -name "roles" -exec rm -rf {} + \
     && chown -R runner:runner "${HOME}" \
@@ -286,7 +287,7 @@ tasks:
 YAML
 
 # ── append proxy tasks
-echo "$TASKS_JSON" | jq -r --arg workdir "/homelab-as-code" '
+echo "$TASKS_JSON" | jq -r --arg workdir "$WORKDIR" '
   .tasks[] |
   "  \"" + .name + "\":\n" +
   "    desc: \"" + (.desc // "") + "\"\n" +
