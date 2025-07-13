@@ -22,7 +22,7 @@ tasks:
     preconditions:
       - sh: which docker
         msg: "Docker is required"
-      - sh: which docker compose
+      - sh: docker compose version
         msg: "Docker Compose is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
@@ -34,7 +34,7 @@ tasks:
     preconditions:
       - sh: which docker
         msg: "Docker is required"
-      - sh: which docker compose
+      - sh: docker compose version
         msg: "Docker Compose is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
@@ -47,7 +47,7 @@ tasks:
     preconditions:
       - sh: which docker
         msg: "Docker is required"
-      - sh: which docker compose
+      - sh: docker compose version
         msg: "Docker Compose is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
@@ -59,7 +59,7 @@ tasks:
     preconditions:
       - sh: which docker
         msg: "Docker is required"
-      - sh: which docker compose
+      - sh: docker compose version
         msg: "Docker Compose is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
@@ -71,7 +71,7 @@ tasks:
     preconditions:
       - sh: which docker
         msg: "Docker is required"
-      - sh: which docker compose
+      - sh: docker compose version
         msg: "Docker Compose is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
