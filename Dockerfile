@@ -205,6 +205,9 @@ COPY --link --from=helm /usr/local/bin/helm /usr/local/bin/
 COPY --link --from=kustomize /usr/local/bin/kustomize /usr/local/bin/
 COPY --link --from=ansible $VIRTUAL_ENV $VIRTUAL_ENV
 COPY --link --from=ansible-requirements /root/.ansible /home/runner/.ansible
+# Copy task-ui and ttyrec from build stages
+COPY --link --from=task-ui /usr/local/bin/task-ui /usr/local/bin/
+COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
 
 # Install only runtime dependencies
 RUN apk add --no-cache \
@@ -212,13 +215,7 @@ RUN apk add --no-cache \
       sshpass \
       less \
       ca-certificates \
-      go \
-      git \
       bash
-
-# Copy task-ui and ttyrec from build stages
-COPY --link --from=task-ui /usr/local/bin/task-ui /usr/local/bin/
-COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
 
 # Set user and home
 ENV USER="runner"
