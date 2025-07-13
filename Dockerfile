@@ -279,4 +279,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
     CMD pgrep task-ui >/dev/null && timeout 5 sh -c '</dev/tcp/localhost/3000' || exit 0
 
-CMD ["/bin/bash"]
+CMD ["/usr/local/bin/task-ui-wrapper", "--history-enable"]
