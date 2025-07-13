@@ -141,25 +141,6 @@ RUN dl-verify \
     talosctl \
     "${CHECKSUM_HASH}"
 
-FROM downloader AS kubectl
-ARG KUBECTL_VERSION TARGETOS TARGETARCH
-ARG FILE="kubectl"
-ARG CHECKSUM_FILE="${FILE}.sha256"
-ENV VERSION="${KUBECTL_VERSION}"
-ENV URL="https://dl.k8s.io/release/v${VERSION}/bin/${TARGETOS}/${TARGETARCH}"
-
-RUN dl-verify \
-    "${URL}/${FILE}" \
-    "${FILE}" \
-    "${URL}/${CHECKSUM_FILE}" \
-    kubectl
-
-# Make kubectl stage usable as standalone container with helm and kustomize
-RUN apk add --no-cache ca-certificates bash
-COPY --link --from=helm /usr/local/bin/helm /usr/local/bin/
-COPY --link --from=kustomize /usr/local/bin/kustomize /usr/local/bin/
-ENTRYPOINT ["/bin/bash"]
-
 FROM downloader AS helm
 ARG HELM_VERSION TARGETOS TARGETARCH
 ARG FILE="helm-v${HELM_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz"
@@ -186,6 +167,25 @@ RUN dl-verify \
       "${URL}/${CHECKSUM_FILE}" \
       kustomize
 
+FROM downloader AS kubectl
+ARG KUBECTL_VERSION TARGETOS TARGETARCH
+ARG FILE="kubectl"
+ARG CHECKSUM_FILE="${FILE}.sha256"
+ENV VERSION="${KUBECTL_VERSION}"
+ENV URL="https://dl.k8s.io/release/v${VERSION}/bin/${TARGETOS}/${TARGETARCH}"
+
+RUN dl-verify \
+    "${URL}/${FILE}" \
+    "${FILE}" \
+    "${URL}/${CHECKSUM_FILE}" \
+    kubectl
+
+# Make kubectl stage usable as standalone container with helm and kustomize
+RUN apk add --no-cache ca-certificates bash
+COPY --link --from=helm /usr/local/bin/helm /usr/local/bin/
+COPY --link --from=kustomize /usr/local/bin/kustomize /usr/local/bin/
+ENTRYPOINT ["/bin/bash"]
+
 # Stage 5: Build Ansible in a venv
 FROM python:${PYTHON_VERSION}-alpine AS ansible
 ENV VIRTUAL_ENV=/opt/venv
@@ -201,16 +201,17 @@ RUN \
 FROM ansible AS ansible-requirements
 # Bring in ansible-galaxy requirements file
 COPY --link ansible/galaxy-requirements.yml /requirements.yml
-# RUN ansible-galaxy collection install community.general --force
-RUN ansible-galaxy install -r "requirements.yml" --force
 
-# Make ansible-requirements stage usable as standalone container
-RUN apk add --no-cache openssh-client sshpass ca-certificates bash
+# Install runtime dependencies
+RUN apk add --no-cache openssh-client sshpass ca-certificates less bash \
+    && ansible-galaxy install -r "requirements.yml" --force
+
+# Use venv for Ansible
 ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ENTRYPOINT ["/bin/bash"]
 
-# Stage 6: Final runtime image
+# Stage 6: Runtime base image
 FROM python:${PYTHON_VERSION}-alpine AS runtime
 ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
@@ -226,9 +227,6 @@ COPY --link --from=helm /usr/local/bin/helm /usr/local/bin/
 COPY --link --from=kustomize /usr/local/bin/kustomize /usr/local/bin/
 COPY --link --from=ansible $VIRTUAL_ENV $VIRTUAL_ENV
 COPY --link --from=ansible-requirements /root/.ansible /home/runner/.ansible
-# Copy task-ui and ttyrec from build stages
-COPY --link --from=task-ui /usr/local/bin/task-ui /usr/local/bin/
-COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
 
 # Install only runtime dependencies
 RUN apk add --no-cache \
@@ -238,10 +236,28 @@ RUN apk add --no-cache \
       ca-certificates \
       bash
 
-# Set user and home
+# Set rootless permissions
+WORKDIR /homelab-as-code
 ENV USER="runner"
 ENV LOGNAME="${USER}"
 ENV HOME="/home/${USER}"
+RUN addgroup -S runner && adduser -S runner -G runner \
+    && find "/home/runner/.ansible/" -mindepth 1 -maxdepth 1 ! -name "collections" ! -name "roles" -exec rm -rf {} + \
+    && chown -R runner:runner "${HOME}" \
+    && chmod -R o+rwx "${HOME}"
+USER "${USER}"
+
+CMD ["/bin/bash"]
+
+# Stage 7: Task-UI runtime built on runtime
+FROM runtime AS task-ui-runtime
+
+# Switch back to root to install task-ui components
+USER root
+
+# Copy task-ui and ttyrec from build stages  
+COPY --link --from=task-ui /usr/local/bin/task-ui /usr/local/bin/
+COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
 
 # Create wrapper script that flattens Taskfile.yml for task-ui
 ENV TASK_UI_WRAPPER_PATH="/usr/local/bin/task-ui-wrapper"
@@ -287,12 +303,7 @@ pushd "$UI_DIR" >/dev/null
 exec task-ui "$@"
 EOS
 
-# Set rootless permissions
-WORKDIR /homelab-as-code
-RUN addgroup -S runner && adduser -S runner -G runner \
-    && find "/home/runner/.ansible/" -mindepth 1 -maxdepth 1 ! -name "collections" ! -name "roles" -exec rm -rf {} + \
-    && chown -R runner:runner "${HOME}" \
-    && chmod -R o+rwx "${HOME}"
+# Switch back to runner user
 USER "${USER}"
 
 EXPOSE 3000

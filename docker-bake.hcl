@@ -39,7 +39,7 @@ target "base" {
 
   output     = [{ type = "cacheonly" }]
 
-  # Final stage to export
+  # Base runtime stage (CLI runner)
   target     = "runtime"
 
   # Pass all version/build args through (populated by `docker-bake.override.hcl`)
@@ -72,6 +72,9 @@ target "base" {
 
 target "multiarch-push" {
   inherits  = ["base"]
+  
+  # Override to use task-ui-runtime as final stage for production
+  target    = "task-ui-runtime"
 
   output    = [{ type = "registry" }]
   platforms = "${DEFAULT_PLATFORMS}"
@@ -87,15 +90,30 @@ target "multiarch-push" {
   ]
 }
 
-# Single‑arch build into local daemon
+# Single‑arch build into local daemon (task-ui)
 target "local" {
   inherits  = ["base"]
+  
+  # Override to use task-ui-runtime as final stage for local builds too
+  target    = "task-ui-runtime"
 
   output    = [{ type = "docker" }]
   platforms = ["${BAKE_LOCAL_PLATFORM}"]
 
   tags = [
     "${IMAGE_TITLE}:latest",
+  ]
+}
+
+# CLI-only runtime stage for local builds
+target "runtime-local" {
+  inherits  = ["base"]
+
+  output    = [{ type = "docker" }]
+  platforms = ["${BAKE_LOCAL_PLATFORM}"]
+
+  tags = [
+    "${IMAGE_TITLE}:runtime",
   ]
 }
 
@@ -146,37 +164,6 @@ target "kubectl-local" {
   }
   
   tags = ["${IMAGE_TITLE}:kubectl"]
-}
-
-target "ansible-local" {
-  context    = "."
-  dockerfile = "Dockerfile"
-  target     = "ansible-requirements"
-  
-  output     = [{ type = "docker" }]
-  platforms  = ["${BAKE_LOCAL_PLATFORM}"]
-  
-  args = {
-    PYTHON_VERSION = "${python}"
-  }
-  
-  tags = ["${IMAGE_TITLE}:ansible"]
-}
-
-target "go-task-local" {
-  context    = "."
-  dockerfile = "Dockerfile"
-  target     = "go-task"
-  
-  output     = [{ type = "docker" }]
-  platforms  = ["${BAKE_LOCAL_PLATFORM}"]
-  
-  args = {
-    ALPINE_VERSION = "${alpine}"
-    TASK_VERSION   = "${go-task}"
-  }
-  
-  tags = ["${IMAGE_TITLE}:go-task"]
 }
 
 group "default"  { targets = ["local"] }
