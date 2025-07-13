@@ -220,55 +220,57 @@ RUN apk add --no-cache \
 COPY --link --from=task-ui /usr/local/bin/task-ui /usr/local/bin/
 COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
 
-# Create wrapper script that generates a flat Taskfile for task-ui
-RUN cat <<'EOF' > /usr/local/bin/task-ui-wrapper && chmod +x /usr/local/bin/task-ui-wrapper
-#!/bin/bash
-set -eu
+# Set user and home
+ENV USER="runner"
+ENV LOGNAME="${USER}"
+ENV HOME="/home/${USER}"
 
-WORK_DIR="/homelab-as-code"
-cd "$WORK_DIR"
+# Create wrapper script that flattens Taskfile.yml for task-ui
+ENV TASK_UI_WRAPPER_PATH="/usr/local/bin/task-ui-wrapper"
+RUN cat <<'EOS' > "${TASK_UI_WRAPPER_PATH}" \
+ && sed -i "s|__HOME__|$HOME|g"  "${TASK_UI_WRAPPER_PATH}" \
+ && sed -i "s|__PATH__|$PATH|g" "${TASK_UI_WRAPPER_PATH}"\
+ && chmod +x "${TASK_UI_WRAPPER_PATH}"
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo "Generating flattened Taskfile.yml for task-ui..."
+UI_DIR="$HOME/task-ui"
+mkdir -p "$UI_DIR/history"
 
-# Get all tasks in JSON format
+echo "Generating flattened Taskfile.yml for task-ui…"
 TASKS_JSON=$(task --list-all --json 2>/dev/null || echo '{"tasks":[]}')
 
-# Create a dedicated directory for task-ui
-UI_DIR="/home/runner/task-ui"
-mkdir -p "$UI_DIR/history"
-cd "$UI_DIR"
-
-# Create header
-cat > Taskfile.yml << 'HEADER'
+# ── write header
+cat > "$UI_DIR/Taskfile.yml" <<'YAML'
 ---
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
-
 set: [pipefail]
 shopt: [globstar]
 
 tasks:
-HEADER
+YAML
 
-# Parse JSON and create simple proxy tasks that preserve original context
-echo "$TASKS_JSON" | jq -r --arg workdir "$WORK_DIR" '.tasks[] | 
+# ── append proxy tasks
+echo "$TASKS_JSON" | jq -r --arg workdir "/homelab-as-code" '
+  .tasks[] |
   "  \"" + .name + "\":\n" +
   "    desc: \"" + (.desc // "") + "\"\n" +
   "    interactive: true\n" +
   "    cmds:\n" +
-  "      - bash -c \"export HOME=\"/home/${USER:-runner}\" PATH=\"/opt/venv/bin:$PATH\" && printenv && pushd \"" + $workdir + "\" && task " + .name + "\"\n"' >> Taskfile.yml
+  "      - bash -c \"printenv && export HOME=__HOME__ PATH=__PATH__ && pushd " +
+            $workdir + " && task " + .name + "\"\n"
+' >> "$UI_DIR/Taskfile.yml"
 
-echo "Flattened Taskfile.yml generated with $(echo "$TASKS_JSON" | jq '.tasks | length') tasks"
+echo "Flattened Taskfile.yml generated with $(echo "$TASKS_JSON" | jq ".tasks|length") tasks"
 
-# Start task-ui from the UI directory with default Taskfile.yml
+# ── launch task-ui (single pushd, no cd)
+pushd "$UI_DIR" >/dev/null
 exec task-ui "$@"
-EOF
+EOS
 
 # Set rootless permissions
 WORKDIR /homelab-as-code
-ENV USER="runner"
-ENV LOGNAME="${USER}"
-ENV HOME="/home/${USER}"
 RUN addgroup -S runner && adduser -S runner -G runner \
     && find "/home/runner/.ansible/" -mindepth 1 -maxdepth 1 ! -name "collections" ! -name "roles" -exec rm -rf {} + \
     && chown -R runner:runner "${HOME}" \
