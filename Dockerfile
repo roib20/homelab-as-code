@@ -271,7 +271,9 @@ RUN cat <<'EOS' > "${TASK_UI_WRAPPER_PATH}" \
 set -euo pipefail
 
 UI_DIR="$HOME/task-ui"
-mkdir -p "$UI_DIR/history"
+mkdir -p "$UI_DIR"
+mkdir -p "$HOME/history"
+ln -sf "$HOME/task-ui-history" "$UI_DIR/history"
 
 echo "Generating flattened Taskfile.yml for task-ui…"
 TASKS_JSON=$(task --list-all --json 2>/dev/null || echo '{"tasks":[]}')

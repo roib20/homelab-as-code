@@ -33,6 +33,8 @@ services:
       # Make sure the directories exist on the host: `mkdir "${HOME}/.kube" "${HOME}/.talos"`
       - "${HOME}/.kube:/home/runner/.kube:rw"
       - "${HOME}/.talos:/home/runner/.talos:rw"
+      # Mount task-ui history volume for persistent task execution history
+      - "../homelab-as-code/task-ui/history:/home/runner/task-ui-history"
     # Used for file ownership for files created inside the container
     user: "${UID:-1000}:${GID:-1000}"
     command: ["/usr/local/bin/task-ui-wrapper", "--history-enable"]

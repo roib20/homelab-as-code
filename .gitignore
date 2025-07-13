@@ -59,3 +59,7 @@ terragrunt-debug.tfvars.json
 # Ignore .env file
 .env
 *.env
+
+# Ignore task-ui history files but keep README
+task-ui/history/*
+!task-ui/history/README.md
