@@ -78,14 +78,14 @@ tasks:
 
   serve:
     desc: "Expose Task UI via Tailscale serve"
-    cmd: tailscale serve --yes --https=443 --bg 3000
+    cmd: sudo tailscale serve --yes --https=443 --bg 3000
     preconditions:
       - sh: which tailscale
         msg: "Tailscale is required"
 
   serve-off:
     desc: "Disable Tailscale serve for Task UI"
-    cmd: tailscale serve --yes --https=443 off
+    cmd: sudo tailscale serve --yes --https=443 off
     preconditions:
       - sh: which tailscale
         msg: "Tailscale is required"

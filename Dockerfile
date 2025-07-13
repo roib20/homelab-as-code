@@ -276,6 +276,9 @@ mkdir -p "$UI_DIR/history"
 echo "Generating flattened Taskfile.yml for task-ui…"
 TASKS_JSON=$(task --list-all --json 2>/dev/null || echo '{"tasks":[]}')
 
+# Define excluded taskfiles for task-ui
+EXCLUDED_TASKFILES='["task-ui"]'
+
 # ── write header
 cat > "$UI_DIR/Taskfile.yml" <<'YAML'
 ---
@@ -287,9 +290,10 @@ shopt: [globstar]
 tasks:
 YAML
 
-# ── append proxy tasks
-echo "$TASKS_JSON" | jq -r --arg workdir "$WORKDIR" '
+# ── append proxy tasks (excluding specified taskfiles)
+echo "$TASKS_JSON" | jq -r --arg workdir "$WORKDIR" --argjson excluded "$EXCLUDED_TASKFILES" '
   .tasks[] |
+  select(.name | split(":")[0] as $taskfile | ($excluded | index($taskfile)) == null) |
   "  \"" + .name + "\":\n" +
   "    desc: \"" + (.desc // "") + "\"\n" +
   "    interactive: true\n" +
