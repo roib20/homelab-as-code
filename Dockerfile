@@ -294,7 +294,7 @@ echo "$TASKS_JSON" | jq -r --arg workdir "$WORKDIR" '
   "    desc: \"" + (.desc // "") + "\"\n" +
   "    interactive: true\n" +
   "    cmds:\n" +
-  "      - bash -c \"printenv && export HOME=__HOME__ PATH=__PATH__ && pushd " +
+  "      - bash -c \"export HOME=__HOME__ PATH=__PATH__ && printenv && pushd " +
             $workdir + " && task " + .name + "\"\n"
 ' >> "$UI_DIR/Taskfile.yml"
 
