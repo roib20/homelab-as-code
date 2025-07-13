@@ -112,6 +112,73 @@ target "local" {
 # Convenience groups #
 ######################
 
+# Individual toolchain targets (local builds only)
+target "terragrunt-local" {
+  context    = "."
+  dockerfile = "Dockerfile"
+  target     = "terragrunt"
+  
+  output     = [{ type = "docker" }]
+  platforms  = ["${BAKE_LOCAL_PLATFORM}"]
+  
+  args = {
+    ALPINE_VERSION     = "${alpine}"
+    TOFU_VERSION       = "${tofu}"
+    TERRAGRUNT_VERSION = "${terragrunt}"
+  }
+  
+  tags = ["${IMAGE_TITLE}:terragrunt"]
+}
+
+target "kubectl-local" {
+  context    = "."
+  dockerfile = "Dockerfile"
+  target     = "kubectl"
+  
+  output     = [{ type = "docker" }]
+  platforms  = ["${BAKE_LOCAL_PLATFORM}"]
+  
+  args = {
+    ALPINE_VERSION    = "${alpine}"
+    KUBECTL_VERSION   = "${kubectl}"
+    HELM_VERSION      = "${helm}"
+    KUSTOMIZE_VERSION = "${kustomize}"
+  }
+  
+  tags = ["${IMAGE_TITLE}:kubectl"]
+}
+
+target "ansible-local" {
+  context    = "."
+  dockerfile = "Dockerfile"
+  target     = "ansible-requirements"
+  
+  output     = [{ type = "docker" }]
+  platforms  = ["${BAKE_LOCAL_PLATFORM}"]
+  
+  args = {
+    PYTHON_VERSION = "${python}"
+  }
+  
+  tags = ["${IMAGE_TITLE}:ansible"]
+}
+
+target "go-task-local" {
+  context    = "."
+  dockerfile = "Dockerfile"
+  target     = "go-task"
+  
+  output     = [{ type = "docker" }]
+  platforms  = ["${BAKE_LOCAL_PLATFORM}"]
+  
+  args = {
+    ALPINE_VERSION = "${alpine}"
+    TASK_VERSION   = "${go-task}"
+  }
+  
+  tags = ["${IMAGE_TITLE}:go-task"]
+}
+
 group "default"  { targets = ["local"] }
 group "local"    { targets = ["local"] }
 group "push"     { targets = ["multiarch-push"] }

@@ -90,6 +90,11 @@ RUN dl-verify \
     "${URL}/${CHECKSUM_FILE}" \
     terragrunt
 
+# Make terragrunt stage usable as standalone container
+RUN apk add --no-cache ca-certificates bash
+COPY --link --from=tofu /usr/local/bin/tofu /usr/local/bin/
+ENTRYPOINT ["/bin/bash"]
+
 FROM downloader AS go-task
 ARG TASK_VERSION TARGETOS TARGETARCH
 ARG FILE="task_${TARGETOS}_${TARGETARCH}.tar.gz"
@@ -102,6 +107,10 @@ RUN dl-verify \
     "${FILE}" \
     "${URL}/${CHECKSUM_FILE}" \
     task
+
+# Make go-task stage usable as standalone container
+RUN apk add --no-cache ca-certificates bash
+ENTRYPOINT ["/bin/bash"]
 
 FROM downloader AS jq
 ARG JQ_VERSION TARGETOS TARGETARCH
@@ -144,6 +153,12 @@ RUN dl-verify \
     "${FILE}" \
     "${URL}/${CHECKSUM_FILE}" \
     kubectl
+
+# Make kubectl stage usable as standalone container with helm and kustomize
+RUN apk add --no-cache ca-certificates bash
+COPY --link --from=helm /usr/local/bin/helm /usr/local/bin/
+COPY --link --from=kustomize /usr/local/bin/kustomize /usr/local/bin/
+ENTRYPOINT ["/bin/bash"]
 
 FROM downloader AS helm
 ARG HELM_VERSION TARGETOS TARGETARCH
@@ -188,6 +203,12 @@ FROM ansible AS ansible-requirements
 COPY --link ansible/galaxy-requirements.yml /requirements.yml
 # RUN ansible-galaxy collection install community.general --force
 RUN ansible-galaxy install -r "requirements.yml" --force
+
+# Make ansible-requirements stage usable as standalone container
+RUN apk add --no-cache openssh-client sshpass ca-certificates bash
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENTRYPOINT ["/bin/bash"]
 
 # Stage 6: Final runtime image
 FROM python:${PYTHON_VERSION}-alpine AS runtime
