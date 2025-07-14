@@ -25,7 +25,7 @@ services:
     # Network mode "host" is needed to access IPs on the local network, including the Tailnet
     network_mode: host
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     volumes:
       # Mount the locally cloned "homelab-as-code" repository, in order to be able to run IaC
       - "../homelab-as-code:/homelab-as-code:rw"
