@@ -20,6 +20,7 @@ includes:
   cluster: .taskfiles/cluster
   docker: .taskfiles/docker
   cloudflare: .taskfiles/cloudflare
+  task-ui: .taskfiles/task-ui
   # Infrastructure taskfiles
   k8s: .taskfiles/kubernetes
   talos: .taskfiles/talos

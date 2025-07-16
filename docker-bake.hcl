@@ -39,7 +39,7 @@ target "base" {
 
   output     = [{ type = "cacheonly" }]
 
-  # Final stage to export
+  # Base runtime stage (CLI runner)
   target     = "runtime"
 
   # Pass all version/build args through (populated by `docker-bake.override.hcl`)
@@ -72,6 +72,9 @@ target "base" {
 
 target "multiarch-push" {
   inherits  = ["base"]
+  
+  # Override to use task-ui-runtime as final stage for production
+  target    = "task-ui-runtime"
 
   output    = [{ type = "registry" }]
   platforms = "${DEFAULT_PLATFORMS}"
@@ -87,15 +90,30 @@ target "multiarch-push" {
   ]
 }
 
-# Single‑arch build into local daemon
+# Single‑arch build into local daemon (task-ui)
 target "local" {
   inherits  = ["base"]
+  
+  # Override to use task-ui-runtime as final stage for local builds too
+  target    = "task-ui-runtime"
 
   output    = [{ type = "docker" }]
   platforms = ["${BAKE_LOCAL_PLATFORM}"]
 
   tags = [
     "${IMAGE_TITLE}:latest",
+  ]
+}
+
+# CLI-only runtime stage for local builds
+target "runtime-local" {
+  inherits  = ["base"]
+
+  output    = [{ type = "docker" }]
+  platforms = ["${BAKE_LOCAL_PLATFORM}"]
+
+  tags = [
+    "${IMAGE_TITLE}:runtime",
   ]
 }
 
@@ -111,6 +129,42 @@ target "local" {
 ######################
 # Convenience groups #
 ######################
+
+# Individual toolchain targets (local builds only)
+target "terragrunt-local" {
+  context    = "."
+  dockerfile = "Dockerfile"
+  target     = "terragrunt"
+  
+  output     = [{ type = "docker" }]
+  platforms  = ["${BAKE_LOCAL_PLATFORM}"]
+  
+  args = {
+    ALPINE_VERSION     = "${alpine}"
+    TOFU_VERSION       = "${tofu}"
+    TERRAGRUNT_VERSION = "${terragrunt}"
+  }
+  
+  tags = ["${IMAGE_TITLE}:terragrunt"]
+}
+
+target "kubectl-local" {
+  context    = "."
+  dockerfile = "Dockerfile"
+  target     = "kubectl"
+  
+  output     = [{ type = "docker" }]
+  platforms  = ["${BAKE_LOCAL_PLATFORM}"]
+  
+  args = {
+    ALPINE_VERSION    = "${alpine}"
+    KUBECTL_VERSION   = "${kubectl}"
+    HELM_VERSION      = "${helm}"
+    KUSTOMIZE_VERSION = "${kustomize}"
+  }
+  
+  tags = ["${IMAGE_TITLE}:kubectl"]
+}
 
 group "default"  { targets = ["local"] }
 group "local"    { targets = ["local"] }
