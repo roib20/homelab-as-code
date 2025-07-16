@@ -12,12 +12,28 @@ ARG HELM_VERSION=3.14.2
 ARG KUSTOMIZE_VERSION=5.7.0
 ARG JQ_VERSION=1.8.1
 ARG PYTHON_VERSION=3.13
+ARG GO_VERSION=1.24
+ARG TTYREC_VERSION=v1.1.7.1
 ARG CURL_FLAGS="-sSL --proto '=https' --tlsv1.3 --ciphers 'HIGH:!aNULL:!MD5' --cacert /etc/ssl/certs/ca-certificates.crt --capath /etc/ssl/certs --compressed"
 
-# Stage 1: Extract tofu binary
+# Stage 1: Build ovh-ttyrec
+FROM alpine:${ALPINE_VERSION} AS ttyrec
+ARG TTYREC_VERSION
+WORKDIR /tmp
+RUN apk --no-cache add build-base git
+RUN git clone --branch ${TTYREC_VERSION} --depth 1 https://github.com/ovh/ovh-ttyrec.git
+WORKDIR /tmp/ovh-ttyrec
+RUN STATIC=1 ./configure --bindir=/usr/local/bin && make && make install
+
+# Stage 2: Build task-ui
+FROM golang:${GO_VERSION}-alpine AS task-ui
+COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
+RUN GOBIN=/usr/local/bin CGO_ENABLED=0 go install github.com/titpetric/task-ui@latest
+
+# Stage 3: Extract tofu binary
 FROM ghcr.io/opentofu/opentofu:${TOFU_VERSION}-minimal AS tofu
 
-# Stage 0 – common downloader utilities
+# Stage 4 – common downloader utilities
 FROM alpine:${ALPINE_VERSION} AS downloader
 ARG CURL_FLAGS
 RUN apk add --no-cache curl
@@ -74,6 +90,11 @@ RUN dl-verify \
     "${URL}/${CHECKSUM_FILE}" \
     terragrunt
 
+# Make terragrunt stage usable as standalone container
+RUN apk add --no-cache ca-certificates bash
+COPY --link --from=tofu /usr/local/bin/tofu /usr/local/bin/
+ENTRYPOINT ["/bin/bash"]
+
 FROM downloader AS go-task
 ARG TASK_VERSION TARGETOS TARGETARCH
 ARG FILE="task_${TARGETOS}_${TARGETARCH}.tar.gz"
@@ -86,6 +107,10 @@ RUN dl-verify \
     "${FILE}" \
     "${URL}/${CHECKSUM_FILE}" \
     task
+
+# Make go-task stage usable as standalone container
+RUN apk add --no-cache ca-certificates bash
+ENTRYPOINT ["/bin/bash"]
 
 FROM downloader AS jq
 ARG JQ_VERSION TARGETOS TARGETARCH
@@ -116,19 +141,6 @@ RUN dl-verify \
     talosctl \
     "${CHECKSUM_HASH}"
 
-FROM downloader AS kubectl
-ARG KUBECTL_VERSION TARGETOS TARGETARCH
-ARG FILE="kubectl"
-ARG CHECKSUM_FILE="${FILE}.sha256"
-ENV VERSION="${KUBECTL_VERSION}"
-ENV URL="https://dl.k8s.io/release/v${VERSION}/bin/${TARGETOS}/${TARGETARCH}"
-
-RUN dl-verify \
-    "${URL}/${FILE}" \
-    "${FILE}" \
-    "${URL}/${CHECKSUM_FILE}" \
-    kubectl
-
 FROM downloader AS helm
 ARG HELM_VERSION TARGETOS TARGETARCH
 ARG FILE="helm-v${HELM_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz"
@@ -155,7 +167,26 @@ RUN dl-verify \
       "${URL}/${CHECKSUM_FILE}" \
       kustomize
 
-# Stage 4: Build Ansible in a venv
+FROM downloader AS kubectl
+ARG KUBECTL_VERSION TARGETOS TARGETARCH
+ARG FILE="kubectl"
+ARG CHECKSUM_FILE="${FILE}.sha256"
+ENV VERSION="${KUBECTL_VERSION}"
+ENV URL="https://dl.k8s.io/release/v${VERSION}/bin/${TARGETOS}/${TARGETARCH}"
+
+RUN dl-verify \
+    "${URL}/${FILE}" \
+    "${FILE}" \
+    "${URL}/${CHECKSUM_FILE}" \
+    kubectl
+
+# Make kubectl stage usable as standalone container with helm and kustomize
+RUN apk add --no-cache ca-certificates bash
+COPY --link --from=helm /usr/local/bin/helm /usr/local/bin/
+COPY --link --from=kustomize /usr/local/bin/kustomize /usr/local/bin/
+ENTRYPOINT ["/bin/bash"]
+
+# Stage 5: Build Ansible in a venv
 FROM python:${PYTHON_VERSION}-alpine AS ansible
 ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
@@ -170,10 +201,17 @@ RUN \
 FROM ansible AS ansible-requirements
 # Bring in ansible-galaxy requirements file
 COPY --link ansible/galaxy-requirements.yml /requirements.yml
-# RUN ansible-galaxy collection install community.general --force
-RUN ansible-galaxy install -r "requirements.yml" --force
 
-# Stage 5: Final runtime image
+# Install runtime dependencies
+RUN apk add --no-cache openssh-client sshpass ca-certificates less bash \
+    && ansible-galaxy install -r "requirements.yml" --force
+
+# Use venv for Ansible
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENTRYPOINT ["/bin/bash"]
+
+# Stage 6: Runtime base image
 FROM python:${PYTHON_VERSION}-alpine AS runtime
 ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
@@ -195,17 +233,90 @@ RUN apk add --no-cache \
       openssh-client \
       sshpass \
       less \
-      ca-certificates
+      ca-certificates \
+      bash
 
 # Set rootless permissions
 WORKDIR /homelab-as-code
 ENV USER="runner"
 ENV LOGNAME="${USER}"
 ENV HOME="/home/${USER}"
+ENV WORKDIR="/homelab-as-code"
 RUN addgroup -S runner && adduser -S runner -G runner \
     && find "/home/runner/.ansible/" -mindepth 1 -maxdepth 1 ! -name "collections" ! -name "roles" -exec rm -rf {} + \
     && chown -R runner:runner "${HOME}" \
     && chmod -R o+rwx "${HOME}"
 USER "${USER}"
 
-CMD ["/bin/sh"]
+CMD ["/bin/bash"]
+
+# Stage 7: Task-UI runtime built on runtime
+FROM runtime AS task-ui-runtime
+
+# Switch back to root to install task-ui components
+USER root
+
+# Copy task-ui and ttyrec from build stages  
+COPY --link --from=task-ui /usr/local/bin/task-ui /usr/local/bin/
+COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
+
+# Create wrapper script that flattens Taskfile.yml for task-ui
+ENV TASK_UI_WRAPPER_PATH="/usr/local/bin/task-ui-wrapper"
+RUN cat <<'EOS' > "${TASK_UI_WRAPPER_PATH}" \
+ && sed -i "s|__HOME__|$HOME|g"  "${TASK_UI_WRAPPER_PATH}" \
+ && sed -i "s|__PATH__|$PATH|g" "${TASK_UI_WRAPPER_PATH}"\
+ && chmod +x "${TASK_UI_WRAPPER_PATH}" \
+ && chmod -R o+x /root
+#!/usr/bin/env bash
+set -euo pipefail
+
+UI_DIR="$HOME/task-ui"
+mkdir -p "$UI_DIR"
+mkdir -p "$HOME/history"
+ln -sf "$HOME/task-ui-history" "$UI_DIR/history"
+
+echo "Generating flattened Taskfile.yml for task-ui…"
+TASKS_JSON=$(task --list-all --json 2>/dev/null || echo '{"tasks":[]}')
+
+# Define excluded taskfiles for task-ui
+EXCLUDED_TASKFILES='["task-ui"]'
+
+# ── write header
+cat > "$UI_DIR/Taskfile.yml" <<'YAML'
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+set: [pipefail]
+shopt: [globstar]
+
+tasks:
+YAML
+
+# ── append proxy tasks (excluding specified taskfiles)
+echo "$TASKS_JSON" | jq -r --arg workdir "$WORKDIR" --argjson excluded "$EXCLUDED_TASKFILES" '
+  .tasks[] |
+  select(.name | split(":")[0] as $taskfile | ($excluded | index($taskfile)) == null) |
+  "  \"" + .name + "\":\n" +
+  "    desc: \"" + (.desc // "") + "\"\n" +
+  "    interactive: true\n" +
+  "    cmds:\n" +
+  "      - bash -c \"export HOME=__HOME__ PATH=__PATH__ && printenv && pushd " +
+            $workdir + " && task " + .name + "\"\n"
+' >> "$UI_DIR/Taskfile.yml"
+
+echo "Flattened Taskfile.yml generated with $(echo "$TASKS_JSON" | jq ".tasks|length") tasks"
+
+# ── launch task-ui (single pushd, no cd)
+pushd "$UI_DIR" >/dev/null
+exec task-ui "$@"
+EOS
+
+# Switch back to runner user
+USER "${USER}"
+
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD pgrep task-ui >/dev/null && timeout 5 sh -c '</dev/tcp/localhost/3000' || exit 0
+
+CMD ["/usr/local/bin/task-ui-wrapper", "--history-enable"]
