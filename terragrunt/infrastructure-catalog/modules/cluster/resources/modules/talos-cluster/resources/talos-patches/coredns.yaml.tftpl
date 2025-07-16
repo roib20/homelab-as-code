@@ -1,0 +1,8 @@
+# https://www.talos.dev/latest/reference/configuration/v1alpha1/config/#Config.cluster.coreDNS
+---
+cluster:
+    coreDNS:
+        disabled: ${disabled}
+machine:
+    kubelet:
+        clusterDNS: ${clusterDNS}
