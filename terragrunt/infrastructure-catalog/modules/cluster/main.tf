@@ -51,6 +51,22 @@ locals {
       namespace  = "kube-system"
       values     = var.helm_charts.talos-ccm.values
     },
+    {
+      repository = var.helm_charts.coredns.helm_repository
+      chart      = "coredns"
+      name       = "coredns"
+      version    = var.helm_charts.coredns.chart_version
+      namespace  = "kube-system"
+      values     = var.helm_charts.coredns.values
+    },
+    {
+      repository = var.helm_charts.spegel.helm_repository
+      chart      = "spegel"
+      name       = "spegel"
+      version    = var.helm_charts.spegel.chart_version
+      namespace  = "kube-system"
+      values     = var.helm_charts.spegel.values
+    },
   ]
 
   extraManifests = [
