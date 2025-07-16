@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: spegel
+  labels:
+    # Pod Security Admission: allow privileged workloads in this NS
+    pod-security.kubernetes.io/enforce: privileged
+    # (optional but recommended) keep audit / warn in sync
+    pod-security.kubernetes.io/audit: privileged
+    pod-security.kubernetes.io/warn: privileged
+
+    # Pin the PSA rule set to whatever K8s minor you run, or “latest”.
+    # Omitting these lines makes the API use the cluster’s current version.
+    pod-security.kubernetes.io/enforce-version: latest
+    pod-security.kubernetes.io/audit-version: latest
+    pod-security.kubernetes.io/warn-version: latest
+spec: {}
+status: {}

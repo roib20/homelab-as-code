@@ -68,7 +68,9 @@ data "talos_machine_configuration" "this" {
       TS_AUTHKEY = each.value.talos_config
     }),
     templatefile("${path.module}/resources/talos-patches/ccm.yaml.tftpl", {
-      type           = yamldecode(each.value.talos_config).type
+      type       = yamldecode(each.value.talos_config).type
+    }),
+    templatefile("${path.module}/resources/talos-patches/spegel.yaml.tftpl", {
     }),
   ]
 }
