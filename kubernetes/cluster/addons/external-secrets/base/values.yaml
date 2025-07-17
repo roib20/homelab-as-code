@@ -23,7 +23,7 @@ webhook:
     enabled: true
     addInjectorAnnotations: true
     cert:
-      create: false
+      create: true
       issuerRef:
         group: cert-manager.io
         kind: "Issuer"
