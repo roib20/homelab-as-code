@@ -70,6 +70,10 @@ data "talos_machine_configuration" "this" {
     templatefile("${path.module}/resources/talos-patches/ccm.yaml.tftpl", {
       type       = yamldecode(each.value.talos_config).type
     }),
+    templatefile("${path.module}/resources/talos-patches/coredns.yaml.tftpl", {
+      disabled    = true
+      clusterDNS  = "10.96.0.10"
+    }),
     templatefile("${path.module}/resources/talos-patches/spegel.yaml.tftpl", {
     }),
   ]

@@ -25,22 +25,22 @@ locals {
       name          = "control-plane-01"
       ip            = "192.168.1.51"
       vm_id         = 1001
-      cpu_cores     = 2
-      memory        = 4096
+      cpu_cores     = 3
+      memory        = 5120
     },
     {
       name         = "control-plane-02"
       ip           = "192.168.1.52"
       vm_id        = 1002
-      cpu_cores    = 2
-      memory       = 4096
+      cpu_cores    = 3
+      memory       = 5120
     },
     {
       name         = "control-plane-03"
       ip           = "192.168.1.53"
       vm_id        = 1003
-      cpu_cores    = 2
-      memory       = 4096
+      cpu_cores    = 3
+      memory       = 5120
     },
   ]
 
@@ -103,6 +103,16 @@ locals {
       chart_version   = "1.18.0"
       helm_repository = "https://charts.jetstack.io"
       values          = file("${local.kubernetes_dir}/cluster/addons/cert-manager/base/values.yaml")
+    }
+    coredns = {
+      chart_version   = "1.43.0"
+      helm_repository = "oci://ghcr.io/coredns/charts"
+      values          = file("${local.kubernetes_dir}/cluster/addons/coredns/base/values.yaml")
+    }
+    spegel = {
+      chart_version   = "0.3.0"
+      helm_repository = "oci://ghcr.io/spegel-org/helm-charts"
+      values          = file("${local.kubernetes_dir}/cluster/addons/spegel/base/values.yaml")
     }
   }
 }
