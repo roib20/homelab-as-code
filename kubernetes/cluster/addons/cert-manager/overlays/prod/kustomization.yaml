@@ -6,7 +6,7 @@ resources:
 
 helmCharts:
   - name: cert-manager
-    repo: https://charts.jetstack.io
+    repo: oci://quay.io/jetstack/charts
     version: 1.18.0
     releaseName: cert-manager
     namespace: cert-manager
