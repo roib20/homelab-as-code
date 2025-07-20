@@ -5,13 +5,13 @@ kustomize_overlays:
     overlay: prod
     wait: yes
   - name: cert-resources
-    set: addons
+    set: resources
     overlay: bootstrap
     wait: yes
   - name: external-secrets
     set: addons
     overlay: prod
-    wait: yes
+    wait: no
   - name: argocd
     set: argo
     overlay: bootstrap
