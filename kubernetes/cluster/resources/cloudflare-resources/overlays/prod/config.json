@@ -1,8 +1,8 @@
 {
   "project": "default",
-  "appName": "cert-resources",
-  "userGivenName": "cert-resources",
-  "destNamespace": "cert-manager",
+  "appName": "cloudflare-resources",
+  "userGivenName": "cloudflare-resources",
+  "destNamespace": "cloudflare-operator-system",
   "destName": "in-cluster",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
