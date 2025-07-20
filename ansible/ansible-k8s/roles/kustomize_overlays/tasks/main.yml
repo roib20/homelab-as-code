@@ -63,3 +63,5 @@
   loop_control:
     index_var: index
     label: "{{ item.name }} ({{ item.set }}/{{ item.overlay }})"
+  retries: 3
+  delay: 30
