@@ -3,5 +3,5 @@ kind: Kustomization
 
 resources:
   - ../../base
-  # External Secrets Certificates
-  - resources/certificates/external-secrets-webhook.yaml
+  # # External Secrets Certificates
+  # - resources/certificates/external-secrets-webhook.yaml

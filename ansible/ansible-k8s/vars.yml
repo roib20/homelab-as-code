@@ -11,7 +11,7 @@ kustomize_overlays:
   - name: external-secrets
     set: addons
     overlay: prod
-    wait: yes
+    wait: no
   - name: argocd
     set: argo
     overlay: bootstrap
