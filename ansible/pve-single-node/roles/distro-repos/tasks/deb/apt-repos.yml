@@ -18,7 +18,7 @@
         suites: ["{{ ansible_distribution_release|lower }}", "{{ ansible_distribution_release|lower }}-updates", "{{ ansible_distribution_release|lower }}-backports"]
         components: [main, contrib, non-free, non-free-firmware]
         signed_by: "/usr/share/keyrings/debian-archive-keyring.gpg"
-        enabled: yes
+        enabled: true
     - ansible.builtin.deb822_repository:
         name: debian-security
         state: present
@@ -27,7 +27,7 @@
         suites: ["{{ ansible_distribution_release|lower }}-security"]
         components: [main, contrib, non-free, non-free-firmware]
         signed_by: "/usr/share/keyrings/debian-archive-keyring.gpg"
-        enabled: yes
+        enabled: true
 - name: Disable non-deb822 Proxmox repositories
   when: ansible_os_family == 'Debian'
   become: true
@@ -65,7 +65,7 @@
         suites: ["{{ ansible_distribution_release|lower }}"]
         components: [pve-enterprise]
         signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release|lower }}.gpg"
-        enabled: no
+        enabled: false
     - name: Enable 'pve-no-subscription' repository
       ansible.builtin.deb822_repository:
         name: pve-no-subscription
@@ -74,7 +74,7 @@
         suites: ["{{ ansible_distribution_release|lower }}"]
         components: [pve-no-subscription]
         signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release|lower }}.gpg"
-        enabled: yes
+        enabled: true
     - name: Correct 'ceph' package sources
       block:
         - name: Disable 'ceph' enterprise repository
@@ -85,7 +85,7 @@
             suites: ["{{ ansible_distribution_release|lower }}"]
             components: [enterprise]
             signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release|lower }}.gpg"
-            enabled: no
+            enabled: false
         - name: Enable 'ceph' no-subscription repository
           ansible.builtin.deb822_repository:
             name: ceph-no-subscription
@@ -94,7 +94,7 @@
             suites: ["{{ ansible_distribution_release|lower }}"]
             components: [no-subscription]
             signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release|lower }}.gpg"
-            enabled: yes
+            enabled: true
     - name: Disable 'pvetest' repository
       ansible.builtin.deb822_repository:
         name: pvetest
@@ -103,7 +103,7 @@
         suites: ["{{ ansible_distribution_release|lower }}"]
         components: [pvetest]
         signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release|lower }}.gpg"
-        enabled: no
+        enabled: false
 - name: Add additional APT repositories
   when: ansible_os_family == 'Debian'
   become: true
@@ -117,7 +117,7 @@
         suites: ["{{ ansible_distribution_release|lower }}"]
         components: [stable]
         signed_by: "https://download.docker.com/linux/{{ ansible_distribution|lower }}/gpg"
-        enabled: yes
+        enabled: true
     - name: Add Tailscale stable APT repository
       ansible.builtin.deb822_repository:
         name: tailscale-stable
@@ -127,4 +127,4 @@
         suites: ["{{ ansible_distribution_release|lower }}"]
         components: [main]
         state: present
-        enabled: yes
+        enabled: true

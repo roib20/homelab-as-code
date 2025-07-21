@@ -1,4 +1,4 @@
 ---
 - name: Update repositories cache
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true

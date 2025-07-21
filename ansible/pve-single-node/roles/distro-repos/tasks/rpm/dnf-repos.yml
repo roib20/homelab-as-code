@@ -9,16 +9,16 @@
         file: docker-ce
         description: Docker CE Stable - $basearch
         baseurl: "https://download.docker.com/linux/{{ ansible_distribution|lower }}/$releasever/$basearch/stable"
-        gpgcheck: yes
+        gpgcheck: true
         gpgkey: "https://download.docker.com/linux/{{ ansible_distribution|lower }}/gpg"
-        enabled: yes
+        enabled: true
     - name: Add Tailscale stable repository
       ansible.builtin.yum_repository:
         name: tailscale-stable
         file: tailscale
         description: Tailscale stable
         baseurl: "https://pkgs.tailscale.com/stable/{{ ansible_distribution|lower }}/$basearch"
-        repo_gpgcheck: yes
-        gpgcheck: yes
+        repo_gpgcheck: true
+        gpgcheck: true
         gpgkey: "https://pkgs.tailscale.com/stable/{{ ansible_distribution|lower }}/repo.gpg"
-        enabled: yes
+        enabled: true

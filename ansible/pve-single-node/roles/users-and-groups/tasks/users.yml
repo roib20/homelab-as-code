@@ -11,7 +11,7 @@
     shell: /bin/bash
     system: true
     groups: ["docker", "gdocker", "render", "video"]
-    append: yes
+    append: true
 - name: Add a personal user with a home directory and bash shell
   become: true
   ansible.builtin.user:
@@ -23,4 +23,4 @@
     shell: /bin/bash
     system: true
     groups: ["sudo", "docker"]
-    append: yes
+    append: true

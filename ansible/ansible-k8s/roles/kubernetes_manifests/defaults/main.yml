@@ -4,5 +4,5 @@ base_path: "{{ playbook_dir }}/../.."
 # Kubernetes manifest configurations
 kubernetes_manifests: []
 # Default wait settings for kubernetes manifests
-default_wait: yes
+default_wait: true
 default_wait_timeout: 300
