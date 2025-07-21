@@ -39,8 +39,8 @@ jobs:
       - name: Create test SSH key
         shell: sh
         run: |
-          mkdir -p ~/.ssh
-          ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N "" -C "runner@$(hostname)"
+          mkdir -p "${HOME}/.ssh"
+          ssh-keygen -t rsa -b 4096 -f "${HOME}/.ssh/id_rsa" -N "" -C "runner@$(hostname)"
 
       - name: Validate all Terragrunt Stacks
         env:
