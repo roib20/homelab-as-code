@@ -1,0 +1,7 @@
+reloader:
+  enableHA: true
+  deployment:
+    replicas: 1
+  readOnlyRootFileSystem: true
+  netpol:
+    enabled: true
