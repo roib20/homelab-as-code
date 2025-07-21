@@ -1,0 +1,10 @@
+{
+  "project": "default",
+  "appName": "hostpath-provisioner",
+  "userGivenName": "hostpath-provisioner",
+  "destNamespace": "hostpath-provisioner",
+  "destName": "in-cluster",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "annotations": {}
+}
