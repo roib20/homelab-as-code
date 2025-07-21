@@ -1,0 +1,10 @@
+{
+  "project": "default",
+  "appName": "istio-resources",
+  "userGivenName": "istio-resources",
+  "destNamespace": "istio-ingress",
+  "destName": "in-cluster",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "annotations": {}
+}

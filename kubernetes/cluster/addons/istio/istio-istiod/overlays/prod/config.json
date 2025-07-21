@@ -1,0 +1,10 @@
+{
+  "project": "default",
+  "appName": "istiod",
+  "userGivenName": "istio-istiod",
+  "destNamespace": "istio-system",
+  "destName": "in-cluster",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "annotations": {}
+}

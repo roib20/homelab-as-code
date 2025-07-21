@@ -25,11 +25,19 @@
     fieldPath: "data.FQDN_01"
   targets:
     - select:
-        kind: Ingress
+        kind: HTTPRoute
         name: argocd-server-webhook
       fieldPaths:
-        - spec.rules.0.host
-        - spec.tls.0.hosts.0
+        - spec.hostnames.0
       options:
         delimiter: "."
         index: 1
+    # - select:
+    #     kind: Ingress
+    #     name: argocd-server-webhook
+    #   fieldPaths:
+    #     - spec.rules.0.host
+    #     - spec.tls.0.hosts.0
+    #   options:
+    #     delimiter: "."
+    #     index: 1

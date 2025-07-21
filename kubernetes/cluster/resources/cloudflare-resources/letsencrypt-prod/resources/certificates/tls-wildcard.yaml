@@ -3,7 +3,6 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: tls-wildcard
-  namespace: cert-manager
 spec:
   secretName: tls-wildcard
   dnsNames:
@@ -15,6 +14,6 @@ spec:
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "kanidm,istio-system,default"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "kanidm,istio-ingress,default"
       reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
-      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "kanidm,istio-system,default"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "kanidm,istio-ingress,default"

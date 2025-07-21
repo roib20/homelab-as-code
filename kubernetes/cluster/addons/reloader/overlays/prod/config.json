@@ -1,0 +1,10 @@
+{
+  "project": "default",
+  "appName": "reloader",
+  "userGivenName": "reloader",
+  "destNamespace": "kube-system",
+  "destName": "in-cluster",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "annotations": {}
+}

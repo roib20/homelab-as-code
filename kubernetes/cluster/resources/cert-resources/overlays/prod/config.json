@@ -2,7 +2,7 @@
   "project": "default",
   "appName": "cert-resources",
   "userGivenName": "cert-resources",
-  "destNamespace": "cert-manager",
+  "destNamespace": "cert-resources",
   "destName": "in-cluster",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},

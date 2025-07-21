@@ -1,0 +1,10 @@
+{
+  "project": "default",
+  "appName": "sealed-secrets",
+  "userGivenName": "sealed-secrets",
+  "destNamespace": "kube-system",
+  "destName": "in-cluster",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "annotations": {}
+}

@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - argocd-server-webhook-ingress.yaml
+  - argocd-server-webhook-httproute.yaml
   - git-webhook.yaml.externalsecret
 
 helmCharts:

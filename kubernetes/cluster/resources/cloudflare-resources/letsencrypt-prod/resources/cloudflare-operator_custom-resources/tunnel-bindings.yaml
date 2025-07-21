@@ -12,7 +12,7 @@ subjects:
       proxyAddress: 127.0.0.1
       proxyPort: 0
       proxyType: ''
-      target: https://istio-ingressgateway.istio-system.svc.cluster.local:443
+      target: https://istio-ingressgateway.istio-ingress.svc.cluster.local:443
   - kind: Service
     name: domain
     spec:
@@ -22,7 +22,7 @@ subjects:
       proxyAddress: 127.0.0.1
       proxyPort: 0
       proxyType: ''
-      target: https://istio-ingressgateway.istio-system.svc.cluster.local:443
+      target: https://istio-ingressgateway.istio-ingress.svc.cluster.local:443
 tunnelRef:
   kind: ClusterTunnel
   name: tunnel-domain

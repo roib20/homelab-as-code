@@ -35,9 +35,10 @@ configs:
   cm:
     # Kustomize build options
     kustomize.buildOptions: "--enable-helm --load-restrictor=LoadRestrictionsNone"
-
+    
     # Troubleshooting Cilium deployed with Argo CD: https://docs.cilium.io/en/latest/configuration/argocd-issues/
-    ignoreDifferences: |-
+    # Ignore some Istio differences
+    ignoreDifferences:
       - group: ""
         kind: ConfigMap
         name: hubble-ca-cert
@@ -57,3 +58,23 @@ configs:
           - /data/ca.crt
           - /data/tls.crt
           - /data/tls.key
+      - group: admissionregistration.k8s.io
+        kind: ValidatingWebhookConfiguration
+        name: istio-validator-istio-system
+        jsonPointers:
+          - /webhooks/0/failurePolicy
+          - /webhooks/1/failurePolicy
+      - group: admissionregistration.k8s.io
+        kind: ValidatingWebhookConfiguration
+        name: istiod-default-validator
+        jsonPointers:
+          - /webhooks/0/failurePolicy
+          - /webhooks/1/failurePolicy
+
+    # Ignore Health for Ingress resources that lack an ADDRESS value
+    resource.customizations: |
+      networking.k8s.io/Ingress:
+        health.lua: |
+          hs = {}
+          hs.status = "Healthy"
+          return hs

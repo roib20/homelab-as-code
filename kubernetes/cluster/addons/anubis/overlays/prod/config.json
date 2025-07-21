@@ -1,0 +1,10 @@
+{
+  "project": "default",
+  "appName": "anubis",
+  "userGivenName": "anubis",
+  "destNamespace": "anubis",
+  "destName": "in-cluster",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "annotations": {}
+}

@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: https-services-tls
+spec:
+  host: "*.svc.cluster.local"
+  trafficPolicy:
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: SIMPLE
+        insecureSkipVerify: true
+    - port:
+        number: 8443
+      tls:
+        mode: SIMPLE
+        insecureSkipVerify: true

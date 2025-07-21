@@ -1,0 +1,10 @@
+{
+  "project": "default",
+  "appName": "valkey-operator",
+  "userGivenName": "valkey-operator",
+  "destNamespace": "valkey-operator",
+  "destName": "in-cluster",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "annotations": {}
+}

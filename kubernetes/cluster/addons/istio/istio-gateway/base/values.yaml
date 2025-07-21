@@ -1,0 +1,28 @@
+service:
+  type: ClusterIP
+  ports:
+  - name: status-port
+    port: 15021
+    targetPort: 15021
+    protocol: TCP
+  - name: http2
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: 443
+    protocol: TCP
+  # - name: http3
+  #   port: 443
+  #   targetPort: 443
+  #   protocol: UDP
+
+autoscaling:
+  enabled: false
+replicaCount: 1
+
+labels:
+  "istio": ingressgateway
+  # By default, don't enroll gateways into the ambient dataplane
+  "istio.io/dataplane-mode": none

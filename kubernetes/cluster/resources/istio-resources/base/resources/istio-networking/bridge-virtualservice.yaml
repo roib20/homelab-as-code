@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: bridge-virtualservice
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - tls-gateway
+  http:
+  - match:
+    - headers:
+        ":authority":
+          regex: "(.*)"
+    route:
+    - destination:
+        host: anubis.anubis.svc.cluster.local
+        port:
+          number: 8923
+      headers:
+        request:
+          set:
+            x-forwarded-proto: "https"
+            # Extract real IP from CF-Connecting-IP header  
+            x-forwarded-for: "%REQ(CF-Connecting-IP)%"
+            x-real-ip: "%REQ(CF-Connecting-IP)%"
+            # Ensure Cloudflare IP is preserved
+            cf-connecting-ip: "%REQ(CF-Connecting-IP)%"
