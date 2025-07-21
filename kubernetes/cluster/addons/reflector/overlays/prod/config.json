@@ -1,0 +1,10 @@
+{
+  "project": "default",
+  "appName": "reflector",
+  "userGivenName": "reflector",
+  "destNamespace": "kube-system",
+  "destName": "in-cluster",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "annotations": {}
+}
