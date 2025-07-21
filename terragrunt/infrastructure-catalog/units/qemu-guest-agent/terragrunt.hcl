@@ -21,9 +21,9 @@ dependency "vm" {
 
 inputs = {
   connection = {
-    type        = try(values.type, "ssh")
-    host        = try(values.host, "${dependency.vm.outputs.ipv4_addresses}")
-    user        = try(values.user, null)
-    agent       = try(values.agent, true)
+    type  = try(values.type, "ssh")
+    host  = try(values.host, "${dependency.vm.outputs.ipv4_addresses}")
+    user  = try(values.user, null)
+    agent = try(values.agent, true)
   }
 }

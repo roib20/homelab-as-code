@@ -27,10 +27,10 @@ dependency "download_file" {
 
 dependencies {
   paths = [
-            "../cloud-config/control-plane-01",
-            "../cloud-config/control-plane-02",
-            "../cloud-config/control-plane-03",
-          ]
+    "../cloud-config/control-plane-01",
+    "../cloud-config/control-plane-02",
+    "../cloud-config/control-plane-03",
+  ]
 }
 
 inputs = {
@@ -42,7 +42,7 @@ inputs = {
   vm_id   = try(values.vm_id, 4000)
 
   # Storage & resources
-  vm_datastore_id  = try(values.vm_datastore_id, "VM")
+  vm_datastore_id = try(values.vm_datastore_id, "VM")
 
   agent = {
     enabled = local.agent
@@ -59,7 +59,7 @@ inputs = {
 
   # CPU
   cpu = {
-    type = "host"
+    type  = "host"
     cores = try(values.cpu_cores, 2)
   }
 
@@ -81,7 +81,7 @@ inputs = {
 
   # Cloud-init
   initialization = {
-    datastore_id = try(values.vm_datastore_id, "VM")
+    datastore_id      = try(values.vm_datastore_id, "VM")
     meta_data_file_id = "${try(values.snippets_datastore_id, "local")}:snippets/${values.meta_data_cloud_config_file_name}"
 
 

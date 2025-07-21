@@ -1,9 +1,9 @@
 resource "terraform_data" "qemu-guest-agent" {
   connection {
-    type        = try(var.connection.type, "ssh")
-    host        = try(var.connection.host, null)
-    user        = try(var.connection.user, null)
-    agent       = try(var.connection.agent, true)
+    type  = try(var.connection.type, "ssh")
+    host  = try(var.connection.host, null)
+    user  = try(var.connection.user, null)
+    agent = try(var.connection.agent, true)
   }
 
   provisioner "remote-exec" {

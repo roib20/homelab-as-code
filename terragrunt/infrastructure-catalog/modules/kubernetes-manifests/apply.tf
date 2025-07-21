@@ -8,10 +8,10 @@ resource "kubernetes_manifest" "apply" {
 
   # Render the manifest template if variables provided, otherwise load raw
   manifest = sensitive(
-      yamldecode(
+    yamldecode(
       length(keys(var.template_vars)) > 0
-        ? templatefile(each.value, var.template_vars)
-        : file(each.value)
+      ? templatefile(each.value, var.template_vars)
+      : file(each.value)
     )
   )
 

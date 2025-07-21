@@ -31,7 +31,7 @@ dependency "cloud-config" {
   config_path = "../cloud-config"
 
   mock_outputs = {
-      user_data_cloud_config = "datastore-name:iso/some-file.img"
+    user_data_cloud_config = "datastore-name:iso/some-file.img"
   }
 }
 
@@ -46,8 +46,8 @@ inputs = {
   stop_on_destroy = local.agent ? false : true
 
   # VM identity
-  vm_name = try(values.vm_name, null)      # leave empty or override via values
-  vm_id   = try(values.vm_id, null)        # leave empty or override via values
+  vm_name = try(values.vm_name, null) # leave empty or override via values
+  vm_id   = try(values.vm_id, null)   # leave empty or override via values
 
   # Networking
   network_devices = [

@@ -95,25 +95,25 @@ variable "verify" {
 # Talos Image Factory Variables
 
 variable "talos_platform" {
-  type        = string
-  nullable    = true
-  default     = null
+  type     = string
+  nullable = true
+  default  = null
 }
 
 variable "talos_arch" {
-  type        = string
-  nullable    = true
-  default     = null
+  type     = string
+  nullable = true
+  default  = null
 }
 
 variable "talos_version" {
-  type        = string
-  nullable    = true
-  default     = null
+  type     = string
+  nullable = true
+  default  = null
 }
 
 variable "talos_schematic_id" {
-  type        = string
-  nullable    = true
-  default     = null
+  type     = string
+  nullable = true
+  default  = null
 }
