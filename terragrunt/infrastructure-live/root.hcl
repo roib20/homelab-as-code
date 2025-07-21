@@ -8,14 +8,14 @@ locals {
   node_vars = read_terragrunt_config(find_in_parent_folders("node.hcl"))
 
   # Extract the variables we need for easy access
-  virtual_environment_endpoint                = local.account_vars.locals.virtual_environment_endpoint
-  virtual_environment_api_token               = local.account_vars.locals.virtual_environment_api_token
-  virtual_environment_username                = local.account_vars.locals.virtual_environment_username
-  virtual_environment_password                = local.account_vars.locals.virtual_environment_password
-  virtual_environment_auth_ticket             = local.account_vars.locals.virtual_environment_auth_ticket 
-  virtual_environment_csrf_prevention_token   = local.account_vars.locals.virtual_environment_csrf_prevention_token
-  node_name                                   = local.node_vars.locals.node_name
-  node_address                                = local.node_vars.locals.node_address
+  virtual_environment_endpoint              = local.account_vars.locals.virtual_environment_endpoint
+  virtual_environment_api_token             = local.account_vars.locals.virtual_environment_api_token
+  virtual_environment_username              = local.account_vars.locals.virtual_environment_username
+  virtual_environment_password              = local.account_vars.locals.virtual_environment_password
+  virtual_environment_auth_ticket           = local.account_vars.locals.virtual_environment_auth_ticket
+  virtual_environment_csrf_prevention_token = local.account_vars.locals.virtual_environment_csrf_prevention_token
+  node_name                                 = local.node_vars.locals.node_name
+  node_address                              = local.node_vars.locals.node_address
 }
 
 generate "proxmox_provider" {

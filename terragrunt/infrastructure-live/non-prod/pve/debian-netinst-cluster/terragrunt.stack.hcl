@@ -1,7 +1,7 @@
 locals {
   # Environment, such as "prod" or "non-prod"
   environment = "non-prod"
-  
+
   # Root "terragrunt/infrastructure-live" directory, containing "prod" and "non-prod" directories
   root_dir = "${dirname(find_in_parent_folders("root.hcl"))}"
 
@@ -37,7 +37,7 @@ unit "vm-1" {
   path = "vm-1"
 
   values = {
-    node_name = "${local.node_name}"
+    node_name    = "${local.node_name}"
     ipv4_address = "192.168.1.11"
   }
 }
@@ -48,7 +48,7 @@ unit "vm-2" {
   path = "vm-2"
 
   values = {
-    node_name = "${local.node_name}"
+    node_name    = "${local.node_name}"
     ipv4_address = "192.168.1.12"
   }
 }
@@ -59,7 +59,7 @@ unit "vm-3" {
   path = "vm-3"
 
   values = {
-    node_name = "${local.node_name}"
+    node_name    = "${local.node_name}"
     ipv4_address = "192.168.1.13"
   }
 }

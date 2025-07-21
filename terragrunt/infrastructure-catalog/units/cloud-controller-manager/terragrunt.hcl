@@ -16,13 +16,13 @@ inputs = {
   datastore_id           = values.datastore_id
   content_type           = try(values.content_type, "snippets")
   user_data_cloud_config = try(values.user_data_cloud_config, "user-data-cloud-config.yaml")
-  
-  hostname               = values.hostname
-  vm_id                  = values.vm_id
-  region                 = values.region
-  zone                   = values.zone
-  cpu                    = values.cpu
-  memory                 = values.memory
-  
+
+  hostname = values.hostname
+  vm_id    = values.vm_id
+  region   = values.region
+  zone     = values.zone
+  cpu      = values.cpu
+  memory   = values.memory
+
   meta_data_cloud_config = try(values.meta_data_cloud_config_file_name, "meta-data-cloud-config.yaml")
 }

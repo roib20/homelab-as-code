@@ -16,18 +16,18 @@ include "common" {
 # Talos-cluster depends on the three VM directories created by this same stack
 dependencies {
   paths = [
-            "../control-plane-01",
-            "../control-plane-02",
-            "../control-plane-03",
-          ]
+    "../control-plane-01",
+    "../control-plane-02",
+    "../control-plane-03",
+  ]
 }
 
 # Pass everything through with the familiar “try(values…, fallback)” idiom
 inputs = {
   # ---------- identification ----------
-  cluster_name           = try(values.cluster_name)
-  cluster_endpoint       = try(values.cluster_endpoint)
-  cluster_vip            = try(values.cluster_vip)
+  cluster_name     = try(values.cluster_name)
+  cluster_endpoint = try(values.cluster_endpoint)
+  cluster_vip      = try(values.cluster_vip)
 
   # ---------- CIDRs ----------
   cluster_node_subnet    = try(values.cluster_node_subnet)
@@ -35,13 +35,13 @@ inputs = {
   cluster_service_subnet = try(values.cluster_service_subnet)
 
   # ---------- versions ----------
-  versions               = try(values.versions)
+  versions = try(values.versions)
 
   # ---------- Helm Charts ----------
-  helm_charts            = try(values.helm_charts)
+  helm_charts = try(values.helm_charts)
 
-  timeout                = try(values.timeout, "10m")
+  timeout = try(values.timeout, "10m")
 
   # machines map
-  machines               = jsonencode(values.machines)
+  machines = jsonencode(values.machines)
 }

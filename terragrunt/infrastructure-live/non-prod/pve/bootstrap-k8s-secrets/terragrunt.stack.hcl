@@ -1,7 +1,7 @@
 locals {
   # Environment, such as "prod" or "non-prod"
   environment = "non-prod"
-  
+
   # Root "terragrunt/infrastructure-live" directory, containing "prod" and "non-prod" directories
   root_dir = "${dirname(find_in_parent_folders("root.hcl"))}"
 
@@ -20,7 +20,7 @@ unit "bitwarden-access" {
   values = {
     bws_access_token = get_env("BWS_ACCESS_TOKEN")
     secret_key       = "BWS_ACCESS_TOKEN"
-    organization_id  = try(get_env("ORGANIZATION_ID"), null) 
+    organization_id  = try(get_env("ORGANIZATION_ID"), null)
   }
 }
 
@@ -30,8 +30,8 @@ unit "kubernetes-manifests" {
   path = "kubernetes-manifests"
 
   values = {
-    kubeconfig_path         = "~/.kube/config"
-    manifest_yaml_files     = [
+    kubeconfig_path = "~/.kube/config"
+    manifest_yaml_files = [
       "${local.kubernetes_dir}/hidden-secrets/bitwarden-access-token.yaml.tftpl",
       "${local.kubernetes_dir}/hidden-secrets/bitwarden-secretsmanager.yaml.tftpl",
       "${local.kubernetes_dir}/hidden-secrets/git-credentials.yaml.externalsecret",

@@ -1,7 +1,7 @@
 locals {
   # Environment, such as "prod" or "non-prod"
   environment = "non-prod"
-  
+
   # Root "terragrunt/infrastructure-live" directory, containing "prod" and "non-prod" directories
   root_dir = "${dirname(find_in_parent_folders("root.hcl"))}"
 
@@ -23,7 +23,7 @@ unit "cloud-config" {
   path = "cloud-config"
 
   values = {
-    node_name = "${local.node_name}"
+    node_name              = "${local.node_name}"
     user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
   }
 }
@@ -48,7 +48,7 @@ unit "vm" {
   path = "vm"
 
   values = {
-    node_name = "${local.node_name}"
+    node_name    = "${local.node_name}"
     ipv4_address = "${local.ipv4_address}"
   }
 }
@@ -60,7 +60,7 @@ unit "qemu-guest-agent" {
 
   values = {
     node_name = "${local.node_name}"
-    host = "${local.ipv4_address}"
-    user = "user"
+    host      = "${local.ipv4_address}"
+    user      = "user"
   }
 }

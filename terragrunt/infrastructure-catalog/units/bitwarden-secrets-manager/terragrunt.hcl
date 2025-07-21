@@ -9,8 +9,8 @@ terraform {
 
 inputs = {
   # Bitwarden Secrets Manager variables
-  bws_access_token        = values.bws_access_token
-  secret_key              = values.secret_key
-  organization_id         = try(values.organization_id, null)
-  project_id              = try(values.project_id, null)
+  bws_access_token = values.bws_access_token
+  secret_key       = values.secret_key
+  organization_id  = try(values.organization_id, null)
+  project_id       = try(values.project_id, null)
 }
