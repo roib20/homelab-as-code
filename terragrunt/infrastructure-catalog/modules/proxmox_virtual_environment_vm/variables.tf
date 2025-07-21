@@ -192,10 +192,10 @@ variable "hook_script_file_id" {
 variable "agent" {
   description = "(Optional) The QEMU agent configuration."
   type = object({
-    enabled = optional(bool, false)       # (Optional) Whether to enable the QEMU agent (defaults to false).
-    timeout = optional(string, "15m")     # (Optional) The maximum amount of time to wait for data from the QEMU agent to become available (defaults to `15m`).
-    trim    = optional(bool, false)       # (Optional) Whether to enable the FSTRIM feature in the QEMU agent (defaults to false).
-    type    = optional(string, "virtio")  # (Optional) The QEMU agent interface type (defaults to virtio).
+    enabled = optional(bool, false)      # (Optional) Whether to enable the QEMU agent (defaults to false).
+    timeout = optional(string, "15m")    # (Optional) The maximum amount of time to wait for data from the QEMU agent to become available (defaults to `15m`).
+    trim    = optional(bool, false)      # (Optional) Whether to enable the FSTRIM feature in the QEMU agent (defaults to false).
+    type    = optional(string, "virtio") # (Optional) The QEMU agent interface type (defaults to virtio).
   })
   default = null
 }
@@ -204,11 +204,11 @@ variable "agent" {
 variable "amd_sev" {
   description = "(Optional) Secure Encrypted Virtualization (SEV) features by AMD CPUs."
   type = object({
-    type            = optional(string, "std")  # (Optional) Enable standard SEV with `std`, SEV-ES with `es`, or SEV-SNP with `snp` (defaults to `std`).
-    allow_smt       = optional(bool, true)     # (Optional) Allow Simultaneous Multi Threading (SMT) (ignored unless for SEV-SNP) (defaults to `true`).
-    kernel_hashes   = optional(bool, false)    # (Optional) Add kernel hashes to guest firmware for measured Linux kernel launch (defaults to `false`).
-    no_debug        = optional(bool, false)    # (Optional) Disallow debugging of guest (defaults to `false`).
-    no_key_sharing  = optional(bool, false)    # (Optional) Disallow key sharing with other guests (ignored for SEV-SNP) (defaults to `false`).
+    type           = optional(string, "std") # (Optional) Enable standard SEV with `std`, SEV-ES with `es`, or SEV-SNP with `snp` (defaults to `std`).
+    allow_smt      = optional(bool, true)    # (Optional) Allow Simultaneous Multi Threading (SMT) (ignored unless for SEV-SNP) (defaults to `true`).
+    kernel_hashes  = optional(bool, false)   # (Optional) Add kernel hashes to guest firmware for measured Linux kernel launch (defaults to `false`).
+    no_debug       = optional(bool, false)   # (Optional) Disallow debugging of guest (defaults to `false`).
+    no_key_sharing = optional(bool, false)   # (Optional) Disallow key sharing with other guests (ignored for SEV-SNP) (defaults to `false`).
   })
   default = null
 }
@@ -217,9 +217,9 @@ variable "amd_sev" {
 variable "audio_device" {
   description = "(Optional) An audio device."
   type = object({
-    device  = optional(string, "intel-hda")  # (Optional) The audio device to use (defaults to `intel-hda`). Options: `AC97`, `ich9-intel-hda`, `intel-hda`.
-    driver  = optional(string, "spice")      # (Optional) The driver (defaults to `spice`). Options: `spice`.
-    enabled = optional(bool, true)           # (Optional) Whether to enable the audio device (defaults to `true`).
+    device  = optional(string, "intel-hda") # (Optional) The audio device to use (defaults to `intel-hda`). Options: `AC97`, `ich9-intel-hda`, `intel-hda`.
+    driver  = optional(string, "spice")     # (Optional) The driver (defaults to `spice`). Options: `spice`.
+    enabled = optional(bool, true)          # (Optional) Whether to enable the audio device (defaults to `true`).
   })
   default = null
 }
@@ -228,11 +228,11 @@ variable "audio_device" {
 variable "clone" {
   description = "(Optional) The cloning configuration."
   type = object({
-    datastore_id = optional(string)      # (Optional) The identifier for the target datastore.
-    node_name    = optional(string)      # (Optional) The name of the source node (leave blank if equal to the `node_name` argument).
-    retries      = optional(number)      # (Optional) Number of retries in Proxmox for clone VM. Sometimes Proxmox errors with timeout when creating multiple clones at once.
-    source_vm_id = number                # (Required) The identifier for the source VM.
-    full         = optional(bool, true)  # (Optional) Full or linked clone (defaults to `true`).
+    datastore_id = optional(string)     # (Optional) The identifier for the target datastore.
+    node_name    = optional(string)     # (Optional) The name of the source node (leave blank if equal to the `node_name` argument).
+    retries      = optional(number)     # (Optional) Number of retries in Proxmox for clone VM. Sometimes Proxmox errors with timeout when creating multiple clones at once.
+    source_vm_id = number               # (Required) The identifier for the source VM.
+    full         = optional(bool, true) # (Optional) Full or linked clone (defaults to `true`).
   })
   default = null
 }
@@ -241,16 +241,16 @@ variable "clone" {
 variable "cpu" {
   description = "(Optional) The CPU configuration."
   type = object({
-    architecture = optional(string, null)             # (Optional) The CPU architecture. NOTE: Can only be set by the root account.
-    cores        = optional(number, 1)                # (Optional) The number of CPU cores (defaults to `1`).
-    flags        = optional(list(string))             # (Optional) The CPU flags.
-    hotplugged   = optional(number, 0)                # (Optional) The number of hotplugged vCPUs (defaults to `0`).
-    limit        = optional(number, 0)                # (Optional) Limit of CPU usage, 0...128. (defaults to `0` -- no limit).
-    numa         = optional(bool, false)              # (Boolean) Enable/disable NUMA. (default to `false`).
-    sockets      = optional(number, 1)                # (Optional) The number of CPU sockets (defaults to `1`).
-    type         = optional(string, "x86-64-v2-AES")  # (Optional) The emulated CPU type, it's recommended to use `x86-64-v2-AES` (defaults to `x86-64-v2-AES`).
-    units        = optional(number, 1024)             # (Optional) The CPU units (defaults to `1024`).
-    affinity     = optional(string)                   # (Optional) The CPU cores that are used to run the VM’s vCPU. The value is a list of CPU IDs, separated by commas. The CPU IDs are zero-based. For example, `0,1,2,3` (which also can be shortened to `0-3`) means that the VM’s vCPUs are run on the first four CPU cores. Setting `affinity` is only allowed for `root@pam` authenticated user.
+    architecture = optional(string, null)            # (Optional) The CPU architecture. NOTE: Can only be set by the root account.
+    cores        = optional(number, 1)               # (Optional) The number of CPU cores (defaults to `1`).
+    flags        = optional(list(string))            # (Optional) The CPU flags.
+    hotplugged   = optional(number, 0)               # (Optional) The number of hotplugged vCPUs (defaults to `0`).
+    limit        = optional(number, 0)               # (Optional) Limit of CPU usage, 0...128. (defaults to `0` -- no limit).
+    numa         = optional(bool, false)             # (Boolean) Enable/disable NUMA. (default to `false`).
+    sockets      = optional(number, 1)               # (Optional) The number of CPU sockets (defaults to `1`).
+    type         = optional(string, "x86-64-v2-AES") # (Optional) The emulated CPU type, it's recommended to use `x86-64-v2-AES` (defaults to `x86-64-v2-AES`).
+    units        = optional(number, 1024)            # (Optional) The CPU units (defaults to `1024`).
+    affinity     = optional(string)                  # (Optional) The CPU cores that are used to run the VM’s vCPU. The value is a list of CPU IDs, separated by commas. The CPU IDs are zero-based. For example, `0,1,2,3` (which also can be shortened to `0-3`) means that the VM’s vCPUs are run on the first four CPU cores. Setting `affinity` is only allowed for `root@pam` authenticated user.
   })
   default = null
 }
@@ -259,30 +259,30 @@ variable "cpu" {
 variable "disks" {
   description = "(Optional) A list of disk configurations."
   type = list(object({
-    aio               = optional(string, "io_uring")     # (Optional) AIO mode, options: `io_uring`, `native`, or `threads` (defaults to `io_uring`).
-    backup            = optional(bool, true)             # (Optional) Include disk in backups (defaults to `true`).
-    cache             = optional(string, "none")         # (Optional) Disk cache mode, options: `none`, `directsync`, `writethrough`, `writeback`, `unsafe` (defaults to `none`).
-    datastore_id      = optional(string, "local-lvm")    # (Optional) Datastore for disk storage (defaults to `local-lvm`).
-    path_in_datastore = optional(string)                 # (Optional) Path within the datastore, used for attached or host disks. *Experimental.*
-    discard           = optional(string, "ignore")       # (Optional) Trim/discard behavior, `on` or `ignore` (defaults to `ignore`).
-    file_format       = optional(string)                 # (Optional) Disk image format, options: `qcow2`, `raw`, `vmdk`.
-    file_id           = optional(string)                 # (Optional) File ID for imported disk, e.g. `local:iso/centos8.img`.
-    interface         = string                           # (Required) Disk interface: `virtio`, `sata`, or `scsi`, with index (e.g. `virtio0`).
-    iothread          = optional(bool, false)            # (Optional) Use IO threads for this disk (defaults to `false`).
-    replicate         = optional(bool, true)             # (Optional) Include in replication jobs (defaults to `true`).
-    serial            = optional(string)                 # (Optional) Disk serial number (max 20 bytes).
-    size              = optional(number, 8)              # (Optional) Disk size in GB (defaults to `8`).
+    aio               = optional(string, "io_uring")  # (Optional) AIO mode, options: `io_uring`, `native`, or `threads` (defaults to `io_uring`).
+    backup            = optional(bool, true)          # (Optional) Include disk in backups (defaults to `true`).
+    cache             = optional(string, "none")      # (Optional) Disk cache mode, options: `none`, `directsync`, `writethrough`, `writeback`, `unsafe` (defaults to `none`).
+    datastore_id      = optional(string, "local-lvm") # (Optional) Datastore for disk storage (defaults to `local-lvm`).
+    path_in_datastore = optional(string)              # (Optional) Path within the datastore, used for attached or host disks. *Experimental.*
+    discard           = optional(string, "ignore")    # (Optional) Trim/discard behavior, `on` or `ignore` (defaults to `ignore`).
+    file_format       = optional(string)              # (Optional) Disk image format, options: `qcow2`, `raw`, `vmdk`.
+    file_id           = optional(string)              # (Optional) File ID for imported disk, e.g. `local:iso/centos8.img`.
+    interface         = string                        # (Required) Disk interface: `virtio`, `sata`, or `scsi`, with index (e.g. `virtio0`).
+    iothread          = optional(bool, false)         # (Optional) Use IO threads for this disk (defaults to `false`).
+    replicate         = optional(bool, true)          # (Optional) Include in replication jobs (defaults to `true`).
+    serial            = optional(string)              # (Optional) Disk serial number (max 20 bytes).
+    size              = optional(number, 8)           # (Optional) Disk size in GB (defaults to `8`).
     speed = optional(object({
-      iops_read            = optional(number)            # (Optional) Max read IOPS.
-      iops_read_burstable  = optional(number)            # (Optional) Max burstable read IOPS.
-      iops_write           = optional(number)            # (Optional) Max write IOPS.
-      iops_write_burstable = optional(number)            # (Optional) Max burstable write IOPS.
-      read                 = optional(number)            # (Optional) Max read speed (MB/s).
-      read_burstable       = optional(number)            # (Optional) Max burstable read speed (MB/s).
-      write                = optional(number)            # (Optional) Max write speed (MB/s).
-      write_burstable      = optional(number)            # (Optional) Max burstable write speed (MB/s).
-    }))                                                  
-    ssd               = optional(bool, false)            # (Optional) Emulate SSD disk (defaults to `false`). Not supported on VirtIO Block.
+      iops_read            = optional(number) # (Optional) Max read IOPS.
+      iops_read_burstable  = optional(number) # (Optional) Max burstable read IOPS.
+      iops_write           = optional(number) # (Optional) Max write IOPS.
+      iops_write_burstable = optional(number) # (Optional) Max burstable write IOPS.
+      read                 = optional(number) # (Optional) Max read speed (MB/s).
+      read_burstable       = optional(number) # (Optional) Max burstable read speed (MB/s).
+      write                = optional(number) # (Optional) Max write speed (MB/s).
+      write_burstable      = optional(number) # (Optional) Max burstable write speed (MB/s).
+    }))
+    ssd = optional(bool, false) # (Optional) Emulate SSD disk (defaults to `false`). Not supported on VirtIO Block.
   }))
   default = []
 }
@@ -291,10 +291,10 @@ variable "disks" {
 variable "efi_disk" {
   description = "(Optional) The EFI disk device (required if `bios` is set to `ovmf`)."
   type = object({
-    datastore_id      = optional(string, "local-lvm")  # (Optional) Datastore for EFI disk (defaults to `local-lvm`).
-    file_format       = optional(string, "raw")        # (Optional) EFI disk format, options: `raw`, `qcow2` (defaults to `raw`).
-    type              = optional(string, "2m")         # (Optional) EFI disk size/type, `2m` (legacy) or `4m` (required for Secure Boot) (defaults to `2m`).
-    pre_enrolled_keys = optional(bool, false)          # (Optional) Use pre-enrolled Microsoft and distro keys (only valid with type=`4m`) (defaults to `false`).
+    datastore_id      = optional(string, "local-lvm") # (Optional) Datastore for EFI disk (defaults to `local-lvm`).
+    file_format       = optional(string, "raw")       # (Optional) EFI disk format, options: `raw`, `qcow2` (defaults to `raw`).
+    type              = optional(string, "2m")        # (Optional) EFI disk size/type, `2m` (legacy) or `4m` (required for Secure Boot) (defaults to `2m`).
+    pre_enrolled_keys = optional(bool, false)         # (Optional) Use pre-enrolled Microsoft and distro keys (only valid with type=`4m`) (defaults to `false`).
   })
   default = null
 }
@@ -303,8 +303,8 @@ variable "efi_disk" {
 variable "tpm_state" {
   description = "(Optional) The TPM state device."
   type = object({
-    datastore_id = optional(string, "local-lvm")  # (Optional) Datastore where the TPM state disk is stored (defaults to `local-lvm`).
-    version      = optional(string, "v2.0")       # (Optional) TPM version, either `v1.2` or `v2.0` (defaults to `v2.0`).
+    datastore_id = optional(string, "local-lvm") # (Optional) Datastore where the TPM state disk is stored (defaults to `local-lvm`).
+    version      = optional(string, "v2.0")      # (Optional) TPM version, either `v1.2` or `v2.0` (defaults to `v2.0`).
   })
   default = null
 }
@@ -313,14 +313,14 @@ variable "tpm_state" {
 variable "hostpci_devices" {
   description = "(Optional) List of host PCI device mappings."
   type = list(object({
-    device   = string                      # (Required) PCI device name in the form `hostpciX`, where X is from 0 to 15.
-    id       = optional(string)            # (Optional) PCI device ID. Requires `root` credentials. Mutually exclusive with `mapping`.
-    mapping  = optional(string)            # (Optional) Cluster-wide resource mapping name (e.g. "gpu"). Mutually exclusive with `id`.
-    mdev     = optional(string)            # (Optional) Mediated device ID (for vGPU).
-    pcie     = optional(bool)              # (Optional) Use PCIe interface (only supported on `q35` machines).
-    rombar   = optional(bool, true)        # (Optional) Make firmware ROM visible to the VM (defaults to `true`).
-    rom_file = optional(string)            # (Optional) Relative path to ROM file under `/usr/share/kvm/`.
-    xvga     = optional(bool)              # (Optional) Mark as primary GPU (disables `vga` config if set).
+    device   = string               # (Required) PCI device name in the form `hostpciX`, where X is from 0 to 15.
+    id       = optional(string)     # (Optional) PCI device ID. Requires `root` credentials. Mutually exclusive with `mapping`.
+    mapping  = optional(string)     # (Optional) Cluster-wide resource mapping name (e.g. "gpu"). Mutually exclusive with `id`.
+    mdev     = optional(string)     # (Optional) Mediated device ID (for vGPU).
+    pcie     = optional(bool)       # (Optional) Use PCIe interface (only supported on `q35` machines).
+    rombar   = optional(bool, true) # (Optional) Make firmware ROM visible to the VM (defaults to `true`).
+    rom_file = optional(string)     # (Optional) Relative path to ROM file under `/usr/share/kvm/`.
+    xvga     = optional(bool)       # (Optional) Mark as primary GPU (disables `vga` config if set).
   }))
   default = []
 }
@@ -329,17 +329,17 @@ variable "hostpci_devices" {
 variable "network_devices" {
   description = "(Optional) List of network device configurations."
   type = list(object({
-    bridge       = optional(string, "vmbr0")   # (Optional) Network bridge name (defaults to `vmbr0`).
-    disconnected = optional(bool, false)       # (Optional) Disconnect NIC from the network (defaults to `false`).
-    enabled      = optional(bool, true)        # (Optional) Enable network interface (defaults to `true`).
-    firewall     = optional(bool, false)       # (Optional) Apply Proxmox firewall rules (defaults to `false`).
-    mac_address  = optional(string)            # (Optional) MAC address for the NIC.
-    model        = optional(string, "virtio")  # (Optional) Network adapter model: `virtio`, `e1000`, `vmxnet3`, etc. (defaults to `virtio`).
-    mtu          = optional(number)            # (Optional) MTU value. Set `1` to use the bridge MTU. Only valid for VirtIO.
-    queues       = optional(number)            # (Optional) Number of VirtIO queues (1–64).
-    rate_limit   = optional(number)            # (Optional) Rate limit in MB/s.
-    vlan_id      = optional(number)            # (Optional) VLAN tag ID.
-    trunks       = optional(string)            # (Optional) Semicolon-separated list of VLAN trunks, e.g. `"10;20;30"`.
+    bridge       = optional(string, "vmbr0")  # (Optional) Network bridge name (defaults to `vmbr0`).
+    disconnected = optional(bool, false)      # (Optional) Disconnect NIC from the network (defaults to `false`).
+    enabled      = optional(bool, true)       # (Optional) Enable network interface (defaults to `true`).
+    firewall     = optional(bool, false)      # (Optional) Apply Proxmox firewall rules (defaults to `false`).
+    mac_address  = optional(string)           # (Optional) MAC address for the NIC.
+    model        = optional(string, "virtio") # (Optional) Network adapter model: `virtio`, `e1000`, `vmxnet3`, etc. (defaults to `virtio`).
+    mtu          = optional(number)           # (Optional) MTU value. Set `1` to use the bridge MTU. Only valid for VirtIO.
+    queues       = optional(number)           # (Optional) Number of VirtIO queues (1–64).
+    rate_limit   = optional(number)           # (Optional) Rate limit in MB/s.
+    vlan_id      = optional(number)           # (Optional) VLAN tag ID.
+    trunks       = optional(string)           # (Optional) Semicolon-separated list of VLAN trunks, e.g. `"10;20;30"`.
   }))
   default = []
 }
@@ -348,9 +348,9 @@ variable "network_devices" {
 variable "rng" {
   description = "(Optional) The random number generator configuration. Can only be set by `root@pam`."
   type = object({
-    source     = optional(string, "/dev/urandom")  # (Optional) The file on the host to gather entropy from (defaults to `/dev/urandom`).
-    max_bytes  = optional(number, 1024)            # (Optional) Maximum bytes of entropy injected into the guest every `period` milliseconds (defaults to `1024`).
-    period     = optional(number, 1000)            # (Optional) Interval in milliseconds after which the entropy quota is reset (defaults to `1000`).
+    source    = optional(string, "/dev/urandom") # (Optional) The file on the host to gather entropy from (defaults to `/dev/urandom`).
+    max_bytes = optional(number, 1024)           # (Optional) Maximum bytes of entropy injected into the guest every `period` milliseconds (defaults to `1024`).
+    period    = optional(number, 1000)           # (Optional) Interval in milliseconds after which the entropy quota is reset (defaults to `1000`).
   })
   default = null
 }
@@ -359,11 +359,11 @@ variable "rng" {
 variable "numa" {
   description = "(Optional) The NUMA configuration."
   type = object({
-    device    = string                          # (Required) NUMA device name in the form `numaX`, where X is from 0 to 7.
-    cpus      = string                          # (Required) CPU core ranges to assign (e.g., `0-3;8-11`).
-    memory    = number                          # (Required) Memory in MB to assign to this NUMA node.
-    hostnodes = optional(string)                # (Optional) Host NUMA node(s) to bind to.
-    policy    = optional(string, "preferred")   # (Optional) NUMA memory allocation policy: `preferred`, `bind`, or `interleave` (defaults to `preferred`).
+    device    = string                        # (Required) NUMA device name in the form `numaX`, where X is from 0 to 7.
+    cpus      = string                        # (Required) CPU core ranges to assign (e.g., `0-3;8-11`).
+    memory    = number                        # (Required) Memory in MB to assign to this NUMA node.
+    hostnodes = optional(string)              # (Optional) Host NUMA node(s) to bind to.
+    policy    = optional(string, "preferred") # (Optional) NUMA memory allocation policy: `preferred`, `bind`, or `interleave` (defaults to `preferred`).
   })
   default = null
 }
@@ -372,9 +372,9 @@ variable "numa" {
 variable "usb_devices" {
   description = "(Optional) List of USB device mappings."
   type = list(object({
-    host    = optional(string)              # (Optional) Host USB device/port (e.g., `spice`). Mutually exclusive with `mapping`.
-    mapping = optional(string)              # (Optional) Cluster-wide resource mapping name. Mutually exclusive with `host`.
-    usb3    = optional(bool, false)         # (Optional) Enable USB 3.0 support (defaults to `false`).
+    host    = optional(string)      # (Optional) Host USB device/port (e.g., `spice`). Mutually exclusive with `mapping`.
+    mapping = optional(string)      # (Optional) Cluster-wide resource mapping name. Mutually exclusive with `host`.
+    usb3    = optional(bool, false) # (Optional) Enable USB 3.0 support (defaults to `false`).
   }))
   default = []
 }
@@ -383,35 +383,35 @@ variable "usb_devices" {
 variable "initialization" {
   description = "(Optional) The cloud-init configuration."
   type = object({
-    datastore_id = optional(string, "local-lvm")       # (Optional) Datastore for the cloud-init disk (defaults to `local-lvm`).
-    interface    = optional(string, "ide2")            # (Optional) Cloud-init interface (e.g., `ide2`, `sata0`). Defaults to `ide2`.
+    datastore_id = optional(string, "local-lvm") # (Optional) Datastore for the cloud-init disk (defaults to `local-lvm`).
+    interface    = optional(string, "ide2")      # (Optional) Cloud-init interface (e.g., `ide2`, `sata0`). Defaults to `ide2`.
 
     dns = optional(object({
-      domain  = optional(string)                       # (Optional) DNS search domain.
-      servers = optional(list(string), [])             # (Optional) List of DNS servers (replaces deprecated `server`).
+      domain  = optional(string)           # (Optional) DNS search domain.
+      servers = optional(list(string), []) # (Optional) List of DNS servers (replaces deprecated `server`).
     }))
 
     ip_config = optional(list(object({
       ipv4 = optional(object({
-        address = optional(string)                     # (Optional) IPv4 address in CIDR (e.g., `192.168.1.10/24`) or `dhcp`.
-        gateway = optional(string)                     # (Optional) IPv4 gateway (omit if using `dhcp`).
+        address = optional(string) # (Optional) IPv4 address in CIDR (e.g., `192.168.1.10/24`) or `dhcp`.
+        gateway = optional(string) # (Optional) IPv4 gateway (omit if using `dhcp`).
       }))
       ipv6 = optional(object({
-        address = optional(string)                     # (Optional) IPv6 address in CIDR (e.g., `fd00::1/64`) or `dhcp`.
-        gateway = optional(string)                     # (Optional) IPv6 gateway (omit if using `dhcp`).
+        address = optional(string) # (Optional) IPv6 address in CIDR (e.g., `fd00::1/64`) or `dhcp`.
+        gateway = optional(string) # (Optional) IPv6 gateway (omit if using `dhcp`).
       }))
-    })), [])                                           # (Optional) One block per NIC. Defaults to empty list.
+    })), []) # (Optional) One block per NIC. Defaults to empty list.
 
     user_account = optional(object({
-      username = optional(string)                      # (Optional) Cloud-init username.
-      password = optional(string)                      # (Optional) Password for the user.
-      keys     = optional(string)                      # (Optional) SSH public keys.
+      username = optional(string) # (Optional) Cloud-init username.
+      password = optional(string) # (Optional) Password for the user.
+      keys     = optional(string) # (Optional) SSH public keys.
     }))
 
-    network_data_file_id = optional(string)            # (Optional) ID of file with custom network data.
-    user_data_file_id    = optional(string)            # (Optional) ID of file with custom user-data (conflicts with `user_account`).
-    vendor_data_file_id  = optional(string)            # (Optional) ID of file with custom vendor-data.
-    meta_data_file_id    = optional(string)            # (Optional) ID of file with custom meta-data.
+    network_data_file_id = optional(string) # (Optional) ID of file with custom network data.
+    user_data_file_id    = optional(string) # (Optional) ID of file with custom user-data (conflicts with `user_account`).
+    vendor_data_file_id  = optional(string) # (Optional) ID of file with custom vendor-data.
+    meta_data_file_id    = optional(string) # (Optional) ID of file with custom meta-data.
   })
   default = null
 }
@@ -420,8 +420,8 @@ variable "initialization" {
 variable "cdrom" {
   description = "(Optional) The CD-ROM configuration."
   type = object({
-    file_id   = optional(string, "cdrom")  # (Optional) ISO file ID (defaults to `cdrom`, or use `none` to leave it empty).
-    interface = optional(string, "ide0")   # (Optional) Interface for CD-ROM (must be `ideN`). Only `ide0`/`ide2` supported on `q35`.
+    file_id   = optional(string, "cdrom") # (Optional) ISO file ID (defaults to `cdrom`, or use `none` to leave it empty).
+    interface = optional(string, "ide0")  # (Optional) Interface for CD-ROM (must be `ideN`). Only `ide0`/`ide2` supported on `q35`.
   })
   default = null
 }
@@ -430,11 +430,11 @@ variable "cdrom" {
 variable "memory" {
   description = "(Optional) The memory configuration."
   type = object({
-    dedicated      = optional(number, 512)     # (Optional) Dedicated memory in MB (defaults to `512`).
-    floating       = optional(number, 0)       # (Optional) Floating memory for ballooning (defaults to `0`, i.e., disabled).
-    shared         = optional(number, 0)       # (Optional) Shared memory in MB (defaults to `0`).
-    hugepages      = optional(string)          # (Optional) Hugepages setting: `2`, `1024`, or `any`.
-    keep_hugepages = optional(bool, false)     # (Optional) Retain hugepages after shutdown (defaults to `false`).
+    dedicated      = optional(number, 512) # (Optional) Dedicated memory in MB (defaults to `512`).
+    floating       = optional(number, 0)   # (Optional) Floating memory for ballooning (defaults to `0`, i.e., disabled).
+    shared         = optional(number, 0)   # (Optional) Shared memory in MB (defaults to `0`).
+    hugepages      = optional(string)      # (Optional) Hugepages setting: `2`, `1024`, or `any`.
+    keep_hugepages = optional(bool, false) # (Optional) Retain hugepages after shutdown (defaults to `false`).
   })
   default = null
 }
@@ -443,7 +443,7 @@ variable "memory" {
 variable "serial_devices" {
   description = "List of serial devices"
   type = list(object({
-    device = optional(string, "socket")  # (Optional) Serial device type: `/dev/*` or `socket` (defaults to `socket`).
+    device = optional(string, "socket") # (Optional) Serial device type: `/dev/*` or `socket` (defaults to `socket`).
   }))
   default = []
 }
@@ -452,13 +452,13 @@ variable "serial_devices" {
 variable "smbios" {
   description = "(Optional) The SMBIOS settings for the VM."
   type = object({
-    family       = optional(string)        # (Optional) SMBIOS family string.
-    manufacturer = optional(string)        # (Optional) Manufacturer name.
-    product      = optional(string)        # (Optional) Product name.
-    serial       = optional(string)        # (Optional) Serial number.
-    sku          = optional(string)        # (Optional) SKU number.
-    uuid         = optional(string)        # (Optional) UUID (defaults to randomly generated).
-    version      = optional(string)        # (Optional) Version string.
+    family       = optional(string) # (Optional) SMBIOS family string.
+    manufacturer = optional(string) # (Optional) Manufacturer name.
+    product      = optional(string) # (Optional) Product name.
+    serial       = optional(string) # (Optional) Serial number.
+    sku          = optional(string) # (Optional) SKU number.
+    uuid         = optional(string) # (Optional) UUID (defaults to randomly generated).
+    version      = optional(string) # (Optional) Version string.
   })
   default = null
 }
@@ -467,9 +467,9 @@ variable "smbios" {
 variable "startup" {
   description = "(Optional) Defines startup and shutdown behavior of the VM."
   type = object({
-    order      = number               # (Required) A non-negative number defining the general startup order.
-    up_delay   = optional(number, 0)  # (Optional) Delay in seconds before the next VM is started (defaults to `0`).
-    down_delay = optional(number, 0)  # (Optional) Delay in seconds before the next VM is shut down (defaults to `0`).
+    order      = number              # (Required) A non-negative number defining the general startup order.
+    up_delay   = optional(number, 0) # (Optional) Delay in seconds before the next VM is started (defaults to `0`).
+    down_delay = optional(number, 0) # (Optional) Delay in seconds before the next VM is shut down (defaults to `0`).
   })
   default = null
 }
@@ -478,9 +478,9 @@ variable "startup" {
 variable "vga" {
   description = "(Optional) The VGA configuration."
   type = object({
-    memory    = optional(number, 16)     # (Optional) The VGA memory in megabytes (defaults to `16`).
-    type      = optional(string, "std")  # (Optional) The VGA type (defaults to `std`). Valid values include `std`, `virtio`, `qxl`, `vmware`, etc.
-    clipboard = optional(string)         # (Optional) Enable VNC clipboard by setting to `vnc`.
+    memory    = optional(number, 16)    # (Optional) The VGA memory in megabytes (defaults to `16`).
+    type      = optional(string, "std") # (Optional) The VGA type (defaults to `std`). Valid values include `std`, `virtio`, `qxl`, `vmware`, etc.
+    clipboard = optional(string)        # (Optional) Enable VNC clipboard by setting to `vnc`.
   })
   default = null
 }
@@ -489,11 +489,11 @@ variable "vga" {
 variable "virtiofs" {
   description = "List of virtiofs share configurations"
   type = list(object({
-    mapping       = string                    # (Required) Identifier for the directory mapping on the host.
-    cache         = optional(string)          # (Optional) Cache mode for the filesystem. Options: `auto`, `always`, `metadata`, `never`.
-    direct_io     = optional(bool)            # (Optional) Enable or disable direct I/O (bypasses host page cache).
-    expose_acl    = optional(bool)            # (Optional) Enable POSIX ACLs for the shared directory. Implies `xattr` support.
-    expose_xattr  = optional(bool)            # (Optional) Enable extended attribute (xattr) support for the shared directory.
+    mapping      = string           # (Required) Identifier for the directory mapping on the host.
+    cache        = optional(string) # (Optional) Cache mode for the filesystem. Options: `auto`, `always`, `metadata`, `never`.
+    direct_io    = optional(bool)   # (Optional) Enable or disable direct I/O (bypasses host page cache).
+    expose_acl   = optional(bool)   # (Optional) Enable POSIX ACLs for the shared directory. Implies `xattr` support.
+    expose_xattr = optional(bool)   # (Optional) Enable extended attribute (xattr) support for the shared directory.
   }))
   default = []
 }

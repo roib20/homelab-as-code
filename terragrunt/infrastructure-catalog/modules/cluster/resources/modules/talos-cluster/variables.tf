@@ -1,7 +1,7 @@
 variable "versions" {
   type = object({
-    kubernetes_version          = string  # The version of Kubernetes to use.
-    talos_version               = string  # The version of Talos to use.
+    kubernetes_version = string # The version of Kubernetes to use.
+    talos_version      = string # The version of Talos to use.
   })
 }
 

@@ -47,18 +47,18 @@ variable "cluster_on_destroy" {
 variable "helm_charts" {
   description = "Configuration for each Helm chart: values file path, chart version, and repository URL."
   type = map(object({
-    values          = string  # Helm values
-    chart_version   = string  # version of the chart
-    helm_repository = string  # repository URL or name
+    values          = string # Helm values
+    chart_version   = string # version of the chart
+    helm_repository = string # repository URL or name
   }))
 }
 
 variable "versions" {
   type = object({
-    kubernetes_version          = string  # The version of Kubernetes to use.
-    talos_version               = string  # The version of Talos to use.
-    prometheus_version          = string  # The version of Prometheus to use.
-    external-secrets_version    = string  # The version of External Secrets to use.
+    kubernetes_version       = string # The version of Kubernetes to use.
+    talos_version            = string # The version of Talos to use.
+    prometheus_version       = string # The version of Prometheus to use.
+    external-secrets_version = string # The version of External Secrets to use.
   })
 }
 

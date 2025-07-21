@@ -11,9 +11,9 @@ locals {
   cluster_name     = try(yamldecode(var.talos_cluster_config).clusterName, "talos.local")
   cluster_endpoint = yamldecode(var.talos_cluster_config).controlPlane.endpoint
 
-  extramounts      = [
-    "/var/hpvolumes",     # hostpath-provisioner: https://github.com/kubevirt/hostpath-provisioner-operator/blob/main/deploy/hostpathprovisioner_cr.yaml
-    "/var/lib/longhorn",  # Longhorn: https://longhorn.io/docs/latest/advanced-resources/os-distro-specific/talos-linux-support/
+  extramounts = [
+    "/var/hpvolumes",    # hostpath-provisioner: https://github.com/kubevirt/hostpath-provisioner-operator/blob/main/deploy/hostpathprovisioner_cr.yaml
+    "/var/lib/longhorn", # Longhorn: https://longhorn.io/docs/latest/advanced-resources/os-distro-specific/talos-linux-support/
   ]
 }
 
@@ -68,11 +68,11 @@ data "talos_machine_configuration" "this" {
       TS_AUTHKEY = each.value.talos_config
     }),
     templatefile("${path.module}/resources/talos-patches/ccm.yaml.tftpl", {
-      type       = yamldecode(each.value.talos_config).type
+      type = yamldecode(each.value.talos_config).type
     }),
     templatefile("${path.module}/resources/talos-patches/coredns.yaml.tftpl", {
-      disabled    = true
-      clusterDNS  = "10.96.0.10"
+      disabled   = true
+      clusterDNS = "10.96.0.10"
     }),
     templatefile("${path.module}/resources/talos-patches/spegel.yaml.tftpl", {
     }),
