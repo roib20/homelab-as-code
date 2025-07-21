@@ -20,10 +20,10 @@ pve_acls:
     roles: ["Administrator"]
     groups: ["ops"]
 pve_storages:
-  # - name: localdir
-  #   type: dir
-  #   content: [ "images", "iso", "backup" ]
-  #   path: /plop
+   # - name: localdir
+   #   type: dir
+   #   content: [ "images", "iso", "backup" ]
+   #   path: /plop
   - name: local
     type: dir
     content: ["backup", "iso", "snippets", "vztmpl"]
@@ -34,24 +34,24 @@ pve_storages:
     path: "/var/lib/pve/local-btrfs"
 pve_ssh_port: 22
 # interfaces_template: "interfaces-{{ pve_group }}.j2"
-pve_remove_subscription_warning: true # patches the subscription warning messages in proxmox if you are using the community edition
-pve_extra_packages: [] # Any extra packages you may want to install, e.g. ngrep
-pve_run_system_upgrades: true # Let role perform system upgrades
-pve_run_proxmox_upgrades: true # Let role perform Proxmox VE upgrades
-pve_check_for_kernel_update: true # Runs a script on the host to check kernel versions
-pve_reboot_on_kernel_update: false # If set to true, will automatically reboot the machine on kernel updates
-pve_reboot_on_kernel_update_delay: 60 # Number of seconds to wait before and after a reboot process to proceed with next task in cluster mode
-pve_remove_old_kernels: true # Currently removes kernel from main Debian repository
-pve_pcie_passthrough_enabled: true # Set this to true to enable PCIe passthrough.
-pve_iommu_passthrough_mode: true # Set this to true to allow VMs to bypass the DMA translation. This might increase performance for IOMMU passthrough.
-pve_iommu_unsafe_interrupts: false # Set this to true if your system doesn't support interrupt remapping.
-pve_mediated_devices_enabled: true # Set this to true if your device supports gtv-g and you wish to enable split functionality.
-pve_pcie_ovmf_enabled: true # Set this to true to enable GPU OVMF PCI passthrough.
-pve_pci_device_ids: [] # List of pci device ID's (see https://pve.proxmox.com/wiki/Pci_passthrough#GPU_Passthrough).
-pve_vfio_blacklist_drivers: [] # List of device drivers to blacklist from the Proxmox host (see https://pve.proxmox.com/wiki/PCI(e)_Passthrough).
-pve_pcie_ignore_msrs: false # Set this to true if passing through to Windows machine to prevent VM crashing.
-pve_pcie_report_msrs: true # Set this to false to prevent dmesg system from logging msrs crash reports.
-pve_watchdog: none # Set this to "ipmi" if you want to configure a hardware watchdog. Proxmox uses a software watchdog (nmi_watchdog) by default.
-pve_zfs_enabled: no # Specifies whether or not to install and configure ZFS packages
-pve_ceph_enabled: false # Specifies wheter or not to install and configure Ceph packages.
-# pve_no_log: true # Set this to true in production to prevent leaking of storage credentials in run logs. (may be used in other tasks in the future)
+pve_remove_subscription_warning: true  # patches the subscription warning messages in proxmox if you are using the community edition
+pve_extra_packages: []  # Any extra packages you may want to install, e.g. ngrep
+pve_run_system_upgrades: true  # Let role perform system upgrades
+pve_run_proxmox_upgrades: true  # Let role perform Proxmox VE upgrades
+pve_check_for_kernel_update: true  # Runs a script on the host to check kernel versions
+pve_reboot_on_kernel_update: false  # If set to true, will automatically reboot the machine on kernel updates
+pve_reboot_on_kernel_update_delay: 60  # Number of seconds to wait before and after a reboot process to proceed with next task in cluster mode
+pve_remove_old_kernels: true  # Currently removes kernel from main Debian repository
+pve_pcie_passthrough_enabled: true  # Set this to true to enable PCIe passthrough.
+pve_iommu_passthrough_mode: true  # Set this to true to allow VMs to bypass the DMA translation. This might increase performance for IOMMU passthrough.
+pve_iommu_unsafe_interrupts: false  # Set this to true if your system doesn't support interrupt remapping.
+pve_mediated_devices_enabled: true  # Set this to true if your device supports gtv-g and you wish to enable split functionality.
+pve_pcie_ovmf_enabled: true  # Set this to true to enable GPU OVMF PCI passthrough.
+pve_pci_device_ids: []  # List of pci device ID's (see https://pve.proxmox.com/wiki/Pci_passthrough#GPU_Passthrough).
+pve_vfio_blacklist_drivers: []  # List of device drivers to blacklist from the Proxmox host (see https://pve.proxmox.com/wiki/PCI(e)_Passthrough).
+pve_pcie_ignore_msrs: false  # Set this to true if passing through to Windows machine to prevent VM crashing.
+pve_pcie_report_msrs: true  # Set this to false to prevent dmesg system from logging msrs crash reports.
+pve_watchdog: none  # Set this to "ipmi" if you want to configure a hardware watchdog. Proxmox uses a software watchdog (nmi_watchdog) by default.
+pve_zfs_enabled: false  # Specifies whether or not to install and configure ZFS packages
+pve_ceph_enabled: false  # Specifies wheter or not to install and configure Ceph packages.
+# pve_no_log: true  # Set this to true in production to prevent leaking of storage credentials in run logs. (may be used in other tasks in the future)
