@@ -1,3 +1,4 @@
+---
 - name: Hold packages
   become: true
   ansible.builtin.dpkg_selections:

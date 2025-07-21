@@ -1,3 +1,4 @@
+---
 # Base path for kubernetes resources
 base_path: "{{ playbook_dir }}/../.."
 # Kubernetes manifest configurations

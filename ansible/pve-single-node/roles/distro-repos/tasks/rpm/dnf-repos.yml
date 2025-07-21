@@ -1,3 +1,4 @@
+---
 - name: Add DNF repositories
   when: ansible_distribution == 'Fedora' and ansible_cmdline.ostree is not defined
   become: true

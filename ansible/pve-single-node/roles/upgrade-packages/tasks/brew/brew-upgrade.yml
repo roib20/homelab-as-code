@@ -1,3 +1,4 @@
+---
 # - name: "Homebrew cleanup: `brew cleanup --prune=all`"
 #   ansible.builtin.command: brew cleanup --prune=all
 #   register: brew_cleanup_output

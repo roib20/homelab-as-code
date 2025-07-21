@@ -1,3 +1,4 @@
+---
 flatpak_packages:
   - org.videolan.VLC
 dnf_packages:

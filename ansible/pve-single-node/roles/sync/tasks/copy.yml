@@ -1,3 +1,4 @@
+---
 - name: Create directories if they do not exist
   become: true
   block:

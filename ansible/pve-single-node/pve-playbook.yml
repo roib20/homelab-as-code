@@ -1,3 +1,4 @@
+---
 - name: Proxmox VE Playbook
   hosts: all
   gather_facts: true

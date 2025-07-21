@@ -1,3 +1,4 @@
+---
 # Run with: `mkdir -p "${HOME}/.kube" "${HOME}/.talos" && docker compose run --user "$(id -u):$(id -g)" --rm runner`
 services:
   runner:

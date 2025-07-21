@@ -1,3 +1,4 @@
+---
 - block:
     - name: Get Tailscale status
       command: tailscale status --json

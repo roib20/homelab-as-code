@@ -1,3 +1,4 @@
+---
 name: Build & Sign containers
 on:
   push:

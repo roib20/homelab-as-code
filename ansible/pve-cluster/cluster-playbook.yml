@@ -1,3 +1,4 @@
+---
 - name: Bootstrap nodes over LAN, install Tailscale, then swap to overlay
   hosts: pve
   become: true

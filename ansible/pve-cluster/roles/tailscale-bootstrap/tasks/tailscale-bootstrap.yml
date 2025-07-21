@@ -1,3 +1,4 @@
+---
 - name: Set a hostname (based on inventory alias)
   ansible.builtin.include_role:
     name: hostname

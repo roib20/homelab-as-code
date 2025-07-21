@@ -1,3 +1,4 @@
+---
 - name: Delete API token 'provider' for user 'terraformer@pve'
   when: recreate_token | default(false)
   ansible.builtin.command:

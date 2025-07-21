@@ -1,3 +1,4 @@
+---
 - name: "Grab Bitwarden token from environment"
   set_fact:
     bws_access_token: "{{ lookup('env','BWS_ACCESS_TOKEN') | default('') }}"

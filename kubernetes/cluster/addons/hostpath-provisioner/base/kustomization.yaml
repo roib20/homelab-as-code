@@ -1,3 +1,4 @@
+---
 # hostpath-provisioner-operator: https://github.com/kubevirt/hostpath-provisioner-operator
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization

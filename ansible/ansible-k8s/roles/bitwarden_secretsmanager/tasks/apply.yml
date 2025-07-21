@@ -1,3 +1,4 @@
+---
 # render & apply both templates in-memory
 - name: "Apply the Bitwarden access-token Secret"
   kubernetes.core.k8s:

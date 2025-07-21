@@ -1,3 +1,4 @@
+---
 - name: Check for standalone kustomize
   ansible.builtin.command:
     cmd: which kustomize

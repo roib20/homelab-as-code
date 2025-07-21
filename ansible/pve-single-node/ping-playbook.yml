@@ -1,3 +1,4 @@
+---
 - name: Ping hosts (test)
   hosts: all
   gather_facts: true

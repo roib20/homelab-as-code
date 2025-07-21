@@ -1,3 +1,4 @@
+---
 reloader:
   enableHA: true
   deployment:

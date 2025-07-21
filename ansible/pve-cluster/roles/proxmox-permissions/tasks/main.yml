@@ -1,3 +1,4 @@
+---
 - name: Configure Proxmox API Token Authentication
   become: true
   block:

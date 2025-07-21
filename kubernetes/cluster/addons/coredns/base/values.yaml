@@ -1,3 +1,4 @@
+---
 fullnameOverride: coredns
 image:
   repository: mirror.gcr.io/coredns/coredns

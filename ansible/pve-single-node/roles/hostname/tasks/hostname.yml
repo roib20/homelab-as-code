@@ -1,3 +1,4 @@
+---
 - name: Set a hostname
   become: true
   ansible.builtin.hostname:

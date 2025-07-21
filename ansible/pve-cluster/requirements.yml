@@ -1,3 +1,4 @@
+---
 roles:
   # https://galaxy.ansible.com/ui/standalone/roles/geerlingguy/ntp/
   - name: geerlingguy.ntp

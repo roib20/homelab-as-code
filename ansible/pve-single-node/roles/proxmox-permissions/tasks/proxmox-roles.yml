@@ -1,3 +1,4 @@
+---
 - name: Create role 'Terraforming' with specific privileges
   ansible.builtin.command:
     cmd: >

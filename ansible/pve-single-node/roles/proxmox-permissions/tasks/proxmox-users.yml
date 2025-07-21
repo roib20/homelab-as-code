@@ -1,3 +1,4 @@
+---
 - name: Create Proxmox user 'terraformer@pve'
   ansible.builtin.command:
     cmd: "pveum user add terraformer@pve"

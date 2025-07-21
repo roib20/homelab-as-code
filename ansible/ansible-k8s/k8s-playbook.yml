@@ -1,3 +1,4 @@
+---
 - name: Deploy Kustomize overlays and plain manifests
   hosts: localhost
   gather_facts: false

@@ -1,3 +1,4 @@
+---
 service:
   type: ClusterIP
   ports:

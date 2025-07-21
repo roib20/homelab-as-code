@@ -1,3 +1,4 @@
+---
 apiVersion: networking.cfargotunnel.com/v1alpha2
 kind: ClusterTunnel
 metadata:

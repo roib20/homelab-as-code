@@ -1,3 +1,4 @@
+---
 name: Validate All Terragrunt Stacks and Format HCL+TF Files
 on:
   push:

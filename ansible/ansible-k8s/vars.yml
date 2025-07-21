@@ -1,3 +1,4 @@
+---
 kustomize_overlays:
   - name: cert-manager
     set: addons

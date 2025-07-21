@@ -1,3 +1,4 @@
+---
 - when: ansible_os_family == "Debian"
   block:
     - name: Ensure localisation files for '{{ config_system_locale }}' are available

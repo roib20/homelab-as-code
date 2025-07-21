@@ -1,3 +1,4 @@
+---
 - name: Build manifest paths from configuration
   ansible.builtin.set_fact:
     manifest_files: >-

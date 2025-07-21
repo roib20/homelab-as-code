@@ -1,3 +1,4 @@
+---
 - name: Set a hostname
   hosts: "all"
   gather_facts: true
