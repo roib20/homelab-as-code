@@ -1,0 +1,70 @@
+name: Kustomize Build Validation
+
+on:
+  pull_request:
+    paths:
+      - 'kubernetes/**'
+  push:
+    branches: [main]
+    paths:
+      - 'kubernetes/**'
+      - '.github/workflows/kustomize-build-validation.yml'
+  workflow_dispatch:
+
+jobs:
+  kustomize-build-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      ENV_FILE: "/tmp/env-vars.env"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create test env file
+        env:
+          FQDN_01: "example.com"
+          CF_EMAIL: "test@example.com"
+          CF_ACCOUNT_ID: "1234567890abcdefghijklmnopqrstuvwxyz"
+        shell: sh
+        run: printenv > "${ENV_FILE}"
+
+      - name: Run kustomize build in parallel
+        uses: int128/kustomize-action@v1
+        id: kustomize
+        with:
+          kustomization: kubernetes/**/overlays/*/kustomization.yaml
+          kustomize-build-args: |
+            --enable-helm
+            --load-restrictor=LoadRestrictionsNone
+
+      - name: Copy manifests into workspace
+        if: steps.kustomize.outputs.directory != ''
+        run: |
+          cp -R "${{ steps.kustomize.outputs.directory }}" "${GITHUB_WORKSPACE}/manifests"
+
+      - name: Lint generated Kubernetes manifests
+        id: k8s-lint
+        uses: docker://ghcr.io/yannh/kubeconform:latest
+        with:
+          entrypoint: /kubeconform
+          args: -summary -ignore-missing-schemas -strict -verbose "/github/workspace/manifests"
+
+      - name: Comment on failure
+        if: failure()
+        uses: int128/comment-action@v1
+        with:
+          update-if-exists: replace
+          post: |
+            :x: kustomize error
+            ${{ steps.kustomize.outputs.pretty-errors }}
+
+      - name: Clean up test files
+        if: always()
+        shell: sh
+        run: |
+          rm -f "${ENV_FILE}"
+          if [ -n "${{ steps.kustomize.outputs.directory }}" ]; then
+            rm -rf "${{ steps.kustomize.outputs.directory }}"
+            rm -rf "${GITHUB_WORKSPACE}/manifests"
+          fi
