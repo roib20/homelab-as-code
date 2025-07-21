@@ -3,8 +3,8 @@
 locals {
   virtual_environment_endpoint              = "https://pve:8006/"
   virtual_environment_api_token             = "user@pam!token=00000000-0000-0000-0000-000000000000"
-  virtual_environment_username              = ""
-  virtual_environment_password              = ""
+  virtual_environment_username              = "username"
+  virtual_environment_password              = "password"
   virtual_environment_auth_ticket           = ""
   virtual_environment_csrf_prevention_token = ""
 }
