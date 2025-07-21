@@ -4,16 +4,16 @@ metadata:
   name: app-of-apps
   namespace: argocd
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     name: in-cluster
     namespace: argocd
   ignoreDifferences:
-  - group: argoproj.io
-    jsonPointers:
-    - /status
-    kind: Application
+    - group: argoproj.io
+      jsonPointers:
+        - /status
+      kind: Application
   project: default
   source:
     path: kubernetes/bootstrap

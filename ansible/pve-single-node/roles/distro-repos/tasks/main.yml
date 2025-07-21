@@ -1,9 +1,7 @@
----
 - when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   block:
     - ansible.builtin.include_tasks:
         file: deb/apt-repos.yml
-
 - name: Configure DNF settings for Fedora (non-OSTree)
   when: ansible_distribution == 'Fedora' and ansible_cmdline.ostree is not defined
   block:

@@ -1,6 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 helmCharts:
   - name: base
     repo: oci://gcr.io/istio-release/charts
@@ -10,6 +9,5 @@ helmCharts:
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
       - values-override.yaml
-
 resources:
   - ../../base

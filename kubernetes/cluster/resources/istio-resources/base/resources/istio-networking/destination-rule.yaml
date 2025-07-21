@@ -6,13 +6,13 @@ spec:
   host: "*.svc.cluster.local"
   trafficPolicy:
     portLevelSettings:
-    - port:
-        number: 443
-      tls:
-        mode: SIMPLE
-        insecureSkipVerify: true
-    - port:
-        number: 8443
-      tls:
-        mode: SIMPLE
-        insecureSkipVerify: true
+      - port:
+          number: 443
+        tls:
+          mode: SIMPLE
+          insecureSkipVerify: true
+      - port:
+          number: 8443
+        tls:
+          mode: SIMPLE
+          insecureSkipVerify: true

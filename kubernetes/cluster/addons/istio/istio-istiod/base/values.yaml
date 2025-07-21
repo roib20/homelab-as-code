@@ -2,19 +2,15 @@ global:
   istioNamespace: istio-system
   hub: gcr.io/istio-release
   variant: distroless
-
 autoscaleEnabled: false
 replicaCount: 1
-
 sidecarInjectorWebhook:
   enableNamespacesByDefault: false
-
 meshConfig:
   ingressSelector: ingressgateway
   ingressService: istio-ingressgateway
   enablePrometheusMerge: false
   accessLogFile: ""
-
 env:
   K8S_INGRESS_NS: istio-ingress
   PILOT_ENABLE_ALPHA_GATEWAY_API: true

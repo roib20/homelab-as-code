@@ -1,17 +1,14 @@
----
 - name: Run Terragrunt stack apply and decide changed/ok
   ansible.builtin.command: >
-    {{ terragrunt_bin }} stack run {{ run_action }}
-    --tf-path="{{ tf_bin }}"
-    --non-interactive
-    --log-format json
+    {{ terragrunt_bin }} stack run {{ run_action }} --tf-path="{{ tf_bin }}" --non-interactive --log-format json
+
   args:
     chdir: "{{ terragrunt_stack_dir }}"
   register: tg_result
-
   # The task is “changed” if ANY summary line has a non-zero counter.
   changed_when: >
     (
+
       tg_result.stdout_lines
       | select('match', '^\\{')
       | map('from_json')
@@ -19,3 +16,4 @@
       | rejectattr('msg', 'search', 'Resources: 0 added, 0 changed, 0 destroyed')
       | list
     ) | length > 0
+

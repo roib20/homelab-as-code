@@ -1,5 +1,4 @@
 # TLS Crypto Configuration: https://github.com/kubevirt/hostpath-provisioner-operator?tab=readme-ov-file#tls-crypto-configuration
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:

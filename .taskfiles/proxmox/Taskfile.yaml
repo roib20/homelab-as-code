@@ -1,10 +1,7 @@
----
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
-
 set: [pipefail]
 shopt: [globstar]
-
 tasks:
   setup-cluster:
     desc: Run Ansible VM playbook (prompts for ANSIBLE_PASS)

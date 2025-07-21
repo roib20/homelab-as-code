@@ -28,31 +28,31 @@ controllers:
               secretKeyRef:
                 name: anubis-key
                 key: password
-          # # --- Valkey backend ----------------------------------
-          # # ─── 1️⃣  pull pieces from the operator’s binding Secret ───
-          # - name: VALKEY_HOST
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: valkey-anubis-binding
-          #       key: host               # "anubis-valkey-master.default.svc.cluster.local"
-          # - name: VALKEY_PORT
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: valkey-anubis-binding
-          #       key: port               # "6379"
-          # - name: VALKEY_PASSWORD
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: valkey-anubis-binding
-          #       key: password           # "p9Rjb3x8yYF" (example)
+        # # --- Valkey backend ----------------------------------
+        # # ─── 1️⃣  pull pieces from the operator’s binding Secret ───
+        # - name: VALKEY_HOST
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: valkey-anubis-binding
+        #       key: host               # "anubis-valkey-master.default.svc.cluster.local"
+        # - name: VALKEY_PORT
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: valkey-anubis-binding
+        #       key: port               # "6379"
+        # - name: VALKEY_PASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: valkey-anubis-binding
+        #       key: password           # "p9Rjb3x8yYF" (example)
+        # # ─── 2️⃣  tell Anubis to use Valkey ───
+        # - name: STORE_BACKEND
+        #   value: "valkey"
 
-          # # ─── 2️⃣  tell Anubis to use Valkey ───
-          # - name: STORE_BACKEND
-          #   value: "valkey"
+        # # ─── 3️⃣  build the final URL (K8s expands $(…)) ───
+        # - name: STORE_PARAMETERS_URL
+        #   value: "redis://:$(VALKEY_PASSWORD)@$(VALKEY_HOST):$(VALKEY_PORT)/0"
 
-          # # ─── 3️⃣  build the final URL (K8s expands $(…)) ───
-          # - name: STORE_PARAMETERS_URL
-          #   value: "redis://:$(VALKEY_PASSWORD)@$(VALKEY_HOST):$(VALKEY_PORT)/0"
         resources:
           limits:
             cpu: 750m
@@ -70,7 +70,6 @@ controllers:
               initialDelaySeconds: 10
               periodSeconds: 10
           readiness: *probe
-
 service:
   anubis:
     controller: anubis
@@ -83,7 +82,6 @@ service:
         port: *port
       metrics:
         port: 9090
-
 anubisPodOptions:
   securityContext:
     runAsUser: 1000

@@ -1,4 +1,3 @@
----
 kustomize_overlays:
   - name: cert-manager
     set: addons
@@ -16,7 +15,6 @@ kustomize_overlays:
     set: argo
     overlay: bootstrap
     wait: no
-
 kubernetes_manifests:
   - name: app-of-apps
     file: bootstrap/app-of-apps.yaml

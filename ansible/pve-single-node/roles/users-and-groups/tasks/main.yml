@@ -1,4 +1,3 @@
----
 - ansible.builtin.include_tasks:
     file: groups.yml
 - ansible.builtin.include_tasks:

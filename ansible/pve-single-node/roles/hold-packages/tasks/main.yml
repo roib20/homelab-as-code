@@ -1,9 +1,7 @@
----
 - when: ansible_os_family == "Debian"
   block:
     - ansible.builtin.include_tasks:
         file: deb/apt-hold.yml
-
 - when: ansible_os_family == "RedHat"
   block:
     - ansible.builtin.include_tasks:

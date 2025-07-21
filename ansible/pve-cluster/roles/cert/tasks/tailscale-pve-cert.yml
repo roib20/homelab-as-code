@@ -1,44 +1,41 @@
 - block:
-  - name: Get Tailscale status
-    command: tailscale status --json
-    register: tailscale_status
-    changed_when: false
-
-  - name: Get Tailscale DNS name (without trailing dot)
-    ansible.builtin.set_fact:
-      ts_dns_name: "{{ (tailscale_status.stdout | from_json | community.general.json_query('Self.DNSName')).rstrip('.') }}"
-
+    - name: Get Tailscale status
+      command: tailscale status --json
+      register: tailscale_status
+      changed_when: false
+    - name: Get Tailscale DNS name (without trailing dot)
+      ansible.builtin.set_fact:
+        ts_dns_name: "{{ (tailscale_status.stdout | from_json | community.general.json_query('Self.DNSName')).rstrip('.') }}"
 - name: Check if `pveproxy-ssl.pem` file already exists in the correct path
   ansible.builtin.stat:
     path: "/etc/pve/nodes/{{ inventory_hostname }}/pveproxy-ssl.pem"
   register: pem_file
   changed_when: not pem_file.stat.exists
-
 - when: pem_file.stat.exists and not force_renew_cert
   block:
     - name: Get certificate expiry date
       become: true
       ansible.builtin.command: >
         openssl x509 -in /etc/pve/nodes/{{ inventory_hostname }}/pveproxy-ssl.pem -noout -enddate
+
       register: cert_expiry
       changed_when: false
       failed_when: cert_expiry.rc != 0
-
     - name: Get threshold date ({{ renew_before_expiry_days }} days from now)
       ansible.builtin.command: >
         date -d "+{{ renew_before_expiry_days }} days" --utc +%Y-%m-%dT%H:%M:%SZ
+
       register: expiry_threshold
       changed_when: false
-
     - name: Check if certificate is expiring (within {{ renew_before_expiry_days }} days)
       ansible.builtin.set_fact:
         pem_expired: >-
           {{
+
             (cert_expiry.stdout | regex_replace('^notAfter=', '') | to_datetime('%b %d %H:%M:%S %Y %Z')) <
             (expiry_threshold.stdout | to_datetime('%Y-%m-%dT%H:%M:%SZ'))
           }}
       changed_when: pem_expired
-
 - name: Generate and install new certificate if missing or expiring
   become: true
   when: force_renew_cert or not pem_file.stat.exists or pem_expired

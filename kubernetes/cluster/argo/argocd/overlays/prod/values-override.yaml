@@ -1,15 +1,14 @@
 server:
-# Ingress
+  # Ingress
   ingress:
     enabled: true
     ingressClassName: tailscale
     extraTls:
       - hosts:
-        - argocd
-
+          - argocd
   ingressGrpc:
     enabled: true
     ingressClassName: tailscale
     extraTls:
       - hosts:
-        - argocd-grpc
+          - argocd-grpc

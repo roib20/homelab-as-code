@@ -6,21 +6,21 @@ metadata:
     app.kubernetes.io/part-of: argocd
 spec:
   parentRefs:
-  - group: gateway.networking.k8s.io
-    kind: Gateway
-    name: http-gateway-api
-    namespace: istio-ingress
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: istio-ingress
   hostnames:
-  - "argocd.${FQDN_01}"
+    - "argocd.${FQDN_01}"
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /api/webhook
-    backendRefs:
-    - group: ''
-      kind: Service
-      name: argocd-server
-      namespace: argocd
-      port: 443
-      weight: 1
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/webhook
+      backendRefs:
+        - group: ''
+          kind: Service
+          name: argocd-server
+          namespace: argocd
+          port: 443
+          weight: 1

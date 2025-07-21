@@ -1,10 +1,7 @@
----
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
-
 set: [pipefail]
 shopt: [globstar]
-
 tasks:
   versions:
     desc: "Check current versions of all components"
@@ -25,7 +22,6 @@ tasks:
       - terragrunt --version 2>/dev/null || echo "Terragrunt not available"
       - tofu version 2>/dev/null || echo "OpenTofu not available"
       - ansible --version 2>/dev/null | head -1 || echo "Ansible not available"
-
   tools:
     desc: "Check if required tools are installed"
     cmds:
@@ -40,7 +36,6 @@ tasks:
       - which curl || echo "❌ curl not found"
       - which jq || echo "❌ jq not found"
       - echo "✅ Tool check completed"
-
   env:
     desc: "Check environment variables and configuration"
     cmds:
@@ -52,7 +47,6 @@ tasks:
       - test -d "{{.TERRAGRUNT_DIR}}" && echo "✅ Terragrunt directory exists" || echo "❌ Terragrunt directory missing"
       - test -d "{{.ANSIBLE_DIR}}" && echo "✅ Ansible directory exists" || echo "❌ Ansible directory missing"
       - test -f "{{.ROOT_DIR}}/docker-bake.hcl" && echo "✅ Docker bake config exists" || echo "❌ Docker bake config missing"
-
   all:
     desc: "Run all info checks (tools, environment, versions)"
     cmds:

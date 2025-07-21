@@ -1,24 +1,18 @@
 # HA mode
 redis-ha:
   enabled: true
-
 controller:
   replicas: 1
-
 server:
   replicas: 2
-
 applicationSet:
   replicas: 2
-
 repoServer:
   replicas: 2
-
   # Mount env-vars
   envFrom:
     - secretRef:
         name: env-vars
-
   lifecycle:
     postStart:
       exec:
@@ -29,13 +23,11 @@ repoServer:
             mkdir -p /tmp
             # grab only env_ vars, strip the prefix, write key=value lines
             printenv | grep '^env_' | sed 's/^env_//' > /tmp/env-vars.env
-
 configs:
-# argocd-cm
+  # argocd-cm
   cm:
     # Kustomize build options
     kustomize.buildOptions: "--enable-helm --load-restrictor=LoadRestrictionsNone"
-    
     # Troubleshooting Cilium deployed with Argo CD: https://docs.cilium.io/en/latest/configuration/argocd-issues/
     # Ignore some Istio differences
     ignoreDifferences:
@@ -70,7 +62,6 @@ configs:
         jsonPointers:
           - /webhooks/0/failurePolicy
           - /webhooks/1/failurePolicy
-
     # Ignore Health for Ingress resources that lack an ADDRESS value
     resource.customizations: |
       networking.k8s.io/Ingress:

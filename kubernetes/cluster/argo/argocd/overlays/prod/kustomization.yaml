@@ -1,11 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
   - ../../base
   - argocd-server-webhook-httproute.yaml
   - git-webhook.yaml.externalsecret
-
 helmCharts:
   - name: argo-cd
     repo: oci://ghcr.io/argoproj/argo-helm
@@ -16,11 +14,9 @@ helmCharts:
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-
 configMapGenerator:
   - name: env-vars
     envs:
       - /tmp/env-vars.env
-
 replacements:
   - path: replacements.yaml

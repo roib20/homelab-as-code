@@ -9,11 +9,11 @@ spec:
     default_directives: default
     directives_map:
       default:
-      - Include @demo-conf
-      - SecDebugLogLevel 9
-      - SecRuleEngine On
-      - Include @crs-setup-conf
-      - Include @owasp_crs/*.conf
+        - Include @demo-conf
+        - SecDebugLogLevel 9
+        - SecRuleEngine On
+        - Include @crs-setup-conf
+        - Include @owasp_crs/*.conf
   selector:
     matchLabels:
       app: istio-ingressgateway

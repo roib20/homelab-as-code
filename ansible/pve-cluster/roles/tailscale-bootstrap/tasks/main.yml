@@ -1,3 +1,2 @@
----
 - ansible.builtin.include_tasks:
     file: tailscale-bootstrap.yml

@@ -20,7 +20,6 @@ controllers:
             memory: 90Mi
           limits:
             memory: 2Gi
-
         probes:
           liveness: &probe
             enabled: true
@@ -37,7 +36,6 @@ controllers:
           readiness: *probe
           startup:
             enabled: false
-
 configMaps:
   kanidm-config:
     enabled: true
@@ -56,14 +54,12 @@ configMaps:
         path = "/data/kanidm/backups/"
         schedule = "0 00 2 * * * *"
         versions = 1
-
 service:
   kanidm:
     controller: kanidm
     ports:
       http:
         port: *port
-
 ingress:
   kanidm:
     enabled: true
@@ -81,14 +77,12 @@ ingress:
     tls:
       - hosts:
           - "*.${FQDN_01}"
-
 defaultPodOptions:
   securityContext:
     runAsUser: 389
     runAsGroup: 389
     fsGroup: 389
     fsGroupChangePolicy: "OnRootMismatch"
-
 persistence:
   data:
     size: 20Gi

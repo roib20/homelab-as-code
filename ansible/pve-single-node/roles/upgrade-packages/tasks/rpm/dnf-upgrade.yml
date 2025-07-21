@@ -1,4 +1,3 @@
----
 - name: "Upgrade DNF packages: `sudo dnf upgrade --refresh`"
   become: true
   ansible.builtin.dnf:

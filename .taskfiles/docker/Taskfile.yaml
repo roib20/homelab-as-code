@@ -1,14 +1,10 @@
----
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
-
 set: [pipefail]
 shopt: [globstar]
-
 vars:
   IMAGE_NAME: 'homelab-as-code-runner'
   COMPOSE_FILE: '{{.ROOT_DIR}}/compose.yaml'
-
 tasks:
   build:
     desc: "Build local container image"
@@ -19,7 +15,6 @@ tasks:
         msg: "Docker is required"
       - sh: test -f docker-bake.hcl
         msg: "docker-bake.hcl not found"
-
   push:
     desc: "Build and push multi-arch container image"
     dir: "{{.ROOT_DIR}}"
@@ -29,7 +24,6 @@ tasks:
         msg: "Docker is required"
       - sh: test -f docker-bake.hcl
         msg: "docker-bake.hcl not found"
-
   run:
     desc: "Run container with proper mounts and user"
     dir: "{{.ROOT_DIR}}"
@@ -41,7 +35,6 @@ tasks:
         msg: "Docker is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
-
   shell:
     desc: "Interactive shell in container"
     dir: "{{.ROOT_DIR}}"
@@ -53,7 +46,6 @@ tasks:
         msg: "Docker is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
-
   clean:
     desc: "Clean up container images and build cache"
     prompt: "This will remove container images and build cache. Continue?"
@@ -64,7 +56,6 @@ tasks:
     preconditions:
       - sh: which docker
         msg: "Docker is required"
-
   logs:
     desc: "View container logs"
     cmd: docker compose logs -f runner
@@ -73,7 +64,6 @@ tasks:
         msg: "Docker is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
-
   status:
     desc: "Show container and image status"
     cmds:
@@ -88,7 +78,6 @@ tasks:
     preconditions:
       - sh: which docker
         msg: "Docker is required"
-
   info:
     desc: "Show Docker configuration and system info"
     cmds:

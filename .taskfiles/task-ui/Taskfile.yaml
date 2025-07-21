@@ -1,20 +1,15 @@
----
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
-
 set: [pipefail]
 shopt: [globstar]
-
 vars:
   COMPOSE_FILE: '{{.ROOT_DIR}}/compose.yaml'
-
 tasks:
   start:
     desc: "Start Task UI and expose via Tailscale"
     cmds:
       - task: up
       - task: serve
-
   up:
     desc: "Start Task UI web interface (http://localhost:3000)"
     dir: "{{.ROOT_DIR}}"
@@ -26,7 +21,6 @@ tasks:
         msg: "Docker Compose is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
-
   stop:
     desc: "Stop Task UI web interface"
     dir: "{{.ROOT_DIR}}"
@@ -38,7 +32,6 @@ tasks:
         msg: "Docker Compose is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
-
   down:
     desc: "Stop Task UI web interface"
     dir: "{{.ROOT_DIR}}"
@@ -51,7 +44,6 @@ tasks:
         msg: "Docker Compose is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
-
   logs:
     desc: "View Task UI logs"
     dir: "{{.ROOT_DIR}}"
@@ -63,7 +55,6 @@ tasks:
         msg: "Docker Compose is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
-
   status:
     desc: "Check Task UI status"
     dir: "{{.ROOT_DIR}}"
@@ -75,21 +66,18 @@ tasks:
         msg: "Docker Compose is required"
       - sh: test -f "{{.COMPOSE_FILE}}"
         msg: "compose.yaml not found"
-
   serve:
     desc: "Expose Task UI via Tailscale serve"
     cmd: sudo tailscale serve --yes --https=443 --bg 3000
     preconditions:
       - sh: which tailscale
         msg: "Tailscale is required"
-
   serve-off:
     desc: "Disable Tailscale serve for Task UI"
     cmd: sudo tailscale serve --yes --https=443 off
     preconditions:
       - sh: which tailscale
         msg: "Tailscale is required"
-
   teardown:
     desc: "Stop Task UI and disable Tailscale serve"
     cmds:

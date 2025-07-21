@@ -1,20 +1,18 @@
----
 - name: Create directories if they do not exist
   become: true
   block:
-  - ansible.builtin.file:
-      path: "/etc/apt/apt.conf.d"
-      state: directory
-      mode: "0755"
-      owner: "root"
-      group: "root"
-
+    - ansible.builtin.file:
+        path: "/etc/apt/apt.conf.d"
+        state: directory
+        mode: "0755"
+        owner: "root"
+        group: "root"
 - name: Sync agent configurations (copy)
   become: true
   block:
-  - ansible.builtin.copy:
-      src: "files/etc/apt/apt.conf.d/no-nag-script"
-      dest: "/etc/apt/apt.conf.d/no-nag-script"
-      mode: "0644"
-      owner: "root"
-      group: "root"
+    - ansible.builtin.copy:
+        src: "files/etc/apt/apt.conf.d/no-nag-script"
+        dest: "/etc/apt/apt.conf.d/no-nag-script"
+        mode: "0644"
+        owner: "root"
+        group: "root"

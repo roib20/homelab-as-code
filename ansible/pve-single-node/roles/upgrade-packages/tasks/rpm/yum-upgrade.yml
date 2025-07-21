@@ -1,4 +1,3 @@
----
 - name: "Upgrade YUM packages"
   become: true
   ansible.builtin.yum:

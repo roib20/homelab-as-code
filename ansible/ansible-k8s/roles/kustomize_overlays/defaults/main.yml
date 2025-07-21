@@ -1,10 +1,7 @@
----
 # Base path for kubernetes resources
 base_path: "{{ playbook_dir }}/../.."
-
 # List of kustomize overlay configurations
 kustomize_overlays: []
-
 # Default wait settings for kustomize overlays
 default_wait: yes
 default_wait_timeout: 300

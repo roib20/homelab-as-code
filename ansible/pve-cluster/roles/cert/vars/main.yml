@@ -1,3 +1,2 @@
----
 renew_before_expiry_days: 7
 force_renew_cert: false

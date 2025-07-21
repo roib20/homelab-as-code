@@ -1,4 +1,3 @@
----
 - name: "Upgrade packages"
   become: true
   ansible.builtin.package:

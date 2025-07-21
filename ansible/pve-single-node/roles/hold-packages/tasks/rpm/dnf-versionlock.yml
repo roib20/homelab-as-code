@@ -1,4 +1,3 @@
----
 - name: Prevent packages from being updated
   become: true
   community.general.dnf_versionlock:

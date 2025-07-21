@@ -1,4 +1,3 @@
----
 pve_group: pve
 pve_watchdog: none
 # pve_ssl_private_key: "{{ lookup('file', pve_group + '/' + inventory_hostname + '.key') }}"
@@ -14,11 +13,11 @@ pve_users:
     email: admin1@lab.local
     firstname: Admin
     lastname: User 1
-    groups: [ "ops" ]
+    groups: ["ops"]
 pve_acls:
   - path: /
-    roles: [ "Administrator" ]
-    groups: [ "ops" ]
+    roles: ["Administrator"]
+    groups: ["ops"]
 pve_storages:
   # - name: localdir
   #   type: dir
@@ -26,14 +25,13 @@ pve_storages:
   #   path: /plop
   - name: local
     type: dir
-    content: [ "backup", "iso", "snippets", "vztmpl" ]
+    content: ["backup", "iso", "snippets", "vztmpl"]
     path: "/var/lib/vz"
   - name: local-btrfs
     type: btrfs
-    content: [ "backup", "images", "iso", "snippets", "rootdir", "vztmpl" ]
+    content: ["backup", "images", "iso", "snippets", "rootdir", "vztmpl"]
     path: "/var/lib/pve/local-btrfs"
 pve_ssh_port: 22
-
 # interfaces_template: "interfaces-{{ pve_group }}.j2"
 pve_remove_subscription_warning: true # patches the subscription warning messages in proxmox if you are using the community edition
 pve_extra_packages: [] # Any extra packages you may want to install, e.g. ngrep

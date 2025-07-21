@@ -1,4 +1,3 @@
----
 - name: "Upgrade APT packages: `sudo apt-get update && sudo aptitude safe-upgrade`"
   become: true
   ansible.builtin.apt:

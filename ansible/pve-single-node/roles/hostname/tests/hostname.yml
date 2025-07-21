@@ -1,8 +1,6 @@
----
 - name: Set a hostname
   hosts: "all"
   gather_facts: true
-
   tasks:
     - name: Set a hostname
       ansible.builtin.include_role:

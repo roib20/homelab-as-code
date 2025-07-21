@@ -1,17 +1,13 @@
----
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
-
 set: [pipefail]
 shopt: [globstar]
-
 tasks:
   default:
     desc: "Get Argo CD admin password and start port-forward"
     cmds:
       - task: password
       - task: port-forward
-
   password:
     desc: "Get Argo CD initial admin password"
     cmds:
@@ -26,7 +22,6 @@ tasks:
         msg: "Argo CD namespace not found. Run 'task cluster:up' first."
       - sh: kubectl get secret argocd-initial-admin-secret -n argocd >/dev/null 2>&1
         msg: "Argo CD initial admin secret not found. Password may have been reset or deleted."
-
   port-forward:
     desc: "Start port-forward to Argo CD server"
     cmds:
@@ -41,7 +36,6 @@ tasks:
         msg: "Argo CD namespace not found. Run 'task cluster:up' first."
       - sh: kubectl get svc argocd-server -n argocd >/dev/null 2>&1
         msg: "Argo CD server service not found. Check if Argo CD is properly installed."
-
   reset-password:
     desc: "Reset Argo CD admin password (3-step process)"
     cmds:
@@ -69,7 +63,6 @@ tasks:
         msg: "Argo CD namespace not found. Run 'task cluster:up' first."
       - sh: kubectl get secret argocd-initial-admin-secret -n argocd >/dev/null 2>&1
         msg: "Argo CD initial admin secret not found. Password may have been reset or deleted."
-
   delete-initial-secret:
     desc: "Delete the initial admin secret"
     cmds:
@@ -84,7 +77,6 @@ tasks:
         msg: "Argo CD namespace not found. Run 'task cluster:up' first."
       - sh: kubectl get secret argocd-initial-admin-secret -n argocd >/dev/null 2>&1
         msg: "Argo CD initial admin secret not found. Password may have been reset or deleted."
-
   disable-sync:
     desc: "Disable Argo CD sync by scaling application controller down"
     cmds:
@@ -99,7 +91,6 @@ tasks:
         msg: "Argo CD namespace not found. Run 'task cluster:up' first."
       - sh: kubectl get statefulset argocd-application-controller -n argocd >/dev/null 2>&1
         msg: "Argo CD application controller not found. Check if Argo CD is properly installed."
-
   enable-sync:
     desc: "Enable Argo CD sync by scaling application controller up"
     cmds:

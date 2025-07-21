@@ -13,10 +13,10 @@ spec:
     accountName: "${CF_EMAIL}"
     accountId: "${CF_ACCOUNT_ID}"
   deployPatch: |
-      spec:
-        replicas: 2
-        template:
-          spec:
-            containers:
-              - name: cloudflared
-                image: cloudflare/cloudflared:2025.7.0
+    spec:
+      replicas: 2
+      template:
+        spec:
+          containers:
+            - name: cloudflared
+              image: cloudflare/cloudflared:2025.7.0

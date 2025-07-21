@@ -1,10 +1,7 @@
----
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
-
 set: [pipefail]
 shopt: [globstar]
-
 tasks:
   clean:
     desc: "Delete all Cloudflare operator resources (tunnels and DNS)"
@@ -26,7 +23,6 @@ tasks:
         msg: "kubectl is required"
       - sh: kubectl api-resources --api-group=networking.cfargotunnel.com
         msg: "cloudflare-operator CRDs not found - is cloudflare-operator installed?"
-
   clean-dryrun:
     desc: "Show what Cloudflare operator resources would be deleted (dry run)"
     cmds:
@@ -53,7 +49,6 @@ tasks:
         msg: "kubectl is required"
       - sh: kubectl api-resources --api-group=networking.cfargotunnel.com
         msg: "cloudflare-operator CRDs not found - is cloudflare-operator installed?"
-
   list:
     desc: "List all Cloudflare operator resources"
     cmds:
@@ -76,7 +71,6 @@ tasks:
         msg: "kubectl is required"
       - sh: kubectl api-resources --api-group=networking.cfargotunnel.com
         msg: "cloudflare-operator CRDs not found - is cloudflare-operator installed?"
-
   status:
     desc: "Show status of Cloudflare operator and resources"
     cmds:
@@ -95,7 +89,6 @@ tasks:
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
-
   info:
     desc: "Show Cloudflare operator information and available resources"
     cmds:
