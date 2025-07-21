@@ -13,10 +13,16 @@ spec:
         ":authority":
           regex: "(.*)"
     route:
+    # Routing protected by Anubis
     - destination:
         host: anubis.anubis.svc.cluster.local
         port:
           number: 8923
+    # # Direct routing with TLS termination
+    # - destination:
+    #     host: istio-ingressgateway.istio-ingress.svc.cluster.local
+    #     port:
+    #       number: 80
       headers:
         request:
           set:
