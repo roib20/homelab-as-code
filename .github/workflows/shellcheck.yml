@@ -10,6 +10,7 @@ name: ShellCheck
     paths:
       - '**/*.sh'
       - '.github/workflows/shellcheck.yml'
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
