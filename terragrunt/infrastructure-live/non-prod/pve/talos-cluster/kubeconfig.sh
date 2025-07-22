@@ -13,6 +13,5 @@ terragrunt stack output --json | jq -r '."talos-cluster".talosconfig_raw' > ~/.t
 chmod 600 ~/.talos/config
 
 echo "Configs written:"
-echo "~/.kube/config (kubeconfig)"
-echo "~/.talos/config (talosconfig)"
-
+echo "$HOME/.kube/config (kubeconfig)"
+echo "$HOME/.talos/config (talosconfig)"
