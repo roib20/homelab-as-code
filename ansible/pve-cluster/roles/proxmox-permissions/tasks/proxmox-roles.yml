@@ -1,8 +1,9 @@
+---
 - name: Create role 'Terraforming' with specific privileges
   ansible.builtin.command:
     cmd: >
-      pveum role add Terraforming -privs
-      "Datastore.Allocate Datastore.AllocateSpace Datastore.AllocateTemplate Datastore.Audit
+      pveum role add Terraforming -privs "Datastore.Allocate Datastore.AllocateSpace Datastore.AllocateTemplate Datastore.Audit
+
         Pool.Allocate Sys.Audit Sys.Console Sys.Modify SDN.Use VM.Allocate VM.Audit VM.Clone
         VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType
         VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.Monitor
@@ -10,12 +11,10 @@
   register: role_add_result
   failed_when: role_add_result.rc != 0 and 'already exists' not in role_add_result.stderr
   changed_when: "'already exists' not in role_add_result.stderr"
-
 - name: Check if role 'Terraforming' is already assigned to 'terraformer@pve'
   ansible.builtin.command: "pveum acl list"
   register: current_acls
   changed_when: false
-
 - name: Assign role 'Terraforming' to user 'terraformer@pve' on root '/'
   ansible.builtin.command:
     cmd: "pveum aclmod / -user terraformer@pve -role Terraforming"

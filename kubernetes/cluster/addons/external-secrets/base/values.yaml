@@ -1,3 +1,4 @@
+---
 installCRDs: false
 bitwarden-sdk-server:
   enabled: true
@@ -12,7 +13,6 @@ bitwarden-sdk-server:
   securityContext:
     seccompProfile:
       type: RuntimeDefault
-
 webhook:
   lookaheadInterval: "1h"
   certManager:

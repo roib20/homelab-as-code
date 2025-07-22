@@ -17,7 +17,6 @@ services:
     # Used for file ownership for files created inside the container
     user: "${UID:-1000}:${GID:-1000}"
     command: ["/bin/bash"]
-  
   task-ui:
     image: homelab-as-code-runner:latest
     pull_policy: missing

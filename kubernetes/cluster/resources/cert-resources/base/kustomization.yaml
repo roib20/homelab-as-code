@@ -1,15 +1,13 @@
+---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
   # Namespaces
   - resources/namespaces/cert-manager-ns.yaml
   - resources/namespaces/bitwarden-ns.yaml
   - resources/namespaces/external-secrets-ns.yaml
-
   # Bitwarden Certificates
   - resources/issuers/bitwarden-issuer.yaml
   - resources/certificates/bitwarden-certificate.yaml
-
   # External Secrets Issuer
   - resources/issuers/external-secrets-issuer.yaml

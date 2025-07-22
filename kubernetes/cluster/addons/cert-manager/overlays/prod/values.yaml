@@ -1,3 +1,4 @@
+---
 # extraArgs:
 #   - --enable-certificate-owner-ref=true
 prometheus:

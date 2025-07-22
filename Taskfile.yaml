@@ -1,17 +1,14 @@
 ---
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
-
 set: [pipefail]
 shopt: [globstar]
 dotenv: [".env"]
-
 vars:
   ANSIBLE_DIR: '{{.ROOT_DIR}}/ansible'
   TERRAGRUNT_DIR: '{{.ROOT_DIR}}/terragrunt/infrastructure-live'
   TERRAGRUNT_ENV: 'non-prod'
   PVE_NODE: 'pve'
-
 # ── include sub‑taskfiles ────────────────────────────────────────────────────
 includes:
   # Info and utilities
@@ -26,7 +23,6 @@ includes:
   talos: .taskfiles/talos
   proxmox: .taskfiles/proxmox
   argocd: .taskfiles/argocd
-
 tasks:
   default:
     desc: List all available tasks (root + included)

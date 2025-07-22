@@ -1,43 +1,38 @@
-  - name: Set a hostname (based on inventory alias)
-    ansible.builtin.include_role:
-      name: hostname
-
-  - name: Install and login into Tailscale
-    ansible.builtin.include_role:
-      name: artis3n.tailscale.machine
-    vars:
-      tailscale_authkey: "{{ lookup('env', TS_KEY') }}"
-      state: latest
-      verbose: true
-
-  - name: Gather the generated Tailscale facts
-    ansible.builtin.setup:
-      filter: '^tailscale_'
-
-  - name: Render new inventory pointing to Tailscale hostnames
-    delegate_to: localhost
-    run_once: true
-    become_user: "{{ current_user }}"
-    vars:
-      pve_groups: ["pve"]
-    ansible.builtin.template:
-      src: "{{ playbook_dir }}/templates/inventory_tailscale.yml.j2"
-      dest: "{{ inventory_to_overwrite }}"
-      mode: "0644"
-
-  - name: DEBUG — show Tailscale facts per host
-    ansible.builtin.debug:
-      msg: |
-        Host: {{ inventory_hostname }}
-        tailscale_node_hostname_full: {{ hostvars[inventory_hostname].tailscale_node_hostname_full | default('MISSING') }}
-        tailscale_node_ipv4: {{ hostvars[inventory_hostname].tailscale_node_ipv4 | default('MISSING') }}
-        tailscale_node_hostname_short: {{ hostvars[inventory_hostname].tailscale_node_hostname_short | default('MISSING') }}
-
-  - name: Refresh inventory in order to use Tailscale hostnames
-    ansible.builtin.meta: refresh_inventory
-    delegate_to: localhost
-    run_once: true
-
-  - name: Show Tailscale connection used
-    ansible.builtin.debug:
-      msg: "Now using {{ ansible_host }} to connect to {{ inventory_hostname }}"
+---
+- name: Set a hostname (based on inventory alias)
+  ansible.builtin.include_role:
+    name: hostname
+- name: Install and login into Tailscale
+  ansible.builtin.include_role:
+    name: artis3n.tailscale.machine
+  vars:
+    tailscale_authkey: "{{ lookup('env', TS_KEY') }}"
+    state: latest
+    verbose: true
+- name: Gather the generated Tailscale facts
+  ansible.builtin.setup:
+    filter: '^tailscale_'
+- name: Render new inventory pointing to Tailscale hostnames
+  delegate_to: localhost
+  run_once: true
+  become_user: "{{ current_user }}"
+  vars:
+    pve_groups: ["pve"]
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/templates/inventory_tailscale.yml.j2"
+    dest: "{{ inventory_to_overwrite }}"
+    mode: "0644"
+- name: DEBUG — show Tailscale facts per host
+  ansible.builtin.debug:
+    msg: |
+      Host: {{ inventory_hostname }}
+      tailscale_node_hostname_full: {{ hostvars[inventory_hostname].tailscale_node_hostname_full | default('MISSING') }}
+      tailscale_node_ipv4: {{ hostvars[inventory_hostname].tailscale_node_ipv4 | default('MISSING') }}
+      tailscale_node_hostname_short: {{ hostvars[inventory_hostname].tailscale_node_hostname_short | default('MISSING') }}
+- name: Refresh inventory in order to use Tailscale hostnames
+  ansible.builtin.meta: refresh_inventory
+  delegate_to: localhost
+  run_once: true
+- name: Show Tailscale connection used
+  ansible.builtin.debug:
+    msg: "Now using {{ ansible_host }} to connect to {{ inventory_hostname }}"

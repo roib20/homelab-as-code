@@ -2,7 +2,6 @@
 - name: Ping hosts (test)
   hosts: all
   gather_facts: true
-
   tasks:
-  - name: Example from an Ansible Playbook
-    ansible.builtin.ping:
+    - name: Example from an Ansible Playbook
+      ansible.builtin.ping:

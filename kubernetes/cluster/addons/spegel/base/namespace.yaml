@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -9,7 +10,6 @@ metadata:
     # (optional but recommended) keep audit / warn in sync
     pod-security.kubernetes.io/audit: privileged
     pod-security.kubernetes.io/warn: privileged
-
     # Pin the PSA rule set to whatever K8s minor you run, or “latest”.
     # Omitting these lines makes the API use the cluster’s current version.
     pod-security.kubernetes.io/enforce-version: latest

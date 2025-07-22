@@ -1,7 +1,6 @@
 ---
 name: Validate All Terragrunt Stacks and Format HCL+TF Files
-
-on:
+'on':
   push:
     branches: [main]
     paths:
@@ -13,18 +12,14 @@ on:
       - '**/*.hcl.example'
       - '.github/workflows/terragrunt-validate-and-fmt.yml'
   workflow_dispatch:
-
 jobs:
   validate-and-fmt:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Install Terragrunt & OpenTofu
         uses: gruntwork-io/terragrunt-action@v3
-
       - name: Create test `account.hcl` files from examples
         shell: sh
         run: |
@@ -35,13 +30,11 @@ jobs:
               echo "Created $account_file from $example_file"
             fi
           done
-
       - name: Create test SSH key
         shell: sh
         run: |
           mkdir -p "${HOME}/.ssh"
           ssh-keygen -t rsa -b 4096 -f "${HOME}/.ssh/id_rsa" -N "" -C "runner@$(hostname)"
-
       - name: Validate all Terragrunt Stacks
         env:
           BWS_ACCESS_TOKEN: "123"
@@ -49,12 +42,10 @@ jobs:
         run: |
           find . -type f -name "terragrunt.stack.hcl" \
           | xargs -I {} sh -c 'terragrunt --working-dir="$(dirname "{}")" stack run --config="terragrunt.stack.hcl" validate'
-
       - name: Check formatting for all HCL files (including `docker-bake.hcl` files)
         shell: sh
         run: |
           terragrunt hcl fmt --check
-
       - name: Check formatting for all tf files
         shell: sh
         run: |

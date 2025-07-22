@@ -2,21 +2,18 @@
 - name: "Grab Bitwarden token from environment"
   set_fact:
     bws_access_token: "{{ lookup('env','BWS_ACCESS_TOKEN') | default('') }}"
-
 - name: "Assert BWS_ACCESS_TOKEN is set"
   assert:
     that:
       - bws_access_token is defined
       - (bws_access_token | default('') | length) > 0
     fail_msg: "Environment variable BWS_ACCESS_TOKEN must be set before running this role."
-
 - name: "Assert organization_id is defined"
   assert:
     that:
       - organization_id is defined
       - (organization_id | default('') | length) > 0
     fail_msg: "organization_id must be defined"
-
 - name: "Assert project_id is defined"
   assert:
     that:

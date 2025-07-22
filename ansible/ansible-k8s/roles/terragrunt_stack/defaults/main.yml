@@ -1,12 +1,9 @@
 ---
 # Directory that contains the Terragrunt Stack to run
 terragrunt_stack_dir: "../../terragrunt/infrastructure-live/non-prod/pve/bootstrap-k8s-secrets"
-
 # Terragrunt binary to execute
 terragrunt_bin: "terragrunt"
-
 # Action to run with `terragrunt stack run ACTION`
 run_action: "apply"
-
 # OpenTofu/Terraform binary to use with Terragrunt
 tf_bin: "tofu"

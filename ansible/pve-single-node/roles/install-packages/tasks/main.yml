@@ -8,7 +8,6 @@
       ansible.builtin.package:
         name: "{{ apt_packages }}"
         state: latest
-
     - name: Install DNF packages
       become: true
       when: ansible_distribution == 'Fedora' and ansible_cmdline.ostree is not defined

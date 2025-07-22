@@ -1,3 +1,4 @@
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -13,13 +14,13 @@ spec:
     - host: "argocd.${FQDN_01}"
       http:
         paths:
-          - path: /api/webhook      # ← only this route is public
+          - path: /api/webhook  # ← only this route is public
             pathType: Prefix
             backend:
               service:
-                name: argocd-server # default service shipped by the chart
+                name: argocd-server  # default service shipped by the chart
                 port:
-                  name: https       # forwards to 443 inside the cluster
+                  name: https  # forwards to 443 inside the cluster
   tls:
     - hosts:
         - "*.${FQDN_01}"

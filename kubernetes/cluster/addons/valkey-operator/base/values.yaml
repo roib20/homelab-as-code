@@ -1,3 +1,4 @@
+---
 webhook:
   certManager:
     # -- Whether to use cert-manager to manage webhook tls
@@ -8,7 +9,6 @@ webhook:
     issuerKind: ""
     # -- Issuer name (only relevant if enabled is true; if unset, a self-signed issuer is used)
     issuerName: ""
-
 metrics:
   podMonitor:
     # -- Whether to create a PodMonitor resource

@@ -1,11 +1,8 @@
 ---
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
-
 set: [pipefail]
 shopt: [globstar]
-
-
 tasks:
   up:
     desc: "Provision the non-prod cluster end-to-end"
@@ -20,7 +17,6 @@ tasks:
         msg: "tofu is required"
       - sh: which ansible-playbook
         msg: "ansible-playbook is required"
-
   down:
     desc: "⚠️  DESTROY cluster with confirmation"
     prompt: "This will DESTROY the entire cluster and clean Cloudflare resources. Are you sure?"
@@ -40,7 +36,6 @@ tasks:
         msg: "tofu is required"
       - sh: test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster/terragrunt.stack.hcl"
         msg: "Terragrunt stack config not found"
-
   down-dryrun:
     desc: "Show what would be destroyed (dry run)"
     cmds:
@@ -58,7 +53,6 @@ tasks:
         msg: "tofu is required"
       - sh: test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/talos-cluster/terragrunt.stack.hcl"
         msg: "Terragrunt stack config not found"
-
   rebuild:
     desc: "Destroy and rebuild cluster for rapid testing"
     cmds:
@@ -71,7 +65,6 @@ tasks:
         msg: "tofu is required"
       - sh: which ansible-playbook
         msg: "ansible-playbook is required"
-
   status:
     desc: "Check cluster health and status"
     cmds:
@@ -84,7 +77,6 @@ tasks:
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
-
   info:
     desc: "Show cluster information and ArgoCD access details"
     cmds:
@@ -104,4 +96,3 @@ tasks:
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
-

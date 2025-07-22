@@ -1,34 +1,35 @@
+---
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
   name: bridge-virtualservice
 spec:
   hosts:
-  - "*"
+    - "*"
   gateways:
-  - tls-gateway
+    - tls-gateway
   http:
-  - match:
-    - headers:
-        ":authority":
-          regex: "(.*)"
-    route:
-    # Routing protected by Anubis
-    - destination:
-        host: anubis.anubis.svc.cluster.local
-        port:
-          number: 8923
-    # # Direct routing with TLS termination
-    # - destination:
-    #     host: istio-ingressgateway.istio-ingress.svc.cluster.local
-    #     port:
-    #       number: 80
-      headers:
-        request:
-          set:
-            x-forwarded-proto: "https"
-            # Extract real IP from CF-Connecting-IP header  
-            x-forwarded-for: "%REQ(CF-Connecting-IP)%"
-            x-real-ip: "%REQ(CF-Connecting-IP)%"
-            # Ensure Cloudflare IP is preserved
-            cf-connecting-ip: "%REQ(CF-Connecting-IP)%"
+    - match:
+        - headers:
+            ":authority":
+              regex: "(.*)"
+      route:
+        # Routing protected by Anubis
+        - destination:
+            host: anubis.anubis.svc.cluster.local
+            port:
+              number: 8923
+              # # Direct routing with TLS termination
+              # - destination:
+              #     host: istio-ingressgateway.istio-ingress.svc.cluster.local
+              #     port:
+              #       number: 80
+          headers:
+            request:
+              set:
+                x-forwarded-proto: "https"
+                # Extract real IP from CF-Connecting-IP header
+                x-forwarded-for: "%REQ(CF-Connecting-IP)%"
+                x-real-ip: "%REQ(CF-Connecting-IP)%"
+                # Ensure Cloudflare IP is preserved
+                cf-connecting-ip: "%REQ(CF-Connecting-IP)%"

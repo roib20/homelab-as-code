@@ -3,21 +3,20 @@ kustomize_overlays:
   - name: cert-manager
     set: addons
     overlay: prod
-    wait: yes
+    wait: true
   - name: cert-resources
     set: resources
     overlay: bootstrap
-    wait: yes
+    wait: true
   - name: external-secrets
     set: addons
     overlay: prod
-    wait: no
+    wait: false
   - name: argocd
     set: argo
     overlay: bootstrap
-    wait: no
-
+    wait: false
 kubernetes_manifests:
   - name: app-of-apps
     file: bootstrap/app-of-apps.yaml
-    wait: yes
+    wait: true

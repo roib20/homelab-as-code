@@ -1,15 +1,12 @@
 ---
 cluster_secret_store_name: bitwarden-secretsmanager
-
 # Bitwarden service endpoints
 api_url: "https://api.bitwarden.com"
 identity_url: "https://identity.bitwarden.com"
 bitwarden_sdk_server_url: "https://bitwarden-sdk-server.{{ namespace }}.svc.cluster.local:9998"
-
 # IDs
 organization_id: ""
-project_id:  ""
-
+project_id: ""
 # Kubernetes object details
 namespace: bitwarden
 token_secret_name: bitwarden-access-token

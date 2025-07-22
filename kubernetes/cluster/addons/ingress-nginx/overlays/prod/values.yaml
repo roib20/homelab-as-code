@@ -1,6 +1,6 @@
+---
 defaultBackend:
   enabled: true
-
 controller:
   service:
     type: ClusterIP

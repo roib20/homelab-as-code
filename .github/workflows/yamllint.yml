@@ -1,0 +1,32 @@
+---
+name: yamllint
+'on':
+  pull_request:
+    paths:
+      - '**/yaml'
+      - '**/yml'
+      - '.github/workflows/yamllint.yml'
+  push:
+    branches: [main]
+    paths:
+      - '**/yaml'
+      - '**/yml'
+      - '.github/workflows/yamllint.yml'
+  workflow_dispatch:
+jobs:
+  yamllint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: List all YAML files
+        shell: sh
+        run: |
+          yamllint . --list-files
+      - name: Lint all YAML files
+        shell: sh
+        run: |
+          find . \
+          -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 \
+          | xargs -0 yamllint -d '{extends: default, rules: {line-length: disable}}'

@@ -1,6 +1,6 @@
+---
 name: Kustomize Build Validation
-
-on:
+'on':
   pull_request:
     paths:
       - 'kubernetes/**'
@@ -10,7 +10,6 @@ on:
       - 'kubernetes/**'
       - '.github/workflows/kustomize-build-validation.yml'
   workflow_dispatch:
-
 jobs:
   kustomize-build-validation:
     runs-on: ubuntu-latest
@@ -20,7 +19,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Create test env file
         env:
           FQDN_01: "example.com"
@@ -28,7 +26,6 @@ jobs:
           CF_ACCOUNT_ID: "1234567890abcdefghijklmnopqrstuvwxyz"
         shell: sh
         run: printenv > "${ENV_FILE}"
-
       - name: Run kustomize build in parallel
         uses: int128/kustomize-action@v1
         id: kustomize
@@ -37,19 +34,16 @@ jobs:
           kustomize-build-args: |
             --enable-helm
             --load-restrictor=LoadRestrictionsNone
-
       - name: Copy manifests into workspace
         if: steps.kustomize.outputs.directory != ''
         run: |
           cp -R "${{ steps.kustomize.outputs.directory }}" "${GITHUB_WORKSPACE}/manifests"
-
       - name: Lint generated Kubernetes manifests
         id: k8s-lint
         uses: docker://ghcr.io/yannh/kubeconform:latest
         with:
           entrypoint: /kubeconform
           args: -summary -ignore-missing-schemas -strict -verbose "/github/workspace/manifests"
-
       - name: Comment on failure
         if: failure()
         uses: int128/comment-action@v1
@@ -58,7 +52,6 @@ jobs:
           post: |
             :x: kustomize error
             ${{ steps.kustomize.outputs.pretty-errors }}
-
       - name: Clean up test files
         if: always()
         shell: sh

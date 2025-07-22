@@ -1,9 +1,9 @@
+---
 - name: Delete API token 'provider' for user 'terraformer@pve'
   when: recreate_token | default(false)
   ansible.builtin.command:
     cmd: "pveum user token delete terraformer@pve provider"
   failed_when: false
-
 - name: Create API token 'provider' for user 'terraformer@pve'
   ansible.builtin.command:
     cmd: "pveum user token add terraformer@pve provider --privsep=0"
@@ -11,35 +11,35 @@
   failed_when: token.rc != 0 and 'already exists' not in token.stderr
   changed_when: "'already exists' not in token.stderr"
   no_log: "{{ hide_token | default(true) }}"
-
 # This block runs only when the token was (re)created
 - name: Get API token
   no_log: "{{ hide_token | default(true) }}"
   when: token.changed
   block:
-  - name: Build a list of data rows (skip borders / header)
-    set_fact:
-      token_lines: >-
-        {{
-          token.stdout_lines
-          | select('search', '^│')
-          | reject('search', '│ key')
-          | list
-        }}
+    - name: Build a list of data rows (skip borders / header)
+      set_fact:
+        token_lines: >-
+          {{
 
-  - name: Extract clean full-tokenid and value columns
-    set_fact:
-      full_tokenid: >-
-        {{
-          (token_lines | select('search', 'full-tokenid') | list).0
-          .split('│')[2] | trim
-        }}
-      token_value: >-
-        {{
-          (token_lines | select('search', '^│ value') | list).0
-          .split('│')[2] | trim
-        }}
+            token.stdout_lines
+            | select('search', '^│')
+            | reject('search', '│ key')
+            | list
+          }}
+    - name: Extract clean full-tokenid and value columns
+      set_fact:
+        full_tokenid: >-
+          {{
 
-  - name: Output formatted Proxmox API token
-    debug:
-      msg: "{{ full_tokenid }}={{ token_value }}"
+            (token_lines | select('search', 'full-tokenid') | list).0
+            .split('│')[2] | trim
+          }}
+        token_value: >-
+          {{
+
+            (token_lines | select('search', '^│ value') | list).0
+            .split('│')[2] | trim
+          }}
+    - name: Output formatted Proxmox API token
+      debug:
+        msg: "{{ full_tokenid }}={{ token_value }}"

@@ -3,6 +3,7 @@
   ansible.builtin.set_fact:
     manifest_files: >-
       {{
+
         kubernetes_manifests | map('combine', {
           'path': base_path + '/kubernetes/' + ansible_playbook_item.file,
           'wait': ansible_playbook_item.wait | default(default_wait),
@@ -12,12 +13,10 @@
   loop: "{{ kubernetes_manifests }}"
   loop_control:
     loop_var: ansible_playbook_item
-
 - name: Fail if no manifest files are defined
   ansible.builtin.fail:
     msg: "No manifest configurations defined. Please set 'kubernetes_manifests' variable."
   when: kubernetes_manifests | length == 0
-
 - name: Apply Kubernetes manifests
   kubernetes.core.k8s:
     src: "{{ item.path }}"

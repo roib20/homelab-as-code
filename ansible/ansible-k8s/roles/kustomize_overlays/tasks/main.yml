@@ -5,54 +5,47 @@
   register: kustomize_path
   ignore_errors: true
   changed_when: false
-
 - name: Check for kubectl binary
   ansible.builtin.command:
     cmd: which kubectl
   register: kubectl_path
   ignore_errors: false
   changed_when: false
-
 - name: Check for helm binary
   ansible.builtin.command:
     cmd: which helm
   register: helm_path
   ignore_errors: false
   changed_when: false
-
 - name: Determine kustomize invocation
   ansible.builtin.set_fact:
     kustomizer: >-
       {% if kustomize_path.rc == 0 %}
+
         {{ kustomize_path.stdout }} build
       {% elif kubectl_path.rc == 0 %}
+
         {{ kubectl_path.stdout }} kustomize
       {% else %}
+
         false
       {% endif %}
-
 - name: "Fail if neither `kustomize` nor `kubectl` are available"
   ansible.builtin.fail:
     msg: "Neither standalone `kustomize` nor `kubectl` was found on the PATH."
   when: kustomizer == false
-
 - name: Fail if no overlays defined
   ansible.builtin.fail:
     msg: "No overlay configurations defined. Please set 'kustomize_overlays' variable."
   when: kustomize_overlays | length == 0
-
 - name: Build kustomization overlays
   ansible.builtin.command: >-
-    {{ kustomizer }}
-    --enable-helm
-    --load-restrictor=LoadRestrictionsNone
-    {{ base_path }}/kubernetes/cluster/{{ item.set }}/{{ item.name }}/overlays/{{ item.overlay }}
+    {{ kustomizer }} --enable-helm --load-restrictor=LoadRestrictionsNone {{ base_path }}/kubernetes/cluster/{{ item.set }}/{{ item.name }}/overlays/{{ item.overlay }}
   loop: "{{ kustomize_overlays }}"
   loop_control:
     label: "{{ item.name }} ({{ item.set }}/{{ item.overlay }})"
   register: kustomize_build
   changed_when: false
-
 - name: Apply rendered resources to the cluster
   kubernetes.core.k8s:
     definition: "{{ kustomize_build.results[index].stdout }}"

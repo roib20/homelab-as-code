@@ -2,12 +2,10 @@
 - name: Deploy Kustomize overlays and plain manifests
   hosts: localhost
   gather_facts: false
-
   pre_tasks:
     - name: Load shared vars
       include_vars:
         file: "{{ playbook_dir }}/vars.yml"
-
   roles:
     - role: kustomize_overlays
     - role: terragrunt_stack

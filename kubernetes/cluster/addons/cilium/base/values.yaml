@@ -1,8 +1,8 @@
+---
 # https://docs.cilium.io/en/stable/helm-reference/
 # https://docs.cilium.io/en/stable/network/kubernetes/configuration/#configmap-options
 # https://docs.cilium.io/en/stable/operations/performance/tuning/
 # https://www.talos.dev/latest/kubernetes-guides/network/deploying-cilium/
----
 autoDirectNodeRoutes: true
 routingMode: native
 ipv4NativeRoutingCIDR: 10.244.0.0/16

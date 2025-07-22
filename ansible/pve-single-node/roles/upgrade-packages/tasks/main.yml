@@ -3,11 +3,9 @@
   block:
     - ansible.builtin.include_tasks:
         file: deb/apt-upgrade.yml
-
 - when: ansible_distribution == 'Fedora' and ansible_cmdline.ostree is not defined
   block:
     - ansible.builtin.include_tasks:
         file: rpm/dnf-upgrade.yml
-
 - ansible.builtin.include_tasks:
     file: package/package.yml
