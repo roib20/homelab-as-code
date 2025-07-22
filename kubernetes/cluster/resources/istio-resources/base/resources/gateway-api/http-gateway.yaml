@@ -1,8 +1,8 @@
 ---
-### Hybrid Gateway Approach 
+### Hybrid Gateway Approach
 ### Uses Istio Gateway CRD for TLS termination (proven to work with staging certs)
 ### Plus Gateway API Gateway for HTTPRoute compatibility
-### 
+###
 ### Traffic Flow:
 ### Cloudflare → Istio Gateway CRD (443) → VirtualService → Gateway API Gateway (80) → HTTPRoute → hello-demo
 apiVersion: gateway.networking.k8s.io/v1

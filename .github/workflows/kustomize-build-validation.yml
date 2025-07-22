@@ -1,6 +1,6 @@
 ---
 name: Kustomize Build Validation
-on:
+'on':
   pull_request:
     paths:
       - 'kubernetes/**'

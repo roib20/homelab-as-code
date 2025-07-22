@@ -1,6 +1,6 @@
 ---
 name: Build & Sign containers
-on:
+'on':
   push:
     branches: [main]
     paths:
@@ -25,9 +25,9 @@ env:
     org.opencontainers.image.version=${{ github.ref_name }}
     org.opencontainers.image.vendor=${{ github.repository_owner }}
 permissions:
-  contents: read # checkout
-  packages: write # push to ghcr.io
-  id-token: write # OIDC & cosign
+  contents: read  # checkout
+  packages: write  # push to ghcr.io
+  id-token: write  # OIDC & cosign
 jobs:
   build-and-sign:
     runs-on: ubuntu-latest

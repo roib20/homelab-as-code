@@ -2,7 +2,7 @@
 # - name: "Homebrew cleanup: `brew cleanup --prune=all`"
 #   ansible.builtin.command: brew cleanup --prune=all
 #   register: brew_cleanup_output
-#   changed_when: "'Removing:' in brew_cleanup_output.stdout" 
+#   changed_when: "'Removing:' in brew_cleanup_output.stdout"
 - name: "Update Homebrew and upgrade all packages: `brew update && brew upgrade`"
   become_user: "{{ ansible_user_id }}"
   community.general.homebrew:

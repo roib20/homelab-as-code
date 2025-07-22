@@ -5,11 +5,10 @@
   block:
     - ansible.builtin.file:
         path: "/etc/apt/sources.list"
-        state: file
+        state: absent
         mode: "0644"
         owner: "root"
         group: "root"
-        state: absent
     - ansible.builtin.deb822_repository:
         name: debian
         state: present

@@ -28,7 +28,7 @@ spec:
             request:
               set:
                 x-forwarded-proto: "https"
-                # Extract real IP from CF-Connecting-IP header  
+                # Extract real IP from CF-Connecting-IP header
                 x-forwarded-for: "%REQ(CF-Connecting-IP)%"
                 x-real-ip: "%REQ(CF-Connecting-IP)%"
                 # Ensure Cloudflare IP is preserved

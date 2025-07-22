@@ -17,4 +17,3 @@
       | rejectattr('msg', 'search', 'Resources: 0 added, 0 changed, 0 destroyed')
       | list
     ) | length > 0
-
