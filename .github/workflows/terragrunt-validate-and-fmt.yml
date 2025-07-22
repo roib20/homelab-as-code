@@ -1,5 +1,5 @@
 ---
-name: Validate All Terragrunt Stacks and Format HCL+TF Files
+name: Terragrunt Validate & Format
 'on':
   push:
     branches: [main]
