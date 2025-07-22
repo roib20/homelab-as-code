@@ -1,10 +1,10 @@
 {
-  "project": "default",
+  "annotations": {},
   "appName": "kanidm",
-  "userGivenName": "kanidm",
-  "destNamespace": "kanidm",
   "destName": "in-cluster",
+  "destNamespace": "kanidm",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
-  "annotations": {}
+  "project": "default",
+  "userGivenName": "kanidm"
 }

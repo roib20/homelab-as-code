@@ -1,10 +1,10 @@
 {
-  "project": "default",
+  "annotations": {},
   "appName": "ingress-nginx",
-  "userGivenName": "ingress-nginx",
-  "destNamespace": "ingress-nginx",
   "destName": "in-cluster",
+  "destNamespace": "ingress-nginx",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
-  "annotations": {}
+  "project": "default",
+  "userGivenName": "ingress-nginx"
 }

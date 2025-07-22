@@ -1,10 +1,10 @@
 {
-  "project": "default",
+  "annotations": {},
   "appName": "cloudflare-operator",
-  "userGivenName": "cloudflare-operator",
-  "destNamespace": "cloudflare-operator-system",
   "destName": "in-cluster",
+  "destNamespace": "cloudflare-operator-system",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
-  "annotations": {}
+  "project": "default",
+  "userGivenName": "cloudflare-operator"
 }

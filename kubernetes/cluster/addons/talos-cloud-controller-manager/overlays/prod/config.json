@@ -1,10 +1,10 @@
 {
-  "project": "default",
+  "annotations": {},
   "appName": "talos-cloud-controller-manager",
-  "userGivenName": "talos-cloud-controller-manager",
-  "destNamespace": "kube-system",
   "destName": "in-cluster",
+  "destNamespace": "kube-system",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
-  "annotations": {}
+  "project": "default",
+  "userGivenName": "talos-cloud-controller-manager"
 }
