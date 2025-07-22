@@ -20,7 +20,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Lint YAML files
+      - name: List all YAML files
+        shell: sh
+        run: |
+          yamllint . --list-files
+      - name: Lint all YAML files
         shell: sh
         run: |
           find . \
