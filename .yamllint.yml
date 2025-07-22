@@ -3,8 +3,3 @@ extends: default
 rules:
   line-length:
     max: 220
-  comments:
-    min-spaces-from-content: 1
-  document-start: disable
-  truthy:
-    allowed-values: ['true', 'false', 'yes', 'no']
