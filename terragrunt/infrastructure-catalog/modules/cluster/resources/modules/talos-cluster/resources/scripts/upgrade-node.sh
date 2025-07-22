@@ -15,7 +15,7 @@ fi
 echo "config: \"$TALOS_CONFIG_PATH\""
 echo "Upgrade check running on: \"$TALOS_NODE\""
 echo "Waiting for this node to be available..."
-for i in {1..12}; do talosctl --talosconfig "$TALOS_CONFIG_PATH" get machinestatus --nodes "$TALOS_NODE" -o json 2>/dev/null | jq -e '.spec.status.ready' >/dev/null && break || sleep 10; done
+i=1; while [ "$i" -le 12 ]; do if talosctl --talosconfig "$TALOS_CONFIG_PATH" get machinestatus --nodes "$TALOS_NODE" -o json 2>/dev/null | jq -e '.spec.status.ready' >/dev/null; then break; else sleep 10; i=$((i+1)); fi; done; echo "✅ Node is reporting ready!"
 echo "✅ Node is reporting ready!"
 
 #echo "Waiting for this cluster to be healthy..."
@@ -31,7 +31,7 @@ if [ "$DESIRED_TALOS_TAG" = "$CURRENT_TALOS_TAG" ] && [ "$DESIRED_TALOS_SCHEMATI
   echo "No Upgrade required."
 else
   echo "Upgrade required."
-  if ! talosctl --talosconfig "$TALOS_CONFIG_PATH" --nodes "$TALOS_NODE" upgrade --image="factory.talos.dev/installer/$DESIRED_TALOS_SCHEMATIC:$DESIRED_TALOS_TAG" --timeout=$TIMEOUT; then
+  if ! talosctl --talosconfig "$TALOS_CONFIG_PATH" --nodes "$TALOS_NODE" upgrade --image="factory.talos.dev/installer/$DESIRED_TALOS_SCHEMATIC:$DESIRED_TALOS_TAG" --timeout="$TIMEOUT"; then
     echo "⚠️ Upgrade RPC errored out (EOF / GOAWAY is expected during reboot), continuing…"
   else
     echo "✅ Upgrade RPC completed without errors."
