@@ -30,3 +30,24 @@ jobs:
           find . \
           -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 \
           | xargs -0 yamllint -d '{extends: default, rules: {line-length: disable}}'
+      - name: ansible-lint for `ansible/pve-single-node`
+        uses: ansible/ansible-lint@v25
+        with:
+          args: "--profile=min"
+          setup_python: "false"
+          working_directory: "ansible/pve-single-node"
+          requirements_file: "requirements.yml"
+      - name: ansible-lint for `ansible/pve-cluster`
+        uses: ansible/ansible-lint@v25
+        with:
+          args: "--profile=min"
+          setup_python: "false"
+          working_directory: "ansible/pve-cluster"
+          requirements_file: "requirements.yml"
+      - name: ansible-lint for `ansible/ansible-k8s`
+        uses: ansible/ansible-lint@v25
+        with:
+          args: "--profile=min"
+          setup_python: "false"
+          working_directory: "ansible/ansible-k8s"
+          requirements_file: "requirements.yml"
