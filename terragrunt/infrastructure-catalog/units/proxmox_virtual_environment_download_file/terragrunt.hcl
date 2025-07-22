@@ -2,6 +2,10 @@ include "root" {
   path = find_in_parent_folders("root.hcl")
 }
 
+include "proxmox_provider" {
+  path = find_in_parent_folders("_envcommon/proxmox-provider.hcl")
+}
+
 locals {
   # Root "terragrunt" directory, containing "infrastructure-catalog" and "infrastructure-live" directories
   terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
