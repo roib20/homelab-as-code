@@ -1,6 +1,6 @@
 # talos-cluster
 
-This is a generic terraform module for deploying and managing a talos cluster via terraform.  It takes a number of opinionated stances to streamline the lifecycle over using the terraform resources directly.  
+This is a generic terraform module for deploying and managing a talos cluster via terraform.  It takes a number of opinionated stances to streamline the lifecycle over using the terraform resources directly.
 
 * **Explicit [machine](https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/#Config.machine) vs [cluster](https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/#Config.cluster) config**: The talos config manifest separates the spec into these primary attributes; this module takes in a `talos_cluster_config` of the `cluster` properties, along with a `machines` variable of (primary) type `list(object(talos_config = string))`, along with a number of other properties specifying the installation.
 * **Assumed Interfaces**: The module assumes that the primary ip interface for all nodes is at `machines[*].talos_config.network.interfaces[0].addresses[0]`.  Additionally, the same interface on `machines[0]`, where `type == controlplane` will be used for the bootstrap node.

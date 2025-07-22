@@ -1,10 +1,10 @@
 {
-  "project": "default",
+  "annotations": {},
   "appName": "gateway",
-  "userGivenName": "istio-gateway",
-  "destNamespace": "istio-ingress",
   "destName": "in-cluster",
+  "destNamespace": "istio-ingress",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
-  "annotations": {}
+  "project": "default",
+  "userGivenName": "istio-gateway"
 }

@@ -1,10 +1,10 @@
 {
-  "project": "default",
+  "annotations": {},
   "appName": "cert-resources",
-  "userGivenName": "cert-resources",
-  "destNamespace": "cert-resources",
   "destName": "in-cluster",
+  "destNamespace": "cert-resources",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
-  "annotations": {}
+  "project": "default",
+  "userGivenName": "cert-resources"
 }

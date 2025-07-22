@@ -41,4 +41,3 @@ fi
 echo "Waiting for node to be healthy..."
 i=1; while [ "$i" -le 12 ]; do if talosctl --talosconfig "$TALOS_CONFIG_PATH" get machinestatus --nodes "$TALOS_NODE" -o json 2>/dev/null | jq -e '.spec.status.ready' >/dev/null; then break; else sleep 10; i=$((i+1)); fi; done
 echo "✅ Node is healthy!"
-

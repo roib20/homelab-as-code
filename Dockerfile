@@ -256,7 +256,7 @@ FROM runtime AS task-ui-runtime
 # Switch back to root to install task-ui components
 USER root
 
-# Copy task-ui and ttyrec from build stages  
+# Copy task-ui and ttyrec from build stages
 COPY --link --from=task-ui /usr/local/bin/task-ui /usr/local/bin/
 COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
 

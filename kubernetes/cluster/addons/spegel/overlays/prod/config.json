@@ -1,10 +1,10 @@
 {
-  "project": "default",
+  "annotations": {},
   "appName": "spegel",
-  "userGivenName": "spegel",
-  "destNamespace": "kube-system",
   "destName": "in-cluster",
+  "destNamespace": "kube-system",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
-  "annotations": {}
+  "project": "default",
+  "userGivenName": "spegel"
 }
