@@ -75,7 +75,7 @@ setup_tfvars() {
         read_hidden "Enter your Cloudflare Account ID" ACCOUNT_ID
         # Insert account_id into terraform.tfvars
         cp "terraform.tfvars.example" "terraform.tfvars"
-        sed -i "s/account_id    = \".*\"/account_id    = \"$ACCOUNT_ID\"/" terraform.tfvars
+        sed -i "s/account_id = \"\"/account_id = \"$ACCOUNT_ID\"/" terraform.tfvars
     else
         # Extract ACCOUNT_ID from existing terraform.tfvars for token verification
         ACCOUNT_ID=$(grep '^account_id' terraform.tfvars | sed 's/account_id[[:space:]]*=[[:space:]]*"\([^"]*\)".*/\1/')
