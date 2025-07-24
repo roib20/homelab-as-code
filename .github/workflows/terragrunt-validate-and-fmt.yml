@@ -15,7 +15,6 @@ name: Terragrunt Validate & Format
 jobs:
   validate-and-fmt:
     runs-on: ubuntu-latest
-    environment: .env
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
