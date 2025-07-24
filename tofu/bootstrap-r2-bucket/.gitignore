@@ -1,5 +1,5 @@
 .env
-backend.tf
+backend.tofu
 
 # Local .terraform directories
 .terraform/

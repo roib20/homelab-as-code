@@ -142,7 +142,7 @@ run_tofu_deployment() {
     tofu init
     run_tofu_cycle
 
-    cp "backend.tf.example" "backend.tf"
+    cp "backend.tofu.example" "backend.tofu"
     tofu init -reconfigure
     run_tofu_cycle
 }
@@ -158,7 +158,7 @@ remove_local_state() {
 destroy_resources() {
     echo "Migrating back to local state for destruction..."
     remove_local_state
-    rm -f backend.tf
+    rm -f backend.tofu
     tofu init -migrate-state
 
     echo "Manually empty bucket before proceeding: https://dash.cloudflare.com/?to=/:account/r2"
