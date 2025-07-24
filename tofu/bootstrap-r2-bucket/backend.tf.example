@@ -11,6 +11,9 @@ terraform {
     skip_s3_checksum            = true
     use_path_style              = true
 
+    encrypt      = true
+    use_lockfile = true
+
     endpoints = { s3 = "https://${var.account_id}.r2.cloudflarestorage.com" }
   }
 }
