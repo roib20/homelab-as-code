@@ -20,13 +20,15 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Terragrunt & OpenTofu
         uses: gruntwork-io/terragrunt-action@v3
-      - name: Create test `account.hcl` files from examples
-        shell: sh
+      - name: Create test account.hcl files from examples
+        shell: bash
+        env:
+          CLOUDFLARE_ACCOUNT_ID: "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}"
         run: |
           find terragrunt/infrastructure-live -name "account.hcl.example" | while read -r example_file; do
             account_file="${example_file%.example}"
             if [ ! -f "$account_file" ]; then
-              cp "$example_file" "$account_file"
+              envsubst '${CLOUDFLARE_ACCOUNT_ID}' < "$example_file" > "$account_file"
               echo "Created $account_file from $example_file"
             fi
           done
@@ -38,6 +40,8 @@ jobs:
       - name: Validate all Terragrunt Stacks
         env:
           BWS_ACCESS_TOKEN: "123"
+          AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
         shell: sh
         run: |
           find . -type f -name "terragrunt.stack.hcl" \

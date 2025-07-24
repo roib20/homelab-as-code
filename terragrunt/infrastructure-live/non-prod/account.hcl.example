@@ -7,4 +7,7 @@ locals {
   virtual_environment_password              = "password"
   virtual_environment_auth_ticket           = ""
   virtual_environment_csrf_prevention_token = ""
+  cloudflare_account_id                     = "${CLOUDFLARE_ACCOUNT_ID}"
+  r2_endpoint                               = "https://${local.cloudflare_account_id}.r2.cloudflarestorage.com"
+  bucket_name                               = "homelab-as-code"
 }
