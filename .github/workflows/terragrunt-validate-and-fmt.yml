@@ -15,6 +15,7 @@ name: Terragrunt Validate & Format
 jobs:
   validate-and-fmt:
     runs-on: ubuntu-latest
+    environment: .env
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,6 +39,8 @@ jobs:
       - name: Validate all Terragrunt Stacks
         env:
           BWS_ACCESS_TOKEN: "123"
+          AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
         shell: sh
         run: |
           find . -type f -name "terragrunt.stack.hcl" \
