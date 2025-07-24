@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = var.bucket_name
-    key    = "tofu/bootstrap-r2/terraform.tfstate"
+    key    = "tofu/r2-backend/terraform.tfstate"
     region = "auto"
 
     skip_credentials_validation = true
