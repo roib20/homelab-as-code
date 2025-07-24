@@ -29,7 +29,7 @@ jobs:
           find terragrunt/infrastructure-live -name "account.hcl.example" | while read -r example_file; do
             account_file="${example_file%.example}"
             if [ ! -f "$account_file" ]; then
-              envsubst -v "CLOUDFLARE_ACCOUNT_ID" < "$example_file" > "$account_file"
+              envsubst '${CLOUDFLARE_ACCOUNT_ID}' < "$example_file" > "$example_file"
               echo "Created $account_file from $example_file"
             fi
           done
