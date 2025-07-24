@@ -11,7 +11,7 @@ variable "account_id" {
 variable "bucket_name" {
   description = "Name of the R2 bucket"
   type        = string
-  default     = "tofu-state"
+  default     = "homelab-as-code"
 
   # Bucket naming limitations: https://developers.cloudflare.com/r2/buckets/create-buckets/#bucket-level-operations
   validation {

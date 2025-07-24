@@ -9,5 +9,5 @@ locals {
   virtual_environment_csrf_prevention_token = ""
   cloudflare_account_id                     = "1234567890abcdef1234567890abcdef"
   r2_endpoint                               = "https://${local.cloudflare_account_id}.r2.cloudflarestorage.com"
-  bucket_name                               = "tofu-state"
+  bucket_name                               = "homelab-as-code"
 }
