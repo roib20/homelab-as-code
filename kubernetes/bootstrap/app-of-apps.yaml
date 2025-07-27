@@ -18,7 +18,7 @@ spec:
   project: default
   source:
     path: kubernetes/bootstrap
-    repoURL: https://github.com/roib20/argocd-testing2.0.git
+    repoURL: https://github.com/roib20/homelab-as-code.git
     targetRevision: HEAD
   syncPolicy:
     automated:
