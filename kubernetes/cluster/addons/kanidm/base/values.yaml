@@ -14,7 +14,7 @@ controllers:
           - name: KANIDM_DOMAIN
             value: "id.${FQDN_01}"
           - name: KANIDM_ORIGIN
-            value: "https://id.{FQDN_01}"
+            value: "https://id.${FQDN_01}"
         resources:
           requests:
             cpu: 10m
