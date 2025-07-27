@@ -27,6 +27,6 @@ output "r2_endpoint" {
 }
 
 output "bucket_creation_date" {
-  description = "Timestamp when the bucket was created."
+  description = "Timestamp when the bucket was created"
   value       = cloudflare_r2_bucket.bucket.creation_date
 }
