@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+helmCharts:
+  - name: node-feature-discovery
+    repo: https://kubernetes-sigs.github.io/node-feature-discovery/charts
+    version: 0.17.3
+    releaseName: node-feature-discovery
+    namespace: node-feature-discovery
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml

@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "node-feature-discovery",
+  "destName": "in-cluster",
+  "destNamespace": "node-feature-discovery",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "node-feature-discovery"
+}
