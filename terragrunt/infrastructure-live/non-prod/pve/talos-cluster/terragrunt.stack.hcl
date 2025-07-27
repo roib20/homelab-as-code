@@ -13,8 +13,9 @@ locals {
 
   # ─── Versions ────────────────────────────────────────────────────────────────
   versions = {
-    kubernetes_version       = "v1.33.1",
-    talos_version            = "v1.10.3",
+    kubernetes_version       = "1.33.1",
+    initial_talos_version    = "1.10.4", # Do not change this value after initial deployment
+    talos_version            = "1.10.5", # Change this value to safely upgrade the Talos version
     prometheus_version       = "17.0.2",
     external-secrets_version = "0.18.0",
   }
@@ -124,7 +125,7 @@ unit "download_file" {
   values = {
     node_names     = ["${local.node_name}"]
     datastore_id   = "local"
-    talos_version  = "${local.versions.talos_version}"
+    talos_version  = "${local.versions.initial_talos_version}"
     talos_platform = "nocloud"
     talos_arch     = "amd64"
   }

@@ -1,4 +1,12 @@
 resource "proxmox_virtual_environment_vm" "vm" {
+  # Avoid destroying a VM when an image gets replaced
+  lifecycle {
+    ignore_changes = [
+      cdrom,
+      disk,
+    ]
+  }
+
   # ------------------------------
   # Required Arguments
   # ------------------------------
