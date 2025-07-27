@@ -4,12 +4,12 @@ kind: Valkey
 metadata:
   name: anubis
 spec:
-  replicas: 3  # 3 × pods → 3 × sentinels
+  replicas: 3 # 3 × pods → 3 × sentinels
   sentinel:
-    enabled: true  # automatic fail-over
-  persistence:  # keep it *ephemeral* → no PVCs
-    enabled: false  # AOF/RDB disabled (pure RAM)
+    enabled: true # automatic fail-over
+  persistence: # keep it *ephemeral* → no PVCs
+    enabled: false # AOF/RDB disabled (pure RAM)
   metrics:
-    enabled: true  # optional Prom metrics on :9121
+    enabled: true # optional Prom metrics on :9121
   tls:
-    enabled: false  # enable if you need in-cluster TLS
+    enabled: false # enable if you need in-cluster TLS
