@@ -20,14 +20,18 @@ variable "bucket_name" {
   }
 }
 
+# Data location - Available hints: https://developers.cloudflare.com/r2/reference/data-location/#available-hints
 variable "location" {
-  description = "Bucket location region code. One of: apac, eeur, enam, weur, wnam, oc."
+  description = "Bucket location region code. One of: APAC, EEUR, ENAM, WEUR, WNAM, OC."
   type        = string
-  default     = null
+  default     = null # Uses Auto: https://developers.cloudflare.com/r2/reference/data-location/#automatic-recommended
 
   validation {
-    condition     = var.location == null || contains(["apac", "eeur", "enam", "weur", "wnam", "oc"], var.location)
-    error_message = "location must be one of: apac, eeur, enam, weur, wnam, oc."
+    condition = var.location == null || contains(
+      ["apac", "eeur", "enam", "weur", "wnam", "oc"],
+      lower(var.location)
+    )
+    error_message = "location must be one of: apac, eeur, enam, weur, wnam, oc (case-insensitive)."
   }
 }
 
@@ -42,6 +46,7 @@ variable "storage_class" {
   }
 }
 
+# Data location - Available jurisdictions: https://developers.cloudflare.com/r2/reference/data-location/#available-jurisdictions
 variable "jurisdiction" {
   description = "Jurisdiction for data residency. One of: default, eu, fedramp."
   type        = string

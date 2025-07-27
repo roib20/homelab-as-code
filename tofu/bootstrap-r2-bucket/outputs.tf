@@ -1,3 +1,11 @@
+locals {
+  jurisdiction_subdomain = (
+    var.jurisdiction == null || var.jurisdiction == "default"
+    ? ""
+    : ".${var.jurisdiction}"
+  )
+}
+
 output "bucket_name" {
   description = "Name of the created R2 bucket"
   value       = cloudflare_r2_bucket.bucket.name
@@ -8,14 +16,14 @@ output "bucket_id" {
   value       = cloudflare_r2_bucket.bucket.id
 }
 
-output "r2_endpoint" {
-  description = "R2 S3-compatible endpoint URL"
-  value       = "https://${var.account_id}.r2.cloudflarestorage.com"
+output "bucket_jurisdiction" {
+  description = "Jurisdiction of the created R2 bucket"
+  value       = var.jurisdiction
 }
 
-output "eu_r2_endpoint" {
-  description = "R2 S3-compatible endpoint URL"
-  value       = "https://${var.account_id}.eu.r2.cloudflarestorage.com"
+output "r2_endpoint" {
+  description = "R2 S3-compatible endpoint URL based on jurisdiction"
+  value       = "https://${var.account_id}${local.jurisdiction_subdomain}.r2.cloudflarestorage.com"
 }
 
 output "bucket_creation_date" {
