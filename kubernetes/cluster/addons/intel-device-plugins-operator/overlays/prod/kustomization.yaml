@@ -5,7 +5,7 @@ resources:
   - ../../base
 helmCharts:
   - name: intel-device-plugins-operator
-    repo: https://intel.github.io/intel-device-plugins-for-kubernetes
+    repo: https://intel.github.io/helm-charts
     version: 0.32.0
     releaseName: intel-device-plugins-operator
     namespace: intel-device-plugins
