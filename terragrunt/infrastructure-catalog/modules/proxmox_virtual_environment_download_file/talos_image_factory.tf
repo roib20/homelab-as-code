@@ -3,7 +3,7 @@ locals {
 
   platform       = try(var.talos_platform, null)
   arch           = try(var.talos_arch, null)
-  version        = try(var.talos_version, null)
+  version        = try("v${var.talos_version}", null)
   schematic_file = file("${path.module}/image/schematic.yaml")
 
   # Use talos_schematic_id value if provided, otherwise calculate it from a schematic file
