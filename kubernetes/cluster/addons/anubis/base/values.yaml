@@ -53,7 +53,6 @@ controllers:
         # # ─── 3️⃣  build the final URL (K8s expands $(…)) ───
         # - name: STORE_PARAMETERS_URL
         #   value: "redis://:$(VALKEY_PASSWORD)@$(VALKEY_HOST):$(VALKEY_PORT)/0"
-
         resources:
           limits:
             cpu: 750m
