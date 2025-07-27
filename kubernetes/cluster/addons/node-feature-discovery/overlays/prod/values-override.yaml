@@ -1,0 +1,9 @@
+---
+worker:
+  enable: true
+  extraArgs: []
+  extraEnvs: []
+  hostNetwork: false
+  config:
+    core:
+      sleepInterval: 0s

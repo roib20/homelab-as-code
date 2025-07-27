@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "intel-device-plugins-operator",
+  "destName": "in-cluster",
+  "destNamespace": "intel-device-plugins",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "intel-device-plugins-operator"
+}
