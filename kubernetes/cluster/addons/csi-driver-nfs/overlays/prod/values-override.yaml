@@ -1,5 +1,7 @@
+---
 externalSnapshotter:
   enabled: false
+
 controller:
   runOnControlPlane: true
   replicas: 2
