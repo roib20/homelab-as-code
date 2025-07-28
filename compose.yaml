@@ -17,6 +17,11 @@ services:
     # Used for file ownership for files created inside the container
     user: "${UID:-1000}:${GID:-1000}"
     command: ["/bin/bash"]
+    environment:
+      - BWS_ACCESS_TOKEN=${BWS_ACCESS_TOKEN}
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
   task-ui:
     image: homelab-as-code-runner:latest
     pull_policy: missing
@@ -37,3 +42,8 @@ services:
     # Used for file ownership for files created inside the container
     user: "${UID:-1000}:${GID:-1000}"
     command: ["/usr/local/bin/task-ui-wrapper", "--history-enable"]
+    environment:
+      - BWS_ACCESS_TOKEN=${BWS_ACCESS_TOKEN}
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
