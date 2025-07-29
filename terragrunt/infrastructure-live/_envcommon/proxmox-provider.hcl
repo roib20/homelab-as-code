@@ -2,8 +2,11 @@ locals {
   # Automatically load account-level variables
   account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl"))
 
-  # Automatically load node-level variables
-  node_vars = read_terragrunt_config(find_in_parent_folders("node.hcl"))
+  # Automatically load node-level variables (try nodes.hcl first, then node.hcl for backward compatibility)
+  node_vars = try(
+    read_terragrunt_config(find_in_parent_folders("nodes.hcl")),
+    read_terragrunt_config(find_in_parent_folders("node.hcl"))
+  )
 
   # Extract the variables we need for easy access
   virtual_environment_endpoint              = local.account_vars.locals.virtual_environment_endpoint
