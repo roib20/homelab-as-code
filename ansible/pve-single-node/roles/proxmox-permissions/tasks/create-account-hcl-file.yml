@@ -23,12 +23,11 @@
         remote_src: true
         force: false
       loop: "{{ environments }}"
-    # Replace the virtual_environment_api_token line
+    # Replace the virtual_environment_api_token line within the proxmox block using a more robust approach
     - name: Inject new API token into account.hcl
       when: token.changed
-      ansible.builtin.lineinfile:
+      ansible.builtin.replace:
         path: "{{ item.account_hcl }}"
-        regexp: '^\s*virtual_environment_api_token\s*=.*$'
-        line: '  virtual_environment_api_token               = "{{ full_tokenid }}={{ token_value }}"'
-        backrefs: false
+        regexp: '(virtual_environment_api_token\s*=\s*)"[^"]*"'
+        replace: '\1"{{ full_tokenid }}={{ token_value }}"'
       loop: "{{ environments }}"
