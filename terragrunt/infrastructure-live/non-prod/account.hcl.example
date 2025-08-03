@@ -10,5 +10,5 @@ locals {
   cloudflare_account_id                     = "${CLOUDFLARE_ACCOUNT_ID}"
   r2_endpoint                               = "https://${local.cloudflare_account_id}.r2.cloudflarestorage.com"
   bucket_name                               = "homelab-as-code"
-  ts_authkey                                = "${TS_AUTHKEY}"
+  ts_authkey                                = get_env("TS_AUTHKEY", "")
 }
