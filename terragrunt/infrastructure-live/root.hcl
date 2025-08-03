@@ -19,7 +19,7 @@ generate "backend" {
   contents = <<EOF
 terraform {
   backend "s3" {
-    bucket = "${local.account_vars.locals.bucket_name}"
+    bucket = "${local.account_vars.locals.cloudflare.bucket_name}"
     key    = "terragrunt/infrastructure-live/${path_relative_to_include()}/tofu.tfstate"
     region = "auto"
 
@@ -33,7 +33,7 @@ terraform {
     encrypt      = true
     use_lockfile = true
 
-    endpoints = { s3 = "${local.account_vars.locals.r2_endpoint}" }
+    endpoints = { s3 = "${local.account_vars.locals.cloudflare.r2_endpoint}" }
   }
 }
 EOF
@@ -52,6 +52,8 @@ EOF
 # Configure root level variables that all resources can inherit. This is especially helpful with multi-account configs
 # where terraform_remote_state data sources are placed directly into the modules.
 inputs = merge(
-  local.account_vars.locals,
+  local.account_vars.locals.proxmox,
+  local.account_vars.locals.cloudflare,
+  local.account_vars.locals.tailscale,
   local.node_vars.locals,
 )

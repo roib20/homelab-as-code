@@ -1,14 +1,26 @@
 # Set account-wide variables. These are automatically pulled in to configure the remote state bucket in the root
 # root.hcl configuration.
 locals {
-  virtual_environment_endpoint              = "https://pve:8006/"
-  virtual_environment_api_token             = "user@pam!token=00000000-0000-0000-0000-000000000000"
-  virtual_environment_username              = "username"
-  virtual_environment_password              = "password"
-  virtual_environment_auth_ticket           = ""
-  virtual_environment_csrf_prevention_token = ""
-  cloudflare_account_id                     = "${CLOUDFLARE_ACCOUNT_ID}"
-  r2_endpoint                               = "https://${local.cloudflare_account_id}.r2.cloudflarestorage.com"
-  bucket_name                               = "homelab-as-code"
-  ts_authkey                                = get_env("TS_AUTHKEY", "")
+  # Proxmox Virtual Environment configuration
+  proxmox = {
+    virtual_environment_endpoint              = try(get_env("PVE_ENDPOINT"), "https://pve:8006/")
+    virtual_environment_api_token             = try(get_env("PVE_API_TOKEN"), "user@pam!token=00000000-0000-0000-0000-000000000000")
+    virtual_environment_username              = try(get_env("PVE_USERNAME"), "username")
+    virtual_environment_password              = try(get_env("PVE_PASSWORD"), "password")
+    virtual_environment_auth_ticket           = try(get_env("PVE_AUTH_TICKET"), "")
+    virtual_environment_csrf_prevention_token = try(get_env("PVE_CSRF_TOKEN"), "")
+  }
+
+  # Cloudflare configuration
+  cloudflare = {
+    cloudflare_account_id  = try(get_env("CLOUDFLARE_ACCOUNT_ID"), "1234567890abcdef1234567890abcdef")
+    jurisdiction_subdomain = try(get_env("CLOUDFLARE_JURISDICTION"), "")
+    r2_endpoint            = "https://${try(get_env("CLOUDFLARE_ACCOUNT_ID"), "1234567890abcdef1234567890abcdef")}${try(get_env("CLOUDFLARE_JURISDICTION"), "")}.r2.cloudflarestorage.com"
+    bucket_name            = try(get_env("R2_BUCKET_NAME"), "homelab-as-code")
+  }
+
+  # Tailscale configuration
+  tailscale = {
+    ts_authkey = try(get_env("TS_AUTHKEY"), "")
+  }
 }
