@@ -5,6 +5,7 @@ namespace: argocd
 resources:
   - applicationsets/cluster-argo.yaml
   - applicationsets/cluster-addons.yaml
+  - applicationsets/cluster-ingress_controllers.yaml
   - applicationsets/cluster-resources.yaml
   - applicationsets/cluster-apps.yaml
   # - applicationsets/cluster-inactive
