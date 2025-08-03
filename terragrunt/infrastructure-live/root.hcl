@@ -52,6 +52,8 @@ EOF
 # Configure root level variables that all resources can inherit. This is especially helpful with multi-account configs
 # where terraform_remote_state data sources are placed directly into the modules.
 inputs = merge(
-  local.account_vars.locals,
+  local.account_vars.locals.proxmox,
+  local.account_vars.locals.cloudflare,
+  local.account_vars.locals.tailscale,
   local.node_vars.locals,
 )
