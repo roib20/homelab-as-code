@@ -3,20 +3,20 @@
 locals {
   # Proxmox Virtual Environment configuration
   proxmox = {
-    virtual_environment_endpoint              = try(get_env("PVE_ENDPOINT"), "$${PVE_ENDPOINT}", "https://pve:8006/")
-    virtual_environment_api_token             = try(get_env("PVE_API_TOKEN"), "$${PVE_API_TOKEN}", "user@pam!token=00000000-0000-0000-0000-000000000000")
-    virtual_environment_username              = try(get_env("PVE_USERNAME"), "$${PVE_USERNAME}", "username")
-    virtual_environment_password              = try(get_env("PVE_PASSWORD"), "$${PVE_PASSWORD}", "password")
-    virtual_environment_auth_ticket           = try(get_env("PVE_AUTH_TICKET"), "$${PVE_AUTH_TICKET}", "")
-    virtual_environment_csrf_prevention_token = try(get_env("PVE_CSRF_TOKEN"), "$${PVE_CSRF_TOKEN}", "")
+    virtual_environment_endpoint              = try(get_env("PVE_ENDPOINT"), "https://pve:8006/")
+    virtual_environment_api_token             = try(get_env("PVE_API_TOKEN"), "user@pam!token=00000000-0000-0000-0000-000000000000")
+    virtual_environment_username              = try(get_env("PVE_USERNAME"), "username")
+    virtual_environment_password              = try(get_env("PVE_PASSWORD"), "password")
+    virtual_environment_auth_ticket           = try(get_env("PVE_AUTH_TICKET"), "")
+    virtual_environment_csrf_prevention_token = try(get_env("PVE_CSRF_TOKEN"), "")
   }
 
   # Cloudflare configuration
   cloudflare = {
     cloudflare_account_id  = try(get_env("CLOUDFLARE_ACCOUNT_ID"), "${CLOUDFLARE_ACCOUNT_ID}", "1234567890abcdef1234567890abcdef")
-    jurisdiction_subdomain = try(get_env("CLOUDFLARE_JURISDICTION"), "$${CLOUDFLARE_JURISDICTION}", "")
+    jurisdiction_subdomain = try(get_env("CLOUDFLARE_JURISDICTION"), "")
     r2_endpoint           = "https://${local.cloudflare.cloudflare_account_id}${local.cloudflare.jurisdiction_subdomain}.r2.cloudflarestorage.com"
-    bucket_name           = try(get_env("R2_BUCKET_NAME"), "$${R2_BUCKET_NAME}", "homelab-as-code")
+    bucket_name           = try(get_env("R2_BUCKET_NAME"), "homelab-as-code")
   }
 
   # Tailscale configuration
