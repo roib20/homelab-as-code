@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cluster-ingress_controllers
+  name: cluster-ingress-controllers
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: '15'
@@ -12,7 +12,7 @@ spec:
   generators:
     - git:
         files:
-          - path: kubernetes/cluster/ingress_controllers/**/overlays/*/config.json
+          - path: kubernetes/cluster/ingress-controllers/**/overlays/*/config.json
         repoURL: https://github.com/roib20/homelab-as-code.git
         requeueAfterSeconds: 20
         revision: ""
