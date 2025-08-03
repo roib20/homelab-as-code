@@ -13,8 +13,9 @@ locals {
 
   # Cloudflare configuration
   cloudflare = {
-    cloudflare_account_id = "${CLOUDFLARE_ACCOUNT_ID}"
-    r2_endpoint           = "https://${local.cloudflare.cloudflare_account_id}.r2.cloudflarestorage.com"
+    cloudflare_account_id  = "${CLOUDFLARE_ACCOUNT_ID}"
+    jurisdiction_subdomain = ""  # Leave empty for default, or set to jurisdiction (e.g., ".eu")
+    r2_endpoint           = "https://${local.cloudflare.cloudflare_account_id}${local.cloudflare.jurisdiction_subdomain}.r2.cloudflarestorage.com"
     bucket_name           = "homelab-as-code"
   }
 
