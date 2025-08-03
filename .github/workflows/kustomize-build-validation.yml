@@ -23,7 +23,7 @@ jobs:
         env:
           FQDN_01: "example.com"
           CF_EMAIL: "test@example.com"
-          CF_ACCOUNT_ID: "1234567890abcdefghijklmnopqrstuvwxyz"
+          CF_ACCOUNT_ID: "1234567890abcdef1234567890abcdef"
         shell: sh
         run: printenv > "${ENV_FILE}"
       - name: Run kustomize build in parallel
