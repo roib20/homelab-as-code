@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "tailscale-operator",
+  "destName": "in-cluster",
+  "destNamespace": "tailscale",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "tailscale-operator"
+}
