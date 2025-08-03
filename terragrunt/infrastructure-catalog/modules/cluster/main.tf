@@ -99,4 +99,5 @@ module "talos_cluster" {
   machines               = local.machines
   bootstrap_charts       = local.bootstrap_charts
   on_destroy             = var.cluster_on_destroy
+  ts_authkey             = var.ts_authkey
 }

@@ -123,3 +123,9 @@ variable "machines" {
     }))
   }))
 }
+
+variable "ts_authkey" {
+  description = "Tailscale auth key for connecting nodes to Tailscale network"
+  type        = string
+  sensitive   = true
+}
