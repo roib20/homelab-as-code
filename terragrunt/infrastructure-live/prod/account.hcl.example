@@ -13,14 +13,14 @@ locals {
 
   # Cloudflare configuration
   cloudflare = {
-    cloudflare_account_id  = try(get_env("CLOUDFLARE_ACCOUNT_ID"), "$${CLOUDFLARE_ACCOUNT_ID}", "1234567890abcdef1234567890abcdef")
+    cloudflare_account_id  = try(get_env("CLOUDFLARE_ACCOUNT_ID"), "1234567890abcdef1234567890abcdef")
     jurisdiction_subdomain = try(get_env("CLOUDFLARE_JURISDICTION"), "")
-    r2_endpoint           = "https://${try(get_env("CLOUDFLARE_ACCOUNT_ID"), "$${CLOUDFLARE_ACCOUNT_ID}", "1234567890abcdef1234567890abcdef")}${try(get_env("CLOUDFLARE_JURISDICTION"), "")}.r2.cloudflarestorage.com"
+    r2_endpoint           = "https://${try(get_env("CLOUDFLARE_ACCOUNT_ID"), "1234567890abcdef1234567890abcdef")}${try(get_env("CLOUDFLARE_JURISDICTION"), "")}.r2.cloudflarestorage.com"
     bucket_name           = try(get_env("R2_BUCKET_NAME"), "homelab-as-code")
   }
 
   # Tailscale configuration
   tailscale = {
-    ts_authkey = try(get_env("TS_AUTHKEY"), "$${TS_AUTHKEY}", "")
+    ts_authkey = try(get_env("TS_AUTHKEY"), "")
   }
 }
