@@ -40,7 +40,7 @@
   when: kustomize_overlays | length == 0
 - name: Build kustomization overlays
   ansible.builtin.command: >-
-    {{ kustomizer }} --enable-helm --load-restrictor=LoadRestrictionsNone {{ base_path }}/kubernetes/cluster/{{ item.set }}/{{ item.name }}/overlays/{{ item.overlay }}
+    {{ kustomizer }} --enable-helm --load-restrictor=LoadRestrictionsNone {{ base_path }}/kubernetes/cluster/active/{{ item.set }}/{{ item.name }}/overlays/{{ item.overlay }}
   loop: "{{ kustomize_overlays }}"
   loop_control:
     label: "{{ item.name }} ({{ item.set }}/{{ item.overlay }})"
