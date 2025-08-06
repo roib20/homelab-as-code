@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "version-checker",
+  "destName": "in-cluster",
+  "destNamespace": "version-checker",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "version-checker"
+}

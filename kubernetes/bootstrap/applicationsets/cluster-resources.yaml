@@ -12,7 +12,7 @@ spec:
   generators:
     - git:
         files:
-          - path: kubernetes/cluster/resources/**/overlays/*/config.json
+          - path: kubernetes/cluster/active/resources/**/overlays/*/config.json
         repoURL: https://github.com/roib20/homelab-as-code.git
         requeueAfterSeconds: 20
         revision: ""

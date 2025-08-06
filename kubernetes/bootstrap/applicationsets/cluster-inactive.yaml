@@ -2,17 +2,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cluster-apps
+  name: cluster-inactive
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: '30'
+    argocd.argoproj.io/sync-wave: '100'
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
     - git:
         files:
-          - path: kubernetes/cluster/active/apps/**/overlays/*/config.json
+          - path: kubernetes/cluster/inactive/**/overlays/*/config.json
         repoURL: https://github.com/roib20/homelab-as-code.git
         requeueAfterSeconds: 20
         revision: ""

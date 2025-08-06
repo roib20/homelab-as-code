@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "local-path-provisioner",
+  "destName": "in-cluster",
+  "destNamespace": "storage",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "local-path-provisioner"
+}

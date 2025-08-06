@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "longhorn",
+  "destName": "in-cluster",
+  "destNamespace": "longhorn-system",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "longhorn"
+}

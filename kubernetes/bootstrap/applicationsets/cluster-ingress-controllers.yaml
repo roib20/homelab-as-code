@@ -12,7 +12,7 @@ spec:
   generators:
     - git:
         files:
-          - path: kubernetes/cluster/ingress-controllers/**/overlays/*/config.json
+          - path: kubernetes/cluster/active/ingress-controllers/**/overlays/*/config.json
         repoURL: https://github.com/roib20/homelab-as-code.git
         requeueAfterSeconds: 20
         revision: ""
