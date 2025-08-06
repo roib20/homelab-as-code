@@ -13,7 +13,7 @@ spec:
     - git:
         files:
           - path: kubernetes/cluster/inactive/**/overlays/*/config.json
-        repoURL: https://github.com/roib20/argocd-testing2.0.git
+        repoURL: https://github.com/roib20/homelab-as-code.git
         requeueAfterSeconds: 20
         revision: ""
         template:
@@ -39,7 +39,7 @@ spec:
       project: '{{ .project }}'
       source:
         path: '{{.path.path}}'
-        repoURL: https://github.com/roib20/argocd-testing2.0.git
+        repoURL: https://github.com/roib20/homelab-as-code.git
       syncPolicy:
         automated:
           prune: true
