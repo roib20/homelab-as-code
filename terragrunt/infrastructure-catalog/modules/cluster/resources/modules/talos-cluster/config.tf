@@ -65,7 +65,8 @@ data "talos_machine_configuration" "this" {
       extramounts = local.extramounts
     }),
     templatefile("${path.module}/resources/talos-patches/tailscale.patch.yaml.tftpl", {
-      TS_AUTHKEY = var.ts_authkey
+      TS_AUTHKEY  = var.ts_authkey
+      TS_HOSTNAME = each.key
     }),
     templatefile("${path.module}/resources/talos-patches/ccm.yaml.tftpl", {
       type = yamldecode(each.value.talos_config).type
