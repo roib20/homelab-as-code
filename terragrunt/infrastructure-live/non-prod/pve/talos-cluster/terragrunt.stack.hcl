@@ -93,27 +93,27 @@ locals {
     cilium = {
       chart_version   = "1.17.4"
       helm_repository = "oci://ghcr.io/home-operations/charts-mirror"
-      values          = file("${local.kubernetes_dir}/cluster/addons/cilium/base/values.yaml")
+      values          = file("${local.kubernetes_dir}/cluster/active/addons/cilium/base/values.yaml")
     }
     talos-ccm = {
       chart_version   = "0.4.6"
       helm_repository = "oci://ghcr.io/siderolabs/charts"
-      values          = file("${local.kubernetes_dir}/cluster/addons/talos-cloud-controller-manager/base/values.yaml")
+      values          = file("${local.kubernetes_dir}/cluster/active/addons/talos-cloud-controller-manager/base/values.yaml")
     }
     cert-manager = {
       chart_version   = "1.18.0"
       helm_repository = "https://charts.jetstack.io"
-      values          = file("${local.kubernetes_dir}/cluster/addons/cert-manager/base/values.yaml")
+      values          = file("${local.kubernetes_dir}/cluster/active/addons/cert-manager/base/values.yaml")
     }
     coredns = {
       chart_version   = "1.43.0"
       helm_repository = "oci://ghcr.io/coredns/charts"
-      values          = file("${local.kubernetes_dir}/cluster/addons/coredns/base/values.yaml")
+      values          = file("${local.kubernetes_dir}/cluster/active/addons/coredns/base/values.yaml")
     }
     spegel = {
       chart_version   = "0.3.0"
       helm_repository = "oci://ghcr.io/spegel-org/helm-charts"
-      values          = file("${local.kubernetes_dir}/cluster/addons/spegel/base/values.yaml")
+      values          = file("${local.kubernetes_dir}/cluster/active/addons/spegel/base/values.yaml")
     }
   }
 }
