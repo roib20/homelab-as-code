@@ -11,6 +11,9 @@ locals {
   node_vars = read_terragrunt_config("${local.root_dir}/${local.environment}/pve/node.hcl")
   node_name = local.node_vars.locals.node_name
 
+  # ─── Account variables ───────────────────────────────────────────────────────
+  account_vars = read_terragrunt_config("${local.root_dir}/${local.environment}/account.hcl")
+
   # ─── Versions ────────────────────────────────────────────────────────────────
   versions = {
     kubernetes_version       = "1.33.1",
@@ -273,5 +276,8 @@ unit "talos-cluster" {
     # other locals
     timeout  = local.timeout
     machines = local.machines
+
+    # Tailscale configuration
+    ts_authkey = local.account_vars.locals.tailscale.ts_authkey
   }
 }
