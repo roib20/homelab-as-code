@@ -44,4 +44,7 @@ inputs = {
 
   # machines map
   machines = jsonencode(values.machines)
+
+  # Tailscale configuration
+  ts_authkey = try(values.ts_authkey)
 }
