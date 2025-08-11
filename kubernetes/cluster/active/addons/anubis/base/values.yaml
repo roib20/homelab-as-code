@@ -1,91 +1,159 @@
 ---
-controllers:
-  anubis:
-    type: deployment
-    replicas: 1
-    containers:
-      anubis:
-        image:
-          repository: ghcr.io/techarohq/anubis
-          tag: v1.21.0-pre3
-        # https://anubis.techaro.lol/docs/admin/installation/#environment-variables
-        env:
-          - name: BIND
-            value: ":8923"
-          - name: DIFFICULTY
-            value: "4"
-          - name: METRICS_BIND
-            value: ":9090"
-          - name: SERVE_ROBOTS_TXT
-            value: "true"
-          - name: TARGET
-            value: "http://istio-ingressgateway.istio-ingress.svc.cluster.local:80"
-          - name: OG_PASSTHROUGH
-            value: "false"
-          - name: USE_REMOTE_ADDRESS
-            value: "false"
-          - name: ED25519_PRIVATE_KEY_HEX
-            valueFrom:
-              secretKeyRef:
-                name: anubis-key
-                key: password
-        # # --- Valkey backend ----------------------------------
-        # # ─── 1️⃣  pull pieces from the operator’s binding Secret ───
-        # - name: VALKEY_HOST
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: valkey-anubis-binding
-        #       key: host               # "anubis-valkey-master.default.svc.cluster.local"
-        # - name: VALKEY_PORT
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: valkey-anubis-binding
-        #       key: port               # "6379"
-        # - name: VALKEY_PASSWORD
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: valkey-anubis-binding
-        #       key: password           # "p9Rjb3x8yYF" (example)
-        # # ─── 2️⃣  tell Anubis to use Valkey ───
-        # - name: STORE_BACKEND
-        #   value: "valkey"
-
-        # # ─── 3️⃣  build the final URL (K8s expands $(…)) ───
-        # - name: STORE_PARAMETERS_URL
-        #   value: "redis://:$(VALKEY_PASSWORD)@$(VALKEY_HOST):$(VALKEY_PORT)/0"
-        resources:
-          limits:
-            cpu: 750m
-            memory: 256Mi
-          requests:
-            cpu: 250m
-            memory: 256Mi
-        probes:
-          liveness: &probe
-            enabled: true
-            custom: true
-            spec:
-              tcpSocket:
-                port: &port 8923
-              initialDelaySeconds: 10
-              periodSeconds: 10
-          readiness: *probe
-service:
-  anubis:
-    controller: anubis
-    sessionAffinity: ClientIP
-    sessionAffinityConfig:
-      clientIP:
-        timeoutSeconds: 3600
-    ports:
-      http:
-        port: *port
-      metrics:
-        port: 9090
-anubisPodOptions:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1000
-    runAsNonRoot: true
-    seccompProfile:
-      type: Runtimeanubis
+{
+  controllers: {
+    anubis: {
+      type: "deployment",
+      replicas: 1,
+      containers: {
+        anubis: {
+          image: {
+            repository: "ghcr.io/techarohq/anubis",
+            tag: "v1.21.0-pre3",
+          },
+          # https://anubis.techaro.lol/docs/admin/installation/#environment-variables
+          env: [
+            {
+              name: "BIND",
+              value: ":8923",
+            },
+            {
+              name: "DIFFICULTY",
+              value: "4",
+            },
+            {
+              name: "METRICS_BIND",
+              value: ":9090",
+            },
+            {
+              name: "SERVE_ROBOTS_TXT",
+              value: "true",
+            },
+            {
+              name: "TARGET",
+              value: "http://istio-ingressgateway.istio-ingress.svc.cluster.local:80",
+            },
+            {
+              name: "OG_PASSTHROUGH",
+              value: "false",
+            },
+            {
+              name: "USE_REMOTE_ADDRESS",
+              value: "false",
+            },
+            {
+              name: "ED25519_PRIVATE_KEY_HEX",
+              valueFrom: {
+                secretKeyRef: {
+                  name: "anubis-key",
+                  key: "password",
+                },
+              },
+            },
+            # # --- Valkey backend ----------------------------------
+            # # ─── 1️⃣  pull pieces from the operator’s binding Secret ───
+            # {
+            #   name: "VALKEY_HOST",
+            #   valueFrom: {
+            #     secretKeyRef: {
+            #       name: "valkey-anubis-binding",
+            #       key: "host", # "anubis-valkey-master.default.svc.cluster.local"
+            #     },
+            #   },
+            # },
+            # {
+            #   name: "VALKEY_PORT",
+            #   valueFrom: {
+            #     secretKeyRef: {
+            #       name: "valkey-anubis-binding",
+            #       key: "port", # "6379"
+            #     },
+            #   },
+            # },
+            # {
+            #   name: "VALKEY_PASSWORD",
+            #   valueFrom: {
+            #     secretKeyRef: {
+            #       name: "valkey-anubis-binding",
+            #       key: "password", # "p9Rjb3x8yYF" (example)
+            #     },
+            #   },
+            # },
+            # # ─── 2️⃣  tell Anubis to use Valkey ───
+            # {
+            #   name: "STORE_BACKEND",
+            #   value: "valkey",
+            # },
+            # # ─── 3️⃣  build the final URL (K8s expands $(…)) ───
+            # {
+            #   name: "STORE_PARAMETERS_URL",
+            #   value: "redis://:$(VALKEY_PASSWORD)@$(VALKEY_HOST):$(VALKEY_PORT)/0",
+            # },
+          ],
+          resources: {
+            limits: {
+              cpu: "750m",
+              memory: "256Mi",
+            },
+            requests: {
+              cpu: "250m",
+              memory: "256Mi",
+            },
+          },
+          probes: {
+            liveness: {
+              enabled: true,
+              custom: true,
+              spec: {
+                tcpSocket: {
+                  port: 8923,
+                },
+                initialDelaySeconds: 10,
+                periodSeconds: 10,
+              },
+            },
+            readiness: {
+              enabled: true,
+              custom: true,
+              spec: {
+                tcpSocket: {
+                  port: 8923,
+                },
+                initialDelaySeconds: 10,
+                periodSeconds: 10,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  service: {
+    anubis: {
+      controller: "anubis",
+      sessionAffinity: "ClientIP",
+      sessionAffinityConfig: {
+        clientIP: {
+          timeoutSeconds: 3600,
+        },
+      },
+      ports: {
+        http: {
+          port: 8923,
+        },
+        metrics: {
+          port: 9090,
+        },
+      },
+    },
+  },
+  anubisPodOptions: {
+    securityContext: {
+      runAsUser: 1000,
+      runAsGroup: 1000,
+      runAsNonRoot: true,
+      seccompProfile: {
+        type: "Runtimeanubis",
+      },
+    },
+  },
+}

@@ -1,8 +1,12 @@
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    argocd.argoproj.io/sync-options: Prune=false
-  name: cert-manager
-spec: {}
+{
+  apiVersion: "v1",
+  kind: "Namespace",
+  metadata: {
+    annotations: {
+      argocd.argoproj.io/sync-options: "Prune=false",
+    },
+    name: "cert-manager",
+  },
+  spec: {},
+}

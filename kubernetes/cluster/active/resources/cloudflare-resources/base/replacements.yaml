@@ -1,85 +1,126 @@
 ---
-- source:
-    kind: ConfigMap
-    name: env-vars
-    fieldPath: "data.FQDN_01"
-  targets:
-    - select:
-        kind: ClusterTunnel
-        name: tunnel-domain
-      fieldPaths:
-        - spec.cloudflare.domain
-        - spec.newTunnel.name
-        - metadata.name
-- source:
-    kind: ConfigMap
-    name: env-vars
-    fieldPath: "data.CF_EMAIL"
-  targets:
-    - select:
-        kind: ClusterTunnel
-        name: tunnel-domain
-      fieldPaths:
-        - spec.cloudflare.email
-        - spec.cloudflare.accountName
-- source:
-    kind: ConfigMap
-    name: env-vars
-    fieldPath: "data.CF_ACCOUNT_ID"
-  targets:
-    - select:
-        kind: ClusterTunnel
-        name: tunnel-domain
-      fieldPaths:
-        - spec.cloudflare.accountId
-- source:
-    kind: ConfigMap
-    name: env-vars
-    fieldPath: "data.FQDN_01"
-  targets:
-    - select:
-        kind: TunnelBinding
-        name: ingress-tunnelbinding
-      fieldPaths:
-        - subjects.0.spec.fqdn
-      options:
-        delimiter: "."
-        index: 1
-- source:
-    kind: ConfigMap
-    name: env-vars
-    fieldPath: "data.FQDN_01"
-  targets:
-    - select:
-        kind: TunnelBinding
-        name: ingress-tunnelbinding
-      fieldPaths:
-        - subjects.1.spec.fqdn
-- source:
-    kind: ConfigMap
-    name: env-vars
-    fieldPath: "data.FQDN_01"
-  targets:
-    - select:
-        kind: TunnelBinding
-        name: ingress-tunnelbinding
-      fieldPaths:
-        - tunnelRef.name
-- source:
-    kind: ConfigMap
-    name: env-vars
-    fieldPath: "data.FQDN_01"
-  targets:
-    - select:
-        kind: Certificate
-        name: tls-wildcard
-      fieldPaths:
-        - spec.dnsNames.0
-      options:
-        delimiter: "."
-        index: 1
-    - select:
-        kind: Certificate
-        name: tls-wildcard
-      fieldPaths:
-        - spec.dnsNames.1
+[{
+  source: {
+    kind: "ConfigMap",
+    name: "env-vars",
+    fieldPath: "data.FQDN_01",
+  },
+  targets: [{
+    select: {
+      kind: "ClusterTunnel",
+      name: "tunnel-domain",
+    },
+    fieldPaths: [
+      "spec.cloudflare.domain",
+      "spec.newTunnel.name",
+      "metadata.name",
+    ],
+  }],
+}, {
+  source: {
+    kind: "ConfigMap",
+    name: "env-vars",
+    fieldPath: "data.CF_EMAIL",
+  },
+  targets: [{
+    select: {
+      kind: "ClusterTunnel",
+      name: "tunnel-domain",
+    },
+    fieldPaths: [
+      "spec.cloudflare.email",
+      "spec.cloudflare.accountName",
+    ],
+  }],
+}, {
+  source: {
+    kind: "ConfigMap",
+    name: "env-vars",
+    fieldPath: "data.CF_ACCOUNT_ID",
+  },
+  targets: [{
+    select: {
+      kind: "ClusterTunnel",
+      name: "tunnel-domain",
+    },
+    fieldPaths: [
+      "spec.cloudflare.accountId",
+    ],
+  }],
+}, {
+  source: {
+    kind: "ConfigMap",
+    name: "env-vars",
+    fieldPath: "data.FQDN_01",
+  },
+  targets: [{
+    select: {
+      kind: "TunnelBinding",
+      name: "ingress-tunnelbinding",
+    },
+    fieldPaths: [
+      "subjects.0.spec.fqdn",
+    ],
+    options: {
+      delimiter: ".",
+      index: 1,
+    },
+  }],
+}, {
+  source: {
+    kind: "ConfigMap",
+    name: "env-vars",
+    fieldPath: "data.FQDN_01",
+  },
+  targets: [{
+    select: {
+      kind: "TunnelBinding",
+      name: "ingress-tunnelbinding",
+    },
+    fieldPaths: [
+      "subjects.1.spec.fqdn",
+    ],
+  }],
+}, {
+  source: {
+    kind: "ConfigMap",
+    name: "env-vars",
+    fieldPath: "data.FQDN_01",
+  },
+  targets: [{
+    select: {
+      kind: "TunnelBinding",
+      name: "ingress-tunnelbinding",
+    },
+    fieldPaths: [
+      "tunnelRef.name",
+    ],
+  }],
+}, {
+  source: {
+    kind: "ConfigMap",
+    name: "env-vars",
+    fieldPath: "data.FQDN_01",
+  },
+  targets: [{
+    select: {
+      kind: "Certificate",
+      name: "tls-wildcard",
+    },
+    fieldPaths: [
+      "spec.dnsNames.0",
+    ],
+    options: {
+      delimiter: ".",
+      index: 1,
+    },
+  }, {
+    select: {
+      kind: "Certificate",
+      name: "tls-wildcard",
+    },
+    fieldPaths: [
+      "spec.dnsNames.1",
+    ],
+  }],
+}]

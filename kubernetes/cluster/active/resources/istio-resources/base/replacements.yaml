@@ -1,21 +1,31 @@
 ---
-- source:
-    kind: ConfigMap
-    name: env-vars
-    fieldPath: "data.FQDN_01"
-  targets:
-    - select:
-        apiVersion: gateway.networking.k8s.io/v1
-        kind: Gateway
-        name: http-gateway-api
-      fieldPaths:
-        - spec.listeners.[name=wildcard].hostname
-      options:
-        delimiter: "."
-        index: 1
-    - select:
-        apiVersion: gateway.networking.k8s.io/v1
-        kind: Gateway
-        name: http-gateway-api
-      fieldPaths:
-        - spec.listeners.[name=apex].hostname
+[{
+  source: {
+    kind: "ConfigMap",
+    name: "env-vars",
+    fieldPath: "data.FQDN_01",
+  },
+  targets: [{
+    select: {
+      apiVersion: "gateway.networking.k8s.io/v1",
+      kind: "Gateway",
+      name: "http-gateway-api",
+    },
+    fieldPaths: [
+      "spec.listeners.[name=wildcard].hostname",
+    ],
+    options: {
+      delimiter: ".",
+      index: 1,
+    },
+  }, {
+    select: {
+      apiVersion: "gateway.networking.k8s.io/v1",
+      kind: "Gateway",
+      name: "http-gateway-api",
+    },
+    fieldPaths: [
+      "spec.listeners.[name=apex].hostname",
+    ],
+  }],
+}]

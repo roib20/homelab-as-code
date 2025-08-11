@@ -1,4 +1,7 @@
 ---
-controller:
-  runOnControlPlane: true
-  replicas: 2
+{
+  controller: {
+    runOnControlPlane: true,
+    replicas: 2,
+  },
+}

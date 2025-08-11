@@ -1,29 +1,37 @@
 ---
-apiVersion: networking.cfargotunnel.com/v1alpha1
-kind: TunnelBinding
-metadata:
-  name: ingress-tunnelbinding
-subjects:
-  - kind: Service
-    name: wildcard-domain
-    spec:
-      fqdn: "*.${FQDN_01}"
-      http2Origin: false
-      noTlsVerify: true
-      proxyAddress: 127.0.0.1
-      proxyPort: 0
-      proxyType: ''
-      target: https://istio-ingressgateway.istio-ingress.svc.cluster.local:443
-  - kind: Service
-    name: domain
-    spec:
-      fqdn: "${FQDN_01}"
-      http2Origin: false
-      noTlsVerify: true
-      proxyAddress: 127.0.0.1
-      proxyPort: 0
-      proxyType: ''
-      target: https://istio-ingressgateway.istio-ingress.svc.cluster.local:443
-tunnelRef:
-  kind: ClusterTunnel
-  name: tunnel-domain
+{
+  apiVersion: "networking.cfargotunnel.com/v1alpha1",
+  kind: "TunnelBinding",
+  metadata: {
+    name: "ingress-tunnelbinding",
+  },
+  subjects: [{
+    kind: "Service",
+    name: "wildcard-domain",
+    spec: {
+      fqdn: "*.${FQDN_01}",
+      http2Origin: false,
+      noTlsVerify: true,
+      proxyAddress: "127.0.0.1",
+      proxyPort: 0,
+      proxyType: "",
+      target: "https://istio-ingressgateway.istio-ingress.svc.cluster.local:443",
+    },
+  }, {
+    kind: "Service",
+    name: "domain",
+    spec: {
+      fqdn: "${FQDN_01}",
+      http2Origin: false,
+      noTlsVerify: true,
+      proxyAddress: "127.0.0.1",
+      proxyPort: 0,
+      proxyType: "",
+      target: "https://istio-ingressgateway.istio-ingress.svc.cluster.local:443",
+    },
+  }],
+  tunnelRef: {
+    kind: "ClusterTunnel",
+    name: "tunnel-domain",
+  },
+}

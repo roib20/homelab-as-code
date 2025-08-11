@@ -1,4 +1,7 @@
 ---
-global:
-  istioNamespace: istio-system
-defaultRevision: "default"
+{
+  global: {
+    istioNamespace: "istio-system",
+  },
+  defaultRevision: "default",
+}

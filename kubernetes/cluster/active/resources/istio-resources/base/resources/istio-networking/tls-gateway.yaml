@@ -1,18 +1,27 @@
 ---
-apiVersion: networking.istio.io/v1
-kind: Gateway
-metadata:
-  name: tls-gateway
-spec:
-  selector:
-    istio: ingressgateway
-  servers:
-    - hosts:
-        - "*"
-      port:
-        number: 443
-        name: https
-        protocol: HTTPS
-      tls:
-        mode: SIMPLE
-        credentialName: tls-wildcard
+{
+  apiVersion: "networking.istio.io/v1",
+  kind: "Gateway",
+  metadata: {
+    name: "tls-gateway",
+  },
+  spec: {
+    selector: {
+      istio: "ingressgateway",
+    },
+    servers: [{
+      hosts: [
+        "*",
+      ],
+      port: {
+        number: 443,
+        name: "https",
+        protocol: "HTTPS",
+      },
+      tls: {
+        mode: "SIMPLE",
+        credentialName: "tls-wildcard",
+      },
+    }],
+  },
+}

@@ -1,5 +1,8 @@
 ---
-# extraArgs:
-#   - --enable-certificate-owner-ref=true
-prometheus:
-  enabled: false
+{
+  # extraArgs:
+  #   - --enable-certificate-owner-ref=true
+  prometheus: {
+    enabled: false,
+  },
+}

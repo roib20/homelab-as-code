@@ -1,26 +1,40 @@
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: argocd-server-webhook
-  labels:
-    app.kubernetes.io/part-of: argocd
-  annotations:
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-spec:
-  ingressClassName: istio
-  rules:
-    - host: "argocd.${FQDN_01}"
-      http:
-        paths:
-          - path: /api/webhook # ← only this route is public
-            pathType: Prefix
-            backend:
-              service:
-                name: argocd-server # default service shipped by the chart
-                port:
-                  name: https # forwards to 443 inside the cluster
-  tls:
-    - hosts:
-        - "*.${FQDN_01}"
+{
+  apiVersion: "networking.k8s.io/v1",
+  kind: "Ingress",
+  metadata: {
+    name: "argocd-server-webhook",
+    labels: {
+      app.kubernetes.io/part-of: "argocd",
+    },
+    annotations: {
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true",
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS",
+    },
+  },
+  spec: {
+    ingressClassName: "istio",
+    rules: [{
+      host: "argocd.${FQDN_01}",
+      http: {
+        paths: [{
+          path: "/api/webhook", # ← only this route is public
+          pathType: "Prefix",
+          backend: {
+            service: {
+              name: "argocd-server", # default service shipped by the chart
+              port: {
+                name: "https", # forwards to 443 inside the cluster
+              },
+            },
+          },
+        }],
+      },
+    }],
+    tls: [{
+      hosts: [
+        "*.${FQDN_01}",
+      ],
+    }],
+  },
+}

@@ -1,72 +1,99 @@
 ---
-# HA mode
-redis-ha:
-  enabled: true
-controller:
-  replicas: 1
-server:
-  replicas: 2
-applicationSet:
-  replicas: 2
-repoServer:
-  replicas: 2
-  # Mount env-vars
-  envFrom:
-    - secretRef:
-        name: env-vars
-  lifecycle:
-    postStart:
-      exec:
-        command:
-          - /bin/sh
-          - -c
-          - |
-            mkdir -p /tmp
-            # grab only env_ vars, strip the prefix, write key=value lines
-            printenv | grep '^env_' | sed 's/^env_//' > /tmp/env-vars.env
-configs:
-  # argocd-cm
-  cm:
-    # Kustomize build options
-    kustomize.buildOptions: "--enable-helm --load-restrictor=LoadRestrictionsNone"
-    # Troubleshooting Cilium deployed with Argo CD: https://docs.cilium.io/en/latest/configuration/argocd-issues/
-    # Ignore some Istio differences
-    ignoreDifferences:
-      - group: ""
-        kind: ConfigMap
-        name: hubble-ca-cert
-        jsonPointers:
-          - /data/ca.crt
-      - group: ""
-        kind: Secret
-        name: hubble-relay-client-certs
-        jsonPointers:
-          - /data/ca.crt
-          - /data/tls.crt
-          - /data/tls.key
-      - group: ""
-        kind: Secret
-        name: hubble-server-certs
-        jsonPointers:
-          - /data/ca.crt
-          - /data/tls.crt
-          - /data/tls.key
-      - group: admissionregistration.k8s.io
-        kind: ValidatingWebhookConfiguration
-        name: istio-validator-istio-system
-        jsonPointers:
-          - /webhooks/0/failurePolicy
-          - /webhooks/1/failurePolicy
-      - group: admissionregistration.k8s.io
-        kind: ValidatingWebhookConfiguration
-        name: istiod-default-validator
-        jsonPointers:
-          - /webhooks/0/failurePolicy
-          - /webhooks/1/failurePolicy
-    # Ignore Health for Ingress resources that lack an ADDRESS value
-    resource.customizations: |
-      networking.k8s.io/Ingress:
-        health.lua: |
-          hs = {}
-          hs.status = "Healthy"
-          return hs
+{
+  # HA mode
+  redis-ha: {
+    enabled: true,
+  },
+  controller: {
+    replicas: 1,
+  },
+  server: {
+    replicas: 2,
+  },
+  applicationSet: {
+    replicas: 2,
+  },
+  repoServer: {
+    replicas: 2,
+    # Mount env-vars
+    envFrom: [{
+      secretRef: {
+        name: "env-vars",
+      },
+    }],
+    lifecycle: {
+      postStart: {
+        exec: {
+          command: [
+            "/bin/sh",
+            "-c",
+            "\
+               mkdir -p /tmp\n\
+               # grab only env_ vars, strip the prefix, write key=value lines\n\
+               printenv | grep '^env_' | sed 's/^env_//' > /tmp/env-vars.env\n\
+              ",
+          ],
+        },
+      },
+    },
+  },
+  configs: {
+    # argocd-cm
+    cm: {
+      # Kustomize build options
+      kustomize.buildOptions: "--enable-helm --load-restrictor=LoadRestrictionsNone",
+      # Troubleshooting Cilium deployed with Argo CD: https://docs.cilium.io/en/latest/configuration/argocd-issues/
+      # Ignore some Istio differences
+      ignoreDifferences: [{
+        group: "",
+        kind: "ConfigMap",
+        name: "hubble-ca-cert",
+        jsonPointers: [
+          "/data/ca.crt",
+        ],
+      }, {
+        group: "",
+        kind: "Secret",
+        name: "hubble-relay-client-certs",
+        jsonPointers: [
+          "/data/ca.crt",
+          "/data/tls.crt",
+          "/data/tls.key",
+        ],
+      }, {
+        group: "",
+        kind: "Secret",
+        name: "hubble-server-certs",
+        jsonPointers: [
+          "/data/ca.crt",
+          "/data/tls.crt",
+          "/data/tls.key",
+        ],
+      }, {
+        group: "admissionregistration.k8s.io",
+        kind: "ValidatingWebhookConfiguration",
+        name: "istio-validator-istio-system",
+        jsonPointers: [
+          "/webhooks/0/failurePolicy",
+          "/webhooks/1/failurePolicy",
+        ],
+      }, {
+        group: "admissionregistration.k8s.io",
+        kind: "ValidatingWebhookConfiguration",
+        name: "istiod-default-validator",
+        jsonPointers: [
+          "/webhooks/0/failurePolicy",
+          "/webhooks/1/failurePolicy",
+        ],
+      }],
+      # Ignore Health for Ingress resources that lack an ADDRESS value
+      resource.customizations: "\
+         networking.k8s.io/Ingress:\n\
+        \  health.lua: |\n\
+        \    hs = {}\n\
+        \    hs.status = \"Healthy\"\n\
+        \    return hs\n\
+        ",
+    },
+  },
+}

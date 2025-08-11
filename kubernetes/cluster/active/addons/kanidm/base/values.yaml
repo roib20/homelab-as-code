@@ -1,104 +1,160 @@
 ---
-controllers:
-  kanidm:
-    annotations:
-      configmap.reloader.stakater.com/reload: kanidm
-      secret.reloader.stakater.com/reload: &cert tls-wildcard
-    type: statefulset
-    containers:
-      kanidm:
-        image:
-          repository: kanidm/server
-          tag: 1.6.4
-        env:
-          - name: KANIDM_DOMAIN
-            value: "id.${FQDN_01}"
-          - name: KANIDM_ORIGIN
-            value: "https://id.${FQDN_01}"
-        resources:
-          requests:
-            cpu: 10m
-            memory: 90Mi
-          limits:
-            memory: 2Gi
-        probes:
-          liveness: &probe
-            enabled: true
-            custom: true
-            spec:
-              httpGet:
-                path: /status
-                port: &port 8443
-                scheme: HTTPS
-              initialDelaySeconds: 0
-              periodSeconds: 10
-              timeoutSeconds: 1
-              failureThreshold: 3
-          readiness: *probe
-          startup:
-            enabled: false
-configMaps:
-  kanidm-config:
-    enabled: true
-    data:
-      server.toml: |
-        bindaddress = "0.0.0.0:8443"
-        ldapbindaddress = "0.0.0.0:3636"
-        trust_x_forward_for = true
-        db_path = "/data/kanidm.db"
-        db_fs_type = "other"
-        tls_chain = "/data/certs/tls.crt"
-        tls_key = "/data/certs/tls.key"
-        log_level = "info"
-        role = "WriteReplica"
-        [online_backup]
-        path = "/data/kanidm/backups/"
-        schedule = "0 00 2 * * * *"
-        versions = 1
-service:
-  kanidm:
-    controller: kanidm
-    ports:
-      http:
-        port: *port
-ingress:
-  kanidm:
-    enabled: true
-    className: istio
-    annotations:
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    hosts:
-      - host: id.${FQDN_01}
-        paths:
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: kanidm
-              port: http
-    tls:
-      - hosts:
-          - "*.${FQDN_01}"
-defaultPodOptions:
-  securityContext:
-    runAsUser: 389
-    runAsGroup: 389
-    fsGroup: 389
-    fsGroupChangePolicy: "OnRootMismatch"
-persistence:
-  data:
-    size: 20Gi
-    accessMode: ReadWriteOnce
-  kanidm-config:
-    enabled: true
-    globalMounts:
-      - path: /data/server.toml
-        subPath: server.toml
-    type: configMap
-    name: kanidm
-  certs:
-    enabled: true
-    type: secret
-    name: *cert
-    globalMounts:
-      - path: /data/certs
-        readOnly: true
+{
+  controllers: {
+    kanidm: {
+      annotations: {
+        configmap.reloader.stakater.com/reload: "kanidm",
+        secret.reloader.stakater.com/reload: "tls-wildcard",
+      },
+      type: "statefulset",
+      containers: {
+        kanidm: {
+          image: {
+            repository: "kanidm/server",
+            tag: "1.6.4",
+          },
+          env: [{
+            name: "KANIDM_DOMAIN",
+            value: "id.${FQDN_01}",
+          }, {
+            name: "KANIDM_ORIGIN",
+            value: "https://id.${FQDN_01}",
+          }],
+          resources: {
+            requests: {
+              cpu: "10m",
+              memory: "90Mi",
+            },
+            limits: {
+              memory: "2Gi",
+            },
+          },
+          probes: {
+            liveness: {
+              enabled: true,
+              custom: true,
+              spec: {
+                httpGet: {
+                  path: "/status",
+                  port: 8443,
+                  scheme: "HTTPS",
+                },
+                initialDelaySeconds: 0,
+                periodSeconds: 10,
+                timeoutSeconds: 1,
+                failureThreshold: 3,
+              },
+            },
+            readiness: {
+              enabled: true,
+              custom: true,
+              spec: {
+                httpGet: {
+                  path: "/status",
+                  port: 8443,
+                  scheme: "HTTPS",
+                },
+                initialDelaySeconds: 0,
+                periodSeconds: 10,
+                timeoutSeconds: 1,
+                failureThreshold: 3,
+              },
+            },
+            startup: {
+              enabled: false,
+            },
+          },
+        },
+      },
+    },
+  },
+  configMaps: {
+    kanidm-config: {
+      enabled: true,
+      data: {
+        server.toml: "\
+           bindaddress = \"0.0.0.0:8443\"\n\
+           ldapbindaddress = \"0.0.0.0:3636\"\n\
+           trust_x_forward_for = true\n\
+           db_path = \"/data/kanidm.db\"\n\
+           db_fs_type = \"other\"\n\
+           tls_chain = \"/data/certs/tls.crt\"\n\
+           tls_key = \"/data/certs/tls.key\"\n\
+           log_level = \"info\"\n\
+           role = \"WriteReplica\"\n\
+           [online_backup]\n\
+           path = \"/data/kanidm/backups/\"\n\
+           schedule = \"0 00 2 * * * *\"\n\
+           versions = 1\n\
+          ",
+      },
+    },
+  },
+  service: {
+    kanidm: {
+      controller: "kanidm",
+      ports: {
+        http: {
+          port: 8443,
+        },
+      },
+    },
+  },
+  ingress: {
+    kanidm: {
+      enabled: true,
+      className: "istio",
+      annotations: {
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS",
+      },
+      hosts: [{
+        host: "id.${FQDN_01}",
+        paths: [{
+          path: "/",
+          pathType: "Prefix",
+          service: {
+            identifier: "kanidm",
+            port: "http",
+          },
+        }],
+      }],
+      tls: [{
+        hosts: [
+          "*.${FQDN_01}",
+        ],
+      }],
+    },
+  },
+  defaultPodOptions: {
+    securityContext: {
+      runAsUser: 389,
+      runAsGroup: 389,
+      fsGroup: 389,
+      fsGroupChangePolicy: "OnRootMismatch",
+    },
+  },
+  persistence: {
+    data: {
+      size: "20Gi",
+      accessMode: "ReadWriteOnce",
+    },
+    kanidm-config: {
+      enabled: true,
+      globalMounts: [{
+        path: "/data/server.toml",
+        subPath: "server.toml",
+      }],
+      type: "configMap",
+      name: "kanidm",
+    },
+    certs: {
+      enabled: true,
+      type: "secret",
+      name: "tls-wildcard",
+      globalMounts: [{
+        path: "/data/certs",
+        readOnly: true,
+      }],
+    },
+  },
+}

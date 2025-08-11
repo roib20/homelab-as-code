@@ -1,65 +1,89 @@
 ---
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: cluster-argo
-  namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: '0'
-spec:
-  goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
-  generators:
-    - git:
-        files:
-          - path: kubernetes/cluster/active/argo/**/overlays/*/config.json
-        repoURL: https://github.com/roib20/homelab-as-code.git
-        requeueAfterSeconds: 20
-        revision: ""
-        template:
-          metadata: {}
-          spec:
-            destination: {}
-            project: ""
-  syncPolicy:
-    preserveResourcesOnDeletion: true
-  template:
-    metadata:
-      name: '{{ .userGivenName }}'
-      namespace: argocd
-    spec:
-      destination:
-        name: '{{ .destName }}'
-        namespace: '{{ .destNamespace }}'
-      ignoreDifferences:
-        - group: argoproj.io
-          jsonPointers:
-            - /status
-          kind: Application
-      project: '{{ .project }}'
-      source:
-        path: '{{.path.path}}'
-        repoURL: https://github.com/roib20/homelab-as-code.git
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
-          - ServerSideApply=true
-          - ServerSideDiff=true
-  templatePatch: |
-    metadata:
-      annotations:
-        {{- /* copy every key/value under .annotations in config.json */}}
-        {{- range $k, $v := .annotations }}
-        {{ $k }}: {{ $v }}
-        {{- end }}
-      labels:
-        app.kubernetes.io/managed-by: argocd
-        app.kubernetes.io/name: '{{ .userGivenName }}'
-        {{- /* copy every key/value under .labels in config.json */}}
-        {{- range $k, $v := .labels }}
-        {{ $k }}: {{ $v }}
-        {{- end }}
-status: {}
+{
+  apiVersion: "argoproj.io/v1alpha1",
+  kind: "ApplicationSet",
+  metadata: {
+    name: "cluster-argo",
+    namespace: "argocd",
+    annotations: {
+      argocd.argoproj.io/sync-wave: "0",
+    },
+  },
+  spec: {
+    goTemplate: true,
+    goTemplateOptions: [
+      "missingkey=error",
+    ],
+    generators: [{
+      git: {
+        files: [{
+          path: "kubernetes/cluster/active/argo/**/overlays/*/config.json",
+        }],
+        repoURL: "https://github.com/roib20/homelab-as-code.git",
+        requeueAfterSeconds: 20,
+        revision: "",
+        template: {
+          metadata: {},
+          spec: {
+            destination: {},
+            project: "",
+          },
+        },
+      },
+    }],
+    syncPolicy: {
+      preserveResourcesOnDeletion: true,
+    },
+    template: {
+      metadata: {
+        name: "{{ .userGivenName }}",
+        namespace: "argocd",
+      },
+      spec: {
+        destination: {
+          name: "{{ .destName }}",
+          namespace: "{{ .destNamespace }}",
+        },
+        ignoreDifferences: [{
+          group: "argoproj.io",
+          jsonPointers: [
+            "/status",
+          ],
+          kind: "Application",
+        }],
+        project: "{{ .project }}",
+        source: {
+          path: "{{.path.path}}",
+          repoURL: "https://github.com/roib20/homelab-as-code.git",
+        },
+        syncPolicy: {
+          automated: {
+            prune: true,
+            selfHeal: true,
+          },
+          syncOptions: [
+            "CreateNamespace=true",
+            "ServerSideApply=true",
+            "ServerSideDiff=true",
+          ],
+        },
+      },
+    },
+    templatePatch: "\
+       metadata:\n\
+      \  annotations:\n\
+      \    {{- /* copy every key/value under .annotations in config.json */}}\n\
+      \    {{- range $k, $v := .annotations }}\n\
+      \    {{ $k }}: {{ $v }}\n\
+      \    {{- end }}\n\
+      \  labels:\n\
+      \    app.kubernetes.io/managed-by: argocd\n\
+      \    app.kubernetes.io/name: '{{ .userGivenName }}'\n\
+      \    {{- /* copy every key/value under .labels in config.json */}}\n\
+      \    {{- range $k, $v := .labels }}\n\
+      \    {{ $k }}: {{ $v }}\n\
+      \    {{- end }}\n\
+      ",
+  },
+  status: {},
+}

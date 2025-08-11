@@ -1,29 +1,42 @@
 ---
-- source:
-    kind: ConfigMap
-    name: env-vars
-    fieldPath: "data.FQDN_01"
-  targets:
-    - select:
-        kind: Ingress
-        name: kanidm
-      fieldPaths:
-        - spec.rules.0.host
-        - spec.tls.0.hosts.0
-      options:
-        delimiter: "."
-        index: 1
-- source:
-    kind: ConfigMap
-    name: env-vars
-    fieldPath: data.FQDN_01
-  targets:
-    - select:
-        kind: StatefulSet
-        name: kanidm
-      fieldPaths:
-        - spec.template.spec.containers.0.env.[name=KANIDM_DOMAIN].value
-        - spec.template.spec.containers.0.env.[name=KANIDM_ORIGIN].value
-      options:
-        delimiter: "."
-        index: 1
+[{
+  source: {
+    kind: "ConfigMap",
+    name: "env-vars",
+    fieldPath: "data.FQDN_01",
+  },
+  targets: [{
+    select: {
+      kind: "Ingress",
+      name: "kanidm",
+    },
+    fieldPaths: [
+      "spec.rules.0.host",
+      "spec.tls.0.hosts.0",
+    ],
+    options: {
+      delimiter: ".",
+      index: 1,
+    },
+  }],
+}, {
+  source: {
+    kind: "ConfigMap",
+    name: "env-vars",
+    fieldPath: "data.FQDN_01",
+  },
+  targets: [{
+    select: {
+      kind: "StatefulSet",
+      name: "kanidm",
+    },
+    fieldPaths: [
+      "spec.template.spec.containers.0.env.[name=KANIDM_DOMAIN].value",
+      "spec.template.spec.containers.0.env.[name=KANIDM_ORIGIN].value",
+    ],
+    options: {
+      delimiter: ".",
+      index: 1,
+    },
+  }],
+}]

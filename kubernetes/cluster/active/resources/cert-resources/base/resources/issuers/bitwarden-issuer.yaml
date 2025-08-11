@@ -1,46 +1,65 @@
 ---
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  name: bitwarden-bootstrap-issuer
-  namespace: bitwarden
-spec:
-  selfSigned: {}
+{
+  apiVersion: "cert-manager.io/v1",
+  kind: "Issuer",
+  metadata: {
+    name: "bitwarden-bootstrap-issuer",
+    namespace: "bitwarden",
+  },
+  spec: {
+    selfSigned: {},
+  },
+}
 ---
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: bitwarden-bootstrap-certificate
-  namespace: bitwarden
-spec:
-  # this is discouraged but required by ios
-  commonName: cert-manager-bitwarden-tls
-  isCA: true
-  secretName: bitwarden-tls-ca
-  subject:
-    organizations:
-      - external-secrets.io
-  dnsNames:
-    - external-secrets-bitwarden-sdk-server.bitwarden.svc.cluster.local
-    - bitwarden-sdk-server.bitwarden.svc.cluster.local
-    - localhost
-  ipAddresses:
-    - 127.0.0.1
-    - ::1
-  privateKey:
-    algorithm: RSA
-    encoding: PKCS8
-    size: 2048
-  issuerRef:
-    name: bitwarden-bootstrap-issuer
-    kind: Issuer
-    group: cert-manager.io
+{
+  apiVersion: "cert-manager.io/v1",
+  kind: "Certificate",
+  metadata: {
+    name: "bitwarden-bootstrap-certificate",
+    namespace: "bitwarden",
+  },
+  spec: {
+    # this is discouraged but required by ios
+    commonName: "cert-manager-bitwarden-tls",
+    isCA: true,
+    secretName: "bitwarden-tls-ca",
+    subject: {
+      organizations: [
+        "external-secrets.io",
+      ],
+    },
+    dnsNames: [
+      "external-secrets-bitwarden-sdk-server.bitwarden.svc.cluster.local",
+      "bitwarden-sdk-server.bitwarden.svc.cluster.local",
+      "localhost",
+    ],
+    ipAddresses: [
+      "127.0.0.1",
+      "::1",
+    ],
+    privateKey: {
+      algorithm: "RSA",
+      encoding: "PKCS8",
+      size: 2048,
+    },
+    issuerRef: {
+      name: "bitwarden-bootstrap-issuer",
+      kind: "Issuer",
+      group: "cert-manager.io",
+    },
+  },
+}
 ---
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  name: bitwarden-certificate-issuer
-  namespace: bitwarden
-spec:
-  ca:
-    secretName: bitwarden-tls-ca
+{
+  apiVersion: "cert-manager.io/v1",
+  kind: "Issuer",
+  metadata: {
+    name: "bitwarden-certificate-issuer",
+    namespace: "bitwarden",
+  },
+  spec: {
+    ca: {
+      secretName: "bitwarden-tls-ca",
+    },
+  },
+}

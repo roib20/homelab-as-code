@@ -1,7 +1,10 @@
 ---
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  - ../../base
-  # # External Secrets Certificates
-  # - resources/certificates/external-secrets-webhook.yaml
+{
+  apiVersion: "kustomize.config.k8s.io/v1beta1",
+  kind: "Kustomization",
+  resources: [
+    "../../base",
+    # # External Secrets Certificates
+    # - resources/certificates/external-secrets-webhook.yaml
+  ],
+}

@@ -1,7 +1,13 @@
 ---
-operatorConfig:
-  image:
-    repository: ghcr.io/tailscale/k8s-operator
-proxyConfig:
-  image:
-    repository: ghcr.io/tailscale/tailscale
+{
+  operatorConfig: {
+    image: {
+      repository: "ghcr.io/tailscale/k8s-operator",
+    },
+  },
+  proxyConfig: {
+    image: {
+      repository: "ghcr.io/tailscale/tailscale",
+    },
+  },
+}

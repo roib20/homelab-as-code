@@ -1,23 +1,30 @@
 ---
-apiVersion: networking.cfargotunnel.com/v1alpha2
-kind: ClusterTunnel
-metadata:
-  name: tunnel-domain
-spec:
-  newTunnel:
-    name: "${FQDN_01}"
-  cloudflare:
-    email: "${CF_EMAIL}"
-    domain: "${FQDN_01}"
-    secret: cloudflare-operator-secret
-    # accountId and accountName cannot be both empty. If both are provided, Account ID is used if valid, else falls back to Account Name.
-    accountName: "${CF_EMAIL}"
-    accountId: "${CF_ACCOUNT_ID}"
-  deployPatch: |
-    spec:
-      replicas: 2
-      template:
-        spec:
-          containers:
-            - name: cloudflared
-              image: cloudflare/cloudflared:2025.7.0
+{
+  apiVersion: "networking.cfargotunnel.com/v1alpha2",
+  kind: "ClusterTunnel",
+  metadata: {
+    name: "tunnel-domain",
+  },
+  spec: {
+    newTunnel: {
+      name: "${FQDN_01}",
+    },
+    cloudflare: {
+      email: "${CF_EMAIL}",
+      domain: "${FQDN_01}",
+      secret: "cloudflare-operator-secret",
+      # accountId and accountName cannot be both empty. If both are provided, Account ID is used if valid, else falls back to Account Name.
+      accountName: "${CF_EMAIL}",
+      accountId: "${CF_ACCOUNT_ID}",
+    },
+    deployPatch: "\
+       spec:\n\
+      \  replicas: 2\n\
+      \  template:\n\
+      \    spec:\n\
+      \      containers:\n\
+      \        - name: cloudflared\n\
+      \          image: cloudflare/cloudflared:2025.7.0\n\
+      ",
+  },
+}
