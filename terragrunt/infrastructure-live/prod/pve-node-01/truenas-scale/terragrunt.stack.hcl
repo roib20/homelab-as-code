@@ -9,7 +9,7 @@ locals {
   terragrunt_dir = "${local.root_dir}/.."
 
   # Automatically load node-level variables
-  node_vars = read_terragrunt_config("${local.root_dir}/${local.environment}/pve/node.hcl")
+  node_vars = read_terragrunt_config("${local.root_dir}/${local.environment}/pve-node-01/node.hcl")
 
   # Extract the variables we need for easy access
   node_name = local.node_vars.locals.node_name
