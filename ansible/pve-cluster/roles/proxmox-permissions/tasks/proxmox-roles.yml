@@ -2,7 +2,7 @@
 - name: Create role 'Terraforming' with specific privileges
   ansible.builtin.command:
     cmd: >-
-      pveum role add Terraform -privs
+      pveum role add Terraforming -privs
       "Realm.AllocateUser, VM.PowerMgmt, VM.GuestAgent.Unrestricted, Sys.Console, Sys.Audit,
       Sys.AccessNetwork, VM.Config.Cloudinit, VM.Replicate, Pool.Allocate, SDN.Audit, Realm.Allocate,
       SDN.Use, Mapping.Modify, VM.Config.Memory, VM.GuestAgent.FileSystemMgmt, VM.Allocate, SDN.Allocate,
