@@ -35,6 +35,9 @@ inputs = {
   vm_name = try(values.vm_name, "local-btrfs-scale")
   vm_id   = try(values.vm_id, 2002)
 
+  # BIOS
+  bios = "ovmf"
+
   # Memory
   memory = {
     dedicated = try(values.memory_dedicated, 24576)
