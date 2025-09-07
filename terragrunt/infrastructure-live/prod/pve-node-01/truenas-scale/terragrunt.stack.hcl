@@ -22,8 +22,8 @@ unit "download_file" {
 
   values = {
     node_names         = ["${local.node_name}"]
-    url                = "https://download.sys.truenas.net/TrueNAS-SCALE-Fangtooth/25.04.0/TrueNAS-SCALE-25.04.0.iso"
-    checksum           = "ede23d4c70a7fde6674879346c1307517be9854dc79f6a5e016814226457f359"
+    url                = "https://download.sys.truenas.net/TrueNAS-SCALE-Fangtooth/25.04.2.3/TrueNAS-SCALE-25.04.2.3.iso"
+    checksum           = "2d8cdc4e6c41730d18ac2864a3dee7b36e54023098c254a1ca7ee1a7ff652297"
     checksum_algorithm = "sha256"
     datastore_id       = "local"
   }
