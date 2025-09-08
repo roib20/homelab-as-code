@@ -7,8 +7,8 @@ dotenv: [".env"]
 vars:
   ANSIBLE_DIR: '{{.ROOT_DIR}}/ansible'
   TERRAGRUNT_DIR: '{{.ROOT_DIR}}/terragrunt/infrastructure-live'
-  TERRAGRUNT_ENV: 'non-prod'
-  PVE_NODE: 'pve'
+  TERRAGRUNT_ENV: 'prod'
+  PVE_NODE: 'multi-node'
 # ── include sub‑taskfiles ────────────────────────────────────────────────────
 includes:
   # Info and utilities

@@ -2,14 +2,15 @@
 
 locals {
   # ─── Directory discovery ─────────────────────────────────────────────────────
-  environment    = "non-prod"
+  environment    = "prod"
   root_dir       = dirname(find_in_parent_folders("root.hcl"))
   terragrunt_dir = "${local.root_dir}/.."
   kubernetes_dir = "${local.root_dir}/../../kubernetes"
 
-  # ─── Proxmox node that will host the VMs ─────────────────────────────────────
-  node_vars = read_terragrunt_config("${local.root_dir}/${local.environment}/pve/node.hcl")
-  node_name = local.node_vars.locals.node_name
+  # ─── Proxmox nodes configuration ─────────────────────────────────────────────
+  node_vars  = read_terragrunt_config("${local.root_dir}/${local.environment}/multi-node/nodes.hcl")
+  nodes      = local.node_vars.locals.nodes
+  node_names = keys(local.nodes)
 
   # ─── Account variables ───────────────────────────────────────────────────────
   account_vars = read_terragrunt_config("${local.root_dir}/${local.environment}/account.hcl")
@@ -31,6 +32,7 @@ locals {
       vm_id     = 1001
       cpu_cores = 3
       memory    = 5120
+      node_name = local.node_names[0] # pve-node-01
     },
     {
       name      = "control-plane-02"
@@ -38,6 +40,7 @@ locals {
       vm_id     = 1002
       cpu_cores = 3
       memory    = 5120
+      node_name = local.node_names[1] # pve-node-02
     },
     {
       name      = "control-plane-03"
@@ -45,6 +48,7 @@ locals {
       vm_id     = 1003
       cpu_cores = 3
       memory    = 5120
+      node_name = local.node_names[2] # pve-node-03
     },
   ]
 
@@ -76,7 +80,7 @@ locals {
       hostname  = node.name
       vm_id     = node.vm_id
       region    = "${local.cluster_name}"
-      zone      = local.node_name
+      zone      = node.node_name
       cpu_cores = node.cpu_cores
       memory    = node.memory
     }
@@ -126,7 +130,7 @@ unit "download_file" {
   path   = "download_file"
 
   values = {
-    node_names     = ["${local.node_name}"]
+    node_names     = local.node_names
     datastore_id   = "local"
     talos_version  = "${local.versions.initial_talos_version}"
     talos_platform = "nocloud"
@@ -139,14 +143,14 @@ unit "cloud-config-$${local.controlplane_nodes[0].name}" {
   path   = "cloud-config/${local.controlplane_nodes[0].name}"
 
   values = {
-    node_name              = "${local.node_name}"
+    node_name              = "${local.controlplane_nodes[0].node_name}"
     datastore_id           = "local"
     user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
 
     hostname = "${local.controlplane_nodes[0].name}"
     vm_id    = "${local.controlplane_nodes[0].vm_id}"
     region   = "${local.cluster_name}"
-    zone     = "${local.node_name}"
+    zone     = "${local.controlplane_nodes[0].node_name}"
     cpu      = "${local.controlplane_nodes[0].cpu_cores}"
     memory   = "${local.controlplane_nodes[0].memory}"
 
@@ -159,14 +163,14 @@ unit "$${local.controlplane_nodes[0].name}" {
   path   = "${local.controlplane_nodes[0].name}"
 
   values = {
-    node_name    = "${local.node_name}"
+    node_name    = "${local.controlplane_nodes[0].node_name}"
     vm_name      = "${local.controlplane_nodes[0].name}"
     ipv4_address = "${local.controlplane_nodes[0].ip}"
 
     hostname  = "${local.controlplane_nodes[0].name}"
     vm_id     = "${local.controlplane_nodes[0].vm_id}"
     region    = "${local.cluster_name}"
-    zone      = "${local.node_name}"
+    zone      = "${local.controlplane_nodes[0].node_name}"
     cpu_cores = "${local.controlplane_nodes[0].cpu_cores}"
     memory    = "${local.controlplane_nodes[0].memory}"
 
@@ -179,14 +183,14 @@ unit "cloud-config-$${local.controlplane_nodes[1].name}" {
   path   = "cloud-config/${local.controlplane_nodes[1].name}"
 
   values = {
-    node_name              = "${local.node_name}"
+    node_name              = "${local.controlplane_nodes[1].node_name}"
     datastore_id           = "local"
     user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
 
     hostname = "${local.controlplane_nodes[1].name}"
     vm_id    = "${local.controlplane_nodes[1].vm_id}"
     region   = "${local.cluster_name}"
-    zone     = "${local.node_name}"
+    zone     = "${local.controlplane_nodes[1].node_name}"
     cpu      = "${local.controlplane_nodes[1].cpu_cores}"
     memory   = "${local.controlplane_nodes[1].memory}"
 
@@ -199,14 +203,14 @@ unit "$${local.controlplane_nodes[1].name}" {
   path   = "${local.controlplane_nodes[1].name}"
 
   values = {
-    node_name    = "${local.node_name}"
+    node_name    = "${local.controlplane_nodes[1].node_name}"
     vm_name      = "${local.controlplane_nodes[1].name}"
     ipv4_address = "${local.controlplane_nodes[1].ip}"
 
     hostname  = "${local.controlplane_nodes[1].name}"
     vm_id     = "${local.controlplane_nodes[1].vm_id}"
     region    = "${local.cluster_name}"
-    zone      = "${local.node_name}"
+    zone      = "${local.controlplane_nodes[1].node_name}"
     cpu_cores = "${local.controlplane_nodes[1].cpu_cores}"
     memory    = "${local.controlplane_nodes[1].memory}"
 
@@ -219,14 +223,14 @@ unit "cloud-config-$${local.controlplane_nodes[2].name}" {
   path   = "cloud-config/${local.controlplane_nodes[2].name}"
 
   values = {
-    node_name              = "${local.node_name}"
+    node_name              = "${local.controlplane_nodes[2].node_name}"
     datastore_id           = "local"
     user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
 
     hostname = "${local.controlplane_nodes[2].name}"
     vm_id    = "${local.controlplane_nodes[2].vm_id}"
     region   = "${local.cluster_name}"
-    zone     = "${local.node_name}"
+    zone     = "${local.controlplane_nodes[2].node_name}"
     cpu      = "${local.controlplane_nodes[2].cpu_cores}"
     memory   = "${local.controlplane_nodes[2].memory}"
 
@@ -239,14 +243,14 @@ unit "$${local.controlplane_nodes[2].name}" {
   path   = "${local.controlplane_nodes[2].name}"
 
   values = {
-    node_name    = "${local.node_name}"
+    node_name    = "${local.controlplane_nodes[2].node_name}"
     vm_name      = "${local.controlplane_nodes[2].name}"
     ipv4_address = "${local.controlplane_nodes[2].ip}"
 
     hostname  = "${local.controlplane_nodes[2].name}"
     vm_id     = "${local.controlplane_nodes[2].vm_id}"
     region    = "${local.cluster_name}"
-    zone      = "${local.node_name}"
+    zone      = "${local.controlplane_nodes[2].node_name}"
     cpu_cores = "${local.controlplane_nodes[2].cpu_cores}"
     memory    = "${local.controlplane_nodes[2].memory}"
 
