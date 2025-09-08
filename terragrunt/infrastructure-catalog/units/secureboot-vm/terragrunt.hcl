@@ -43,7 +43,7 @@ inputs = {
 
   # EFI Disk
   efi_disk = {
-    datastore_id      = try(values.vm_datastore_id, "VM")
+    datastore_id      = try(values.vm_datastore_id, "local-btrfs")
     type              = "4m"
     pre_enrolled_keys = true
   }
@@ -74,7 +74,7 @@ inputs = {
   disks = [
     {
       interface    = "virtio0"
-      datastore_id = try(values.vm_datastore_id, "VM")
+      datastore_id = try(values.vm_datastore_id, "local-btrfs")
       iothread     = true
       discard      = "on"
       size         = try(values.disk_size_gb, 64)

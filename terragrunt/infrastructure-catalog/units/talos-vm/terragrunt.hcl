@@ -46,7 +46,7 @@ inputs = {
   vm_id   = try(values.vm_id, 4000)
 
   # Storage & resources
-  vm_datastore_id = try(values.vm_datastore_id, "VM")
+  vm_datastore_id = try(values.vm_datastore_id, "local-btrfs")
 
   agent = {
     enabled = local.agent
@@ -76,7 +76,7 @@ inputs = {
     {
       interface    = "virtio0"
       file_id      = dependency.download_file.outputs.downloaded_file_id
-      datastore_id = try(values.vm_datastore_id, "VM")
+      datastore_id = try(values.vm_datastore_id, "local-btrfs")
       iothread     = true
       discard      = "on"
       size         = try(values.disk_size_gb, 64)
@@ -85,7 +85,7 @@ inputs = {
 
   # Cloud-init
   initialization = {
-    datastore_id      = try(values.vm_datastore_id, "VM")
+    datastore_id      = try(values.vm_datastore_id, "local-btrfs")
     meta_data_file_id = "${try(values.snippets_datastore_id, "local")}:snippets/${values.meta_data_cloud_config_file_name}"
 
 
