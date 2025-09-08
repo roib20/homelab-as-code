@@ -31,7 +31,7 @@ locals {
       ip        = "192.168.1.51"
       vm_id     = 1001
       cpu_cores = 3
-      memory    = 5120
+      memory    = 14336
       node_name = local.node_names[0] # pve-node-01
     },
     {
@@ -39,7 +39,7 @@ locals {
       ip        = "192.168.1.52"
       vm_id     = 1002
       cpu_cores = 3
-      memory    = 5120
+      memory    = 14336
       node_name = local.node_names[1] # pve-node-02
     },
     {
@@ -47,7 +47,7 @@ locals {
       ip        = "192.168.1.53"
       vm_id     = 1003
       cpu_cores = 3
-      memory    = 5120
+      memory    = 14336
       node_name = local.node_names[2] # pve-node-03
     },
   ]
@@ -167,12 +167,13 @@ unit "$${local.controlplane_nodes[0].name}" {
     vm_name      = "${local.controlplane_nodes[0].name}"
     ipv4_address = "${local.controlplane_nodes[0].ip}"
 
-    hostname  = "${local.controlplane_nodes[0].name}"
-    vm_id     = "${local.controlplane_nodes[0].vm_id}"
-    region    = "${local.cluster_name}"
-    zone      = "${local.controlplane_nodes[0].node_name}"
-    cpu_cores = "${local.controlplane_nodes[0].cpu_cores}"
-    memory    = "${local.controlplane_nodes[0].memory}"
+    hostname     = "${local.controlplane_nodes[0].name}"
+    vm_id        = "${local.controlplane_nodes[0].vm_id}"
+    region       = "${local.cluster_name}"
+    zone         = "${local.controlplane_nodes[0].node_name}"
+    cpu_cores    = "${local.controlplane_nodes[0].cpu_cores}"
+    memory       = "${local.controlplane_nodes[0].memory}"
+    disk_size_gb = 400
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[0].name}.yaml"
   }
@@ -207,12 +208,13 @@ unit "$${local.controlplane_nodes[1].name}" {
     vm_name      = "${local.controlplane_nodes[1].name}"
     ipv4_address = "${local.controlplane_nodes[1].ip}"
 
-    hostname  = "${local.controlplane_nodes[1].name}"
-    vm_id     = "${local.controlplane_nodes[1].vm_id}"
-    region    = "${local.cluster_name}"
-    zone      = "${local.controlplane_nodes[1].node_name}"
-    cpu_cores = "${local.controlplane_nodes[1].cpu_cores}"
-    memory    = "${local.controlplane_nodes[1].memory}"
+    hostname     = "${local.controlplane_nodes[1].name}"
+    vm_id        = "${local.controlplane_nodes[1].vm_id}"
+    region       = "${local.cluster_name}"
+    zone         = "${local.controlplane_nodes[1].node_name}"
+    cpu_cores    = "${local.controlplane_nodes[1].cpu_cores}"
+    memory       = "${local.controlplane_nodes[1].memory}"
+    disk_size_gb = 400
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[1].name}.yaml"
   }
@@ -247,12 +249,13 @@ unit "$${local.controlplane_nodes[2].name}" {
     vm_name      = "${local.controlplane_nodes[2].name}"
     ipv4_address = "${local.controlplane_nodes[2].ip}"
 
-    hostname  = "${local.controlplane_nodes[2].name}"
-    vm_id     = "${local.controlplane_nodes[2].vm_id}"
-    region    = "${local.cluster_name}"
-    zone      = "${local.controlplane_nodes[2].node_name}"
-    cpu_cores = "${local.controlplane_nodes[2].cpu_cores}"
-    memory    = "${local.controlplane_nodes[2].memory}"
+    hostname     = "${local.controlplane_nodes[2].name}"
+    vm_id        = "${local.controlplane_nodes[2].vm_id}"
+    region       = "${local.cluster_name}"
+    zone         = "${local.controlplane_nodes[2].node_name}"
+    cpu_cores    = "${local.controlplane_nodes[2].cpu_cores}"
+    memory       = "${local.controlplane_nodes[2].memory}"
+    disk_size_gb = 400
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[2].name}.yaml"
   }
