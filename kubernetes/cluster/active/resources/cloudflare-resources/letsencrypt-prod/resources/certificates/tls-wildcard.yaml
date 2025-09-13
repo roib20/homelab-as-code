@@ -9,7 +9,7 @@ spec:
     - "*.${FQDN_01}"
     - "${FQDN_01}"
   issuerRef:
-    name: letsencrypt-staging
+    name: letsencrypt-prod
     kind: ClusterIssuer
   secretTemplate:
     annotations:
