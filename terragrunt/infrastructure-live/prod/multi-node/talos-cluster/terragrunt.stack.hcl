@@ -89,7 +89,7 @@ locals {
 
   cluster_name           = "talos"
   cluster_endpoint       = local.controlplane_nodes[0].ip
-  cluster_vip            = "192.168.1.60"
+  cluster_vip            = "192.168.1.50"
   cluster_node_subnet    = "192.168.1.0/24"
   cluster_pod_subnet     = "10.244.0.0/16"
   cluster_service_subnet = "10.96.0.0/12"
