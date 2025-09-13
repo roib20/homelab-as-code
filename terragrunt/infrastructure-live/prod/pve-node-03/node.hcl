@@ -1,7 +1,7 @@
 locals {
   nodes = {
-    "pve-02" = {
-      address = "https://pve-02:8006/"
+    "pve-node-03" = {
+      address = "https://pve-node-03:8006/"
     }
   }
   # For backward compatibility

@@ -28,6 +28,6 @@
       when: token.changed
       ansible.builtin.replace:
         path: "{{ item.account_hcl }}"
-        regexp: '(virtual_environment_api_token\s*=\s*try\(get_env\("PVE_API_TOKEN"\),\s*"\$\{PVE_API_TOKEN\}",\s*)"[^"]*"(\))'
+        regexp: '(virtual_environment_api_token\s*=\s*try\(get_env\("PVE_API_TOKEN"\),\s*)"[^"]*"(\))'
         replace: '\1"{{ full_tokenid }}={{ token_value }}"\2'
       loop: "{{ environments }}"

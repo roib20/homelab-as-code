@@ -2,25 +2,26 @@
 
 locals {
   # ─── Directory discovery ─────────────────────────────────────────────────────
-  environment    = "non-prod"
+  environment    = "prod"
   root_dir       = dirname(find_in_parent_folders("root.hcl"))
   terragrunt_dir = "${local.root_dir}/.."
   kubernetes_dir = "${local.root_dir}/../../kubernetes"
 
-  # ─── Proxmox node that will host the VMs ─────────────────────────────────────
-  node_vars = read_terragrunt_config("${local.root_dir}/${local.environment}/pve/node.hcl")
-  node_name = local.node_vars.locals.node_name
+  # ─── Proxmox nodes configuration ─────────────────────────────────────────────
+  node_vars  = read_terragrunt_config("${local.root_dir}/${local.environment}/multi-node/nodes.hcl")
+  nodes      = local.node_vars.locals.nodes
+  node_names = keys(local.nodes)
 
   # ─── Account variables ───────────────────────────────────────────────────────
   account_vars = read_terragrunt_config("${local.root_dir}/${local.environment}/account.hcl")
 
   # ─── Versions ────────────────────────────────────────────────────────────────
   versions = {
-    kubernetes_version       = "1.33.1",
-    initial_talos_version    = "1.10.4", # Do not change this value after initial deployment
-    talos_version            = "1.10.5", # Change this value to safely upgrade the Talos version
+    kubernetes_version       = "1.34.0",
+    initial_talos_version    = "1.11.1", # Do not change this value after initial deployment
+    talos_version            = "1.11.1", # Change this value to safely upgrade the Talos version
     prometheus_version       = "17.0.2",
-    external-secrets_version = "0.18.0",
+    external-secrets_version = "0.19.2",
   }
 
   # ─── Machines / IP layout ────────────────────────────────────────────────────
@@ -30,21 +31,24 @@ locals {
       ip        = "192.168.1.51"
       vm_id     = 1001
       cpu_cores = 3
-      memory    = 5120
+      memory    = 14336
+      node_name = local.node_names[0] # pve-node-01
     },
     {
       name      = "control-plane-02"
       ip        = "192.168.1.52"
       vm_id     = 1002
       cpu_cores = 3
-      memory    = 5120
+      memory    = 14336
+      node_name = local.node_names[1] # pve-node-02
     },
     {
       name      = "control-plane-03"
       ip        = "192.168.1.53"
       vm_id     = 1003
       cpu_cores = 3
-      memory    = 5120
+      memory    = 14336
+      node_name = local.node_names[2] # pve-node-03
     },
   ]
 
@@ -63,6 +67,7 @@ locals {
           "siderolabs/i915",
           "siderolabs/intel-ucode",
           "siderolabs/iscsi-tools",
+          "siderolabs/mei",
           "siderolabs/qemu-guest-agent",
           "siderolabs/tailscale",
           "siderolabs/util-linux-tools",
@@ -76,7 +81,7 @@ locals {
       hostname  = node.name
       vm_id     = node.vm_id
       region    = "${local.cluster_name}"
-      zone      = local.node_name
+      zone      = node.node_name
       cpu_cores = node.cpu_cores
       memory    = node.memory
     }
@@ -84,7 +89,7 @@ locals {
 
   cluster_name           = "talos"
   cluster_endpoint       = local.controlplane_nodes[0].ip
-  cluster_vip            = "192.168.1.60"
+  cluster_vip            = "192.168.1.50"
   cluster_node_subnet    = "192.168.1.0/24"
   cluster_pod_subnet     = "10.244.0.0/16"
   cluster_service_subnet = "10.96.0.0/12"
@@ -94,22 +99,22 @@ locals {
   # Helm Charts
   helm_charts = {
     cilium = {
-      chart_version   = "1.17.4"
+      chart_version   = "1.18.1"
       helm_repository = "oci://ghcr.io/home-operations/charts-mirror"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cilium/base/values.yaml")
     }
     talos-ccm = {
-      chart_version   = "0.4.6"
+      chart_version   = "0.5.0"
       helm_repository = "oci://ghcr.io/siderolabs/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/talos-cloud-controller-manager/base/values.yaml")
     }
     cert-manager = {
-      chart_version   = "1.18.0"
+      chart_version   = "v1.18.2"
       helm_repository = "https://charts.jetstack.io"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cert-manager/base/values.yaml")
     }
     coredns = {
-      chart_version   = "1.43.0"
+      chart_version   = "1.43.3"
       helm_repository = "oci://ghcr.io/coredns/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/coredns/base/values.yaml")
     }
@@ -126,7 +131,7 @@ unit "download_file" {
   path   = "download_file"
 
   values = {
-    node_names     = ["${local.node_name}"]
+    node_names     = local.node_names
     datastore_id   = "local"
     talos_version  = "${local.versions.initial_talos_version}"
     talos_platform = "nocloud"
@@ -139,14 +144,14 @@ unit "cloud-config-$${local.controlplane_nodes[0].name}" {
   path   = "cloud-config/${local.controlplane_nodes[0].name}"
 
   values = {
-    node_name              = "${local.node_name}"
+    node_name              = "${local.controlplane_nodes[0].node_name}"
     datastore_id           = "local"
     user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
 
     hostname = "${local.controlplane_nodes[0].name}"
     vm_id    = "${local.controlplane_nodes[0].vm_id}"
     region   = "${local.cluster_name}"
-    zone     = "${local.node_name}"
+    zone     = "${local.controlplane_nodes[0].node_name}"
     cpu      = "${local.controlplane_nodes[0].cpu_cores}"
     memory   = "${local.controlplane_nodes[0].memory}"
 
@@ -159,16 +164,17 @@ unit "$${local.controlplane_nodes[0].name}" {
   path   = "${local.controlplane_nodes[0].name}"
 
   values = {
-    node_name    = "${local.node_name}"
+    node_name    = "${local.controlplane_nodes[0].node_name}"
     vm_name      = "${local.controlplane_nodes[0].name}"
     ipv4_address = "${local.controlplane_nodes[0].ip}"
 
-    hostname  = "${local.controlplane_nodes[0].name}"
-    vm_id     = "${local.controlplane_nodes[0].vm_id}"
-    region    = "${local.cluster_name}"
-    zone      = "${local.node_name}"
-    cpu_cores = "${local.controlplane_nodes[0].cpu_cores}"
-    memory    = "${local.controlplane_nodes[0].memory}"
+    hostname     = "${local.controlplane_nodes[0].name}"
+    vm_id        = "${local.controlplane_nodes[0].vm_id}"
+    region       = "${local.cluster_name}"
+    zone         = "${local.controlplane_nodes[0].node_name}"
+    cpu_cores    = "${local.controlplane_nodes[0].cpu_cores}"
+    memory       = "${local.controlplane_nodes[0].memory}"
+    disk_size_gb = 400
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[0].name}.yaml"
   }
@@ -179,14 +185,14 @@ unit "cloud-config-$${local.controlplane_nodes[1].name}" {
   path   = "cloud-config/${local.controlplane_nodes[1].name}"
 
   values = {
-    node_name              = "${local.node_name}"
+    node_name              = "${local.controlplane_nodes[1].node_name}"
     datastore_id           = "local"
     user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
 
     hostname = "${local.controlplane_nodes[1].name}"
     vm_id    = "${local.controlplane_nodes[1].vm_id}"
     region   = "${local.cluster_name}"
-    zone     = "${local.node_name}"
+    zone     = "${local.controlplane_nodes[1].node_name}"
     cpu      = "${local.controlplane_nodes[1].cpu_cores}"
     memory   = "${local.controlplane_nodes[1].memory}"
 
@@ -199,16 +205,17 @@ unit "$${local.controlplane_nodes[1].name}" {
   path   = "${local.controlplane_nodes[1].name}"
 
   values = {
-    node_name    = "${local.node_name}"
+    node_name    = "${local.controlplane_nodes[1].node_name}"
     vm_name      = "${local.controlplane_nodes[1].name}"
     ipv4_address = "${local.controlplane_nodes[1].ip}"
 
-    hostname  = "${local.controlplane_nodes[1].name}"
-    vm_id     = "${local.controlplane_nodes[1].vm_id}"
-    region    = "${local.cluster_name}"
-    zone      = "${local.node_name}"
-    cpu_cores = "${local.controlplane_nodes[1].cpu_cores}"
-    memory    = "${local.controlplane_nodes[1].memory}"
+    hostname     = "${local.controlplane_nodes[1].name}"
+    vm_id        = "${local.controlplane_nodes[1].vm_id}"
+    region       = "${local.cluster_name}"
+    zone         = "${local.controlplane_nodes[1].node_name}"
+    cpu_cores    = "${local.controlplane_nodes[1].cpu_cores}"
+    memory       = "${local.controlplane_nodes[1].memory}"
+    disk_size_gb = 400
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[1].name}.yaml"
   }
@@ -219,14 +226,14 @@ unit "cloud-config-$${local.controlplane_nodes[2].name}" {
   path   = "cloud-config/${local.controlplane_nodes[2].name}"
 
   values = {
-    node_name              = "${local.node_name}"
+    node_name              = "${local.controlplane_nodes[2].node_name}"
     datastore_id           = "local"
     user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
 
     hostname = "${local.controlplane_nodes[2].name}"
     vm_id    = "${local.controlplane_nodes[2].vm_id}"
     region   = "${local.cluster_name}"
-    zone     = "${local.node_name}"
+    zone     = "${local.controlplane_nodes[2].node_name}"
     cpu      = "${local.controlplane_nodes[2].cpu_cores}"
     memory   = "${local.controlplane_nodes[2].memory}"
 
@@ -239,16 +246,17 @@ unit "$${local.controlplane_nodes[2].name}" {
   path   = "${local.controlplane_nodes[2].name}"
 
   values = {
-    node_name    = "${local.node_name}"
+    node_name    = "${local.controlplane_nodes[2].node_name}"
     vm_name      = "${local.controlplane_nodes[2].name}"
     ipv4_address = "${local.controlplane_nodes[2].ip}"
 
-    hostname  = "${local.controlplane_nodes[2].name}"
-    vm_id     = "${local.controlplane_nodes[2].vm_id}"
-    region    = "${local.cluster_name}"
-    zone      = "${local.node_name}"
-    cpu_cores = "${local.controlplane_nodes[2].cpu_cores}"
-    memory    = "${local.controlplane_nodes[2].memory}"
+    hostname     = "${local.controlplane_nodes[2].name}"
+    vm_id        = "${local.controlplane_nodes[2].vm_id}"
+    region       = "${local.cluster_name}"
+    zone         = "${local.controlplane_nodes[2].node_name}"
+    cpu_cores    = "${local.controlplane_nodes[2].cpu_cores}"
+    memory       = "${local.controlplane_nodes[2].memory}"
+    disk_size_gb = 400
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[2].name}.yaml"
   }

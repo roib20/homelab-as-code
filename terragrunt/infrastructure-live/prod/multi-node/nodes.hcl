@@ -2,14 +2,14 @@
 # configure the remote state bucket and is accessible as inputs in child units.
 locals {
   nodes = {
-    "pve-01" = {
-      address = "https://pve-01:8006/"
+    "pve-node-01" = {
+      address = "https://pve-node-01:8006/"
     }
-    "pve-02" = {
-      address = "https://pve-02:8006/"
+    "pve-node-02" = {
+      address = "https://pve-node-02:8006/"
     }
-    "pve-03" = {
-      address = "https://pve-03:8006/"
+    "pve-node-03" = {
+      address = "https://pve-node-03:8006/"
     }
   }
   # For backward compatibility

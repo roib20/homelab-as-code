@@ -74,7 +74,7 @@ inputs = {
     {
       interface    = "virtio0"
       file_id      = dependency.download_file.outputs.downloaded_file_id
-      datastore_id = try(values.vm_datastore_id, "VM")
+      datastore_id = try(values.vm_datastore_id, "local-btrfs")
       iothread     = true
       discard      = "on"
       size         = try(values.disk_size_gb, 64)
@@ -83,7 +83,7 @@ inputs = {
 
   # Cloud-init
   initialization = {
-    datastore_id = try(values.vm_datastore_id, "VM")
+    datastore_id = try(values.vm_datastore_id, "local-btrfs")
     # user_data_file_id = dependency.cloud-config.outputs.user_data_cloud_config
     ip_config = [
       {

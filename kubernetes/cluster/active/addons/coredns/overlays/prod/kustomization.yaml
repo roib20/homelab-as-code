@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: coredns
     repo: oci://ghcr.io/coredns/charts
-    version: 1.43.0
+    version: 1.43.3
     releaseName: coredns
     namespace: kube-system
     valuesFile: ../../base/values.yaml

@@ -1,6 +1,6 @@
 ---
 # Directory that contains the Terragrunt Stack to run
-terragrunt_stack_dir: "../../terragrunt/infrastructure-live/non-prod/pve/bootstrap-k8s-secrets"
+terragrunt_stack_dir: "../../terragrunt/infrastructure-live/prod/multi-node/bootstrap-k8s-secrets"
 # Terragrunt binary to execute
 terragrunt_bin: "terragrunt"
 # Action to run with `terragrunt stack run ACTION`

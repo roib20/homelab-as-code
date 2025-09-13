@@ -5,7 +5,7 @@ set: [pipefail]
 shopt: [globstar]
 tasks:
   up:
-    desc: "Provision the non-prod cluster end-to-end"
+    desc: "Provision the cluster end-to-end"
     interactive: false
     cmds:
       - task: :talos:apply

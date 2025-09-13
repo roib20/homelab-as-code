@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - resources/namespaces/external-secrets-ns.yaml
   - resources/namespaces/bitwarden-ns.yaml
-  - https://raw.githubusercontent.com/external-secrets/external-secrets/v0.18.0/deploy/crds/bundle.yaml # renovate: datasource=github-releases depName=external-secrets/external-secrets versioning=semver
+  - https://raw.githubusercontent.com/external-secrets/external-secrets/v0.19.2/deploy/crds/bundle.yaml # renovate: datasource=github-releases depName=external-secrets/external-secrets versioning=semver
