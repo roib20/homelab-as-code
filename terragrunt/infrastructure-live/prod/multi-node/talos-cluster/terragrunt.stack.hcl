@@ -99,22 +99,22 @@ locals {
   # Helm Charts
   helm_charts = {
     cilium = {
-      chart_version   = "1.17.4"
+      chart_version   = "1.18.1"
       helm_repository = "oci://ghcr.io/home-operations/charts-mirror"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cilium/base/values.yaml")
     }
     talos-ccm = {
-      chart_version   = "0.4.6"
+      chart_version   = "0.5.0"
       helm_repository = "oci://ghcr.io/siderolabs/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/talos-cloud-controller-manager/base/values.yaml")
     }
     cert-manager = {
-      chart_version   = "1.18.0"
+      chart_version   = "v1.18.2"
       helm_repository = "https://charts.jetstack.io"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cert-manager/base/values.yaml")
     }
     coredns = {
-      chart_version   = "1.43.0"
+      chart_version   = "1.43.3"
       helm_repository = "oci://ghcr.io/coredns/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/coredns/base/values.yaml")
     }
