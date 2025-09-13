@@ -67,6 +67,7 @@ locals {
           "siderolabs/i915",
           "siderolabs/intel-ucode",
           "siderolabs/iscsi-tools",
+          "siderolabs/mei",
           "siderolabs/qemu-guest-agent",
           "siderolabs/tailscale",
           "siderolabs/util-linux-tools",
