@@ -9,7 +9,7 @@ subjects:
     spec:
       fqdn: "*.${FQDN_01}"
       http2Origin: false
-      noTlsVerify: false
+      noTlsVerify: true
       proxyAddress: 127.0.0.1
       proxyPort: 0
       proxyType: ''
