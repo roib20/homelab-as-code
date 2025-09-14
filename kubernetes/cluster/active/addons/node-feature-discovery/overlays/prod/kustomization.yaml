@@ -9,6 +9,7 @@ helmCharts:
     version: 0.17.3
     releaseName: node-feature-discovery
     namespace: node-feature-discovery
+    includeCRDs: true
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
       - values-override.yaml
