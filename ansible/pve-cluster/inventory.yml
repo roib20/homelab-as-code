@@ -3,11 +3,11 @@ all:
   children:
     pve:
       children:
-        comet-lake:
+        comet_lake:
           hosts:
             pve-node-01:
               ansible_host: pve-node-01
-        twin-lake:
+        twin_lake:
           hosts:
             pve-node-02:
               ansible_host: pve-node-02
