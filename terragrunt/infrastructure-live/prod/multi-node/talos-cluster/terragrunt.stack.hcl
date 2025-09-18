@@ -176,6 +176,9 @@ unit "$${local.controlplane_nodes[0].name}" {
     memory       = "${local.controlplane_nodes[0].memory}"
     disk_size_gb = 400
 
+    # PCI passthrough mapping for Intel GPU
+    pci_mapping = "GPU_${local.controlplane_nodes[0].node_name}"
+
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[0].name}.yaml"
   }
 }
@@ -217,6 +220,9 @@ unit "$${local.controlplane_nodes[1].name}" {
     memory       = "${local.controlplane_nodes[1].memory}"
     disk_size_gb = 400
 
+    # PCI passthrough mapping for Intel GPU
+    pci_mapping = "GPU_${local.controlplane_nodes[1].node_name}"
+
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[1].name}.yaml"
   }
 }
@@ -257,6 +263,9 @@ unit "$${local.controlplane_nodes[2].name}" {
     cpu_cores    = "${local.controlplane_nodes[2].cpu_cores}"
     memory       = "${local.controlplane_nodes[2].memory}"
     disk_size_gb = 400
+
+    # PCI passthrough mapping for Intel GPU
+    pci_mapping = "GPU_${local.controlplane_nodes[2].node_name}"
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[2].name}.yaml"
   }

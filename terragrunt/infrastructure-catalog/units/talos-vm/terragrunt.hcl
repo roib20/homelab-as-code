@@ -83,6 +83,16 @@ inputs = {
     },
   ]
 
+  # Host PCI passthrough
+  hostpci_devices = [
+    {
+      device  = "hostpci0"
+      mapping = try(values.pci_mapping, "GPU_default")
+      pcie    = true
+      rombar  = true
+    },
+  ]
+
   # Cloud-init
   initialization = {
     datastore_id      = try(values.vm_datastore_id, "local-btrfs")
