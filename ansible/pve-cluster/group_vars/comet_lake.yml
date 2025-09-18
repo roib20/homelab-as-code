@@ -2,4 +2,4 @@
 # Override for comet-lake nodes (pve-node-01)
 # Intel CometLake-S GT2 [UHD Graphics 630] device ID
 pve_pci_device_ids:
-  - "8086:9bc8"
+  - id: "8086:9bc8"
