@@ -2,13 +2,17 @@
 all:
   children:
     pve:
-      hosts:
-        pve-node-01:
-          ansible_host: pve-node-01
-        pve-node-02:
-          ansible_host: pve-node-02
-        pve-node-03:
-          ansible_host: pve-node-03
+      children:
+        comet-lake:
+          hosts:
+            pve-node-01:
+              ansible_host: pve-node-01
+        twin-lake:
+          hosts:
+            pve-node-02:
+              ansible_host: pve-node-02
+            pve-node-03:
+              ansible_host: pve-node-03
       vars:
         ansible_connection: ssh
         ansible_port: 22
