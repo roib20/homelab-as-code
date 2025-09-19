@@ -31,7 +31,7 @@ locals {
       ip        = "192.168.1.51"
       vm_id     = 1001
       cpu_cores = 3
-      memory    = 14336
+      memory    = 10240
       node_name = local.node_names[0] # pve-node-01
     },
     {
@@ -39,7 +39,7 @@ locals {
       ip        = "192.168.1.52"
       vm_id     = 1002
       cpu_cores = 3
-      memory    = 14336
+      memory    = 10240
       node_name = local.node_names[1] # pve-node-02
     },
     {
@@ -47,7 +47,7 @@ locals {
       ip        = "192.168.1.53"
       vm_id     = 1003
       cpu_cores = 3
-      memory    = 14336
+      memory    = 10240
       node_name = local.node_names[2] # pve-node-03
     },
   ]
@@ -62,7 +62,8 @@ locals {
       type = contains(local.controlplane_nodes, node) ? "controlplane" : "worker"
 
       install = {
-        disk = "/dev/vda"
+        disk       = "/dev/vda"
+        secureboot = true
         extensions = [
           "siderolabs/i915",
           "siderolabs/intel-ucode",
@@ -77,7 +78,6 @@ locals {
       interfaces = [{
         addresses = [node.ip]
       }]
-
       hostname  = node.name
       vm_id     = node.vm_id
       region    = "${local.cluster_name}"
@@ -131,11 +131,12 @@ unit "download_file" {
   path   = "download_file"
 
   values = {
-    node_names     = local.node_names
-    datastore_id   = "local"
-    talos_version  = "${local.versions.initial_talos_version}"
-    talos_platform = "nocloud"
-    talos_arch     = "amd64"
+    node_names       = local.node_names
+    datastore_id     = "local"
+    talos_version    = "${local.versions.initial_talos_version}"
+    talos_platform   = "nocloud"
+    talos_arch       = "amd64"
+    talos_secureboot = true
   }
 }
 
@@ -175,6 +176,9 @@ unit "$${local.controlplane_nodes[0].name}" {
     cpu_cores    = "${local.controlplane_nodes[0].cpu_cores}"
     memory       = "${local.controlplane_nodes[0].memory}"
     disk_size_gb = 400
+
+    # PCI passthrough mapping for Intel GPU
+    pci_mapping = "GPU_${local.controlplane_nodes[0].node_name}"
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[0].name}.yaml"
   }
@@ -217,6 +221,9 @@ unit "$${local.controlplane_nodes[1].name}" {
     memory       = "${local.controlplane_nodes[1].memory}"
     disk_size_gb = 400
 
+    # PCI passthrough mapping for Intel GPU
+    pci_mapping = "GPU_${local.controlplane_nodes[1].node_name}"
+
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[1].name}.yaml"
   }
 }
@@ -257,6 +264,9 @@ unit "$${local.controlplane_nodes[2].name}" {
     cpu_cores    = "${local.controlplane_nodes[2].cpu_cores}"
     memory       = "${local.controlplane_nodes[2].memory}"
     disk_size_gb = 400
+
+    # PCI passthrough mapping for Intel GPU
+    pci_mapping = "GPU_${local.controlplane_nodes[2].node_name}"
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[2].name}.yaml"
   }

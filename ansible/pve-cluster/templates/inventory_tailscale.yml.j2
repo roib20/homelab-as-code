@@ -1,16 +1,37 @@
 ---
 all:
   children:
-{% for group in pve_groups %}
-    {{ group }}:
+    pve:
+{% set pve_subgroups = [] %}
+{% for group_name in groups.keys() %}
+{%   if group_name not in ['pve', 'all', 'ungrouped'] %}
+{%     set common_hosts = groups[group_name] | intersect(groups['pve'] | default([])) %}
+{%     if common_hosts | length > 0 %}
+{%       set _ = pve_subgroups.append(group_name) %}
+{%     endif %}
+{%   endif %}
+{% endfor %}
+{% if pve_subgroups | length > 0 %}
+      children:
+{%   for subgroup in pve_subgroups | sort %}
+        {{ subgroup }}:
+          hosts:
+{%     for host in groups[subgroup] | default([]) %}
+{%       if host in groups['pve'] | default([]) %}
+            {{ hostvars[host].tailscale_node_hostname_short }}:
+              ansible_host: {{ hostvars[host].tailscale_node_hostname_short }}
+{%       endif %}
+{%     endfor %}
+{%   endfor %}
+{% else %}
       hosts:
-{%   for host in groups[group] | default([]) %}
+{%   for host in groups['pve'] | default([]) %}
         {{ hostvars[host].tailscale_node_hostname_short }}:
           ansible_host: {{ hostvars[host].tailscale_node_hostname_short }}
 {%   endfor %}
+{% endif %}
       vars:
         ansible_connection: ssh
         ansible_port: 22
         ansible_ssh_common_args: -o StrictHostKeyChecking=no
         ansible_user: debian
-{% endfor %}

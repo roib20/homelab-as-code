@@ -1,0 +1,5 @@
+---
+# Override for twin-lake nodes (pve-node-02, pve-node-03)
+# Intel Alder Lake-N [Intel Graphics] device ID
+pve_pci_device_ids:
+  - id: "8086:46d4"

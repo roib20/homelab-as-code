@@ -117,3 +117,9 @@ variable "talos_schematic_id" {
   nullable = true
   default  = null
 }
+
+variable "talos_secureboot" {
+  description = "Enable SecureBoot for Talos images. When true, downloads secureboot-enabled ISO."
+  type        = bool
+  default     = false
+}

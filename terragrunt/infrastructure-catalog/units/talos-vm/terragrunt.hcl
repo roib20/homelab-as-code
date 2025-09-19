@@ -45,6 +45,9 @@ inputs = {
   vm_name = try(values.vm_name, "talos-vm")
   vm_id   = try(values.vm_id, 4000)
 
+  # BIOS
+  bios = "ovmf"
+
   # Storage & resources
   vm_datastore_id = try(values.vm_datastore_id, "local-btrfs")
 
@@ -53,6 +56,11 @@ inputs = {
   }
 
   stop_on_destroy = local.agent ? false : true
+
+  # Display - Serial console (works alongside GPU passthrough)
+  vga = {
+    type = "serial1"
+  }
 
   # Networking
   network_devices = [
@@ -82,6 +90,24 @@ inputs = {
       size         = try(values.disk_size_gb, 64)
     },
   ]
+
+  # Host PCI passthrough
+  hostpci_devices = [
+    {
+      device  = "hostpci0"
+      mapping = try(values.pci_mapping, "GPU_default")
+      pcie    = true
+      rombar  = true
+      xvga    = true
+    },
+  ]
+
+  # EFI Disk
+  efi_disk = {
+    datastore_id      = try(values.vm_datastore_id, "local-btrfs")
+    type              = "4m"
+    pre_enrolled_keys = false
+  }
 
   # Cloud-init
   initialization = {
