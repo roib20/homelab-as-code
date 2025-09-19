@@ -35,4 +35,5 @@ inputs = {
   talos_arch         = try(values.talos_arch, null)
   talos_version      = try(values.talos_version, null)
   talos_schematic_id = try(values.talos_schematic_id, null)
+  talos_secureboot   = try(values.talos_secureboot, false)
 }

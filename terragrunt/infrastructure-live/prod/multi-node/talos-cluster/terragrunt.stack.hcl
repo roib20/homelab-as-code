@@ -131,11 +131,12 @@ unit "download_file" {
   path   = "download_file"
 
   values = {
-    node_names     = local.node_names
-    datastore_id   = "local"
-    talos_version  = "${local.versions.initial_talos_version}"
-    talos_platform = "nocloud"
-    talos_arch     = "amd64"
+    node_names       = local.node_names
+    datastore_id     = "local"
+    talos_version    = "${local.versions.initial_talos_version}"
+    talos_platform   = "nocloud"
+    talos_arch       = "amd64"
+    talos_secureboot = true
   }
 }
 

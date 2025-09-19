@@ -14,6 +14,9 @@ locals {
   )
   image_id = try("${local.schematic_id}_${local.version}", null)
 
+  # Construct platform string with secureboot suffix if enabled
+  platform_string = var.talos_secureboot ? "${local.platform}-${local.arch}-secureboot" : "${local.platform}-${local.arch}"
+
   # update_version = coalesce(var.image.update_version, var.image.version)
   # update_schematic = coalesce(var.image.update_schematic, var.image.schematic)
   # update_schematic_id = jsondecode(data.http.updated_schematic_id.response_body)["id"]
