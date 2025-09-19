@@ -62,7 +62,8 @@ locals {
       type = contains(local.controlplane_nodes, node) ? "controlplane" : "worker"
 
       install = {
-        disk = "/dev/vda"
+        disk       = "/dev/vda"
+        secureboot = true
         extensions = [
           "siderolabs/i915",
           "siderolabs/intel-ucode",
@@ -77,7 +78,6 @@ locals {
       interfaces = [{
         addresses = [node.ip]
       }]
-
       hostname  = node.name
       vm_id     = node.vm_id
       region    = "${local.cluster_name}"
