@@ -57,9 +57,9 @@ inputs = {
 
   stop_on_destroy = local.agent ? false : true
 
-  # Display - No VGA for GPU passthrough
+  # Display - Serial console (works alongside GPU passthrough)
   vga = {
-    type = "none"
+    type = "serial1"
   }
 
   # Networking
