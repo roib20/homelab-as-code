@@ -57,6 +57,11 @@ inputs = {
 
   stop_on_destroy = local.agent ? false : true
 
+  # Display - No VGA for GPU passthrough
+  vga = {
+    type = "none"
+  }
+
   # Networking
   network_devices = [
     {
@@ -93,6 +98,7 @@ inputs = {
       mapping = try(values.pci_mapping, "GPU_default")
       pcie    = true
       rombar  = true
+      xvga    = true
     },
   ]
 
