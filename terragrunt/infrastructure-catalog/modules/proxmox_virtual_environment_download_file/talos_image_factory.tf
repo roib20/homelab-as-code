@@ -15,7 +15,9 @@ locals {
   image_id = try("${local.schematic_id}_${local.version}", null)
 
   # Construct platform string with secureboot suffix if enabled
-  platform_string = var.talos_secureboot ? "${local.platform}-${local.arch}-secureboot" : "${local.platform}-${local.arch}"
+  platform_string = (local.platform != null && local.arch != null) ? (
+    var.talos_secureboot ? "${local.platform}-${local.arch}-secureboot" : "${local.platform}-${local.arch}"
+  ) : null
 
   # update_version = coalesce(var.image.update_version, var.image.version)
   # update_schematic = coalesce(var.image.update_schematic, var.image.schematic)

@@ -18,6 +18,6 @@ resource "proxmox_virtual_environment_download_file" "download" {
   upload_timeout      = try(var.upload_timeout, 600)        # Optional: Timeout in seconds (default 600)
   verify              = try(var.verify, true)
 
-  url       = var.url != null ? var.url : "${local.factory_url}/image/${local.schematic_id}/${local.version}/${local.platform_string}.${local.file_extension}" # Required: HTTP/HTTPS URL
-  file_name = var.url != null ? try(var.file_name, null) : try("talos-${local.schematic_id}-${local.version}-${local.platform_string}.img", null)              # Optional: Filename override, especially for file extension issues
+  url       = var.url != null ? var.url : (local.platform_string != null ? "${local.factory_url}/image/${local.schematic_id}/${local.version}/${local.platform_string}.${local.file_extension}" : null) # Required: HTTP/HTTPS URL
+  file_name = var.url != null ? try(var.file_name, null) : (local.platform_string != null ? try("talos-${local.schematic_id}-${local.version}-${local.platform_string}.img", null) : null)              # Optional: Filename override, especially for file extension issues
 }
