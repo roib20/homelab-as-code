@@ -45,6 +45,9 @@ inputs = {
   vm_name = try(values.vm_name, "talos-vm")
   vm_id   = try(values.vm_id, 4000)
 
+  # BIOS
+  bios = "ovmf"
+
   # Storage & resources
   vm_datastore_id = try(values.vm_datastore_id, "local-btrfs")
 
@@ -92,6 +95,13 @@ inputs = {
       rombar  = true
     },
   ]
+
+  # EFI Disk
+  efi_disk = {
+    datastore_id      = try(values.vm_datastore_id, "local-btrfs")
+    type              = "4m"
+    pre_enrolled_keys = false
+  }
 
   # Cloud-init
   initialization = {
