@@ -113,8 +113,6 @@ inputs = {
   initialization = {
     datastore_id      = try(values.vm_datastore_id, "local-btrfs")
     meta_data_file_id = "${try(values.snippets_datastore_id, "local")}:snippets/${values.meta_data_cloud_config_file_name}"
-
-
     dns = {
       servers = ["1.1.1.1", "1.0.0.1"]
     }

@@ -77,6 +77,12 @@ data "talos_machine_configuration" "this" {
     }),
     templatefile("${path.module}/resources/talos-patches/spegel.yaml.tftpl", {
     }),
+    templatefile("${path.module}/resources/talos-patches/cdi.yaml.tftpl", {
+      cdi = {
+        staticPath  = "/var/cdi/static"
+        dynamicPath = "/var/cdi/dynamic"
+      }
+    }),
   ]
 }
 
