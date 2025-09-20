@@ -1,8 +1,0 @@
-# https://www.talos.dev/latest/talos-guides/configuration/containerd/#set-cdi-plugin-spec-dirs-to-writable-directories
-machine:
-  files:
-  - path: /etc/cri/conf.d/20-customization.part
-    op: create
-    content: |
-      [plugins."io.containerd.cri.v1.runtime"]
-        cdi_spec_dirs = ["${cdi.staticPath}", "${cdi.dynamicPath}"]

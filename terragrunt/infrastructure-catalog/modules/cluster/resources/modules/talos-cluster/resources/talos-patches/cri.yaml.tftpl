@@ -1,0 +1,14 @@
+---
+machine:
+  files:
+    - path: /etc/cri/conf.d/20-customization.part
+      op: create
+      content: |
+        # Talos will by default discard unpacked layers, which has to be disabled with a machine configuration.
+        # Source: https://spegel.dev/docs/getting-started/#talos
+        [plugins."io.containerd.cri.v1.images"]
+          discard_unpacked_layers = ${discard_unpacked_layers}
+        # To be able to use CDI and DRA modify the cdi spec dirs to writable locations.
+        # Source: https://www.talos.dev/latest/talos-guides/configuration/containerd/#set-cdi-plugin-spec-dirs-to-writable-directories
+        [plugins."io.containerd.cri.v1.runtime"]
+          cdi_spec_dirs = ["${cdi.staticPath}", "${cdi.dynamicPath}"]

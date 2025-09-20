@@ -44,13 +44,33 @@ data "talos_machine_configuration" "this" {
   talos_version      = "v${var.versions.talos_version}"
 
   config_patches = [
+    templatefile("${path.module}/resources/talos-patches/ccm.yaml.tftpl", {
+      type = yamldecode(each.value.talos_config).type
+    }),
     templatefile("${path.module}/resources/talos-patches/cluster.yaml.tftpl", {
       type           = yamldecode(each.value.talos_config).type
       cluster_config = var.talos_cluster_config
     }),
+    templatefile("${path.module}/resources/talos-patches/coredns.yaml.tftpl", {
+      disabled   = true
+      clusterDNS = "10.96.0.10"
+    }),
+    templatefile("${path.module}/resources/talos-patches/cri.yaml.tftpl", {
+      discard_unpacked_layers = false
+      cdi = {
+        staticPath  = "/var/cdi/static"
+        dynamicPath = "/var/cdi/dynamic"
+      }
+    }),
+    templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
+      extramounts = local.extramounts
+    }),
     templatefile("${path.module}/resources/talos-patches/inline_manifests.yaml.tftpl", {
       type      = yamldecode(each.value.talos_config).type
       manifests = data.helm_template.bootstrap_charts
+    }),
+    templatefile("${path.module}/resources/talos-patches/machine_hostdns.yaml.tftpl", {
+      forwardKubeDNSToHost = false
     }),
     templatefile("${path.module}/resources/talos-patches/machine_install.yaml.tftpl", {
       machine_install_disk_image = each.value.secureboot ? local.machine_installer_secureboot[each.key] : local.machine_installer[each.key]
@@ -58,30 +78,9 @@ data "talos_machine_configuration" "this" {
     templatefile("${path.module}/resources/talos-patches/machine.yaml.tftpl", {
       machine_config = each.value.talos_config
     }),
-    templatefile("${path.module}/resources/talos-patches/machine_hostdns.yaml.tftpl", {
-      forwardKubeDNSToHost = false
-    }),
-    templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
-      extramounts = local.extramounts
-    }),
     templatefile("${path.module}/resources/talos-patches/tailscale.patch.yaml.tftpl", {
       TS_AUTHKEY  = var.ts_authkey
       TS_HOSTNAME = each.key
-    }),
-    templatefile("${path.module}/resources/talos-patches/ccm.yaml.tftpl", {
-      type = yamldecode(each.value.talos_config).type
-    }),
-    templatefile("${path.module}/resources/talos-patches/coredns.yaml.tftpl", {
-      disabled   = true
-      clusterDNS = "10.96.0.10"
-    }),
-    templatefile("${path.module}/resources/talos-patches/spegel.yaml.tftpl", {
-    }),
-    templatefile("${path.module}/resources/talos-patches/cdi.yaml.tftpl", {
-      cdi = {
-        staticPath  = "/var/cdi/static"
-        dynamicPath = "/var/cdi/dynamic"
-      }
     }),
   ]
 }
