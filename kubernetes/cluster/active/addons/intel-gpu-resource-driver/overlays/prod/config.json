@@ -1,6 +1,6 @@
 {
   "annotations": {},
-  "appName": "intel-gpu-resource-driver",
+  "appName": "intel-gpu-resource-driver-chart",
   "destName": "in-cluster",
   "destNamespace": "intel-gpu",
   "destServer": "https://kubernetes.default.svc",
