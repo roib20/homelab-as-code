@@ -295,6 +295,13 @@ unit "talos-cluster" {
     timeout  = local.timeout
     machines = local.machines
 
+    # Fix for UEFI + GPU passthrough destroy timeouts - skip all cleanup
+    cluster_on_destroy = {
+      graceful = false # Skip graceful shutdown attempts
+      reboot   = false # Don't reboot
+      reset    = false # Don't reset - just disconnect
+    }
+
     # Tailscale configuration
     ts_authkey = local.account_vars.locals.tailscale.ts_authkey
   }
