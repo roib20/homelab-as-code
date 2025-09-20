@@ -22,7 +22,7 @@ dependencies {
   ]
 }
 
-# Pass everything through with the familiar “try(values…, fallback)” idiom
+# Pass everything through with the familiar "try(values…, fallback)" idiom
 inputs = {
   # ---------- identification ----------
   cluster_name     = try(values.cluster_name)
@@ -44,6 +44,13 @@ inputs = {
 
   # machines map
   machines = jsonencode(values.machines)
+
+  # destroy behavior
+  cluster_on_destroy = try(values.cluster_on_destroy, {
+    graceful = false
+    reboot   = true
+    reset    = true
+  })
 
   # Tailscale configuration
   ts_authkey = try(values.ts_authkey)
