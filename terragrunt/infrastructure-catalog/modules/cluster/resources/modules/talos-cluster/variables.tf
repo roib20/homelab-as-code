@@ -42,7 +42,7 @@ variable "bootstrap_charts" {
 }
 
 variable "on_destroy" {
-  description = "How to preform node destruction"
+  description = "How to perform node destruction"
   type = object({
     graceful = bool
     reboot   = bool
