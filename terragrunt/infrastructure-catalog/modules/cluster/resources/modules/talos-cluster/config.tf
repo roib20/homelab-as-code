@@ -75,9 +75,8 @@ data "talos_machine_configuration" "this" {
       disabled   = true
       clusterDNS = "10.96.0.10"
     }),
-    templatefile("${path.module}/resources/talos-patches/spegel.yaml.tftpl", {
-    }),
-    templatefile("${path.module}/resources/talos-patches/cdi.yaml.tftpl", {
+    templatefile("${path.module}/resources/talos-patches/cri.yaml.tftpl", {
+      discard_unpacked_layers = false
       cdi = {
         staticPath  = "/var/cdi/static"
         dynamicPath = "/var/cdi/dynamic"
