@@ -55,7 +55,6 @@ install:
 features:
   hostDNS:
     enabled: true
-    forwardKubeDNSToHost: true
     resolveMemberNames: true
 nodeLabels:
 %{ for item in machine_labels ~}
