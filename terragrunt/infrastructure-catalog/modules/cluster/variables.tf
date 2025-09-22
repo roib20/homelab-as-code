@@ -65,6 +65,7 @@ variable "versions" {
 variable "nameservers" {
   description = "The nameservers to use for the cluster."
   type        = list(string)
+  default     = ["8.8.8.8", "1.1.1.1"]
 }
 
 variable "timeservers" {
