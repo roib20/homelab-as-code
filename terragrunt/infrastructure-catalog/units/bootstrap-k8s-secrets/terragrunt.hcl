@@ -21,6 +21,7 @@ dependency "bitwarden-access" {
 inputs = {
   kubeconfig_path     = try(values.kubeconfig_path, "~/.kube/config")
   manifest_yaml_files = values.manifest_yaml_files
+  secret_yaml_files   = try(values.secret_yaml_files, [])
 
   template_vars = try(values.template_vars, {
     BWS_ACCESS_TOKEN = dependency.bitwarden-access.outputs.secret_value_base64
