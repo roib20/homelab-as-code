@@ -32,9 +32,11 @@ unit "kubernetes-manifests" {
   values = {
     kubeconfig_path = "~/.kube/config"
     manifest_yaml_files = [
-      "${local.kubernetes_dir}/hidden-secrets/bitwarden-access-token.yaml.tftpl",
       "${local.kubernetes_dir}/hidden-secrets/bitwarden-secretsmanager.yaml.tftpl",
       "${local.kubernetes_dir}/hidden-secrets/git-credentials.yaml.externalsecret",
+    ]
+    secret_yaml_files = [
+      "${local.kubernetes_dir}/hidden-secrets/bitwarden-access-token.yaml.tftpl",
     ]
   }
 }
