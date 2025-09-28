@@ -7,6 +7,10 @@ terraform {
   source = "${local.terragrunt_dir}/infrastructure-catalog/modules/kubernetes-manifests"
 }
 
+include "root" {
+  path = find_in_parent_folders("root.hcl")
+}
+
 dependency "bitwarden-access" {
   config_path = "../bitwarden-access"
 
