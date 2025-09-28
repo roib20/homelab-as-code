@@ -1,3 +1,7 @@
+include "root" {
+  path = find_in_parent_folders("root.hcl")
+}
+
 locals {
   # Root "terragrunt" directory, containing "infrastructure-catalog" and "infrastructure-live" directories
   terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
@@ -5,12 +9,6 @@ locals {
 
 terraform {
   source = "${local.terragrunt_dir}/infrastructure-catalog/modules/cluster"
-}
-
-# Optional: pull in shared provider / backend settings
-include "common" {
-  path   = "${dirname(find_in_parent_folders("root.hcl"))}/_envcommon/common.hcl"
-  expose = true
 }
 
 # Talos-cluster depends on the three VM directories created by this same stack
