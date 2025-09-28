@@ -2,26 +2,6 @@ locals {
   # Ensure unique file paths
   secret_files   = toset(var.secret_yaml_files)
   manifest_files = setsubtract(toset(var.manifest_yaml_files), local.secret_files)
-
-  raw_manifests = {
-    for path in local.manifest_files :
-    path => yamldecode(
-      length(keys(var.template_vars)) > 0
-      ? templatefile(path, var.template_vars)
-      : file(path)
-    )
-  }
-
-  rendered_manifests = {
-    for path, manifest in local.raw_manifests :
-    path => merge(
-      manifest,
-      can(manifest.metadata) ? { metadata = sensitive(manifest.metadata) } : {},
-      can(manifest.spec) ? { spec = sensitive(manifest.spec) } : {},
-      can(manifest.data) ? { data = sensitive(manifest.data) } : {},
-      can(manifest.stringData) ? { stringData = sensitive(manifest.stringData) } : {}
-    )
-  }
 }
 
 resource "kubernetes_manifest" "apply" {
