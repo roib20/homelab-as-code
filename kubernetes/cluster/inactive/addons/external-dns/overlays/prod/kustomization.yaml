@@ -11,4 +11,4 @@ helmCharts:
     namespace: external-dns
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
-      - values.yaml
+      - values-override.yaml

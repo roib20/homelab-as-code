@@ -12,4 +12,4 @@ helmCharts:
     namespace: anubis
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
-      - values.yaml
+      - values-override.yaml

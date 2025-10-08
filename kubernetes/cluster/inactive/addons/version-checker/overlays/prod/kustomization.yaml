@@ -11,4 +11,4 @@ helmCharts:
     namespace: version-checker
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
-      - values.yaml
+      - values-override.yaml

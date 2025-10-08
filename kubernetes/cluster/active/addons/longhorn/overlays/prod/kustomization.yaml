@@ -12,7 +12,7 @@ helmCharts:
     includeCRDs: true
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
-      - values.yaml
+      - values-override.yaml
 patches:
   - target:
       kind: StorageClass

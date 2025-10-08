@@ -11,7 +11,7 @@ helmCharts:
     namespace: external-secrets
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
-      - values.yaml
+      - values-override.yaml
 # Patch namespace for "bitwarden-sdk-server" resources
 # Patch using Path JSON6902: https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patches/#patch-using-path-json6902
 patches:
