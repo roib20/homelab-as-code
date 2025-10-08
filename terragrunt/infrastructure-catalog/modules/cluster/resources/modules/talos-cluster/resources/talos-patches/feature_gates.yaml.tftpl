@@ -1,0 +1,9 @@
+---
+cluster:
+  apiServer:
+    extraArgs:
+      feature-gates: ResourceHealthStatus=true
+machine:
+  kubelet:
+    extraArgs:
+      feature-gates: ResourceHealthStatus=true
