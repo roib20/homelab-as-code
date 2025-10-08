@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "${APP_NAME}",
+  "destName": "in-cluster",
+  "destNamespace": "kaniop",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "${RELEASE_NAME}"
+}
