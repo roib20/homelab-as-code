@@ -9,7 +9,7 @@ helmCharts:
     version: 0.1.4
     releaseName: valkey-operator
     namespace: valkey-operator
-    includeCRDs: true
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
-      - values.yaml
+      - values-override.yaml
+    includeCRDs: true

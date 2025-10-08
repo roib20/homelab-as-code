@@ -6,9 +6,10 @@ resources:
 helmCharts:
   - name: talos-cloud-controller-manager
     repo: oci://ghcr.io/siderolabs/charts
-    version: "0.5.0"
+    version: 0.5.0
     releaseName: talos-cloud-controller-manager
     namespace: kube-system
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
-      - values.yaml
+      - values-override.yaml
+    includeCRDs: true

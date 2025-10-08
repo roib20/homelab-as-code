@@ -9,10 +9,10 @@ helmCharts:
     version: 1.9.1
     releaseName: longhorn
     namespace: longhorn-system
-    includeCRDs: true
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
-      - values.yaml
+      - values-override.yaml
+    includeCRDs: true
 patches:
   - target:
       kind: StorageClass

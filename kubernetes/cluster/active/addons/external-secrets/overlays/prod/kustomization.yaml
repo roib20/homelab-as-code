@@ -11,28 +11,24 @@ helmCharts:
     namespace: external-secrets
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
-      - values.yaml
-# Patch namespace for "bitwarden-sdk-server" resources
-# Patch using Path JSON6902: https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patches/#patch-using-path-json6902
+      - values-override.yaml
+    includeCRDs: true
 patches:
-  # Deployment
   - path: ../../base/patches/patch-namespace.json
     target:
       group: apps
       version: v1
       kind: Deployment
       name: bitwarden-sdk-server
-  # ServiceAccount
   - path: ../../base/patches/patch-namespace.json
     target:
-      group: ""
+      group: ''
       version: v1
       kind: ServiceAccount
       name: bitwarden-sdk-server
-  # Service
   - path: ../../base/patches/patch-namespace.json
     target:
-      group: ""
+      group: ''
       version: v1
       kind: Service
       name: bitwarden-sdk-server

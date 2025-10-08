@@ -9,7 +9,7 @@ helmCharts:
     version: 0.9.0
     releaseName: intel-gpu-resource-driver
     namespace: intel-gpu
-    includeCRDs: true
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
       - values-override.yaml
+    includeCRDs: true

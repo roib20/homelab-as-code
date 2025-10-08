@@ -9,7 +9,7 @@ helmCharts:
     version: 2.17.3
     releaseName: sealed-secrets-controller
     namespace: kube-system
-    includeCRDs: true
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
-      - values.yaml
+      - values-override.yaml
+    includeCRDs: true

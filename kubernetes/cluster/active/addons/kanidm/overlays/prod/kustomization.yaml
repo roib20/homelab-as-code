@@ -11,7 +11,8 @@ helmCharts:
     namespace: kanidm
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
-      - values.yaml
+      - values-override.yaml
+    includeCRDs: true
 configMapGenerator:
   - name: env-vars
     envs:
