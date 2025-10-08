@@ -17,5 +17,7 @@ patches:
   - target:
       kind: StorageClass
       name: longhorn
-    patch: "- op: add\n  path: /metadata/annotations/storageclass.kubernetes.io~1is-default-class\n\
-      \  value: \"true\""
+    patch: |-
+      - op: add
+        path: /metadata/annotations/storageclass.kubernetes.io~1is-default-class
+        value: "true"
