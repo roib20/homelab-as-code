@@ -9,7 +9,7 @@ helmCharts:
     version: 2.2.2
     releaseName: reloader
     namespace: kube-system
-    includeCRDs: true
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
       - values-override.yaml
+    includeCRDs: true

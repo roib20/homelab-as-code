@@ -12,3 +12,4 @@ helmCharts:
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
       - values-override.yaml
+    includeCRDs: true
