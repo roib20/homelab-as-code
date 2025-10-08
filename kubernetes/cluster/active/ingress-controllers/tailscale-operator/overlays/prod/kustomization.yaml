@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - name: tailscale-operator
-    repo: https://pkgs.tailscale.com/helmcharts
-    version: v1.84.2
-    releaseName: tailscale-operator
-    namespace: tailscale
-    valuesFile: ../../base/values.yaml
-    additionalValuesFiles:
+  - additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+    name: tailscale-operator
+    namespace: tailscale
+    releaseName: tailscale-operator
+    repo: https://pkgs.tailscale.com/helmcharts
+    valuesFile: ../../base/values.yaml
+    version: v1.84.2

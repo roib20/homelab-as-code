@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - name: version-checker
-    repo: https://charts.jetstack.io
-    version: 0.9.3
-    releaseName: version-checker
-    namespace: version-checker
-    valuesFile: ../../base/values.yaml
-    additionalValuesFiles:
+  - additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+    name: version-checker
+    namespace: version-checker
+    releaseName: version-checker
+    repo: https://charts.jetstack.io
+    valuesFile: ../../base/values.yaml
+    version: 0.9.3

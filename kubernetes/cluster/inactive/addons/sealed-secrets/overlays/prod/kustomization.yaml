@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - name: sealed-secrets
-    repo: https://bitnami-labs.github.io/sealed-secrets
-    version: 2.17.3
-    releaseName: sealed-secrets-controller
-    namespace: kube-system
-    includeCRDs: true
-    valuesFile: ../../base/values.yaml
-    additionalValuesFiles:
+  - additionalValuesFiles:
       - values-override.yaml
+    includeCRDs: true
+    name: sealed-secrets
+    namespace: kube-system
+    releaseName: sealed-secrets-controller
+    repo: https://bitnami-labs.github.io/sealed-secrets
+    valuesFile: ../../base/values.yaml
+    version: 2.17.3

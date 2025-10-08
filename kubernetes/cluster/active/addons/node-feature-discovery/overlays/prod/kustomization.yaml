@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - name: node-feature-discovery
-    repo: https://kubernetes-sigs.github.io/node-feature-discovery/charts
-    version: 0.17.3
-    releaseName: node-feature-discovery
-    namespace: node-feature-discovery
-    valuesFile: ../../base/values.yaml
-    additionalValuesFiles:
+  - additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+    name: node-feature-discovery
+    namespace: node-feature-discovery
+    releaseName: node-feature-discovery
+    repo: https://kubernetes-sigs.github.io/node-feature-discovery/charts
+    valuesFile: ../../base/values.yaml
+    version: 0.17.3

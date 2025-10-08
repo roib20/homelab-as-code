@@ -4,15 +4,15 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - name: app-template
-    repo: oci://ghcr.io/bjw-s-labs/helm
-    version: 4.2.0
-    releaseName: kanidm
-    namespace: kanidm
-    valuesFile: ../../base/values.yaml
-    additionalValuesFiles:
+  - additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+    name: app-template
+    namespace: kanidm
+    releaseName: kanidm
+    repo: oci://ghcr.io/bjw-s-labs/helm
+    valuesFile: ../../base/values.yaml
+    version: 4.2.0
 configMapGenerator:
   - name: env-vars
     envs:

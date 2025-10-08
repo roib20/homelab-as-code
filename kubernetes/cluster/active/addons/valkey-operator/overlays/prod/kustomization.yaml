@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - name: valkey-operator
-    repo: oci://ghcr.io/sap/valkey-operator-helm
-    version: 0.1.4
-    releaseName: valkey-operator
-    namespace: valkey-operator
-    valuesFile: ../../base/values.yaml
-    additionalValuesFiles:
+  - additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+    name: valkey-operator
+    namespace: valkey-operator
+    releaseName: valkey-operator
+    repo: oci://ghcr.io/sap/valkey-operator-helm
+    valuesFile: ../../base/values.yaml
+    version: 0.1.4

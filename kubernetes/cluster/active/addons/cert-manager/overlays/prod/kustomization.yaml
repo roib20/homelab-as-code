@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - name: cert-manager
-    repo: oci://quay.io/jetstack/charts
-    version: v1.18.2
-    releaseName: cert-manager
-    namespace: cert-manager
-    valuesFile: ../../base/values.yaml
-    additionalValuesFiles:
+  - additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+    name: cert-manager
+    namespace: cert-manager
+    releaseName: cert-manager
+    repo: oci://quay.io/jetstack/charts
+    valuesFile: ../../base/values.yaml
+    version: v1.18.2

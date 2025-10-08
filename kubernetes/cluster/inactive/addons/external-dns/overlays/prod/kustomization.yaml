@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - name: external-dns
-    repo: oci://ghcr.io/home-operations/charts-mirror
-    version: 1.17.0
-    releaseName: external-dns
-    namespace: external-dns
-    valuesFile: ../../base/values.yaml
-    additionalValuesFiles:
+  - additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+    name: external-dns
+    namespace: external-dns
+    releaseName: external-dns
+    repo: oci://ghcr.io/home-operations/charts-mirror
+    valuesFile: ../../base/values.yaml
+    version: 1.17.0

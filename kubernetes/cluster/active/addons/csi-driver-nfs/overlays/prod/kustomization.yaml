@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - name: csi-driver-nfs
-    repo: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
-    version: 4.11.0
-    releaseName: csi-driver-nfs
-    namespace: kube-system
-    valuesFile: ../../base/values.yaml
-    additionalValuesFiles:
+  - additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+    name: csi-driver-nfs
+    namespace: kube-system
+    releaseName: csi-driver-nfs
+    repo: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+    valuesFile: ../../base/values.yaml
+    version: 4.11.0

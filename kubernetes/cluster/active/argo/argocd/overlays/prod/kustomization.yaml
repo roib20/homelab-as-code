@@ -6,15 +6,15 @@ resources:
   - argocd-server-webhook-httproute.yaml
   - git-webhook.yaml.externalsecret
 helmCharts:
-  - name: argo-cd
-    repo: oci://ghcr.io/argoproj/argo-helm
-    version: 8.1.1
-    releaseName: argocd
-    namespace: argocd
-    valuesFile: ../../base/values.yaml
-    additionalValuesFiles:
+  - additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+    name: argo-cd
+    namespace: argocd
+    releaseName: argocd
+    repo: oci://ghcr.io/argoproj/argo-helm
+    valuesFile: ../../base/values.yaml
+    version: 8.1.1
 configMapGenerator:
   - name: env-vars
     envs:

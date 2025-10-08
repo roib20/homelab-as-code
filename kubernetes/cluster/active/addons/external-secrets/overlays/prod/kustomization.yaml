@@ -4,36 +4,31 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - name: external-secrets
-    repo: https://charts.external-secrets.io
-    version: 0.19.2
-    releaseName: external-secrets
-    namespace: external-secrets
-    valuesFile: ../../base/values.yaml
-    additionalValuesFiles:
+  - additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-# Patch namespace for "bitwarden-sdk-server" resources
-# Patch using Path JSON6902: https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patches/#patch-using-path-json6902
+    name: external-secrets
+    namespace: external-secrets
+    releaseName: external-secrets
+    repo: https://charts.external-secrets.io
+    valuesFile: ../../base/values.yaml
+    version: 0.19.2
 patches:
-  # Deployment
   - path: ../../base/patches/patch-namespace.json
     target:
       group: apps
       version: v1
       kind: Deployment
       name: bitwarden-sdk-server
-  # ServiceAccount
   - path: ../../base/patches/patch-namespace.json
     target:
-      group: ""
+      group: ''
       version: v1
       kind: ServiceAccount
       name: bitwarden-sdk-server
-  # Service
   - path: ../../base/patches/patch-namespace.json
     target:
-      group: ""
+      group: ''
       version: v1
       kind: Service
       name: bitwarden-sdk-server
