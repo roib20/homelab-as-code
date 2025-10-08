@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - additionalValuesFiles:
+  - name: cilium
+    repo: oci://ghcr.io/home-operations/charts-mirror
+    version: 1.18.1
+    releaseName: cilium
+    namespace: kube-system
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-    name: cilium
-    namespace: kube-system
-    releaseName: cilium
-    repo: oci://ghcr.io/home-operations/charts-mirror
-    valuesFile: ../../base/values.yaml
-    version: 1.18.1

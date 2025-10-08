@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - additionalValuesFiles:
+  - name: coredns
+    repo: oci://ghcr.io/coredns/charts
+    version: 1.43.3
+    releaseName: coredns
+    namespace: kube-system
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-    name: coredns
-    namespace: kube-system
-    releaseName: coredns
-    repo: oci://ghcr.io/coredns/charts
-    valuesFile: ../../base/values.yaml
-    version: 1.43.3

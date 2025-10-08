@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - additionalValuesFiles:
+  - name: ingress-nginx
+    repo: oci://ghcr.io/home-operations/charts-mirror
+    version: 4.12.3
+    releaseName: ingress-nginx
+    namespace: ingress-nginx
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-    name: ingress-nginx
-    namespace: ingress-nginx
-    releaseName: ingress-nginx
-    repo: oci://ghcr.io/home-operations/charts-mirror
-    valuesFile: ../../base/values.yaml
-    version: 4.12.3

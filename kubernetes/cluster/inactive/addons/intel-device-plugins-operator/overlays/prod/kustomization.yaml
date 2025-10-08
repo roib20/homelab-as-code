@@ -5,12 +5,12 @@ resources:
   - ../../base
   - gpu-device-plugin.yaml
 helmCharts:
-  - additionalValuesFiles:
+  - name: intel-device-plugins-operator
+    repo: https://intel.github.io/helm-charts
+    version: 0.34.0
+    releaseName: intel-device-plugins-operator
+    namespace: intel-device-plugins
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-    name: intel-device-plugins-operator
-    namespace: intel-device-plugins
-    releaseName: intel-device-plugins-operator
-    repo: https://intel.github.io/helm-charts
-    valuesFile: ../../base/values.yaml
-    version: 0.34.0

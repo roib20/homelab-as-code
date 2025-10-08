@@ -4,15 +4,15 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - additionalValuesFiles:
+  - name: longhorn
+    repo: https://charts.longhorn.io
+    version: 1.9.1
+    releaseName: longhorn
+    namespace: longhorn-system
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-    name: longhorn
-    namespace: longhorn-system
-    releaseName: longhorn
-    repo: https://charts.longhorn.io
-    valuesFile: ../../base/values.yaml
-    version: 1.9.1
 patches:
   - target:
       kind: StorageClass

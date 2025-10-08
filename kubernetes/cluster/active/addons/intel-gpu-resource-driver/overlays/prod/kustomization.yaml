@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - additionalValuesFiles:
+  - name: intel-gpu-resource-driver-chart
+    repo: oci://ghcr.io/intel/intel-resource-drivers-for-kubernetes
+    version: 0.9.0
+    releaseName: intel-gpu-resource-driver
+    namespace: intel-gpu
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-    name: intel-gpu-resource-driver-chart
-    namespace: intel-gpu
-    releaseName: intel-gpu-resource-driver
-    repo: oci://ghcr.io/intel/intel-resource-drivers-for-kubernetes
-    valuesFile: ../../base/values.yaml
-    version: 0.9.0

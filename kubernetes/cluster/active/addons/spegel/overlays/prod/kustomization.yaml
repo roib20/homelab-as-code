@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - additionalValuesFiles:
+  - name: spegel
+    repo: oci://ghcr.io/spegel-org/helm-charts
+    version: 0.3.0
+    releaseName: spegel
+    namespace: kube-system
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-    name: spegel
-    namespace: kube-system
-    releaseName: spegel
-    repo: oci://ghcr.io/spegel-org/helm-charts
-    valuesFile: ../../base/values.yaml
-    version: 0.3.0
