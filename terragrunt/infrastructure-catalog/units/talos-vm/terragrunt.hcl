@@ -42,8 +42,8 @@ inputs = {
   node_name = try(values.node_name, "pve")
 
   # VM identity
-  vm_name = try(values.vm_name, "talos-vm")
-  vm_id   = try(values.vm_id, 4000)
+  name  = try(values.vm_name, "talos-vm")
+  vm_id = try(values.vm_id, 4000)
 
   # BIOS
   bios = "ovmf"

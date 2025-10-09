@@ -32,8 +32,8 @@ inputs = {
   node_name = try(values.node_name, "pve")
 
   # VM identity
-  vm_name = try(values.vm_name, "local-btrfs-scale")
-  vm_id   = try(values.vm_id, 2002)
+  name  = try(values.vm_name, "TrueNAS")
+  vm_id = try(values.vm_id, 2002)
 
   # BIOS
   bios = "ovmf"
