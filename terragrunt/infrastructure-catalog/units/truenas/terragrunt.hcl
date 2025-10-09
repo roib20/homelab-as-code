@@ -98,5 +98,5 @@ inputs = {
   }
 
   # Boot order
-  boot_order = ["virtio0", "virtio1", "net0"]
+  boot_order = ["virtio0", "scsi0", "net0"]
 }
