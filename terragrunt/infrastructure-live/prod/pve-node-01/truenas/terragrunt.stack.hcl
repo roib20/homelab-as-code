@@ -22,21 +22,21 @@ unit "download_file" {
 
   values = {
     node_names         = ["${local.node_name}"]
-    url                = "https://download.sys.truenas.net/TrueNAS-SCALE-Fangtooth/25.04.2.3/TrueNAS-SCALE-25.04.2.3.iso"
-    checksum           = "2d8cdc4e6c41730d18ac2864a3dee7b36e54023098c254a1ca7ee1a7ff652297"
+    url                = "https://download.sys.truenas.net/TrueNAS-SCALE-Fangtooth/25.04.2.4/TrueNAS-SCALE-25.04.2.4.iso"
+    checksum           = "a2bccdd4db360c48acfe7196158031f44a460ed99c5145ee3f5ee7827a7e6d58"
     checksum_algorithm = "sha256"
     datastore_id       = "local"
   }
 }
 
 unit "vm" {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/units/truenas-scale"
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/truenas"
 
   path = "vm"
 
   values = {
     node_name = "${local.node_name}"
-    # vm_name   = "truenas-scale"
-    vm_id = 2001
+    vm_name   = "TrueNAS"
+    vm_id     = 2001
   }
 }

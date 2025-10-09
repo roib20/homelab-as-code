@@ -32,8 +32,8 @@ inputs = {
   node_name = try(values.node_name, "pve")
 
   # VM identity
-  vm_name = try(values.vm_name, "local-btrfs-scale")
-  vm_id   = try(values.vm_id, 2002)
+  name  = try(values.vm_name, "TrueNAS")
+  vm_id = try(values.vm_id, 2002)
 
   # BIOS
   bios = "ovmf"
@@ -47,11 +47,10 @@ inputs = {
   disks = [
     {
       interface    = "virtio0"
-      file_id      = dependency.download_file.outputs.downloaded_file_id
       datastore_id = try(values.vm_datastore_id, "local-btrfs")
       iothread     = true
       discard      = "on"
-      size         = try(values.disk_size_gb, 64)
+      size         = try(values.disk_size_gb, 32)
     },
     {
       interface    = "scsi0"
@@ -59,7 +58,8 @@ inputs = {
       iothread     = true
       discard      = "on"
       ssd          = true
-      size         = try(values.disk_size_gb, 64)
+      size         = try(values.disk_size_gb, 32)
+      file_id      = dependency.download_file.outputs.downloaded_file_id
     },
   ]
 
@@ -89,11 +89,14 @@ inputs = {
   efi_disk = {
     datastore_id      = try(values.vm_datastore_id, "local-btrfs")
     type              = "4m"
-    pre_enrolled_keys = true
+    pre_enrolled_keys = false
   }
 
   # Agent
   agent = {
     enabled = true
   }
+
+  # Boot order
+  boot_order = ["virtio0", "scsi0", "net0"]
 }

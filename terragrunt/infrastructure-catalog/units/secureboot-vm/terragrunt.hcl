@@ -51,8 +51,8 @@ inputs = {
   stop_on_destroy = local.agent ? false : true
 
   # VM identity
-  vm_name = try(values.vm_name, null) # leave empty or override via values
-  vm_id   = try(values.vm_id, null)   # leave empty or override via values
+  name  = try(values.vm_name, null) # leave empty or override via values
+  vm_id = try(values.vm_id, null)   # leave empty or override via values
 
   # Networking
   network_devices = [
