@@ -1,0 +1,21 @@
+---
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaimTemplate
+metadata:
+  name: jellyfin-gpu-claim
+spec:
+  spec:
+    devices:
+      requests:
+        - name: gpu
+          exactly:
+            deviceClassName: gpu.intel.com
+            # Uncomment if more GPUs needed:
+            # count: 2
+
+            # Uncomment to request specific GPU series or memory:
+            # selectors:
+            # - cel:
+            #     expression: device.attributes["gpu.intel.com"].driver == 'i915'
+            # - cel:
+            #     expression: device.capacity["gpu.intel.com"].memory.compareTo(quantity("4Gi")) >= 0

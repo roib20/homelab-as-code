@@ -1,0 +1,16 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+spec:
+  template:
+    spec:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: jellyfin-gpu-claim
+      containers:
+        - name: jellyfin
+          resources:
+            claims:
+              - name: gpu

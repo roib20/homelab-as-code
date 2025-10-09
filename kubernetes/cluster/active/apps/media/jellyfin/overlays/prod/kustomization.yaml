@@ -1,0 +1,22 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - pvc-smb-mediadata-rox.yaml
+  - resource-claim-template.yaml
+patches:
+  - path: deployment-patch.yaml
+    target:
+      kind: Deployment
+      name: jellyfin
+helmCharts:
+  - name: jellyfin
+    repo: oci://tccr.io/truecharts
+    version: 21.8.0
+    releaseName: jellyfin
+    namespace: jellyfin
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
