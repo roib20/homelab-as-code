@@ -54,7 +54,7 @@ inputs = {
       size         = try(values.disk_size_gb, 64)
     },
     {
-      interface    = "scsi0"
+      interface    = "virtio1"
       datastore_id = try(values.vm_datastore_id, "local-btrfs")
       iothread     = true
       discard      = "on"
