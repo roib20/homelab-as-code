@@ -89,7 +89,7 @@ inputs = {
   efi_disk = {
     datastore_id      = try(values.vm_datastore_id, "local-btrfs")
     type              = "4m"
-    pre_enrolled_keys = true
+    pre_enrolled_keys = false
   }
 
   # Agent
