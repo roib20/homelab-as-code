@@ -36,7 +36,7 @@ unit "vm" {
 
   values = {
     node_name = "${local.node_name}"
-    # vm_name   = "truenas"
-    vm_id = 2001
+    vm_name   = "TrueNAS"
+    vm_id     = 2001
   }
 }
