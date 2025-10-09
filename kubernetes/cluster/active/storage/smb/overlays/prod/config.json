@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "smb",
+  "destName": "in-cluster",
+  "destNamespace": "smb",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "smb"
+}
