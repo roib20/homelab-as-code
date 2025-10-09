@@ -96,4 +96,7 @@ inputs = {
   agent = {
     enabled = true
   }
+
+  # Boot order
+  boot_order = ["virtio0", "virtio1", "net0"]
 }
