@@ -47,7 +47,6 @@ inputs = {
   disks = [
     {
       interface    = "virtio0"
-      file_id      = dependency.download_file.outputs.downloaded_file_id
       datastore_id = try(values.vm_datastore_id, "local-btrfs")
       iothread     = true
       discard      = "on"
@@ -55,6 +54,7 @@ inputs = {
     },
     {
       interface    = "virtio1"
+      file_id      = dependency.download_file.outputs.downloaded_file_id
       datastore_id = try(values.vm_datastore_id, "local-btrfs")
       iothread     = true
       discard      = "on"
