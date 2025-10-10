@@ -1,0 +1,22 @@
+---
+apiVersion: kaniop.rs/v1beta1
+kind: Kanidm
+metadata:
+  name: idm
+spec:
+  domain: "id.${FQDN_01}"
+  replicaGroups:
+    - name: default
+      replicas: 3
+      primaryNode: true
+  logLevel: info
+  storage:
+    volumeClaimTemplate:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 100Mi

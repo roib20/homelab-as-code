@@ -1,0 +1,11 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        kind: Kanidm
+        name: idm
+      fieldPaths:
+        - spec.domain
