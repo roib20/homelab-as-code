@@ -5,6 +5,7 @@ metadata:
   name: idm
 spec:
   domain: "id.${FQDN_01}"
+  tlsSecretName: tls-wildcard
   replicaGroups:
     - name: default
       replicas: 3
