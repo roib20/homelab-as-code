@@ -3,6 +3,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - kanidm.yaml
+  - kanidm-tls.yaml
+  - kanidm-httproute.yaml
 helmCharts:
   - name: kaniop
     repo: oci://ghcr.io/pando85/helm-charts
@@ -13,3 +16,5 @@ helmCharts:
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+replacements:
+  - path: replacements.yaml
