@@ -8,14 +8,5 @@ spec:
   tlsSecretName: tls-wildcard
   replicaGroups:
     - name: default
-      replicas: 3
-      primaryNode: true
+      replicas: 1
   logLevel: info
-  storage:
-    volumeClaimTemplate:
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 100Mi
