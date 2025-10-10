@@ -4,7 +4,6 @@ kind: Kustomization
 resources:
   - ../../base
   - kanidm.yaml
-  - kanidm-tls.yaml
   - kanidm-httproute.yaml
 helmCharts:
   - name: kaniop
