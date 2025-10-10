@@ -9,4 +9,13 @@ spec:
   replicaGroups:
     - name: default
       replicas: 1
+      primaryNode: true
   logLevel: info
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 100Mi
