@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "jellyfin",
+  "destName": "in-cluster",
+  "destNamespace": "jellyfin",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "jellyfin"
+}

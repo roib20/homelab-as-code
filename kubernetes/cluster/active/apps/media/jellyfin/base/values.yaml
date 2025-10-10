@@ -1,0 +1,6 @@
+# https://github.com/trueforge-org/truecharts/blob/master/charts/stable/jellyfin/values.yaml
+---
+image:
+  repository: ghcr.io/jellyfin/jellyfin
+  pullPolicy: IfNotPresent
+  tag: 10.11.0-rc8
