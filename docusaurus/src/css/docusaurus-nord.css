@@ -1,0 +1,96 @@
+/**
+ * Nord Theme for Docusaurus
+ * Using official Nord color palette
+ */
+
+/* Import official Nord CSS color variables */
+@import "./nord.css";
+
+:root {
+  --ifm-code-font-size: 95%;
+}
+
+/* Light Mode (Bright ambiance using Snow Storm backgrounds) */
+[data-theme="light"] {
+  /* Primary interactive elements (Polar Night) */
+  --ifm-color-primary: var(--nord3);
+  --ifm-color-primary-dark: var(--nord2);
+  --ifm-color-primary-darker: var(--nord1);
+  --ifm-color-primary-darkest: var(--nord0);
+  --ifm-color-primary-light: var(--nord3);
+  --ifm-color-primary-lighter: var(--nord3);
+  --ifm-color-primary-lightest: var(--nord3);
+
+  /* Backgrounds (Snow Storm) */
+  --ifm-background-color: var(--nord6);
+  --ifm-background-surface-color: var(--nord5);
+  --ifm-navbar-background-color: var(--nord6);
+  --ifm-footer-background-color: var(--nord5);
+  --ifm-footer-color: var(--nord3);
+
+  /* Text (Polar Night) */
+  --ifm-font-color-base: var(--nord3);
+  --ifm-font-color-secondary: var(--nord2);
+
+  /* Highlighting (Polar Night) */
+  --docusaurus-highlighted-code-line-bg: color-mix(
+    in srgb,
+    var(--nord2) 50%,
+    transparent
+  );
+
+  /* Links (Frost) */
+  --ifm-link-color: var(--nord10);
+  --ifm-link-hover-color: var(--nord9);
+
+  /* Menu (Polar Night) */
+  --ifm-menu-color: var(--nord2);
+  --ifm-menu-color-active: var(--nord3);
+}
+
+/* Dark Mode (Dark ambiance using Polar Night backgrounds) */
+[data-theme="dark"] {
+  /* Primary interactive elements (Snow Storm) */
+  --ifm-color-primary: var(--nord6);
+  --ifm-color-primary-dark: var(--nord5);
+  --ifm-color-primary-darker: var(--nord4);
+  --ifm-color-primary-darkest: var(--nord4);
+  --ifm-color-primary-light: var(--nord6);
+  --ifm-color-primary-lighter: var(--nord6);
+  --ifm-color-primary-lightest: var(--nord6);
+
+  /* Backgrounds (Polar Night) */
+  --ifm-background-color: var(--nord0);
+  --ifm-background-surface-color: var(--nord1);
+  --ifm-navbar-background-color: var(--nord0);
+  --ifm-footer-background-color: var(--nord1);
+  --ifm-footer-color: var(--nord6);
+
+  /* Text (Snow Storm) */
+  --ifm-font-color-base: var(--nord6);
+  --ifm-font-color-secondary: var(--nord4);
+
+  /* Highlighting (Polar Night) */
+  --docusaurus-highlighted-code-line-bg: color-mix(
+    in srgb,
+    var(--nord2) 50%,
+    transparent
+  );
+
+  /* Links (Frost) */
+  --ifm-link-color: var(--nord8);
+  --ifm-link-hover-color: var(--nord7);
+
+  /* Menu (Snow Storm) */
+  --ifm-menu-color: var(--nord5);
+  --ifm-menu-color-active: var(--nord6);
+}
+
+/* Hero Section (Polar Night background, Snow Storm text) */
+.hero {
+  background-color: var(--nord2);
+  color: var(--nord6);
+}
+
+/* Syntax Highlighting (Prism Nord Theme) */
+@import "prism-themes/themes/prism-nord.css";

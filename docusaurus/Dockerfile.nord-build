@@ -1,0 +1,22 @@
+# Build official Nord CSS from nord@0.2.1 package
+#
+# Usage:
+#   docker build -f Dockerfile.nord-build -t nord-builder .
+#   docker run --rm nord-builder cat /build/node_modules/nord/build/css/nord.css > src/css/nord.css
+#
+# Note: Uses Node 11 (latest version that successfully builds the old nord package)
+
+FROM node:11
+
+WORKDIR /build
+
+# Install Nord package
+RUN npm install nord@0.2.1
+
+# Set working directory to nord package
+WORKDIR /build/node_modules/nord
+
+# Install dependencies and build
+RUN npm install && npx gulp compile-css-template
+
+# The compiled nord.css will be at /build/node_modules/nord/build/css/nord.css
