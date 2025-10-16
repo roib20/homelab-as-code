@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: ingress-nginx
     repo: oci://ghcr.io/home-operations/charts-mirror
-    version: 4.12.3
+    version: 4.13.0
     releaseName: ingress-nginx
     namespace: ingress-nginx
     valuesFile: ../../base/values.yaml
