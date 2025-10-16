@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: tailscale-operator
     repo: oci://ghcr.io/home-operations/charts-mirror
-    version: v1.88.3
+    version: 1.88.4
     releaseName: tailscale-operator
     namespace: tailscale
     valuesFile: ../../base/values.yaml
