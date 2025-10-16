@@ -119,7 +119,7 @@ locals {
       values          = file("${local.kubernetes_dir}/cluster/active/addons/coredns/base/values.yaml")
     }
     spegel = {
-      chart_version   = "0.3.0"
+      chart_version   = "0.4.0"
       helm_repository = "oci://ghcr.io/spegel-org/helm-charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/spegel/base/values.yaml")
     }

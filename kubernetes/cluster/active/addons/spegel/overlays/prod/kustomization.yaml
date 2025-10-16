@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: spegel
     repo: oci://ghcr.io/spegel-org/helm-charts
-    version: 0.3.0
+    version: 0.4.0
     releaseName: spegel
     namespace: kube-system
     valuesFile: ../../base/values.yaml
