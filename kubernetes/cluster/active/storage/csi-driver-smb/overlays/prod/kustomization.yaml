@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: csi-driver-smb
     repo: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
-    version: 1.19.0
+    version: 1.19.1
     releaseName: csi-driver-smb
     namespace: kube-system
     valuesFile: ../../base/values.yaml
