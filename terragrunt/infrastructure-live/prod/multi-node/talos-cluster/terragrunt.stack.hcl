@@ -99,12 +99,12 @@ locals {
   # Helm Charts
   helm_charts = {
     cilium = {
-      chart_version   = "1.18.1"
+      chart_version   = "1.18.2"
       helm_repository = "oci://ghcr.io/home-operations/charts-mirror"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cilium/base/values.yaml")
     }
     talos-ccm = {
-      chart_version   = "0.5.0"
+      chart_version   = "0.5.2"
       helm_repository = "oci://ghcr.io/siderolabs/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/talos-cloud-controller-manager/base/values.yaml")
     }
