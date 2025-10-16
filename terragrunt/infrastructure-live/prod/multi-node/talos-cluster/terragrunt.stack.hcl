@@ -109,8 +109,8 @@ locals {
       values          = file("${local.kubernetes_dir}/cluster/active/addons/talos-cloud-controller-manager/base/values.yaml")
     }
     cert-manager = {
-      chart_version   = "v1.18.2"
-      helm_repository = "https://charts.jetstack.io"
+      chart_version   = "v1.19.1"
+      helm_repository = "oci://quay.io/jetstack/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cert-manager/base/values.yaml")
     }
     coredns = {
