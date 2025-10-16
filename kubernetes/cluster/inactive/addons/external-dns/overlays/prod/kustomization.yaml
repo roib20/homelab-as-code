@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: external-dns
     repo: oci://ghcr.io/home-operations/charts-mirror
-    version: 1.17.0
+    version: 1.19.0
     releaseName: external-dns
     namespace: external-dns
     valuesFile: ../../base/values.yaml
