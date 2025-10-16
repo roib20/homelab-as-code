@@ -5,7 +5,7 @@ resources:
   - ../../base
 helmCharts:
   - name: csi-driver-smb
-    repo: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
+    repo: oci://ghcr.io/home-operations/charts-mirror
     version: 1.19.1
     releaseName: csi-driver-smb
     namespace: kube-system
