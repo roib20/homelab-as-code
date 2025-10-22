@@ -3,4 +3,4 @@
 image:
   repository: ghcr.io/jellyfin/jellyfin
   pullPolicy: IfNotPresent
-  tag: 10.11.0-rc9
+  tag: 10.11.0
