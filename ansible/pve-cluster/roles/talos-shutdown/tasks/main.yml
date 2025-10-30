@@ -7,4 +7,3 @@
   ansible.builtin.command:
     cmd: "talosctl shutdown --nodes {{ talos_endpoint }} --wait --timeout {{ talos_shutdown_timeout }}s"
   delegate_to: localhost
-  failed_when: false  # Don't fail if VM is already down
