@@ -1,0 +1,16 @@
+---
+- name: Install packages
+  become: true
+  block:
+    - name: Install APT packages
+      become: true
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+      ansible.builtin.package:
+        name: "{{ apt_packages }}"
+        state: latest
+    - name: Install DNF packages
+      become: true
+      when: ansible_distribution == 'Fedora' and ansible_cmdline.ostree is not defined
+      ansible.builtin.package:
+        name: "{{ dnf_packages }}"
+        state: latest
