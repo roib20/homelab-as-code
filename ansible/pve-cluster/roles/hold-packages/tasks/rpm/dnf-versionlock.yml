@@ -1,0 +1,13 @@
+---
+- name: Gather RPM package facts
+  become: true
+  ansible.builtin.package_facts:
+    manager: rpm
+
+- name: Prevent packages from being updated
+  when: "item in ansible_facts.packages"
+  become: true
+  community.general.dnf_versionlock:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ dnf_packages }}"

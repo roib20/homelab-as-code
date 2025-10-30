@@ -1,0 +1,15 @@
+---
+- name: Gracefully shutdown Talos VMs and reboot PVE nodes
+  hosts: "pve"
+  gather_facts: true
+  serial: 1
+
+  tasks:
+    - name: Shutdown Talos VM
+      ansible.builtin.include_role:
+        name: talos-shutdown
+
+    - name: Reboot PVE node (wait for up to 20 minutes)
+      become: true
+      ansible.builtin.reboot:
+        reboot_timeout: 1200

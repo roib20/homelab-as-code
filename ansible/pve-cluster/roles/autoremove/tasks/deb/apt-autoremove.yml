@@ -1,0 +1,5 @@
+---
+- name: "Remove dependencies that are no longer required: `sudo apt-get autoremove`"
+  become: true
+  ansible.builtin.apt:
+    autoremove: true

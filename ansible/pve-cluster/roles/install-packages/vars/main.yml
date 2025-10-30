@@ -1,0 +1,18 @@
+---
+apt_packages:
+  # Proxmox packages
+  - proxmox-default-kernel
+  - proxmox-ve
+  - postfix
+  - open-iscsi
+  - chrony
+  - proxmox-kernel-6.17  # https://forum.proxmox.com/tags/opt-in-kernel/
+  # Hardware packages
+  - eject
+  - firmware-sof-signed
+  - mdadm
+  # Other packages
+  - guestfs-tools
+  - rsync
+  - tmux
+dnf_packages: []

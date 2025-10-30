@@ -1,0 +1,9 @@
+---
+- name: Get Talos VM endpoint for current node
+  ansible.builtin.set_fact:
+    talos_endpoint: "{{ talos_vm_map[inventory_hostname] }}"
+
+- name: Gracefully shutdown Talos VM
+  ansible.builtin.command:
+    cmd: "talosctl shutdown --nodes {{ talos_endpoint }} --wait --timeout {{ talos_shutdown_timeout }}s"
+  delegate_to: localhost

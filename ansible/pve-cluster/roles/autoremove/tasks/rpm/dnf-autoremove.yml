@@ -1,0 +1,5 @@
+---
+- name: "Autoremove unneeded packages installed as dependencies: `sudo dnf autoremove`"
+  become: true
+  ansible.builtin.dnf:
+    autoremove: true

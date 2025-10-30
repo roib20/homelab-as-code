@@ -40,3 +40,9 @@
         apply:
           tags: proxmox-permissions
       tags: proxmox-permissions
+    - name: Install other packages
+      ansible.builtin.include_role:
+        name: install-packages
+        apply:
+          tags: install-packages
+      tags: install-packages
