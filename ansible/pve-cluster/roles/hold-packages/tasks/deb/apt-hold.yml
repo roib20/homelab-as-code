@@ -1,0 +1,13 @@
+---
+- name: Gather APT package facts
+  become: true
+  ansible.builtin.package_facts:
+    manager: apt
+
+- name: Hold packages
+  when: ansible_facts.packages.get(item) is not none
+  become: true
+  ansible.builtin.dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop: "{{ apt_packages }}"

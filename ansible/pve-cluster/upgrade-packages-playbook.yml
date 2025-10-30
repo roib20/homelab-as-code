@@ -1,0 +1,21 @@
+---
+- name: Upgrade packages
+  hosts: "pve"
+  gather_facts: true
+
+  tasks:
+    - name: Hold packages
+      ansible.builtin.include_role:
+        name: hold-packages
+
+    - name: Upgrade packages
+      ansible.builtin.include_role:
+        name: upgrade-packages
+
+    - name: Remove packages
+      ansible.builtin.include_role:
+        name: remove-packages
+
+    - name: Remove dependencies that are no longer required
+      ansible.builtin.include_role:
+        name: autoremove

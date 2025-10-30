@@ -1,0 +1,5 @@
+---
+- name: "Autoremove unneeded packages installed as dependencies: `sudo yum autoremove`"
+  become: true
+  ansible.builtin.yum:
+    autoremove: true
