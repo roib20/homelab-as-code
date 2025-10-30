@@ -5,7 +5,7 @@
     manager: rpm
 
 - name: Prevent packages from being updated
-  when: "'item' in ansible_facts.packages"
+  when: "item in ansible_facts.packages"
   become: true
   community.general.dnf_versionlock:
     name: "{{ item }}"

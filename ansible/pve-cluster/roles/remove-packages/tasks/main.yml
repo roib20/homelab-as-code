@@ -1,16 +1,14 @@
 ---
-- name: Install packages
+- name: Remove packages
   become: true
   block:
     - name: Remove APT packages
-      become: true
       when: ansible_os_family == "Debian"
       ansible.builtin.package:
         name: "{{ apt_packages }}"
         state: absent
 
     - name: Remove DNF packages
-      become: true
       when: ansible_os_family == "RedHat"
       ansible.builtin.package:
         name: "{{ dnf_packages }}"
