@@ -1,0 +1,11 @@
+---
+- name: Reboot nodes
+  hosts: "pve"
+  gather_facts: true
+  serial: 1
+
+  tasks:
+    - name: Reboot the machine (wait for up to 20 minutes)
+      become: true
+      ansible.builtin.reboot:
+        reboot_timeout: 1200
