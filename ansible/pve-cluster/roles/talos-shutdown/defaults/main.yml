@@ -1,0 +1,9 @@
+---
+# Map PVE nodes to their Talos VM control plane endpoints
+talos_vm_map:
+  pve-node-01: "control-plane-01"
+  pve-node-02: "control-plane-02"
+  pve-node-03: "control-plane-03"
+
+# Timeout for Talos shutdown operation (in seconds)
+talos_shutdown_timeout: 1800  # 30 minutes
