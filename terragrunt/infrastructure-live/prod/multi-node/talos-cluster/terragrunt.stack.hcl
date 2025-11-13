@@ -17,9 +17,9 @@ locals {
 
   # ─── Versions ────────────────────────────────────────────────────────────────
   versions = {
-    kubernetes_version       = "1.34.1",
+    kubernetes_version       = "1.34.2",
     initial_talos_version    = "1.11.1", # Do not change this value after initial deployment
-    talos_version            = "1.11.1", # Change this value to safely upgrade the Talos version
+    talos_version            = "1.11.3", # Change this value to safely upgrade the Talos version
     prometheus_version       = "17.0.2",
     external-secrets_version = "0.19.2",
   }

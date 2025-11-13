@@ -65,8 +65,6 @@ data "talos_machine_configuration" "this" {
     templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
       extramounts = local.extramounts
     }),
-    templatefile("${path.module}/resources/talos-patches/feature_gates.yaml.tftpl", {
-    }),
     templatefile("${path.module}/resources/talos-patches/inline_manifests.yaml.tftpl", {
       type      = yamldecode(each.value.talos_config).type
       manifests = data.helm_template.bootstrap_charts
