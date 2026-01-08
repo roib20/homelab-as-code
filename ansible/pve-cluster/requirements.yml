@@ -2,22 +2,22 @@
 roles:
   # https://galaxy.ansible.com/ui/standalone/roles/geerlingguy/ntp/
   - name: geerlingguy.ntp
-    # version: ">=2.7.0"
+    version: "4.0.0"
     source: https://galaxy.ansible.com
   # https://galaxy.ansible.com/ui/standalone/roles/lae/proxmox/
   - name: lae.proxmox
-    version:
+    version: "v1.10.0"
     source: https://galaxy.ansible.com
 collections:
   # https://galaxy.ansible.com/ui/repo/published/community/general/
   - name: community.general
-    version: ">=10.7.0"
+    version: ">=12.2.0"
     source: https://galaxy.ansible.com
   # https://galaxy.ansible.com/ui/repo/published/ansible/posix/
   - name: ansible.posix
-    version: ">=2.0.0"
+    version: ">=2.1.0"
     source: https://galaxy.ansible.com
   # https://galaxy.ansible.com/ui/repo/published/artis3n/tailscale/
   - name: artis3n.tailscale
-    version: ">=1.0.1"
+    version: ">=1.2.0"
     source: https://galaxy.ansible.com
