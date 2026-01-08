@@ -1,0 +1,15 @@
+# {{ ansible_managed }}
+auto lo
+iface lo inet loopback
+
+allow-hotplug {{ bridge_port }}
+iface {{ bridge_port }} inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+    address {{ lookup('dig', ansible_fqdn) }}
+    gateway 192.168.1.1
+    netmask 255.255.255.0
+    bridge_ports {{ bridge_port }}
+    bridge_stp off
+    bridge_fd 0

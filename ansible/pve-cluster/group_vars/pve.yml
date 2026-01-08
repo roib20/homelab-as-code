@@ -33,7 +33,7 @@ pve_storages:
     content: ["backup", "images", "iso", "snippets", "rootdir", "vztmpl"]
     path: "/var/lib/pve/local-btrfs"
 pve_ssh_port: 22
-# interfaces_template: "interfaces-{{ pve_group }}.j2"
+interfaces_template: "interfaces-{{ pve_group }}.j2"
 pve_remove_subscription_warning: true  # patches the subscription warning messages in proxmox if you are using the community edition
 pve_extra_packages: []  # Any extra packages you may want to install, e.g. ngrep
 pve_run_system_upgrades: true  # Let role perform system upgrades

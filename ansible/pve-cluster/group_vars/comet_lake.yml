@@ -3,3 +3,6 @@
 # Intel CometLake-S GT2 [UHD Graphics 630] device ID
 pve_pci_device_ids:
   - id: "8086:9bc8"
+
+# Network interface configuration
+bridge_port: enp2s0
