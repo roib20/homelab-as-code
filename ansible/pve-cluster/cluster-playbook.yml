@@ -46,3 +46,9 @@
         apply:
           tags: install-packages
       tags: install-packages
+    - name: Disable PVE subscription nag
+      ansible.builtin.include_role:
+        name: pve-remove-nag
+        apply:
+          tags: pve-remove-nag
+      tags: pve-remove-nag

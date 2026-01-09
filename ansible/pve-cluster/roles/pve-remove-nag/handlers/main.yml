@@ -1,0 +1,5 @@
+---
+- name: Run pve-remove-nag
+  ansible.builtin.command:
+    cmd: /usr/local/bin/pve-remove-nag.sh
+  changed_when: false
