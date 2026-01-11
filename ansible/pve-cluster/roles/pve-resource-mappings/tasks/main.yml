@@ -16,12 +16,14 @@
     that:
       - hostvars[item]['pve_gpu_id'] is defined
       - hostvars[item]['pve_gpu_id'] != omit
+      - hostvars[item]['pve_gpu_id'] | string | length > 0
       - hostvars[item]['pve_gpu_path'] is defined
       - hostvars[item]['pve_gpu_path'] | string | length > 0
       - hostvars[item]['pve_gpu_iommugroup'] is defined
       - hostvars[item]['pve_gpu_subsystem_id'] is defined
+      - hostvars[item]['pve_gpu_subsystem_id'] | string | length > 0
     fail_msg: >-
-      Missing required GPU mapping vars for host {{ item }}
+      Missing or invalid GPU mapping vars for host {{ item }}
       (pve_gpu_id, pve_gpu_path, pve_gpu_iommugroup, pve_gpu_subsystem_id).
   loop: "{{ groups['pve'] }}"
   run_once: true
