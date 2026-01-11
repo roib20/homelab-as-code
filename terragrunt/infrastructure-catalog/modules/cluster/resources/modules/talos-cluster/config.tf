@@ -43,7 +43,7 @@ data "talos_machine_configuration" "this" {
   kubernetes_version = "v${var.versions.kubernetes_version}"
   talos_version      = "v${var.versions.talos_version}"
 
-  config_patches = [
+  config_patches = compact([
     templatefile("${path.module}/resources/talos-patches/ccm.yaml.tftpl", {
       type = yamldecode(each.value.talos_config).type
     }),
@@ -82,7 +82,7 @@ data "talos_machine_configuration" "this" {
       TS_AUTHKEY  = var.ts_authkey
       TS_HOSTNAME = each.key
     }),
-  ]
+  ])
 }
 
 data "talos_client_configuration" "this" {

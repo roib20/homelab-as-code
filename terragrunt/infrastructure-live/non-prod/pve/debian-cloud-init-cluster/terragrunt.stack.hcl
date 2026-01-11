@@ -35,9 +35,9 @@ unit "download_file" {
 
   values = {
     node_names         = ["${local.node_name}"]
-    url                = "https://cloud.debian.org/images/cloud/bookworm-backports/20250519-2117/debian-12-backports-genericcloud-amd64-20250519-2117.qcow2"
-    file_name          = "debian-12-backports-genericcloud-amd64.img"
-    checksum           = "4e1f80724daf086b784e4ff8e16051668482cd2d041762e83f8e51dbda1424f87f4bcd88a21f0814fd7c273f19b92f77519740dfbe7cd3b9402030557cec593b"
+    url                = "https://cloud.debian.org/images/cloud/trixie-backports/20251129-2311/debian-13-backports-genericcloud-amd64-20251129-2311.qcow2"
+    file_name          = "debian-13-backports-genericcloud-amd64.img"
+    checksum           = "35a7afe5f77463066a81e55d619bc7e775d17b90ef425ac70e39e1ae55de59fd68071b2285a539ca1b3f645263d7ebf77394a01697f1b8086938b9204325dc9a"
     checksum_algorithm = "sha512"
     datastore_id       = "local"
   }
