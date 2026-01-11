@@ -136,6 +136,8 @@
       - "{{ _desired_map }}"
       - --mdev
       - "{{ _desired_mdev }}"
-  changed_when: true
+  register: _update_result
+  changed_when: _update_result.rc == 0
+  failed_when: _update_result.rc != 0
   become: true
   throttle: 1
