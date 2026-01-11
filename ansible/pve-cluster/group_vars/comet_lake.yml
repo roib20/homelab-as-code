@@ -8,6 +8,8 @@ pve_pci_device_ids:
 # PCI Resource Mapping configuration
 pve_gpu_id: "{{ (pve_pci_device_ids | map(attribute='id') | first) | default(omit) }}"
 pve_gpu_subsystem_id: "1462:7d18"
+pve_gpu_path: "0000:00:02.0"  # Explicit GPU PCI path for Comet Lake nodes; adjust per host
+pve_gpu_iommugroup: 0  # Explicit IOMMU group ID for Comet Lake nodes; adjust per host
 pve_gpu_mdev: 0
 
 # Network interface configuration

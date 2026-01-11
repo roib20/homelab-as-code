@@ -3,6 +3,29 @@
 # Uses the cluster mapping API to avoid race conditions
 # https://pve.proxmox.com/wiki/PCI_Passthrough#Resource_Mapping
 
+- name: Ensure pve group has hosts
+  ansible.builtin.assert:
+    that:
+      - groups['pve'] is defined
+      - groups['pve'] | length > 0
+    fail_msg: "Inventory group 'pve' is empty; define at least one host to build PCI mappings."
+  run_once: true
+
+- name: Validate GPU mapping variables for each node
+  ansible.builtin.assert:
+    that:
+      - hostvars[item]['pve_gpu_id'] is defined
+      - hostvars[item]['pve_gpu_id'] != omit
+      - hostvars[item]['pve_gpu_path'] is defined
+      - hostvars[item]['pve_gpu_path'] | string | length > 0
+      - hostvars[item]['pve_gpu_iommugroup'] is defined
+      - hostvars[item]['pve_gpu_subsystem_id'] is defined
+    fail_msg: >-
+      Missing required GPU mapping vars for host {{ item }}
+      (pve_gpu_id, pve_gpu_path, pve_gpu_iommugroup, pve_gpu_subsystem_id).
+  loop: "{{ groups['pve'] }}"
+  run_once: true
+
 - name: Get existing PCI mappings
   ansible.builtin.command:
     cmd: pvesh get /cluster/mapping/pci --output-format json
@@ -13,7 +36,7 @@
 
 - name: Parse existing PCI mappings
   ansible.builtin.set_fact:
-    existing_mappings: "{{ existing_mappings_raw.stdout | from_json }}"
+    existing_mappings: "{{ (existing_mappings_raw.stdout | default('[]', true)) | from_json }}"
   run_once: true
 
 - name: Build current state dictionary
@@ -25,18 +48,20 @@
   ansible.builtin.set_fact:
     desired_mappings: >-
       {{
-        desired_mappings | default({}) | combine({
-          'GPU_' + item: {
-            'map': 'id=' + hostvars[item]['pve_gpu_id'] +
-                   ',iommugroup=' + (hostvars[item]['pve_gpu_iommugroup'] | string) +
-                   ',node=' + item +
-                   ',path=' + hostvars[item]['pve_gpu_path'] +
-                   ',subsystem-id=' + hostvars[item]['pve_gpu_subsystem_id'],
-            'mdev': (hostvars[item]['pve_gpu_mdev'] | default(0) | int)
-          }
-        })
+        ([
+          {
+            'key': 'GPU_' ~ node,
+            'value': {
+              'map': 'id=' ~ hostvars[node]['pve_gpu_id']
+                     ~ ',iommugroup=' ~ (hostvars[node]['pve_gpu_iommugroup'] | string)
+                     ~ ',node=' ~ node
+                     ~ ',path=' ~ hostvars[node]['pve_gpu_path']
+                     ~ ',subsystem-id=' ~ hostvars[node]['pve_gpu_subsystem_id'],
+              'mdev': (hostvars[node]['pve_gpu_mdev'] | default(0) | int)
+            }
+          } for node in groups['pve']
+        ]) | items2dict
       }}
-  loop: "{{ groups['pve'] }}"
   run_once: true
 
 - name: Create or update PCI mappings
