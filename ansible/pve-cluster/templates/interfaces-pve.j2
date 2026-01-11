@@ -6,10 +6,7 @@ allow-hotplug {{ bridge_port }}
 iface {{ bridge_port }} inet manual
 
 auto vmbr0
-iface vmbr0 inet static
-    address {{ lookup('dig', ansible_fqdn) }}
-    gateway {{ vmbr0_gateway | default('192.168.1.1') }}
-    netmask {{ vmbr0_netmask | default('255.255.255.0') }}
+iface vmbr0 inet dhcp
     bridge_ports {{ bridge_port }}
     bridge_stp off
     bridge_fd 0
