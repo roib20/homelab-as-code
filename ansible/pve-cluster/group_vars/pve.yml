@@ -51,6 +51,9 @@ pve_pci_device_ids: []  # List of pci device ID's (see https://pve.proxmox.com/w
 pve_vfio_blacklist_drivers: []  # List of device drivers to blacklist from the Proxmox host (see https://pve.proxmox.com/wiki/PCI(e)_Passthrough).
 pve_pcie_ignore_msrs: false  # Set this to true if passing through to Windows machine to prevent VM crashing.
 pve_pcie_report_msrs: true  # Set this to false to prevent dmesg system from logging msrs crash reports.
+pve_node_dns1: "1.1.1.1"  # Primary DNS server for dhclient configuration
+pve_node_dns2: "1.0.0.1"  # Secondary DNS server for dhclient configuration
+pve_node_dns_strategy: "supersede"  # Strategy for DNS override: prepend or supersede
 pve_zfs_enabled: false  # Specifies whether or not to install and configure ZFS packages
 pve_ceph_enabled: false  # Specifies wheter or not to install and configure Ceph packages.
 # pve_no_log: true  # Set this to true in production to prevent leaking of storage credentials in run logs. (may be used in other tasks in the future)
