@@ -46,24 +46,35 @@
     current_mappings: "{{ dict(existing_mappings | map(attribute='id') | zip(existing_mappings)) }}"
   run_once: true
 
+- name: Initialize desired mapping items
+  ansible.builtin.set_fact:
+    desired_mapping_items: []
+  run_once: true
+
+- name: Build desired mapping items for all nodes
+  ansible.builtin.set_fact:
+    desired_mapping_items: "{{ desired_mapping_items + [mapping_item] }}"
+  vars:
+    mapping_item:
+      key: "GPU_{{ item }}"
+      value:
+        map: >-
+          {{
+            [
+              'id=' ~ hostvars[item]['pve_gpu_id'],
+              'iommugroup=' ~ (hostvars[item]['pve_gpu_iommugroup'] | string),
+              'node=' ~ item,
+              'path=' ~ hostvars[item]['pve_gpu_path'],
+              'subsystem-id=' ~ hostvars[item]['pve_gpu_subsystem_id']
+            ] | join(',')
+          }}
+        mdev: "{{ hostvars[item]['pve_gpu_mdev'] | default(0) | int }}"
+  loop: "{{ groups['pve'] }}"
+  run_once: true
+
 - name: Build desired state for all nodes
   ansible.builtin.set_fact:
-    desired_mappings: >-
-      {{
-        ([
-          {
-            'key': 'GPU_' ~ node,
-            'value': {
-              'map': 'id=' ~ hostvars[node]['pve_gpu_id']
-                     ~ ',iommugroup=' ~ (hostvars[node]['pve_gpu_iommugroup'] | string)
-                     ~ ',node=' ~ node
-                     ~ ',path=' ~ hostvars[node]['pve_gpu_path']
-                     ~ ',subsystem-id=' ~ hostvars[node]['pve_gpu_subsystem_id'],
-              'mdev': (hostvars[node]['pve_gpu_mdev'] | default(0) | int)
-            }
-          } for node in groups['pve']
-        ]) | items2dict
-      }}
+    desired_mappings: "{{ desired_mapping_items | items2dict }}"
   run_once: true
 
 - name: Create or update PCI mappings
