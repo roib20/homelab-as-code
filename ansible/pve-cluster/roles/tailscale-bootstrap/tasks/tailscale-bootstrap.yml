@@ -2,6 +2,23 @@
 - name: Set a hostname (based on inventory alias)
   ansible.builtin.include_role:
     name: hostname
+- name: Enable IP forwarding for exit node support
+  become: true
+  block:
+    - name: Enable IPv4 forwarding
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: '1'
+        sysctl_file: /etc/sysctl.d/99-tailscale.conf
+        state: present
+        reload: true
+    - name: Enable IPv6 forwarding
+      ansible.posix.sysctl:
+        name: net.ipv6.conf.all.forwarding
+        value: '1'
+        sysctl_file: /etc/sysctl.d/99-tailscale.conf
+        state: present
+        reload: true
 - name: Install and login into Tailscale
   ansible.builtin.include_role:
     name: artis3n.tailscale.machine

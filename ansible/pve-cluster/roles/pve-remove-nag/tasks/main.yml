@@ -1,0 +1,26 @@
+---
+- name: Deploy pve-remove-nag
+  become: true
+  block:
+    - name: Deploy pve-remove-nag script
+      ansible.builtin.copy:
+        src: pve-remove-nag.sh
+        dest: /usr/local/bin/pve-remove-nag.sh
+        owner: root
+        group: root
+        mode: "0755"
+      notify: Run pve-remove-nag
+
+    - name: Deploy APT post-invoke hook
+      ansible.builtin.copy:
+        src: no-nag-script
+        dest: /etc/apt/apt.conf.d/no-nag-script
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Run pve-remove-nag script on first deploy
+      ansible.builtin.command:
+        cmd: /usr/local/bin/pve-remove-nag.sh
+      register: script_result
+      changed_when: "'Patching' in script_result.stdout"

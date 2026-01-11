@@ -1,0 +1,6 @@
+---
+- name: Run pve-remove-nag
+  ansible.builtin.command:
+    cmd: /usr/local/bin/pve-remove-nag.sh
+  register: script_result
+  changed_when: "'Patching' in script_result.stdout"
