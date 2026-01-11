@@ -7,7 +7,8 @@
 
 - name: Configure DHCP client DNS overrides
   ansible.builtin.blockinfile:
-    path: /etc/dhcp/dhclient.conf
+    path: "/etc/dhcp/dhclient.conf"
+    create: true
     block: |
       {{ pve_node_dns_strategy | default('prepend') }} domain-name-servers {{
         [
