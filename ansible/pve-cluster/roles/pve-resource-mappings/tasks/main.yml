@@ -79,11 +79,22 @@
             {{ '' }}
           {%- endif -%}
 
-    - name: Compare current and desired state
+    - name: Normalize maps for comparison
       ansible.builtin.set_fact:
-        _needs_update: >-
-          {{ (_current_map.split(',') | sort | join(',')) != (_desired_map.split(',') | sort | join(','))
-             or ((_current_mapping.mdev | default(0) | int) != (_desired_mdev | int)) }}
+        _current_map_sorted: "{{ _current_map.split(',') | sort | join(',') }}"
+        _desired_map_sorted: "{{ _desired_map.split(',') | sort | join(',') }}"
+
+    - name: Check if map differs
+      ansible.builtin.set_fact:
+        _map_differs: "{{ _current_map_sorted != _desired_map_sorted }}"
+
+    - name: Check if mdev differs
+      ansible.builtin.set_fact:
+        _mdev_differs: "{{ (_current_mapping.mdev | default(0) | int) != (_desired_mdev | int) }}"
+
+    - name: Determine if update needed
+      ansible.builtin.set_fact:
+        _needs_update: "{{ _map_differs or _mdev_differs }}"
 
 - name: Create PCI mapping
   when: not _mapping_exists
