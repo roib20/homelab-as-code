@@ -3,11 +3,118 @@
 # Each node manages its own GPU mapping entry, executed sequentially
 # https://pve.proxmox.com/wiki/PCI_Passthrough#Resource_Mapping
 
-- name: Configure PCI resource mappings for each node
-  run_once: true
+- name: Validate GPU mapping variables
+  ansible.builtin.assert:
+    that:
+      - pve_gpu_id is defined
+      - pve_gpu_id | length > 0
+      - pve_gpu_path is defined
+      - pve_gpu_path | length > 0
+      - pve_gpu_iommugroup is defined
+      - pve_gpu_subsystem_id is defined
+      - pve_gpu_subsystem_id | length > 0
+    fail_msg: >-
+      Missing or invalid GPU mapping variables for {{ inventory_hostname }}.
+      Required: pve_gpu_id, pve_gpu_path, pve_gpu_iommugroup, pve_gpu_subsystem_id.
+  throttle: 1
+
+- name: Set mapping variables
+  vars:
+    _map_parts:
+      - "node={{ inventory_hostname }}"
+      - "path={{ pve_gpu_path }}"
+      - "id={{ pve_gpu_id }}"
+      - "subsystem-id={{ pve_gpu_subsystem_id }}"
+      - "iommugroup={{ pve_gpu_iommugroup }}"
+  ansible.builtin.set_fact:
+    _mapping_id: "GPU_{{ inventory_hostname }}"
+    _desired_map: "{{ _map_parts | join(',') }}"
+    _desired_mdev: "{{ pve_gpu_mdev | default(0) | int }}"
+  throttle: 1
+
+- name: Get existing PCI mapping
+  ansible.builtin.command:
+    cmd: pvesh get /cluster/mapping/pci/{{ _mapping_id }} --output-format json
+  register: _existing_mapping
+  changed_when: false
+  failed_when: false
+  become: true
+  throttle: 1
+
+- name: Set mapping exists flag
+  ansible.builtin.set_fact:
+    _mapping_exists: "{{ _existing_mapping.rc == 0 }}"
+  throttle: 1
+
+- name: Parse and compare existing mapping
+  when: _mapping_exists
+  throttle: 1
   block:
-    - name: Process GPU mapping for {{ item }}
-      ansible.builtin.include_tasks: pci-mapping.yml
-      loop: "{{ groups['pve'] | sort }}"
-      loop_control:
-        loop_var: pve_node
+    - name: Parse current mapping
+      ansible.builtin.set_fact:
+        _current_mapping: "{{ _existing_mapping.stdout | from_json }}"
+
+    - name: Extract current map string
+      ansible.builtin.set_fact:
+        _current_map_raw: "{{ _current_mapping.map | default([]) }}"
+
+    - name: Normalize current map to comparable string
+      ansible.builtin.set_fact:
+        _current_map: >-
+          {%- set raw = _current_map_raw -%}
+          {%- if raw is string -%}
+            {{ raw }}
+          {%- elif raw is sequence and raw | length > 0 -%}
+            {%- set first = raw | first -%}
+            {%- if first is mapping -%}
+              {%- set parts = [] -%}
+              {%- for k, v in first.items() -%}
+                {%- set _ = parts.append(k ~ '=' ~ v) -%}
+              {%- endfor -%}
+              {{ parts | sort | join(',') }}
+            {%- else -%}
+              {{ first }}
+            {%- endif -%}
+          {%- else -%}
+            {{ '' }}
+          {%- endif -%}
+
+    - name: Compare current and desired state
+      ansible.builtin.set_fact:
+        _needs_update: >-
+          {{ (_current_map.split(',') | sort | join(',')) != (_desired_map.split(',') | sort | join(','))
+             or ((_current_mapping.mdev | default(0) | int) != (_desired_mdev | int)) }}
+
+- name: Create PCI mapping
+  when: not _mapping_exists
+  ansible.builtin.command:
+    argv:
+      - pvesh
+      - create
+      - /cluster/mapping/pci
+      - --id
+      - "{{ _mapping_id }}"
+      - --map
+      - "{{ _desired_map }}"
+      - --mdev
+      - "{{ _desired_mdev }}"
+  changed_when: true
+  become: true
+  throttle: 1
+
+- name: Update PCI mapping
+  when:
+    - _mapping_exists
+    - _needs_update
+  ansible.builtin.command:
+    argv:
+      - pvesh
+      - set
+      - /cluster/mapping/pci/{{ _mapping_id }}
+      - --map
+      - "{{ _desired_map }}"
+      - --mdev
+      - "{{ _desired_mdev }}"
+  changed_when: true
+  become: true
+  throttle: 1
