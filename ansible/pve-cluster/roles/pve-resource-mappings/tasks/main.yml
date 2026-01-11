@@ -1,85 +1,13 @@
 ---
 # Configure PCI Resource Mappings for Proxmox VE cluster
-# Uses the cluster mapping API to avoid race conditions
+# Each node manages its own GPU mapping entry, executed sequentially
 # https://pve.proxmox.com/wiki/PCI_Passthrough#Resource_Mapping
 
-- name: Ensure pve group has hosts
-  ansible.builtin.assert:
-    that:
-      - groups['pve'] is defined
-      - groups['pve'] | length > 0
-    fail_msg: "Inventory group 'pve' is empty; define at least one host to build PCI mappings."
+- name: Configure PCI resource mappings for each node
   run_once: true
-
-- name: Validate GPU mapping variables for each node
-  ansible.builtin.assert:
-    that:
-      - hostvars[item]['pve_gpu_id'] is defined
-      - hostvars[item]['pve_gpu_id'] != omit
-      - hostvars[item]['pve_gpu_id'] | string | length > 0
-      - hostvars[item]['pve_gpu_path'] is defined
-      - hostvars[item]['pve_gpu_path'] | string | length > 0
-      - hostvars[item]['pve_gpu_iommugroup'] is defined
-      - hostvars[item]['pve_gpu_subsystem_id'] is defined
-      - hostvars[item]['pve_gpu_subsystem_id'] | string | length > 0
-    fail_msg: >-
-      Missing or invalid GPU mapping vars for host {{ item }}
-      (pve_gpu_id, pve_gpu_path, pve_gpu_iommugroup, pve_gpu_subsystem_id).
-  loop: "{{ groups['pve'] }}"
-  run_once: true
-
-- name: Get existing PCI mappings
-  ansible.builtin.command:
-    cmd: pvesh get /cluster/mapping/pci --output-format json
-  register: existing_mappings_raw
-  changed_when: false
-  become: true
-  run_once: true
-
-- name: Parse existing PCI mappings
-  ansible.builtin.set_fact:
-    existing_mappings: "{{ (existing_mappings_raw.stdout | default('[]', true)) | from_json }}"
-  run_once: true
-
-- name: Build current state dictionary
-  ansible.builtin.set_fact:
-    current_mappings: "{{ dict(existing_mappings | map(attribute='id') | zip(existing_mappings)) }}"
-  run_once: true
-
-- name: Initialize desired mapping items
-  ansible.builtin.set_fact:
-    desired_mapping_items: []
-  run_once: true
-
-- name: Build desired mapping items for all nodes
-  ansible.builtin.set_fact:
-    desired_mapping_items: "{{ desired_mapping_items + [mapping_item] }}"
-  vars:
-    mapping_item:
-      key: "GPU_{{ item }}"
-      value:
-        map: >-
-          {{
-            [
-              'id=' ~ hostvars[item]['pve_gpu_id'],
-              'iommugroup=' ~ (hostvars[item]['pve_gpu_iommugroup'] | string),
-              'node=' ~ item,
-              'path=' ~ hostvars[item]['pve_gpu_path'],
-              'subsystem-id=' ~ hostvars[item]['pve_gpu_subsystem_id']
-            ] | join(',')
-          }}
-        mdev: "{{ hostvars[item]['pve_gpu_mdev'] | default(0) | int }}"
-  loop: "{{ groups['pve'] }}"
-  run_once: true
-
-- name: Build desired state for all nodes
-  ansible.builtin.set_fact:
-    desired_mappings: "{{ desired_mapping_items | items2dict }}"
-  run_once: true
-
-- name: Create or update PCI mappings
-  ansible.builtin.include_tasks: pci-mapping.yml
-  loop: "{{ desired_mappings | dict2items }}"
-  loop_control:
-    loop_var: mapping
-  run_once: true
+  block:
+    - name: Process GPU mapping for {{ item }}
+      ansible.builtin.include_tasks: pci-mapping.yml
+      loop: "{{ groups['pve'] | sort }}"
+      loop_control:
+        loop_var: pve_node
