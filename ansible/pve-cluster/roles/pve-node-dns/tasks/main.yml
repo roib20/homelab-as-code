@@ -9,6 +9,9 @@
   ansible.builtin.blockinfile:
     path: "/etc/dhcp/dhclient.conf"
     create: true
+    owner: root
+    group: root
+    mode: "0644"
     block: |
       {{ pve_node_dns_strategy | default('prepend') }} domain-name-servers {{
         [
