@@ -52,3 +52,9 @@
         apply:
           tags: pve-remove-nag
       tags: pve-remove-nag
+    - name: Configure PCI resource mappings
+      ansible.builtin.include_role:
+        name: pve-resource-mappings
+        apply:
+          tags: pve-resource-mappings
+      tags: pve-resource-mappings

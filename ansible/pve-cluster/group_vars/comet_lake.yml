@@ -1,8 +1,14 @@
 ---
-# Override for comet-lake nodes (pve-node-01)
+# Overrides for Comet Lake nodes (pve-node-01)
+
 # Intel CometLake-S GT2 [UHD Graphics 630] device ID
 pve_pci_device_ids:
   - id: "8086:9bc8"
+
+# PCI Resource Mapping configuration
+pve_gpu_id: "{{ (pve_pci_device_ids | map(attribute='id') | first) | default(omit) }}"
+pve_gpu_subsystem_id: "1462:7d18"
+pve_gpu_mdev: 0
 
 # Network interface configuration
 bridge_port: enp2s0

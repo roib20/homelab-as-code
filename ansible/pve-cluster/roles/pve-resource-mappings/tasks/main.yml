@@ -1,0 +1,47 @@
+---
+# Configure PCI Resource Mappings for Proxmox VE cluster
+# Uses the cluster mapping API to avoid race conditions
+# https://pve.proxmox.com/wiki/PCI_Passthrough#Resource_Mapping
+
+- name: Get existing PCI mappings
+  ansible.builtin.command:
+    cmd: pvesh get /cluster/mapping/pci --output-format json
+  register: existing_mappings_raw
+  changed_when: false
+  become: true
+  run_once: true
+
+- name: Parse existing PCI mappings
+  ansible.builtin.set_fact:
+    existing_mappings: "{{ existing_mappings_raw.stdout | from_json }}"
+  run_once: true
+
+- name: Build current state dictionary
+  ansible.builtin.set_fact:
+    current_mappings: "{{ dict(existing_mappings | map(attribute='id') | zip(existing_mappings)) }}"
+  run_once: true
+
+- name: Build desired state for all nodes
+  ansible.builtin.set_fact:
+    desired_mappings: >-
+      {{
+        desired_mappings | default({}) | combine({
+          'GPU_' + item: {
+            'map': 'id=' + hostvars[item]['pve_gpu_id'] +
+                   ',iommugroup=' + (hostvars[item]['pve_gpu_iommugroup'] | string) +
+                   ',node=' + item +
+                   ',path=' + hostvars[item]['pve_gpu_path'] +
+                   ',subsystem-id=' + hostvars[item]['pve_gpu_subsystem_id'],
+            'mdev': (hostvars[item]['pve_gpu_mdev'] | default(0) | int)
+          }
+        })
+      }}
+  loop: "{{ groups['pve'] }}"
+  run_once: true
+
+- name: Create or update PCI mappings
+  ansible.builtin.include_tasks: pci-mapping.yml
+  loop: "{{ desired_mappings | dict2items }}"
+  loop_control:
+    loop_var: mapping
+  run_once: true

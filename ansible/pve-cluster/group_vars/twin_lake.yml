@@ -1,8 +1,14 @@
 ---
-# Override for twin-lake nodes (pve-node-02, pve-node-03)
+# Overrides for Twin Lake nodes (pve-node-02, pve-node-03)
+
 # Intel Alder Lake-N [Intel Graphics] device ID
 pve_pci_device_ids:
   - id: "8086:46d4"
+
+# PCI Resource Mapping configuration
+pve_gpu_id: "{{ (pve_pci_device_ids | map(attribute='id') | first) | default(omit) }}"
+pve_gpu_subsystem_id: "0301:02f3"
+pve_gpu_mdev: 0
 
 # Network interface configuration
 bridge_port: enp3s0

@@ -1,0 +1,25 @@
+---
+# Create or update a single PCI mapping
+
+- name: Create PCI mapping {{ mapping.key }}
+  ansible.builtin.command:
+    cmd: >-
+      pvesh create /cluster/mapping/pci
+      --id {{ mapping.key }}
+      --map {{ mapping.value.map }}
+      --mdev {{ mapping.value.mdev }}
+  when: mapping.key not in current_mappings
+  become: true
+
+- name: Update PCI mapping {{ mapping.key }}
+  ansible.builtin.command:
+    cmd: >-
+      pvesh set /cluster/mapping/pci/{{ mapping.key }}
+      --map {{ mapping.value.map }}
+      --mdev {{ mapping.value.mdev }}
+  when:
+    - mapping.key in current_mappings
+    - >-
+      (current_mappings[mapping.key].map[0] != mapping.value.map) or
+      ((current_mappings[mapping.key].mdev | default(0) | int) != mapping.value.mdev)
+  become: true
