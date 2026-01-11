@@ -4,6 +4,12 @@
   become: true
   gather_facts: true
   tasks:
+    - name: Configure Proxmox node DNS
+      ansible.builtin.include_role:
+        name: pve-node-dns
+        apply:
+          tags: pve-node-dns
+      tags: pve-node-dns
     - ansible.builtin.include_role:
         name: tailscale-bootstrap
         apply:
