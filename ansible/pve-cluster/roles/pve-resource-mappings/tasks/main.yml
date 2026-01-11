@@ -11,26 +11,26 @@
       - pve_gpu_path is defined
       - pve_gpu_path | length > 0
       - pve_gpu_iommugroup is defined
+      - pve_gpu_iommugroup | string | length > 0
       - pve_gpu_subsystem_id is defined
       - pve_gpu_subsystem_id | length > 0
     fail_msg: >-
       Missing or invalid GPU mapping variables for {{ inventory_hostname }}.
       Required: pve_gpu_id, pve_gpu_path, pve_gpu_iommugroup, pve_gpu_subsystem_id.
-  throttle: 1
 
 - name: Set mapping variables
   vars:
+    # Field order matches original implementation for API compatibility
     _map_parts:
+      - "id={{ pve_gpu_id }}"
+      - "iommugroup={{ pve_gpu_iommugroup }}"
       - "node={{ inventory_hostname }}"
       - "path={{ pve_gpu_path }}"
-      - "id={{ pve_gpu_id }}"
       - "subsystem-id={{ pve_gpu_subsystem_id }}"
-      - "iommugroup={{ pve_gpu_iommugroup }}"
   ansible.builtin.set_fact:
     _mapping_id: "GPU_{{ inventory_hostname }}"
     _desired_map: "{{ _map_parts | join(',') }}"
     _desired_mdev: "{{ pve_gpu_mdev | default(0) | int }}"
-  throttle: 1
 
 - name: Get existing PCI mapping
   ansible.builtin.command:
@@ -44,28 +44,34 @@
 - name: Set mapping exists flag
   ansible.builtin.set_fact:
     _mapping_exists: "{{ _existing_mapping.rc == 0 }}"
-  throttle: 1
+
+- name: Initialize update flag
+  ansible.builtin.set_fact:
+    _needs_update: false
 
 - name: Parse and compare existing mapping
   when: _mapping_exists
-  throttle: 1
   block:
     - name: Parse current mapping
       ansible.builtin.set_fact:
         _current_mapping: "{{ _existing_mapping.stdout | from_json }}"
 
-    - name: Extract current map string
+    - name: Extract current map from API response
       ansible.builtin.set_fact:
         _current_map_raw: "{{ _current_mapping.map | default([]) }}"
 
-    - name: Normalize current map to comparable string
+    - name: Normalize current map to string
       ansible.builtin.set_fact:
+        # Proxmox API returns map in different formats:
+        # - string: "id=X,node=Y,..." (use as-is)
+        # - list with dict: [{"id": "X", "node": "Y"}] (convert dict to key=value pairs)
+        # - list with string: ["id=X,node=Y,..."] (extract first element)
+        # - empty: [] (use empty string)
         _current_map: >-
-          {%- set raw = _current_map_raw -%}
-          {%- if raw is string -%}
-            {{ raw }}
-          {%- elif raw is sequence and raw | length > 0 -%}
-            {%- set first = raw | first -%}
+          {%- if _current_map_raw is string -%}
+            {{ _current_map_raw }}
+          {%- elif _current_map_raw is sequence and _current_map_raw | length > 0 -%}
+            {%- set first = _current_map_raw | first -%}
             {%- if first is mapping -%}
               {%- set parts = [] -%}
               {%- for k, v in first.items() -%}
@@ -109,7 +115,11 @@
       - "{{ _desired_map }}"
       - --mdev
       - "{{ _desired_mdev }}"
-  changed_when: true
+  register: _create_result
+  changed_when: _create_result.rc == 0
+  failed_when:
+    - _create_result.rc != 0
+    - "'already exists' not in (_create_result.stderr | default(''))"
   become: true
   throttle: 1
 
