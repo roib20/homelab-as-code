@@ -1,7 +1,7 @@
 # All versions in one place – parsed as an env‑file by Buildx Bake
 alpine     = "3.22"
-tofu       = "1.10.2"
-terragrunt = "0.83.0"
+tofu       = "1.11.2"
+terragrunt = "0.97.2"
 go-task    = "3.44.0"
 talos      = "1.11.3"
 yq         = "4.45.4"
