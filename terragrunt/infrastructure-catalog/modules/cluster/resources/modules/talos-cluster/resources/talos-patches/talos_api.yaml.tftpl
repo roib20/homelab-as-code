@@ -1,0 +1,10 @@
+# https://github.com/home-operations/tuppr?tab=readme-ov-file#installation
+---
+machine:
+  features:
+    kubernetesTalosAPIAccess:
+      allowedKubernetesNamespaces:
+        - kube-system
+      allowedRoles:
+        - os:admin
+      enabled: true
