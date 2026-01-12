@@ -2,6 +2,7 @@ variable "bws_access_token" {
   description = "Access token for Bitwarden Secrets Manager (Machine Account)"
   type        = string
   sensitive   = true
+  ephemeral   = true
 }
 
 variable "secret_key" {
