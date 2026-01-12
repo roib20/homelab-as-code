@@ -8,6 +8,7 @@ variable "virtual_environment_api_token" {
   description = "The API token for Proxmox VE."
   type        = string
   sensitive   = true
+  ephemeral   = true
 }
 
 variable "virtual_environment_username" {
@@ -19,4 +20,5 @@ variable "virtual_environment_password" {
   description = "The password for SSH access to Proxmox VE."
   type        = string
   sensitive   = true
+  ephemeral   = true
 }
