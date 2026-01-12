@@ -12,7 +12,7 @@ patches:
       name: jellyfin
 helmCharts:
   - name: jellyfin
-    repo: oci://tccr.io/truecharts
+    repo: oci://oci.trueforge.org/truecharts
     version: 21.8.0
     releaseName: jellyfin
     namespace: jellyfin
