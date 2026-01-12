@@ -60,9 +60,9 @@ curl ${CURL_FLAGS:-"-sSL"} -o "$tmp_dir/$file" "$url"
 curl ${CURL_FLAGS:-"-sSL"} -o "$tmp_dir/${checksum_hash}sum.txt" "$checksum_url"
 
 CHECKSUM="$(${checksum_hash}sum "$tmp_dir/$file" | awk '{print $1}')"
-EXPECTED_CHECKSUM="$(grep " $file" "$tmp_dir/${checksum_hash}sum.txt" | awk '{print $1}')"
+EXPECTED_CHECKSUM="$(grep -E "[[:space:]]+$file$" "$tmp_dir/${checksum_hash}sum.txt" | awk '{print $1}')"
 if [ -z "${EXPECTED_CHECKSUM}" ]; then
-  EXPECTED_CHECKSUM="$(tr -d '[:space:]' < "$tmp_dir/${checksum_hash}sum.txt")"
+  EXPECTED_CHECKSUM="$(awk '{print $1; exit}' "$tmp_dir/${checksum_hash}sum.txt")"
 fi
 [ "$CHECKSUM" = "$EXPECTED_CHECKSUM" ] || { echo "Checksum mismatch for $file" >&2; exit 1; }
 
