@@ -99,29 +99,44 @@ locals {
   # Helm Charts
   helm_charts = {
     cilium = {
+      chart           = "cilium"
+      name            = "cilium"
+      namespace       = "kube-system"
       chart_version   = "1.18.2"
       helm_repository = "oci://ghcr.io/home-operations/charts-mirror"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cilium/base/values.yaml")
     }
     talos-ccm = {
+      chart           = "talos-cloud-controller-manager"
+      name            = "talos-cloud-controller-manager"
+      namespace       = "kube-system"
       chart_version   = "0.5.2"
       helm_repository = "oci://ghcr.io/siderolabs/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/talos-cloud-controller-manager/base/values.yaml")
     }
-    cert-manager = {
-      chart_version   = "v1.19.1"
-      helm_repository = "oci://quay.io/jetstack/charts"
-      values          = file("${local.kubernetes_dir}/cluster/active/addons/cert-manager/base/values.yaml")
-    }
     coredns = {
+      chart           = "coredns"
+      name            = "coredns"
+      namespace       = "kube-system"
       chart_version   = "1.44.3"
       helm_repository = "oci://ghcr.io/coredns/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/coredns/base/values.yaml")
     }
     spegel = {
+      chart           = "spegel"
+      name            = "spegel"
+      namespace       = "kube-system"
       chart_version   = "0.4.0"
       helm_repository = "oci://ghcr.io/spegel-org/helm-charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/spegel/base/values.yaml")
+    }
+    tuppr = {
+      chart           = "tuppr"
+      name            = "tuppr"
+      namespace       = "kube-system"
+      chart_version   = "0.0.51"
+      helm_repository = "oci://ghcr.io/home-operations/charts"
+      values          = file("${local.kubernetes_dir}/cluster/active/addons/tuppr/base/values.yaml")
     }
   }
 }
@@ -304,5 +319,22 @@ unit "talos-cluster" {
 
     # Tailscale configuration
     ts_authkey = local.account_vars.locals.tailscale.ts_authkey
+  }
+}
+
+unit "tuppr-upgrades" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/tuppr-upgrades"
+  path   = "tuppr-upgrades"
+
+  values = {
+    manifest_yaml_files = [
+      "${local.terragrunt_dir}/infrastructure-catalog/units/tuppr-upgrades/templates/talos-upgrade.yaml.tftpl",
+      "${local.terragrunt_dir}/infrastructure-catalog/units/tuppr-upgrades/templates/kubernetes-upgrade.yaml.tftpl",
+    ]
+
+    template_vars = {
+      talos_version      = local.versions.talos_version
+      kubernetes_version = local.versions.kubernetes_version
+    }
   }
 }

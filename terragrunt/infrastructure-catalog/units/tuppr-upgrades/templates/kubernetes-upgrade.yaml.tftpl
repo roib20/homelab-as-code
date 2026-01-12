@@ -1,0 +1,16 @@
+apiVersion: tuppr.home-operations.com/v1alpha1
+kind: KubernetesUpgrade
+metadata:
+  name: kubernetes
+spec:
+  kubernetes:
+    version: v${kubernetes_version}
+  healthChecks:
+    - apiVersion: v1
+      kind: Node
+      expr: status.conditions.exists(c, c.type == "Ready" && c.status == "True")
+      timeout: 10m
+  talosctl:
+    image:
+      repository: ghcr.io/siderolabs/talosctl
+      pullPolicy: IfNotPresent

@@ -69,6 +69,7 @@ data "talos_machine_configuration" "this" {
       type      = yamldecode(each.value.talos_config).type
       manifests = data.helm_template.bootstrap_charts
     }),
+    templatefile("${path.module}/resources/talos-patches/talos_api.yaml.tftpl", {}),
     templatefile("${path.module}/resources/talos-patches/machine_hostdns.yaml.tftpl", {
       forwardKubeDNSToHost = false
     }),

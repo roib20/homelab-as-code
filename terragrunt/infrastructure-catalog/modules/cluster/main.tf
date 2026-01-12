@@ -35,43 +35,23 @@ locals {
   ]
 
   bootstrap_charts = [
-    {
-      repository = var.helm_charts.cilium.helm_repository
-      chart      = "cilium"
-      name       = "cilium"
-      version    = var.helm_charts.cilium.chart_version
-      namespace  = "kube-system"
-      values     = var.helm_charts.cilium.values
-    },
-    {
-      repository = var.helm_charts.talos-ccm.helm_repository
-      chart      = "talos-cloud-controller-manager"
-      name       = "talos-cloud-controller-manager"
-      version    = var.helm_charts.talos-ccm.chart_version
-      namespace  = "kube-system"
-      values     = var.helm_charts.talos-ccm.values
-    },
-    {
-      repository = var.helm_charts.coredns.helm_repository
-      chart      = "coredns"
-      name       = "coredns"
-      version    = var.helm_charts.coredns.chart_version
-      namespace  = "kube-system"
-      values     = var.helm_charts.coredns.values
-    },
-    {
-      repository = var.helm_charts.spegel.helm_repository
-      chart      = "spegel"
-      name       = "spegel"
-      version    = var.helm_charts.spegel.chart_version
-      namespace  = "kube-system"
-      values     = var.helm_charts.spegel.values
-    },
+    for chart in values(var.helm_charts) : {
+      repository = chart.helm_repository
+      chart      = chart.chart
+      name       = chart.name
+      version    = chart.chart_version
+      namespace  = chart.namespace
+      values     = chart.values
+    }
   ]
 
   extraManifests = [
     # External Secrets CRDs
     "https://raw.githubusercontent.com/external-secrets/external-secrets/v${var.versions.external-secrets_version}/deploy/crds/bundle.yaml",
+
+    # Tuppr CRDs
+    # "https://raw.githubusercontent.com/home-operations/tuppr/main/config/crd/bases/tuppr.home-operations.com_talosupgrades.yaml",
+    # "https://raw.githubusercontent.com/home-operations/tuppr/main/config/crd/bases/tuppr.home-operations.com_kubernetesupgrades.yaml",
 
     # Prometheus CRDs
     "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-v${var.versions.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml",

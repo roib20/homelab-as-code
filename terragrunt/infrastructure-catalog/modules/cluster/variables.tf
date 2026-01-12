@@ -45,9 +45,12 @@ variable "cluster_on_destroy" {
 }
 
 variable "helm_charts" {
-  description = "Configuration for each Helm chart: values file path, chart version, and repository URL."
+  description = "Configuration for each Helm chart: values, chart, release name, namespace, version, and repository."
   type = map(object({
     values          = string # Helm values
+    chart           = string # chart name
+    name            = string # release name
+    namespace       = string # release namespace
     chart_version   = string # version of the chart
     helm_repository = string # repository URL or name
   }))
