@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: version-checker
     repo: https://charts.jetstack.io
-    version: 0.9.3
+    version: 0.10.0
     releaseName: version-checker
     namespace: version-checker
     valuesFile: ../../base/values.yaml

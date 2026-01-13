@@ -4,7 +4,7 @@ kind: Kustomization
 helmCharts:
   - name: gateway
     repo: oci://gcr.io/istio-release/charts
-    version: 1.27.1
+    version: 1.28.2
     releaseName: istio-ingressgateway
     namespace: istio-ingress
     valuesFile: ../../base/values.yaml
