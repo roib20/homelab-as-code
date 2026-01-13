@@ -110,7 +110,7 @@ locals {
       chart           = "talos-cloud-controller-manager"
       name            = "talos-cloud-controller-manager"
       namespace       = "kube-system"
-      chart_version   = "0.5.2"
+      chart_version   = "0.5.4"
       helm_repository = "oci://ghcr.io/siderolabs/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/talos-cloud-controller-manager/base/values.yaml")
     }
@@ -118,7 +118,7 @@ locals {
       chart           = "coredns"
       name            = "coredns"
       namespace       = "kube-system"
-      chart_version   = "1.44.3"
+      chart_version   = "1.45.0"
       helm_repository = "oci://ghcr.io/coredns/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/coredns/base/values.yaml")
     }
@@ -126,7 +126,7 @@ locals {
       chart           = "spegel"
       name            = "spegel"
       namespace       = "kube-system"
-      chart_version   = "0.4.0"
+      chart_version   = "0.6.0"
       helm_repository = "oci://ghcr.io/spegel-org/helm-charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/spegel/base/values.yaml")
     }
