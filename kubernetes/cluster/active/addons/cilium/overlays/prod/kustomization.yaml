@@ -5,8 +5,8 @@ resources:
   - ../../base
 helmCharts:
   - name: cilium
-    repo: oci://ghcr.io/home-operations/charts-mirror
-    version: 1.18.2
+    repo: oci://quay.io/cilium/charts
+    version: 1.18.6
     releaseName: cilium
     namespace: kube-system
     valuesFile: ../../base/values.yaml
