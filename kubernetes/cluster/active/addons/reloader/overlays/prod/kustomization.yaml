@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: reloader
     repo: oci://ghcr.io/stakater/charts
-    version: 2.2.2
+    version: 2.2.7
     releaseName: reloader
     namespace: kube-system
     valuesFile: ../../base/values.yaml

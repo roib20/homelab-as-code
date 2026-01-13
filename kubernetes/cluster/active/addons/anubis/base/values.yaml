@@ -7,7 +7,7 @@ controllers:
       anubis:
         image:
           repository: ghcr.io/techarohq/anubis
-          tag: v1.22.0
+          tag: v1.24.0
         # https://anubis.techaro.lol/docs/admin/installation/#environment-variables
         env:
           - name: BIND
