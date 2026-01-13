@@ -102,8 +102,8 @@ locals {
       chart           = "cilium"
       name            = "cilium"
       namespace       = "kube-system"
-      chart_version   = "1.18.2"
-      helm_repository = "oci://ghcr.io/home-operations/charts-mirror"
+      chart_version   = "1.18.6"
+      helm_repository = "oci://quay.io/cilium/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cilium/base/values.yaml")
     }
     talos-ccm = {
