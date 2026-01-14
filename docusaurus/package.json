@@ -27,6 +27,7 @@
     "@docusaurus/module-type-aliases": "3.9.2",
     "@docusaurus/tsconfig": "3.9.2",
     "@docusaurus/types": "3.9.2",
+    "@types/node": "^24.0.0",
     "oxfmt": "^0.24.0",
     "oxlint": "^1.39.0",
     "oxlint-tsgolint": "^0.11.0",
@@ -34,7 +35,7 @@
     "wrangler": "^4.59.1"
   },
   "engines": {
-    "node": ">=24.0"
+    "node": ">=24.0.0"
   },
   "name": "docusaurus",
   "private": true,
