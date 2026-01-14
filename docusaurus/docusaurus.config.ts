@@ -1,3 +1,4 @@
+import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
@@ -38,22 +39,25 @@ const config: Config = {
         docs: {
           sidebarPath: "./sidebars.ts",
           editUrl:
-            "https://github.com/roib20/homelab-as-code/edit/main/docusaurus/docs/",
+            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
         },
         blog: false,
         theme: {
-          customCss: "./src/css/docusaurus-nord.css",
+          customCss: "./src/css/custom.css",
         },
       } satisfies Preset.Options,
     ],
   ],
 
-  markdown: {
-    mermaid: true,
-  },
-
   themes: [
-    [require.resolve("@docusaurus/theme-mermaid"), {}],
+    [
+      require.resolve("@docusaurus/theme-mermaid"),
+      {
+        markdown: {
+          mermaid: true,
+        },
+      },
+    ],
     [
       require.resolve("@easyops-cn/docusaurus-search-local"),
       /** @type {import('@easyops-cn/docusaurus-search-local').PluginOptions} */
@@ -100,6 +104,10 @@ const config: Config = {
           title: "More",
           items: [
             {
+              label: "Blog",
+              to: "https://www.towerofkubes.com/articles/",
+            },
+            {
               label: "GitHub",
               href: "https://github.com/roib20/homelab-as-code",
             },
@@ -107,6 +115,10 @@ const config: Config = {
         },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} roib20. Built with Docusaurus.`,
+    },
+    prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
 };
