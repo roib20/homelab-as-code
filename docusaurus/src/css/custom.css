@@ -1,0 +1,127 @@
+/**
+ * Nord Theme for Homelab as Code
+ * Based on the Nord color palette: https://www.nordtheme.com/
+ */
+
+/* Nord Color Palette */
+:root {
+  /* Nord Frost - Blues */
+  --nord-frost-1: #8fbcbb;
+  --nord-frost-2: #88c0d0;
+  --nord-frost-3: #81a1c1;
+  --nord-frost-4: #5e81ac;
+
+  /* Nord Aurora - Accent colors */
+  --nord-aurora-red: #bf616a;
+  --nord-aurora-orange: #d08770;
+  --nord-aurora-yellow: #ebcb8b;
+  --nord-aurora-green: #a3be8c;
+  --nord-aurora-purple: #b48ead;
+
+  /* Nord Snow Storm - Whites */
+  --nord-snow-1: #d8dee9;
+  --nord-snow-2: #e5e9f0;
+  --nord-snow-3: #eceff4;
+
+  /* Nord Polar Night - Darks */
+  --nord-polar-1: #2e3440;
+  --nord-polar-2: #3b4252;
+  --nord-polar-3: #434c5e;
+  --nord-polar-4: #4c566a;
+}
+
+/* Light theme (default) */
+:root {
+  --ifm-color-primary: var(--nord-frost-4);
+  --ifm-color-primary-dark: #4c7299;
+  --ifm-color-primary-darker: #476b91;
+  --ifm-color-primary-darkest: #3a5877;
+  --ifm-color-primary-light: var(--nord-frost-3);
+  --ifm-color-primary-lighter: #8ca6c4;
+  --ifm-color-primary-lightest: var(--nord-frost-2);
+
+  --ifm-background-color: var(--nord-snow-3);
+  --ifm-background-surface-color: var(--nord-snow-2);
+  --ifm-navbar-background-color: var(--nord-snow-2);
+  --ifm-footer-background-color: var(--nord-polar-2);
+  --ifm-footer-color: var(--nord-snow-2);
+
+  --ifm-font-color-base: var(--nord-polar-1);
+  --ifm-font-color-secondary: var(--nord-polar-3);
+
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(94, 129, 172, 0.1);
+
+  /* Links */
+  --ifm-link-color: var(--nord-frost-4);
+  --ifm-link-hover-color: var(--nord-frost-3);
+
+  /* Success/Info/Warning colors using Nord Aurora */
+  --ifm-color-success: var(--nord-aurora-green);
+  --ifm-color-info: var(--nord-frost-2);
+  --ifm-color-warning: var(--nord-aurora-yellow);
+  --ifm-color-danger: var(--nord-aurora-red);
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --ifm-color-primary: var(--nord-frost-2);
+  --ifm-color-primary-dark: #7bb3c7;
+  --ifm-color-primary-darker: #73aec3;
+  --ifm-color-primary-darkest: #5fa0b8;
+  --ifm-color-primary-light: var(--nord-frost-1);
+  --ifm-color-primary-lighter: #95c4cc;
+  --ifm-color-primary-lightest: #a1cad1;
+
+  --ifm-background-color: var(--nord-polar-1);
+  --ifm-background-surface-color: var(--nord-polar-2);
+  --ifm-navbar-background-color: var(--nord-polar-2);
+  --ifm-footer-background-color: var(--nord-polar-1);
+
+  --ifm-font-color-base: var(--nord-snow-2);
+  --ifm-font-color-secondary: var(--nord-snow-1);
+
+  --docusaurus-highlighted-code-line-bg: rgba(136, 192, 208, 0.15);
+
+  /* Links */
+  --ifm-link-color: var(--nord-frost-2);
+  --ifm-link-hover-color: var(--nord-frost-1);
+
+  /* Sidebar */
+  --ifm-menu-color: var(--nord-snow-1);
+  --ifm-menu-color-active: var(--nord-frost-2);
+}
+
+/* Custom styling for navbar */
+.navbar {
+  box-shadow: 0 2px 4px rgba(46, 52, 64, 0.1);
+}
+
+/* Custom styling for footer */
+.footer {
+  border-top: 1px solid var(--nord-polar-3);
+}
+
+/* Mermaid diagram styling */
+.mermaid {
+  background: transparent !important;
+}
+
+/* Code block styling */
+.prism-code {
+  background-color: var(--nord-polar-2) !important;
+}
+
+[data-theme="light"] .prism-code {
+  background-color: var(--nord-snow-1) !important;
+}
+
+/* Search styling */
+.DocSearch-Button {
+  background-color: var(--ifm-background-surface-color);
+  border: 1px solid var(--nord-polar-4);
+}
+
+[data-theme="light"] .DocSearch-Button {
+  border: 1px solid var(--nord-snow-1);
+}

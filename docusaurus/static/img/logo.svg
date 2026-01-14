@@ -1,0 +1,31 @@
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main chassis -->
+  <rect x="2" y="3" width="20" height="18" rx="2" fill="#5E81AC" stroke="#4C566A" stroke-width="1"/>
+
+  <!-- Drive unit 1 -->
+  <rect x="3" y="4.5" width="18" height="3.5" rx="0.5" fill="#81A1C1" stroke="#4C566A" stroke-width="0.5"/>
+  <rect x="4" y="5.5" width="14" height="1.5" rx="0.2" fill="#3B4252"/>
+  <circle cx="19.5" cy="6.25" r="0.6" fill="#A3BE8C"/>
+
+  <!-- Drive unit 2 -->
+  <rect x="3" y="8.5" width="18" height="3.5" rx="0.5" fill="#81A1C1" stroke="#4C566A" stroke-width="0.5"/>
+  <rect x="4" y="9.5" width="14" height="1.5" rx="0.2" fill="#3B4252"/>
+  <circle cx="19.5" cy="10.25" r="0.6" fill="#A3BE8C"/>
+
+  <!-- Drive unit 3 -->
+  <rect x="3" y="12.5" width="18" height="3.5" rx="0.5" fill="#81A1C1" stroke="#4C566A" stroke-width="0.5"/>
+  <rect x="4" y="13.5" width="14" height="1.5" rx="0.2" fill="#3B4252"/>
+  <circle cx="19.5" cy="14.25" r="0.6" fill="#A3BE8C"/>
+
+  <!-- Control panel -->
+  <rect x="3" y="16.5" width="18" height="3.5" rx="0.5" fill="#88C0D0" stroke="#4C566A" stroke-width="0.5"/>
+  <rect x="4" y="17.5" width="8" height="1.5" rx="0.2" fill="#2E3440"/>
+  <circle cx="19.5" cy="18.25" r="0.6" fill="#EBCB8B"/>
+
+  <!-- Ventilation grilles -->
+  <line x1="13.5" y1="17.5" x2="13.5" y2="19" stroke="#4C566A" stroke-width="0.3"/>
+  <line x1="14.5" y1="17.5" x2="14.5" y2="19" stroke="#4C566A" stroke-width="0.3"/>
+  <line x1="15.5" y1="17.5" x2="15.5" y2="19" stroke="#4C566A" stroke-width="0.3"/>
+  <line x1="16.5" y1="17.5" x2="16.5" y2="19" stroke="#4C566A" stroke-width="0.3"/>
+  <line x1="17.5" y1="17.5" x2="17.5" y2="19" stroke="#4C566A" stroke-width="0.3"/>
+</svg>
