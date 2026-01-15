@@ -9,6 +9,15 @@ Secrets are bootstrapped from Bitwarden Secrets Manager and then synchronized in
 
 ## Bootstrap flow
 
+```mermaid
+flowchart TD
+  Env[.env with BWS_ACCESS_TOKEN] --> Terragrunt[Terragrunt bootstrap]
+  Terragrunt --> Bitwarden[Bitwarden Secrets Manager]
+  Bitwarden --> Runtime[Runtime token secret]
+  Runtime --> ESO[External Secrets Operator]
+  ESO --> Workloads[Kubernetes workloads]
+```
+
 1. The bootstrap `BWS_ACCESS_TOKEN` is stored in `.env`.
 2. Terragrunt uses it to retrieve the runtime token from Bitwarden.
 3. The runtime token is applied as a Kubernetes secret.

@@ -7,6 +7,14 @@ title: Build the Runner Container
 
 The runner image contains all tools needed for provisioning (Ansible, Terragrunt, OpenTofu, kubectl, talosctl, and task). Build it locally before running tasks.
 
+```mermaid
+flowchart LR
+  Dev[Developer] --> Task[Taskfile command]
+  Task --> Runner[Runner container]
+  Runner --> Tools[Provisioning tools]
+  Tools --> Cluster[Target cluster]
+```
+
 ## Build locally
 
 ```shell

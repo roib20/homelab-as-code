@@ -18,14 +18,12 @@ Homelab as Code layers infrastructure automation, GitOps, and cluster services s
 ## GitOps flow
 
 ```mermaid
-flowchart LR
-  Repo[Git Repository] -->|syncs manifests| ArgoCD[Argo CD]
+flowchart TD
+  Repo[Git Repository] -->|Pushes manifests| ArgoCD[Argo CD]
   ArgoCD --> AppSets[ApplicationSets]
-  ArgoCD --> Addons[Platform Addons]
-  ArgoCD --> Apps[App Deployments]
+  AppSets --> Addons[Platform Addons]
+  AppSets --> Apps[App Deployments]
   ArgoCD --> Resources[Cluster Resources]
-  AppSets --> Addons
-  AppSets --> Apps
 ```
 
 ## Control plane and tooling

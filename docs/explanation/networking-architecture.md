@@ -18,15 +18,11 @@ Networking combines in-cluster routing with secure edge access so services can b
 
 ```mermaid
 flowchart LR
-  subgraph Edge
-    Client[Client] -->|HTTPS| Cloudflare[Cloudflare Tunnel]
-  end
-  subgraph Cluster
-    Cloudflare --> Istio[Istio Gateway]
-    Istio --> Service[Kubernetes Service]
-    Service --> Pod[Pod]
-  end
-  Cilium[Cilium CNI] -. network policy .- Pod
+  Client[Client] -->|HTTPS| Cloudflare[Cloudflare Tunnel]
+  Cloudflare --> Istio[Istio Gateway]
+  Istio --> Service[Kubernetes Service]
+  Service --> Pod[Pod]
+  Cilium[Cilium CNI + Policies] -. enforces .- Pod
 ```
 
 ## Related references

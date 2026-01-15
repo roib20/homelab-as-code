@@ -7,6 +7,15 @@ title: Getting Started
 
 This walkthrough gets you from a fresh clone to a bootstrapped Talos cluster.
 
+```mermaid
+flowchart TD
+  Hardware[Hardware + Networking] --> Debian[Layer 1: Debian Preseed]
+  Debian --> Proxmox[Layer 2: Proxmox + Ansible]
+  Proxmox --> Infra[Layer 3: Terragrunt + OpenTofu]
+  Infra --> Talos[Layer 4: Talos + GitOps]
+  Talos --> Apps[Applications + Addons]
+```
+
 ## Step 1: Validate prerequisites
 
 Review the required hardware, accounts, and tooling in [Prerequisites](../how-to-guides/prerequisites).
