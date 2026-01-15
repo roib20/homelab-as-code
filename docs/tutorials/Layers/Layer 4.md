@@ -35,7 +35,6 @@ docker compose run --user "$(id -u):$(id -g)" --rm runner bash -c "task cluster:
 
 - [Access Argo CD](../../how-to-guides/access-argocd)
 - [Add a New Application](../../how-to-guides/add-application)
-- [Update the Cluster](../../how-to-guides/update-cluster)
 
 ## Troubleshooting
 

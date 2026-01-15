@@ -56,7 +56,6 @@ docker compose run --user "$(id -u):$(id -g)" --rm runner bash -c "task cluster:
 
 ## Related guides
 
-- [Update the Cluster](update-cluster)
 - [Update Talos Linux](update-talos)
 - [Destroy the Cluster](destroy-cluster)
 - [Configure Bitwarden Secrets Manager](setup-bitwarden)

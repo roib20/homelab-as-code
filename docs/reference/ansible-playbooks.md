@@ -20,4 +20,3 @@ Ansible playbooks live under `ansible/` and are grouped by target systems.
 
 - [Layer 2: Ansible (pve-cluster)](../tutorials/Layers/Layer%202)
 - [Ansible Inventory](ansible-inventory)
-- [Update the Cluster](../how-to-guides/update-cluster)

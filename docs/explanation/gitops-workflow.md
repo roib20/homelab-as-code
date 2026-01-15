@@ -39,4 +39,3 @@ See [ApplicationSet Config Format](../reference/applicationset-config) for requi
 
 - [Add a New Application](../how-to-guides/add-application)
 - [Access Argo CD](../how-to-guides/access-argocd)
-- [Update the Cluster](../how-to-guides/update-cluster)

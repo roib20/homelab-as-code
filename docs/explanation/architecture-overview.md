@@ -19,10 +19,13 @@ Homelab as Code layers infrastructure automation, GitOps, and cluster services s
 
 ```mermaid
 flowchart LR
-  Git[Git Repository] --> ArgoCD[Argo CD]
-  ArgoCD --> Apps[Kubernetes Applications]
-  ArgoCD --> Addons[Cluster Addons]
+  Repo[Git Repository] -->|syncs manifests| ArgoCD[Argo CD]
+  ArgoCD --> AppSets[ApplicationSets]
+  ArgoCD --> Addons[Platform Addons]
+  ArgoCD --> Apps[App Deployments]
   ArgoCD --> Resources[Cluster Resources]
+  AppSets --> Addons
+  AppSets --> Apps
 ```
 
 ## Control plane and tooling

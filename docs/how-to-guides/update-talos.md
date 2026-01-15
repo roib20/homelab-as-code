@@ -30,5 +30,4 @@ docker compose run --user "$(id -u):$(id -g)" --rm runner bash -c "task cluster:
 
 ## Related guides
 
-- [Update the Cluster](update-cluster)
 - [Troubleshooting](troubleshooting)

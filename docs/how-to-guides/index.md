@@ -19,7 +19,6 @@ Use these guides when you need to achieve a specific goal quickly. They assume t
 
 - [Access Argo CD](access-argocd)
 - [Add a New Application](add-application)
-- [Update the Cluster](update-cluster)
 - [Destroy the Cluster](destroy-cluster)
 
 ## Troubleshooting
