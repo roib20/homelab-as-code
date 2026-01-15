@@ -51,15 +51,12 @@ const config: Config = {
     ],
   ],
 
+  markdown: {
+    mermaid: true,
+  },
+
   themes: [
-    [
-      require.resolve("@docusaurus/theme-mermaid"),
-      {
-        markdown: {
-          mermaid: true,
-        },
-      },
-    ],
+    require.resolve("@docusaurus/theme-mermaid"),
     [
       require.resolve("@easyops-cn/docusaurus-search-local"),
       /** @type {import('@easyops-cn/docusaurus-search-local').PluginOptions} */
