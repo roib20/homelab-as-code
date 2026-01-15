@@ -142,3 +142,5 @@ In `kubernetes/cluster/active/ingress-controllers/`:
 |------------|-------------|
 | `istio/istio-gateway` | Istio ingress gateway |
 | `tailscale-operator` | Tailscale-based ingress |
+
+See [Ingress Controllers](ingress-controllers) for details.

@@ -1,16 +1,37 @@
 # Layer 1: Debian Preseed
 
-## How to install Debian with my preseed file
+Install Debian consistently across nodes using the `debian/preseed.cfg` file.
+
+## What this layer does
+
+- Installs a baseline Debian OS
+- Configures SSH access and base packages
+- Standardizes disk layout
+
+## Steps
 
 1. Download a [Debian netinst ISO](https://www.debian.org/CD/netinst/).
-2. Load it onto a USB. For this purpose, I usually use [Ventoy](https://www.ventoy.net/), [Rufus](https://rufus.ie/) or [balenaEtcher](https://etcher.balena.io/).
+2. Load it onto a USB. For this purpose, use [Ventoy](https://www.ventoy.net/), [Rufus](https://rufus.ie/) or [balenaEtcher](https://etcher.balena.io/).
 3. Configure BIOS settings to UEFI mode (**not** LEGACY) and Secure Boot **ON**.
-4. Boot into the USB. Prefer not to change the boot order, instead do a one-time boot.
-5. Once the Debian installer boots, select "Advanced options ..." then "Graphical automated install" (NOTE: if the graphical installer doesn't boot, try the regular "... Automated install" option).
-6. Under "Location of inital preconfiguration file", type a URL or local IP of a webserver serving the `preseed.cfg` file.
-6a. If this repository is public, I can use: [https://github.com/roib20/homelab-as-code/tree/debian-preseed/debian](https://github.com/roib20/homelab-as-code/tree/debian-preseed/debian)
-6b. Alternatively, open a terminal in the "debian" directory and run a temporary webserver on a local IP: `python3 -m http.server 80`
-7. Continue with the installation. I will need to choose a password for the default user (for security reasons, a password is not included in the public `preseed.cfg` file).
-8. Assuming the preseed file is correct and the correct drive exists on the system, the rest of the installation should continue automatically with no further input needed.
-9. Once the installation completes succefuly, Debian will automatically reboot. If the UEFI boot order is correct, the new Debian installation will automatically boot.
-10. **I** can login into the system from its DHCP IP using my SSH keys.
+4. Boot into the USB and choose a one-time boot.
+5. Select "Advanced options ..." then "Graphical automated install".
+6. Under "Location of initial preconfiguration file", provide a URL to `preseed.cfg`.
+   - Public repository option: [https://github.com/roib20/homelab-as-code/tree/debian-preseed/debian](https://github.com/roib20/homelab-as-code/tree/debian-preseed/debian)
+   - Local webserver option: `python3 -m http.server 80` from the `debian` directory.
+7. Choose a password for the default user when prompted.
+8. Let the installation run to completion. Debian will reboot automatically.
+
+## Verification
+
+- Confirm the node boots into Debian without manual intervention.
+- Verify SSH access from your workstation.
+
+## Next step
+
+Proceed to [Layer 2: Ansible (pve-cluster)](Layer%202).
+
+## Troubleshooting
+
+- If preseed download fails, verify the URL is reachable on the installer network.
+- If the installer hangs, try the non-graphical automated install option.
+- If SSH is unavailable, confirm the user password and IP address.

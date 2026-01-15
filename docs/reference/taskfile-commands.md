@@ -71,6 +71,48 @@ Proxmox cluster management.
 |---------|-------------|
 | `proxmox:setup-cluster` | Run Proxmox cluster Ansible playbook |
 
+## docker
+
+Runner container workflows.
+
+| Command | Description |
+|---------|-------------|
+| `docker:build` | Build local runner image |
+| `docker:push` | Build and push multi-arch image |
+| `docker:run` | Run runner with proper mounts |
+| `docker:shell` | Start an interactive shell |
+| `docker:clean` | Remove images and build cache |
+| `docker:logs` | View runner container logs |
+| `docker:status` | Show runner container status |
+| `docker:info` | Show Docker system info |
+
+## task-ui
+
+Task UI web interface.
+
+| Command | Description |
+|---------|-------------|
+| `task-ui:start` | Start Task UI and enable Tailscale serve |
+| `task-ui:up` | Start Task UI (http://localhost:3000) |
+| `task-ui:stop` | Stop Task UI container |
+| `task-ui:down` | Stop and remove Task UI container |
+| `task-ui:logs` | View Task UI logs |
+| `task-ui:status` | Check Task UI container status |
+| `task-ui:serve` | Expose Task UI via Tailscale serve |
+| `task-ui:serve-off` | Disable Tailscale serve |
+| `task-ui:teardown` | Stop Task UI and disable serve |
+
+## info
+
+Environment and tool checks.
+
+| Command | Description |
+|---------|-------------|
+| `info:tools` | Verify required tools exist |
+| `info:env` | Check environment configuration |
+| `info:versions` | Show component versions |
+| `info:all` | Run tools, env, and versions checks |
+
 ## Configuration variables
 
 These variables are set in `Taskfile.yaml`:

@@ -12,7 +12,7 @@ Bitwarden Secrets Manager access token for bootstrapping.
 BWS_ACCESS_TOKEN=""
 ```
 
-This token authenticates Terragrunt with Bitwarden during initial cluster setup. See [Bitwarden Access Tokens](../explanation/bitwarden-access-tokens.md) for the two-token architecture.
+This token authenticates Terragrunt with Bitwarden during initial cluster setup. See [Bitwarden Access Tokens](../explanation/bitwarden-access-tokens) for the two-token architecture.
 
 ### CLOUDFLARE_API_TOKEN
 
@@ -52,7 +52,7 @@ Copy the example file:
 cp env.example .env
 ```
 
-Fill in the values and ensure the file is not committed to version control (`.env` is in `.gitignore`).
+See [Configure Environment Variables](../how-to-guides/configure-env) for a walkthrough. Fill in the values and ensure the file is not committed to version control (`.env` is in `.gitignore`).
 
 ## Usage with Docker Compose
 
