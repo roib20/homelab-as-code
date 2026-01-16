@@ -24,10 +24,10 @@ pve_storages:
   #   type: dir
   #   content: [ "images", "iso", "backup" ]
   #   path: /plop
-  - name: local
-    type: dir
-    content: ["backup", "iso", "snippets", "vztmpl"]
-    path: "/var/lib/vz"
+  # - name: local
+  #   type: dir
+  #   content: ["backup", "iso", "snippets", "vztmpl"]
+  #   path: "/var/lib/vz"
   - name: local-btrfs
     type: btrfs
     content: ["backup", "images", "iso", "snippets", "rootdir", "vztmpl"]
