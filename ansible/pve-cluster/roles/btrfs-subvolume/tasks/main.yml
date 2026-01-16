@@ -1,0 +1,21 @@
+---
+- name: Configure btrfs subvolume
+  become: true
+  block:
+    - name: Ensure btrfs tools are installed
+      ansible.builtin.package:
+        name: btrfs-progs
+        state: present
+
+    - name: Ensure parent directory exists
+      ansible.builtin.file:
+        path: "{{ btrfs_subvol_parent }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Create the btrfs subvolume
+      community.general.btrfs_subvolume:
+        name: "{{ btrfs_subvol_parent }}/{{ btrfs_subvol_name }}"
+        state: present

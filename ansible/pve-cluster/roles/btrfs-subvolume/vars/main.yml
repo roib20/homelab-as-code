@@ -1,0 +1,8 @@
+---
+# defaults file for btrfs-subvolume
+
+# Parent directory for the btrfs subvolume
+btrfs_subvol_parent: /var/lib/pve
+
+# Name of the btrfs subvolume
+btrfs_subvol_name: local-btrfs
