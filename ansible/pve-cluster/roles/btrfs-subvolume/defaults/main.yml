@@ -1,6 +1,7 @@
 ---
 # defaults file for btrfs-subvolume
 
-# Path of the btrfs subvolume relative to BTRFS root (no leading slash)
+# Path of the btrfs subvolume relative to BTRFS root (no leading slash).
+# Leading slash is added automatically where needed for absolute paths.
 # Matches Proxmox VE format: var/lib/pve/local-btrfs
 btrfs_subvol_path: var/lib/pve/local-btrfs

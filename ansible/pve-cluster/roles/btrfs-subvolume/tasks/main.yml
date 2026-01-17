@@ -65,6 +65,6 @@
       ansible.posix.mount:
         src: "{{ btrfs_filesystem_device }}"
         path: "/{{ btrfs_subvol_path }}"
-        opts: "subvol={{ btrfs_subvol_path }},compress=zstd:1"
+        opts: "subvol=/{{ btrfs_subvol_path }},compress=zstd:1"
         fstype: btrfs
         state: mounted
