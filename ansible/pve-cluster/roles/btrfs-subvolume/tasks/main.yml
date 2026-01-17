@@ -1,0 +1,75 @@
+---
+- name: Configure btrfs subvolume
+  become: true
+  block:
+    - name: Ensure btrfs tools are installed
+      ansible.builtin.package:
+        name: btrfs-progs
+        state: present
+
+    - name: Detect BTRFS root filesystem device
+      ansible.builtin.shell: findmnt -no SOURCE / | sed 's/\[.*\]//'
+      register: root_device
+      changed_when: false
+
+    - name: Set BTRFS filesystem device fact
+      ansible.builtin.set_fact:
+        btrfs_filesystem_device: "{{ root_device.stdout }}"
+
+    - name: Check and prepare subvolume
+      block:
+        - name: Mount BTRFS root
+          ansible.posix.mount:
+            src: "{{ btrfs_filesystem_device }}"
+            path: /mnt/btrfs-root
+            opts: subvolid=5
+            fstype: btrfs
+            state: ephemeral
+
+        - name: Check if subvolume already exists in BTRFS root
+          ansible.builtin.stat:
+            path: "/mnt/btrfs-root/{{ btrfs_subvol_path }}"
+          register: subvol_check
+
+        - name: Set subvolume existence fact
+          ansible.builtin.set_fact:
+            btrfs_subvol_exists: "{{ subvol_check.stat.exists }}"
+
+        - name: Create parent directory structure in BTRFS root
+          ansible.builtin.file:
+            path: "/mnt/btrfs-root/{{ btrfs_subvol_path | dirname }}"
+            state: directory
+            owner: root
+            group: root
+            mode: "0755"
+          when: not btrfs_subvol_exists
+
+      always:
+        - name: Unmount BTRFS root
+          ansible.posix.mount:
+            path: /mnt/btrfs-root
+            state: unmounted
+
+    - name: Create the btrfs subvolume
+      community.general.btrfs_subvolume:
+        name: "{{ btrfs_subvol_path }}"
+        filesystem_device: "{{ btrfs_filesystem_device }}"
+        state: present
+        automount: true
+
+    - name: Ensure mount point exists in running system
+      ansible.builtin.file:
+        path: "/{{ btrfs_subvol_path }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      when: not btrfs_subvol_exists
+
+    - name: Mount the btrfs subvolume
+      ansible.posix.mount:
+        src: "{{ btrfs_filesystem_device }}"
+        path: "/{{ btrfs_subvol_path }}"
+        opts: "subvol=/{{ btrfs_subvol_path }},compress=zstd:1"
+        fstype: btrfs
+        state: mounted

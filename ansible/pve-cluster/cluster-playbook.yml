@@ -10,6 +10,11 @@
         apply:
           tags: pve-node-dns
       tags: pve-node-dns
+    - name: Configure /etc/network/interfaces
+      template:
+        src: "{{ interfaces_template }}"
+        dest: /etc/network/interfaces
+      register: _configure_interfaces
     - ansible.builtin.include_role:
         name: tailscale-bootstrap
         apply:
@@ -18,16 +23,15 @@
         inventory_to_overwrite: "{{ hostvars[inventory_hostname].inventory_file }}"
         current_user: "{{ lookup('env','USER') }}"
       tags: tailscale-bootstrap
+    - name: Create btrfs subvolume for local storage
+      ansible.builtin.include_role:
+        name: btrfs-subvolume
+        apply:
+          tags: btrfs-subvolume
+      tags: btrfs-subvolume
     - name: Setup PVE cluster
       tags: proxmox
       block:
-        - name: Ensure "/var/lib/pve/local-btrfs" directory exists (with 755 permissions and root ownership)
-          ansible.builtin.file:
-            path: "{{ pve_storages | selectattr('name', 'equalto', 'local-btrfs') | map(attribute='path') | first }}"
-            state: directory
-            owner: root
-            group: root
-            mode: '0755'
         - ansible.builtin.include_role:
             name: lae.proxmox
             apply:
