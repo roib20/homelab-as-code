@@ -4,8 +4,3 @@
 # Path of the btrfs subvolume relative to BTRFS root (no leading slash)
 # Matches Proxmox VE format: var/lib/pve/local-btrfs
 btrfs_subvol_path: var/lib/pve/local-btrfs
-
-# BTRFS filesystem device to target
-# For Proxmox VE installations with BTRFS root, this is typically the root partition
-# Override this variable if your root filesystem is on a different device
-btrfs_filesystem_device: /dev/nvme0n1p2

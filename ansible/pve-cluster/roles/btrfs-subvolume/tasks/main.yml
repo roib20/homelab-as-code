@@ -7,6 +7,15 @@
         name: btrfs-progs
         state: present
 
+    - name: Detect BTRFS root filesystem device
+      ansible.builtin.shell: findmnt -no SOURCE /
+      register: root_device
+      changed_when: false
+
+    - name: Set BTRFS filesystem device fact
+      ansible.builtin.set_fact:
+        btrfs_filesystem_device: "{{ root_device.stdout }}"
+
     - name: Mount BTRFS root to create parent directories
       ansible.posix.mount:
         src: "{{ btrfs_filesystem_device }}"
