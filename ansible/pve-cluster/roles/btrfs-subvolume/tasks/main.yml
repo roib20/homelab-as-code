@@ -16,26 +16,35 @@
       ansible.builtin.set_fact:
         btrfs_filesystem_device: "{{ root_device.stdout }}"
 
-    - name: Mount BTRFS root to create parent directories
-      ansible.posix.mount:
-        src: "{{ btrfs_filesystem_device }}"
-        path: /mnt/btrfs-root
-        opts: subvolid=5
-        fstype: btrfs
-        state: ephemeral
+    - name: Check and prepare subvolume
+      block:
+        - name: Mount BTRFS root
+          ansible.posix.mount:
+            src: "{{ btrfs_filesystem_device }}"
+            path: /mnt/btrfs-root
+            opts: subvolid=5
+            fstype: btrfs
+            state: ephemeral
 
-    - name: Create parent directory structure in BTRFS root
-      ansible.builtin.file:
-        path: "/mnt/btrfs-root/{{ btrfs_subvol_path | dirname }}"
-        state: directory
-        owner: root
-        group: root
-        mode: "0755"
+        - name: Check if subvolume already exists in BTRFS root
+          ansible.builtin.stat:
+            path: "/mnt/btrfs-root/{{ btrfs_subvol_path }}"
+          register: subvol_check
 
-    - name: Unmount BTRFS root
-      ansible.posix.mount:
-        path: /mnt/btrfs-root
-        state: unmounted
+        - name: Create parent directory structure in BTRFS root
+          ansible.builtin.file:
+            path: "/mnt/btrfs-root/{{ btrfs_subvol_path | dirname }}"
+            state: directory
+            owner: root
+            group: root
+            mode: "0755"
+          when: not subvol_check.stat.exists
+
+      always:
+        - name: Unmount BTRFS root
+          ansible.posix.mount:
+            path: /mnt/btrfs-root
+            state: unmounted
 
     - name: Create the btrfs subvolume
       community.general.btrfs_subvolume:
