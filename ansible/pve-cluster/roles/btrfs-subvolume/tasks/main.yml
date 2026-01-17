@@ -31,6 +31,10 @@
             path: "/mnt/btrfs-root/{{ btrfs_subvol_path }}"
           register: subvol_check
 
+        - name: Set subvolume existence fact
+          ansible.builtin.set_fact:
+            btrfs_subvol_exists: "{{ subvol_check.stat.exists }}"
+
         - name: Create parent directory structure in BTRFS root
           ansible.builtin.file:
             path: "/mnt/btrfs-root/{{ btrfs_subvol_path | dirname }}"
@@ -38,7 +42,7 @@
             owner: root
             group: root
             mode: "0755"
-          when: not subvol_check.stat.exists
+          when: not btrfs_subvol_exists
 
       always:
         - name: Unmount BTRFS root
@@ -60,6 +64,7 @@
         owner: root
         group: root
         mode: "0755"
+      when: not btrfs_subvol_exists
 
     - name: Mount the btrfs subvolume
       ansible.posix.mount:
