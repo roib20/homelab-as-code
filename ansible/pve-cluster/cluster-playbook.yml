@@ -10,6 +10,11 @@
         apply:
           tags: pve-node-dns
       tags: pve-node-dns
+    - name: Configure /etc/network/interfaces
+      template:
+        src: "{{ interfaces_template }}"
+        dest: /etc/network/interfaces
+      register: _configure_interfaces
     - ansible.builtin.include_role:
         name: tailscale-bootstrap
         apply:
