@@ -1,0 +1,141 @@
+---
+# Configure a single PCI resource mapping
+# Called with pci_device variable containing: name, id, path, iommugroup, subsystem_id, mdev
+
+- name: "Validate {{ pci_device.name }} mapping variables"
+  ansible.builtin.assert:
+    that:
+      - pci_device.id is defined
+      - pci_device.id | length > 0
+      - pci_device.path is defined
+      - pci_device.path | length > 0
+      - pci_device.iommugroup is defined
+      - pci_device.iommugroup | string | length > 0
+      - pci_device.subsystem_id is defined
+      - pci_device.subsystem_id | length > 0
+    fail_msg: >-
+      Missing or invalid {{ pci_device.name }} mapping variables for {{ inventory_hostname }}.
+      Required: id, path, iommugroup, subsystem_id.
+
+- name: "Set {{ pci_device.name }} mapping variables"
+  vars:
+    _map_parts:
+      - "id={{ pci_device.id }}"
+      - "iommugroup={{ pci_device.iommugroup }}"
+      - "node={{ inventory_hostname }}"
+      - "path={{ pci_device.path }}"
+      - "subsystem-id={{ pci_device.subsystem_id }}"
+  ansible.builtin.set_fact:
+    _mapping_id: "{{ pci_device.name }}_{{ inventory_hostname }}"
+    _desired_map: "{{ _map_parts | join(',') }}"
+    _desired_mdev: "{{ pci_device.mdev | default(0) | int }}"
+
+- name: "Get existing {{ pci_device.name }} PCI mapping"
+  ansible.builtin.command:
+    cmd: pvesh get /cluster/mapping/pci/{{ _mapping_id }} --output-format json
+  register: _existing_mapping
+  changed_when: false
+  failed_when: false
+  become: true
+  throttle: 1
+
+- name: "Set {{ pci_device.name }} mapping exists flag"
+  ansible.builtin.set_fact:
+    _mapping_exists: "{{ _existing_mapping.rc == 0 }}"
+
+- name: "Initialize {{ pci_device.name }} update flag"
+  ansible.builtin.set_fact:
+    _needs_update: false
+
+- name: "Parse and compare existing {{ pci_device.name }} mapping"
+  when: _mapping_exists
+  block:
+    - name: Parse current mapping
+      ansible.builtin.set_fact:
+        _current_mapping: "{{ _existing_mapping.stdout | from_json }}"
+
+    - name: Extract current map from API response
+      ansible.builtin.set_fact:
+        _current_map_raw: "{{ _current_mapping.map | default([]) }}"
+
+    - name: Normalize current map to string
+      ansible.builtin.set_fact:
+        # Proxmox API returns map in different formats:
+        # - string: "id=X,node=Y,..." (use as-is)
+        # - list with dict: [{"id": "X", "node": "Y"}] (convert dict to key=value pairs)
+        # - list with string: ["id=X,node=Y,..."] (extract first element)
+        # - empty: [] (use empty string)
+        _current_map: >-
+          {%- if _current_map_raw is string -%}
+            {{ _current_map_raw }}
+          {%- elif _current_map_raw is sequence and _current_map_raw | length > 0 -%}
+            {%- set first = _current_map_raw | first -%}
+            {%- if first is mapping -%}
+              {%- set parts = [] -%}
+              {%- for k, v in first.items() -%}
+                {%- set _ = parts.append(k ~ '=' ~ v) -%}
+              {%- endfor -%}
+              {{ parts | sort | join(',') }}
+            {%- else -%}
+              {{ first }}
+            {%- endif -%}
+          {%- else -%}
+            {{ '' }}
+          {%- endif -%}
+
+    - name: Normalize maps for comparison
+      ansible.builtin.set_fact:
+        _current_map_sorted: "{{ _current_map.split(',') | sort | join(',') }}"
+        _desired_map_sorted: "{{ _desired_map.split(',') | sort | join(',') }}"
+
+    - name: Check if map differs
+      ansible.builtin.set_fact:
+        _map_differs: "{{ _current_map_sorted != _desired_map_sorted }}"
+
+    - name: Check if mdev differs
+      ansible.builtin.set_fact:
+        _mdev_differs: "{{ (_current_mapping.mdev | default(0) | int) != (_desired_mdev | int) }}"
+
+    - name: Determine if update needed
+      ansible.builtin.set_fact:
+        _needs_update: "{{ _map_differs or _mdev_differs }}"
+
+- name: "Create {{ pci_device.name }} PCI mapping"
+  when: not _mapping_exists
+  ansible.builtin.command:
+    argv:
+      - pvesh
+      - create
+      - /cluster/mapping/pci
+      - --id
+      - "{{ _mapping_id }}"
+      - --map
+      - "{{ _desired_map }}"
+      - --mdev
+      - "{{ _desired_mdev }}"
+  register: _create_result
+  changed_when: _create_result.rc == 0
+  failed_when:
+    - _create_result.rc != 0
+    - "'already exists' not in (_create_result.stderr | default(''))"
+  become: true
+  throttle: 1
+
+- name: "Update {{ pci_device.name }} PCI mapping"
+  when:
+    - _mapping_exists
+    - _needs_update
+  ansible.builtin.command:
+    argv:
+      - pvesh
+      - set
+      - /cluster/mapping/pci/{{ _mapping_id }}
+      - --map
+      - "{{ _desired_map }}"
+      - --mdev
+      - "{{ _desired_mdev }}"
+  register: _update_result
+  changed_when: _update_result.rc == 0
+  failed_when: _update_result.rc != 0
+  become: true
+  throttle: 1

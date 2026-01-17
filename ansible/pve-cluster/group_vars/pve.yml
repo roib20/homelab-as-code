@@ -60,6 +60,12 @@ pve_gpu_subsystem_id: ""  # Subsystem vendor:device ID for the GPU at pve_gpu_pa
 pve_gpu_path: "0000:00:02.0"  # PCI address of the default GPU on this host (integrated graphics by default)
 pve_gpu_iommugroup: 0  # IOMMU group ID for the GPU at pve_gpu_path (adjust per host)
 pve_gpu_mdev: 0  # Mediated device flag for GPU at pve_gpu_path (0 = disabled, 1 = enabled)
+# LSI SAS controller passthrough defaults (empty = not configured):
+pve_lsi_id: ""  # PCI vendor:device ID for LSI controller (e.g. "1000:0087"); override per host
+pve_lsi_subsystem_id: ""  # Subsystem vendor:device ID for LSI controller; override per host
+pve_lsi_path: ""  # PCI address of LSI controller (e.g. "0000:01:00.0"); override per host
+pve_lsi_iommugroup: ""  # IOMMU group ID for LSI controller; override per host
+pve_lsi_mdev: 0  # Mediated device flag for LSI controller (0 = disabled)
 pve_vfio_blacklist_drivers: []  # List of device drivers to blacklist from the Proxmox host (see https://pve.proxmox.com/wiki/PCI(e)_Passthrough).
 pve_pcie_ignore_msrs: false  # Set this to true if passing through to Windows machine to prevent VM crashing.
 pve_pcie_report_msrs: true  # Set this to false to prevent dmesg system from logging msrs crash reports.

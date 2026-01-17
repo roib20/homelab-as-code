@@ -67,7 +67,7 @@ inputs = {
   hostpci_devices = [
     {
       device  = "hostpci0"
-      mapping = try(values.pci_mapping, "LSI")
+      mapping = try(values.pci_mapping, "LSI_pve-node-01")
       pcie    = true
       rombar  = true
     },
