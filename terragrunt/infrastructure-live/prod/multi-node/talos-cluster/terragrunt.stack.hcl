@@ -327,6 +327,8 @@ unit "tuppr-upgrades" {
   path   = "tuppr-upgrades"
 
   values = {
+    kubeconfig_path = "${get_terragrunt_dir()}/.terragrunt-stack/talos-cluster/kubeconfig"
+
     manifest_yaml_files = [
       "${local.terragrunt_dir}/infrastructure-catalog/units/tuppr-upgrades/templates/talos-upgrade.yaml.tftpl",
       "${local.terragrunt_dir}/infrastructure-catalog/units/tuppr-upgrades/templates/kubernetes-upgrade.yaml.tftpl",
