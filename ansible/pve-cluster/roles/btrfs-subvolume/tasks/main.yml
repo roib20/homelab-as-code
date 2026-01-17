@@ -8,7 +8,7 @@
         state: present
 
     - name: Detect BTRFS root filesystem device
-      ansible.builtin.shell: findmnt -no SOURCE /
+      ansible.builtin.shell: findmnt -no SOURCE / | sed 's/\[.*\]//'
       register: root_device
       changed_when: false
 
@@ -26,7 +26,7 @@
 
     - name: Create parent directory structure in BTRFS root
       ansible.builtin.file:
-        path: /mnt/btrfs-root/var/lib/pve
+        path: "/mnt/btrfs-root/{{ btrfs_subvol_path | dirname }}"
         state: directory
         owner: root
         group: root
