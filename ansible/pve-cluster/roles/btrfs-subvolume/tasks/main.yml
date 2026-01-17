@@ -19,3 +19,4 @@
       community.general.btrfs_subvolume:
         name: "{{ btrfs_subvol_parent }}/{{ btrfs_subvol_name }}"
         state: present
+        automount: true
