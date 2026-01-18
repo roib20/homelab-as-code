@@ -33,7 +33,8 @@ resource "local_sensitive_file" "kubeconfig" {
 }
 
 output "kubeconfig_filename" {
-  value = local_sensitive_file.kubeconfig.filename
+  depends_on = [terraform_data.talos_cluster_health]
+  value      = local_sensitive_file.kubeconfig.filename
 }
 
 output "kubeconfig_raw" {

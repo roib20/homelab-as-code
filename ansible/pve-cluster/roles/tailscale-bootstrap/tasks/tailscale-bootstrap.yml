@@ -19,6 +19,24 @@
         sysctl_file: /etc/sysctl.d/99-tailscale.conf
         state: present
         reload: true
+- name: Linux optimizations for subnet routers and exit nodes
+  become: true
+  vars:
+    tailscale_netdev: "{{ ansible_default_ipv4.interface }}"
+  block:
+    - name: Ensure networkd-dispatcher directory exists
+      ansible.builtin.file:
+        path: "/etc/networkd-dispatcher/routable.d"
+        state: directory
+        mode: '0755'
+    - name: Create persistent ethtool script for networkd-dispatcher
+      ansible.builtin.copy:
+        dest: "/etc/networkd-dispatcher/routable.d/50-tailscale"
+        mode: '0755'
+        content: |
+          #!/bin/sh
+          ethtool -K {{ tailscale_netdev }} rx-udp-gro-forwarding on rx-gro-list off
+      notify: Apply tailscale ethtool settings
 - name: Install and login into Tailscale
   ansible.builtin.include_role:
     name: artis3n.tailscale.machine
