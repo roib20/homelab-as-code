@@ -11,7 +11,7 @@
           tags: pve-node-dns
       tags: pve-node-dns
     - name: Configure /etc/network/interfaces
-      template:
+      ansible.builtin.template:
         src: "{{ interfaces_template }}"
         dest: /etc/network/interfaces
       register: _configure_interfaces
