@@ -327,7 +327,6 @@ unit "tuppr-upgrades" {
   path   = "tuppr-upgrades"
 
   values = {
-
     manifest_yaml_files = [
       "${local.terragrunt_dir}/infrastructure-catalog/units/tuppr-upgrades/templates/talos-upgrade.yaml.tftpl",
       "${local.terragrunt_dir}/infrastructure-catalog/units/tuppr-upgrades/templates/kubernetes-upgrade.yaml.tftpl",
