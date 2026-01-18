@@ -19,7 +19,7 @@ dependency "talos-cluster" {
 }
 
 inputs = {
-  kubeconfig_path     = dependency.talos-cluster.outputs.kubeconfig_filename
+  kubeconfig_path     = try(dependency.talos-cluster.outputs.kubeconfig_filename, "~/.kube/config")
   manifest_yaml_files = values.manifest_yaml_files
   secret_yaml_files   = try(values.secret_yaml_files, [])
   template_vars       = try(values.template_vars, {})
