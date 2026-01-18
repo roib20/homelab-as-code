@@ -24,6 +24,11 @@
   vars:
     tailscale_netdev: "{{ ansible_default_ipv4.interface }}"
   block:
+    - name: Ensure networkd-dispatcher directory exists
+      ansible.builtin.file:
+        path: "/etc/networkd-dispatcher/routable.d"
+        state: directory
+        mode: '0755'
     - name: Create persistent ethtool script for networkd-dispatcher
       ansible.builtin.copy:
         dest: "/etc/networkd-dispatcher/routable.d/50-tailscale"
