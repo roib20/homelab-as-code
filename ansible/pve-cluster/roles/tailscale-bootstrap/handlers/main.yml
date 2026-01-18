@@ -1,0 +1,4 @@
+---
+- name: Apply tailscale ethtool settings
+  become: true
+  ansible.builtin.command: "/etc/networkd-dispatcher/routable.d/50-tailscale"
