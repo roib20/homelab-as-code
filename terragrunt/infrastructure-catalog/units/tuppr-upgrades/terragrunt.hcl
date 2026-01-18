@@ -14,12 +14,12 @@ dependency "talos-cluster" {
   config_path = "../talos-cluster"
 
   mock_outputs = {
-    kubeconfig = ""
+    kubeconfig_filename = "~/.kube/config"
   }
 }
 
 inputs = {
-  kubeconfig_path     = values.kubeconfig_path
+  kubeconfig_path     = dependency.talos-cluster.outputs.kubeconfig_filename
   manifest_yaml_files = values.manifest_yaml_files
   secret_yaml_files   = try(values.secret_yaml_files, [])
   template_vars       = try(values.template_vars, {})
