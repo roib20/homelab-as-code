@@ -3,7 +3,7 @@
 locals {
   # Proxmox Virtual Environment configuration
   proxmox = {
-    virtual_environment_endpoint              = try(get_env("PVE_ENDPOINT"), "https://pve:8006/")
+    virtual_environment_endpoint              = try(get_env("PVE_ENDPOINT"), "https://pve-node-01:8006/")
     virtual_environment_api_token             = try(get_env("PVE_API_TOKEN"), "user@pam!token=00000000-0000-0000-0000-000000000000")
     virtual_environment_username              = try(get_env("PVE_USERNAME"), "username")
     virtual_environment_password              = try(get_env("PVE_PASSWORD"), "password")
