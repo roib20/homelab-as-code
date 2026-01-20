@@ -12,7 +12,7 @@ resource "terraform_data" "talos_cluster_health" {
 
     environment = {
       TALOSCONFIG = pathexpand("${var.talos_config_path}/config")
-      NODE        = each.key
+      NODE        = split("/", yamldecode(each.value.talos_config).network.interfaces[0].addresses[0])[0]
       TIMEOUT     = var.timeout
     }
   }
