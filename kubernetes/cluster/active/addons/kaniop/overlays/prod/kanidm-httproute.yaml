@@ -17,5 +17,5 @@ spec:
           kind: Service
           name: idm
           namespace: kaniop
-          port: 443
+          port: 8443
           weight: 1
