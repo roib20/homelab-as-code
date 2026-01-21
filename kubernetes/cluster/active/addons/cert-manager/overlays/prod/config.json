@@ -2,7 +2,7 @@
   "annotations": {},
   "appName": "cert-manager",
   "destName": "in-cluster",
-  "destNamespace": "cert-manager",
+  "destNamespace": "kube-system",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
   "project": "default",
