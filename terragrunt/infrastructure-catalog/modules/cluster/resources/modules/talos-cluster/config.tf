@@ -27,6 +27,7 @@ data "helm_template" "bootstrap_charts" {
   namespace    = each.value.namespace
   kube_version = var.versions.kubernetes_version
   values       = [each.value.values]
+  include_crds = true
 }
 
 resource "talos_machine_secrets" "this" {

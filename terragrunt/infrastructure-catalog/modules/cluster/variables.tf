@@ -60,8 +60,9 @@ variable "versions" {
   type = object({
     kubernetes_version       = string # The version of Kubernetes to use.
     talos_version            = string # The version of Talos to use.
-    prometheus_version       = string # The version of Prometheus to use.
     external-secrets_version = string # The version of External Secrets to use.
+    gateway-api_version      = string # The version of Gateway API to use.
+    gateway-api_channel      = string # The channel of Gateway API to use (standard OR experimental).
   })
 }
 

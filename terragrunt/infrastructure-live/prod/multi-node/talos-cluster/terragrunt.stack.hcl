@@ -20,8 +20,9 @@ locals {
     kubernetes_version       = "1.34.2",
     initial_talos_version    = "1.11.1", # Do not change this value after initial deployment
     talos_version            = "1.11.5", # Change this value to safely upgrade the Talos version
-    prometheus_version       = "17.0.2",
     external-secrets_version = "0.19.2",
+    gateway-api_version      = "1.4.1",
+    gateway-api_channel      = "experimental",
   }
 
   # ─── Machines / IP layout ────────────────────────────────────────────────────
@@ -88,7 +89,7 @@ locals {
   }
 
   cluster_name           = "talos"
-  cluster_endpoint       = local.controlplane_nodes[0].ip
+  cluster_endpoint       = local.cluster_vip
   cluster_vip            = "192.168.1.50"
   cluster_node_subnet    = "192.168.1.0/24"
   cluster_pod_subnet     = "10.244.0.0/16"
@@ -130,6 +131,14 @@ locals {
       helm_repository = "oci://ghcr.io/spegel-org/helm-charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/spegel/base/values.yaml")
     }
+    cert-manager = {
+      chart           = "cert-manager"
+      name            = "cert-manager"
+      namespace       = "kube-system"
+      chart_version   = "v1.19.2"
+      helm_repository = "oci://quay.io/jetstack/charts"
+      values          = file("${local.kubernetes_dir}/cluster/active/addons/cert-manager/base/values.yaml")
+    }
     tuppr = {
       chart           = "tuppr"
       name            = "tuppr"
@@ -146,12 +155,13 @@ unit "download_file" {
   path   = "download_file"
 
   values = {
-    node_names       = local.node_names
-    datastore_id     = "local"
-    talos_version    = "${local.versions.initial_talos_version}"
-    talos_platform   = "nocloud"
-    talos_arch       = "amd64"
-    talos_secureboot = true
+    node_names          = local.node_names
+    datastore_id        = "local"
+    talos_version       = "${local.versions.initial_talos_version}"
+    talos_platform      = "nocloud"
+    talos_arch          = "amd64"
+    talos_secureboot    = true
+    overwrite_unmanaged = true
   }
 }
 
