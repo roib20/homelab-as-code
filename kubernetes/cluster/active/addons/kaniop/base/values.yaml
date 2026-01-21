@@ -1,2 +1,8 @@
-image:
-  repository: ghcr.io/pando85/kaniop
+---
+webhook:
+  ## Enable validating webhook for KanidmGroup
+  enabled: true
+
+  ## Use cert-manager to manage webhook TLS certificates
+  certManager:
+    enabled: true
