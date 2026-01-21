@@ -137,7 +137,7 @@ locals {
       namespace       = "kube-system"
       chart_version   = "v1.19.2"
       helm_repository = "oci://quay.io/jetstack/charts"
-      values          = file("${local.kubernetes_dir}/cluster/active/addons/tuppr/base/values.yaml")
+      values          = file("${local.kubernetes_dir}/cluster/active/addons/cert-manager/base/values.yaml")
     }
     tuppr = {
       chart           = "tuppr"
