@@ -53,14 +53,8 @@ locals {
     # "https://raw.githubusercontent.com/home-operations/tuppr/main/config/crd/bases/tuppr.home-operations.com_talosupgrades.yaml",
     # "https://raw.githubusercontent.com/home-operations/tuppr/main/config/crd/bases/tuppr.home-operations.com_kubernetesupgrades.yaml",
 
-    # Gateway API CRDs: https://docs.cilium.io/en/latest/network/servicemesh/gateway-api/gateway-api/#prerequisites
-    "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml",
-    "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_gateways.yaml",
-    "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml",
-    "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml",
-    "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml",
-    # TLSRoute (experimental)
-    "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml",
+    # Gateway API CRDs: https://gateway-api.sigs.k8s.io/guides/getting-started/#installing-gateway-api
+    "https://github.com/kubernetes-sigs/gateway-api/releases/download/v${var.versions.gateway-api_version}/${var.versions.gateway-api_channel}-install.yaml",
   ]
 }
 
