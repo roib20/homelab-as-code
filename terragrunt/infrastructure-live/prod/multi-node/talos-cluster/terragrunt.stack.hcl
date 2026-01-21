@@ -130,6 +130,14 @@ locals {
       helm_repository = "oci://ghcr.io/spegel-org/helm-charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/spegel/base/values.yaml")
     }
+    cert-manager = {
+      chart           = "cert-manager"
+      name            = "cert-manager"
+      namespace       = "kube-system"
+      chart_version   = "v1.19.2"
+      helm_repository = "oci://quay.io/jetstack/charts"
+      values          = file("${local.kubernetes_dir}/cluster/active/addons/tuppr/base/values.yaml")
+    }
     tuppr = {
       chart           = "tuppr"
       name            = "tuppr"
