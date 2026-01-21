@@ -230,11 +230,12 @@ COPY --link --from=ansible-requirements /root/.ansible /home/runner/.ansible
 
 # Install only runtime dependencies
 RUN apk add --no-cache \
-      openssh-client \
-      sshpass \
-      less \
-      ca-certificates \
-      bash
+        openssh-client \
+        sshpass \
+        ca-certificates \
+        less \
+        bash \
+        git
 
 # Set rootless permissions
 WORKDIR /homelab-as-code
