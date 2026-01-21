@@ -4,6 +4,11 @@
 cluster:
   inlineManifests:
 %{ for content in manifests ~}
+%{ for index, crd in content.crds ~}
+    - name: ${content.name}-crd-${index}
+      contents: |-
+        ${indent(8, crd)}
+%{ endfor ~}
     - name: ${content.name}
       contents: |-
         ${indent(8,content.manifest)}

@@ -50,8 +50,8 @@ locals {
     "https://raw.githubusercontent.com/external-secrets/external-secrets/v${var.versions.external-secrets_version}/deploy/crds/bundle.yaml",
 
     # Tuppr CRDs
-    "https://raw.githubusercontent.com/home-operations/tuppr/main/config/crd/bases/tuppr.home-operations.com_talosupgrades.yaml",
-    "https://raw.githubusercontent.com/home-operations/tuppr/main/config/crd/bases/tuppr.home-operations.com_kubernetesupgrades.yaml",
+    # "https://raw.githubusercontent.com/home-operations/tuppr/main/config/crd/bases/tuppr.home-operations.com_talosupgrades.yaml",
+    # "https://raw.githubusercontent.com/home-operations/tuppr/main/config/crd/bases/tuppr.home-operations.com_kubernetesupgrades.yaml",
 
     # Prometheus CRDs
     "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/tags/prometheus-operator-crds-v${var.versions.prometheus_version}/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml",
