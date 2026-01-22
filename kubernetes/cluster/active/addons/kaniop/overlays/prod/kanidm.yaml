@@ -6,6 +6,8 @@ metadata:
 spec:
   domain: "id.${FQDN_01}"
   tlsSecretName: tls-wildcard
+  oauth2ClientNamespaceSelector:
+    matchLabels: {}  # Watch all namespaces
   replicaGroups:
     - name: default
       replicas: 1
