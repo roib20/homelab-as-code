@@ -2,3 +2,13 @@
 gitea:
   admin:
     existingSecret: gitea-admin-secret
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: istio-ingress
+  hostnames:
+    - "git.${FQDN_01}"
