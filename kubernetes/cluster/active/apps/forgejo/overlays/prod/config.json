@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "forgejo",
+  "destName": "in-cluster",
+  "destNamespace": "forgejo",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "forgejo"
+}

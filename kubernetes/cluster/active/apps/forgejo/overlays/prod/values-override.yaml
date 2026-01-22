@@ -1,0 +1,46 @@
+---
+gitea:
+  admin:
+    existingSecret: gitea-admin-secret
+
+  oauth:
+    - name: "kanidm"
+      provider: "openidConnect"
+      existingSecret: "forgejo-oauth-secret"
+      # Uses shell variable - expanded at runtime from env var
+      autoDiscoverUrl: "https://${OAUTH_IDP_DOMAIN}/oauth2/openid/forgejo/.well-known/openid-configuration"
+
+  config:
+    oauth2_client:
+      OPENID_CONNECT_SCOPES: "openid email profile groups forgejo"
+      ENABLE_AUTO_REGISTRATION: true
+      USERNAME: email
+    openid:
+      ENABLE_OPENID_SIGNIN: false
+      ENABLE_OPENID_SIGNUP: true
+    service:
+      DISABLE_REGISTRATION: false
+      ALLOW_ONLY_EXTERNAL_REGISTRATION: true
+      SHOW_REGISTRATION_BUTTON: false
+
+# Use env vars for FQDN-dependent config (targetable by kustomize replacements)
+deployment:
+  env:
+    - name: FORGEJO__OPENID__WHITELISTED_URIS
+      value: "https://id.${FQDN_01}"
+    - name: FORGEJO__SERVER__DOMAIN
+      value: "git.${FQDN_01}"
+    - name: FORGEJO__SERVER__ROOT_URL
+      value: "https://git.${FQDN_01}"
+    - name: OAUTH_IDP_DOMAIN
+      value: "id.${FQDN_01}"
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: istio-ingress
+  hostnames:
+    - "git.${FQDN_01}"
