@@ -4,11 +4,44 @@
     name: env-vars
     fieldPath: "data.FQDN_01"
   targets:
+    # HTTPRoute hostname: git.${FQDN_01}
     - select:
         kind: HTTPRoute
         name: forgejo
       fieldPaths:
         - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    # Deployment main container env vars
+    - select:
+        kind: Deployment
+        name: forgejo
+      fieldPaths:
+        - spec.template.spec.containers.[name=forgejo].env.[name=FORGEJO__OPENID__WHITELISTED_URIS].value
+        - spec.template.spec.containers.[name=forgejo].env.[name=FORGEJO__SERVER__DOMAIN].value
+        - spec.template.spec.containers.[name=forgejo].env.[name=FORGEJO__SERVER__ROOT_URL].value
+        - spec.template.spec.containers.[name=forgejo].env.[name=OAUTH_IDP_DOMAIN].value
+      options:
+        delimiter: "."
+        index: 1
+    # Deployment init containers env vars (init-directories, init-app-ini, configure-gitea)
+    - select:
+        kind: Deployment
+        name: forgejo
+      fieldPaths:
+        - spec.template.spec.initContainers.[name=configure-gitea].env.[name=FORGEJO__OPENID__WHITELISTED_URIS].value
+        - spec.template.spec.initContainers.[name=configure-gitea].env.[name=FORGEJO__SERVER__DOMAIN].value
+        - spec.template.spec.initContainers.[name=configure-gitea].env.[name=FORGEJO__SERVER__ROOT_URL].value
+        - spec.template.spec.initContainers.[name=configure-gitea].env.[name=OAUTH_IDP_DOMAIN].value
+        - spec.template.spec.initContainers.[name=init-app-ini].env.[name=FORGEJO__OPENID__WHITELISTED_URIS].value
+        - spec.template.spec.initContainers.[name=init-app-ini].env.[name=FORGEJO__SERVER__DOMAIN].value
+        - spec.template.spec.initContainers.[name=init-app-ini].env.[name=FORGEJO__SERVER__ROOT_URL].value
+        - spec.template.spec.initContainers.[name=init-app-ini].env.[name=OAUTH_IDP_DOMAIN].value
+        - spec.template.spec.initContainers.[name=init-directories].env.[name=FORGEJO__OPENID__WHITELISTED_URIS].value
+        - spec.template.spec.initContainers.[name=init-directories].env.[name=FORGEJO__SERVER__DOMAIN].value
+        - spec.template.spec.initContainers.[name=init-directories].env.[name=FORGEJO__SERVER__ROOT_URL].value
+        - spec.template.spec.initContainers.[name=init-directories].env.[name=OAUTH_IDP_DOMAIN].value
       options:
         delimiter: "."
         index: 1
