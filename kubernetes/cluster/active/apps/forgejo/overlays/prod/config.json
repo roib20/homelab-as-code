@@ -1,10 +1,10 @@
 {
   "annotations": {},
-  "appName": "cert-manager",
+  "appName": "forgejo",
   "destName": "in-cluster",
   "destNamespace": "forgejo",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
   "project": "default",
-  "userGivenName": "cert-manager"
+  "userGivenName": "forgejo"
 }
