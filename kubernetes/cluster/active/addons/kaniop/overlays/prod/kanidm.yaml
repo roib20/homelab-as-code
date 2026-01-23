@@ -13,6 +13,9 @@ spec:
       replicas: 1
       primaryNode: true
   logLevel: info
+  # Enable LDAPS service on port 3636
+  # Kanidm uses its TLS certificates for both HTTPS and LDAPS
+  ldapPortName: ldaps
   storage:
     volumeClaimTemplate:
       spec:
