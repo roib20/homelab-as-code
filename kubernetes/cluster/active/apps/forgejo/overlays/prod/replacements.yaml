@@ -4,16 +4,6 @@
     name: env-vars
     fieldPath: "data.FQDN_01"
   targets:
-    # Kanidm OAuth2 client fields
-    - select:
-        kind: KanidmOAuth2Client
-        name: forgejo
-      fieldPaths:
-        - spec.origin
-        - spec.redirectUrl.0
-      options:
-        delimiter: "."
-        index: 1
     # HTTPRoute hostname: git.${FQDN_01}
     - select:
         kind: HTTPRoute
