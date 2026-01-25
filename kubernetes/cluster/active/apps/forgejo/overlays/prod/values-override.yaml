@@ -27,13 +27,13 @@ gitea:
 deployment:
   env:
     - name: FORGEJO__OPENID__WHITELISTED_URIS
-      value: "https://id.${FQDN_01}"
+      value: "https://auth.${FQDN_01}"
     - name: FORGEJO__SERVER__DOMAIN
       value: "git.${FQDN_01}"
     - name: FORGEJO__SERVER__ROOT_URL
       value: "https://git.${FQDN_01}"
     - name: OAUTH_IDP_DOMAIN
-      value: "id.${FQDN_01}"
+      value: "auth.${FQDN_01}"
 
 httpRoute:
   enabled: true
