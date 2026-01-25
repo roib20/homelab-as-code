@@ -24,6 +24,7 @@ jobs:
           FQDN_01: "example.com"
           CF_EMAIL: "test@example.com"
           CF_ACCOUNT_ID: "1234567890abcdef1234567890abcdef"
+          PRIVATE_REPO_01: "https://github.com/github/gitignore.git"
         shell: sh
         run: printenv > "${ENV_FILE}"
       - name: Run kustomize build in parallel
