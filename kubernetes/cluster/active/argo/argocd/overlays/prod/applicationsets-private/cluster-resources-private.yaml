@@ -1,0 +1,65 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-resources-private
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: '10'
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        files:
+          - path: kubernetes/cluster/active/resources/**/overlays/*/config.json
+        repoURL: "${PRIVATE_REPO_01}"
+        requeueAfterSeconds: 20
+        revision: ""
+        template:
+          metadata: {}
+          spec:
+            destination: {}
+            project: ""
+  syncPolicy:
+    preserveResourcesOnDeletion: false
+  template:
+    metadata:
+      name: '{{ .userGivenName }}'
+      namespace: argocd
+    spec:
+      destination:
+        name: '{{ .destName }}'
+        namespace: '{{ .destNamespace }}'
+      ignoreDifferences:
+        - group: argoproj.io
+          jsonPointers:
+            - /status
+          kind: Application
+      project: '{{ .project }}'
+      source:
+        path: '{{.path.path}}'
+        repoURL: "${PRIVATE_REPO_01}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - ServerSideDiff=true
+  templatePatch: |
+    metadata:
+      annotations:
+        {{- /* copy every key/value under .annotations in config.json */}}
+        {{- range $k, $v := .annotations }}
+        {{ $k }}: {{ $v }}
+        {{- end }}
+      labels:
+        app.kubernetes.io/managed-by: argocd
+        app.kubernetes.io/name: '{{ .userGivenName }}'
+        {{- /* copy every key/value under .labels in config.json */}}
+        {{- range $k, $v := .labels }}
+        {{ $k }}: {{ $v }}
+        {{- end }}
+status: {}

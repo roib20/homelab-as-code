@@ -1,0 +1,10 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - cluster-argo.yaml
+  - cluster-addons.yaml
+  - cluster-ingress-controllers.yaml
+  - cluster-resources.yaml
+  - cluster-apps.yaml
+  # - cluster-inactive.yaml
