@@ -4,10 +4,10 @@ persistence:
     enabled: true
     storageClass: longhorn
     size: 10Gi
-  media:
-    enabled: true
-    type: pvc
-    mountPath: /media
-    readOnly: true
-    existingClaim: smb-mediadata-rox
-    subPath: Media
+  # media:
+  #   enabled: true
+  #   type: pvc
+  #   mountPath: /media
+  #   readOnly: true
+  #   existingClaim: smb-mediadata-rox
+  #   subPath: Media
