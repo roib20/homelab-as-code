@@ -3,11 +3,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
-  - cloudnative-pg.yaml
-  - pvc-immich-library.yaml
-  - resource-claim-template.yaml
+  - resources/cloudnative-pg.yaml
+  - resources/pvc-immich-library.yaml
+  - resources/resource-claim-template.yaml
 patches:
-  - path: deployment-patch.yaml
+  - path: patches/deployment-patch.yaml
     target:
       kind: Deployment
       name: immich-machine-learning
