@@ -9,13 +9,4 @@ configMapGenerator:
     envs:
       - /tmp/env-vars.env
 replacements:
-  - source:
-      kind: ConfigMap
-      name: env-vars
-      fieldPath: data.PRIVATE_REPO_01
-    targets:
-      - select:
-          kind: ApplicationSet
-        fieldPaths:
-          - spec.generators.0.git.repoURL
-          - spec.template.spec.source.repoURL
+  - path: replacements.yaml
