@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "cloudnative-pg",
+  "destName": "in-cluster",
+  "destNamespace": "cnpg-system",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "cloudnative-pg"
+}
