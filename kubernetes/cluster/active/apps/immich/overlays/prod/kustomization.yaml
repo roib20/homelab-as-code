@@ -1,0 +1,23 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - cloudnative-pg.yaml
+  - pvc-immich-library.yaml
+  - resource-claim-template.yaml
+patches:
+  - path: deployment-patch.yaml
+    target:
+      kind: Deployment
+      name: immich-machine-learning
+helmCharts:
+  - name: immich
+    repo: oci://ghcr.io/immich-app/immich-charts
+    version: 0.10.3
+    releaseName: immich
+    namespace: immich
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
