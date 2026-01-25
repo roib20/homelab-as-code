@@ -1,0 +1,36 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-database
+spec:
+  instances: 1
+
+  storage:
+    size: 1Gi
+
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.0-0.5.3
+
+  postgresql:
+    shared_preload_libraries:
+      - "vchord.so"
+
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: immich-database-immich
+spec:
+  name: immich
+  owner: immich
+  cluster:
+    name: immich-database
+  extensions:
+    - name: vector
+    - name: cube
+    - name: vchord
+    - name: earthdistance
