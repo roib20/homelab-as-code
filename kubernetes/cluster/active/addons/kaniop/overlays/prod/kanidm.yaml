@@ -4,7 +4,7 @@ kind: Kanidm
 metadata:
   name: idm
 spec:
-  domain: "id.${FQDN_01}"
+  domain: "auth.${FQDN_01}"
   tlsSecretName: tls-wildcard
   oauth2ClientNamespaceSelector:
     matchLabels: {}  # Watch all namespaces
