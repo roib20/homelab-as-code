@@ -5,6 +5,7 @@ resources:
   - ../../base
   - argocd-server-webhook-httproute.yaml
   - git-webhook.yaml.externalsecret
+  - applicationsets-private
 helmCharts:
   - name: argo-cd
     repo: oci://ghcr.io/argoproj/argo-helm

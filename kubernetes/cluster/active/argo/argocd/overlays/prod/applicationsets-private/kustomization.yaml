@@ -4,9 +4,3 @@ kind: Kustomization
 resources:
   - cluster-apps-private.yaml
   - cluster-resources-private.yaml
-configMapGenerator:
-  - name: env-vars
-    envs:
-      - /tmp/env-vars.env
-replacements:
-  - path: replacements.yaml
