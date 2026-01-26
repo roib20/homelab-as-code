@@ -7,10 +7,7 @@ resources:
   - resources/pvc-immich-library.yaml
   - resources/resource-claim-template.yaml
 patches:
-  - path: patches/deployment-patch.yaml
-    target:
-      kind: Deployment
-      name: immich-machine-learning
+  - path: patches/deployment-patches.yaml
 helmCharts:
   - name: immich
     repo: oci://ghcr.io/immich-app/immich-charts
