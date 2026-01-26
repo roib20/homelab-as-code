@@ -4,3 +4,6 @@ preUpgradeChecker:
   jobEnabled: false
 persistence:
   defaultDataLocality: best-effort
+defaultSettings:
+  defaultDataLocality: best-effort
+  defaultDataPath: "/var/mnt/longhorn"

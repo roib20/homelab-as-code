@@ -12,8 +12,7 @@ locals {
   cluster_endpoint = yamldecode(var.talos_cluster_config).controlPlane.endpoint
 
   extramounts = [
-    "/var/hpvolumes",    # hostpath-provisioner: https://github.com/kubevirt/hostpath-provisioner-operator/blob/main/deploy/hostpathprovisioner_cr.yaml
-    "/var/lib/longhorn", # Longhorn: https://longhorn.io/docs/latest/advanced-resources/os-distro-specific/talos-linux-support/
+    "/var/mnt/longhorn", # Longhorn: https://longhorn.io/docs/latest/advanced-resources/os-distro-specific/talos-linux-support/
   ]
 }
 
@@ -62,6 +61,17 @@ data "talos_machine_configuration" "this" {
         staticPath  = "/var/cdi/static"
         dynamicPath = "/var/cdi/dynamic"
       }
+    }),
+    templatefile("${path.module}/resources/talos-patches/user-volume.patch.yaml.tftpl", {
+      user_volumes = [
+        {
+          name           = "longhorn"
+          disk_name      = "vdb"
+          disk_transport = "virtio"
+          volumeType     = "partition"
+          grow           = true
+        }
+      ]
     }),
     templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
       extramounts = local.extramounts
