@@ -6,6 +6,7 @@ resources:
   - resources/cloudnative-pg.yaml
   - resources/pvc-immich-library.yaml
   - resources/resource-claim-template.yaml
+  - resources/http-route.yaml
 patches:
   - path: patches/deployment-patches.yaml
 helmCharts:
@@ -18,3 +19,9 @@ helmCharts:
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+replacements:
+  - path: replacements.yaml
