@@ -41,3 +41,9 @@ valkey:
 
 machine-learning:
   enabled: true
+  controllers:
+    main:
+      containers:
+        main:
+          image:
+            tag: release-openvino
