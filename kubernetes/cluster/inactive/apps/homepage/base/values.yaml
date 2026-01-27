@@ -23,10 +23,26 @@ configmap:
             url: http://longhorn-frontend.longhorn-system.svc.cluster.local
       widgets.yaml: |
         ---
-        - resources:
-            cpu: true
-            memory: true
-            disk: /
+        - kubernetes:
+            cluster:
+              # Shows the cluster node
+              show: true
+              # Shows the aggregate CPU stats
+              cpu: true
+              # Shows the aggregate memory stats
+              memory: true
+              # Shows a custom label
+              showLabel: true
+              label: "cluster"
+            nodes:
+              # Shows the clusters
+              show: true
+              # Shows the CPU for each node
+              cpu: true
+              # Shows the memory for each node
+              memory: true
+              # Shows the label, which is always the node name
+              showLabel: true
         - search:
             provider: google # google, duckduckgo, bing, baidu, brave or custom
             focus: false # Optional, will set focus to the search bar on page load
