@@ -1,5 +1,4 @@
 ---
-# homepage-values.yaml
 global:
   fallbackDefaults:
     storageClass: longhorn
