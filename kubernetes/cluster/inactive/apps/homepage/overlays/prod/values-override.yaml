@@ -10,14 +10,14 @@ ingress:
     enabled: true
     ingressClassName: tailscale
     hosts:
-      - host: homepage
+      - host: home
         paths:
           - path: "/"
             pathType: Prefix
     # drop this block if you don’t have cert-manager
     tls:
       - hosts:
-          - homepage
+          - home
 workload:
   main:
     podSpec:
