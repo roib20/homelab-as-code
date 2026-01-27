@@ -2,9 +2,9 @@
 # homepage-values.yaml
 global:
   fallbackDefaults:
-    storageClass: hostpath-csi
+    storageClass: longhorn
     pvcRetain: false
-    pvcSize: 53Gi
+    pvcSize: 1Gi
 ingress:
   main:
     enabled: true
