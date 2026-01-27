@@ -12,7 +12,7 @@ server:
       gethomepage.dev/name: Argo CD
       gethomepage.dev/widget.type: "argocd"
       gethomepage.dev/widget.url: "http://argocd-server.argocd.svc.cluster.local"
-      gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_ARGOCD_KEY}}"
+      gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_ARGOCD_KEY}}`}}"
     extraTls:
       - hosts:
           - "argocd.${FQDN_02}"
