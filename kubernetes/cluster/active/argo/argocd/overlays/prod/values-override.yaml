@@ -10,6 +10,9 @@ server:
       gethomepage.dev/group: Operations
       gethomepage.dev/icon: argo-cd.svg
       gethomepage.dev/name: Argo CD
+      gethomepage.dev/widget.type: "argocd"
+      gethomepage.dev/widget.url: "http://jellyfin.jellyfin.svc.cluster.local:8096"
+      gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_ARGOCD_KEY}}"
     extraTls:
       - hosts:
           - "argocd.${FQDN_02}"
