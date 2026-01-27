@@ -1,0 +1,14 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        kind: Deployment
+        name: homepage
+      fieldPaths:
+        - spec.template.spec.containers.[name=main].env.[name=HOMEPAGE_ALLOWED_HOSTS].value
+      options:
+        delimiter: "."
+        index: 1
