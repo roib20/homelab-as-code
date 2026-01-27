@@ -7,11 +7,11 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.17"
+      version = "~> 3.1"
     }
     local = {
       source  = "hashicorp/local"
-      version = "~> 2.5"
+      version = "~> 2.6"
     }
     time = {
       source  = "hashicorp/time"
