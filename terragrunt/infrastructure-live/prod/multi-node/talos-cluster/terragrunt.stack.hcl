@@ -38,15 +38,14 @@ locals {
       node_name   = local.node_names[0] # pve-node-01
     },
     {
-      name             = "control-plane-02"
-      ip               = "192.168.1.52"
-      vm_id            = 1002
-      cpu_cores        = 3
-      memory           = 10240
-      system_disk      = 100
-      data_disk        = 300
-      data_disk_serial = "longhorn-data"
-      node_name        = local.node_names[1] # pve-node-02
+      name        = "control-plane-02"
+      ip          = "192.168.1.52"
+      vm_id       = 1002
+      cpu_cores   = 3
+      memory      = 10240
+      system_disk = 100
+      data_disk   = 300
+      node_name   = local.node_names[1] # pve-node-02
     },
     {
       name        = "control-plane-03"

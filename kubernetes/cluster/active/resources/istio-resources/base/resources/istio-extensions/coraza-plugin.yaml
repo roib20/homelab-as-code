@@ -1,4 +1,24 @@
 ---
+# Coraza WAF - Web Application Firewall for Istio Ingress Gateway
+#
+# Uses OWASP Core Rule Set (CRS) to protect against common web attacks:
+# - SQL Injection (942xxx)
+# - Cross-Site Scripting (941xxx)
+# - Remote Code Execution (932xxx)
+# - Local File Inclusion (930xxx)
+# - And more...
+#
+# Rule Exclusions:
+# The following rules are disabled due to false positives in this environment:
+#
+# | Rule ID | Name                    | Reason                                          |
+# |---------|-------------------------|-------------------------------------------------|
+# | 911100  | Method Enforcement      | REST APIs need DELETE/PATCH (Jellyfin, Immich)  |
+# | 920274  | Invalid Header Chars    | Cloudflare cf-visitor and Envoy headers         |
+# | 920430  | HTTP Protocol Version   | Istio/Envoy uses HTTP/2 internally              |
+# | 930120  | OS File Access (LFI)    | ProfileImageHash contains .Profile (Jellyfin)   |
+# | 941160  | XSS HTML Injection      | SSO login form contains legitimate <form> tag   |
+#
 apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
 metadata:
@@ -15,6 +35,17 @@ spec:
         - SecRuleEngine On
         - Include @crs-setup-conf
         - Include @owasp_crs/*.conf
+        # --- Rule Exclusions ---
+        # 911100: Method enforcement - REST APIs need DELETE/PATCH/PUT
+        - SecRuleRemoveById 911100
+        # 920274: Invalid header chars - Cloudflare cf-visitor and Envoy headers
+        - SecRuleRemoveById 920274
+        # 920430: HTTP protocol version - Istio/Envoy uses HTTP/2 internally
+        - SecRuleRemoveById 920430
+        # 930120: LFI - matches legitimate field names like .Profile
+        - SecRuleRemoveById 930120
+        # 941160: XSS - matches legitimate HTML in forms
+        - SecRuleRemoveById 941160
   selector:
     matchLabels:
       app: istio-ingressgateway
