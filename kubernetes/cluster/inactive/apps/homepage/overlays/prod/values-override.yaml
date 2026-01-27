@@ -14,7 +14,6 @@ ingress:
         paths:
           - path: "/"
             pathType: Prefix
-    # drop this block if you don't have cert-manager
     tls:
       - hosts:
           - "home.${FQDN_02}"
@@ -24,5 +23,4 @@ workload:
       containers:
         main:
           env:
-            # Set this to your host (example: home.mydomain.com)
             HOMEPAGE_ALLOWED_HOSTS: "home.${FQDN_02}"
