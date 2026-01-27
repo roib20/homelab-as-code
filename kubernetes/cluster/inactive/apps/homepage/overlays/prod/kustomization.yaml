@@ -21,6 +21,6 @@ helmCharts:
 configMapGenerator:
   - name: env-vars
     envs:
-      - env-vars.env
+      - /tmp/env-vars.env
 replacements:
   - path: replacements.yaml
