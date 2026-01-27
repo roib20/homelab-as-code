@@ -3,6 +3,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+patches:
+  - path: patches/clusterrole-gateway-api.yaml
+    target:
+      kind: ClusterRole
+      name: homepage
 helmCharts:
   - name: homepage
     repo: oci://oci.trueforge.org/truecharts
