@@ -6,7 +6,8 @@ name: ${vol.name}
 volumeType: ${vol.volumeType}
 provisioning:
   diskSelector:
-    match: disk.name == "${vol.disk_name}" && disk.transport == "${vol.disk_transport}"
+    match: disk.transport == "${vol.disk_transport}"
+  maxSize: ${vol.max_size}
 %{ if vol.grow ~}
   grow: true
 %{ endif ~}

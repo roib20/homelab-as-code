@@ -1,0 +1,57 @@
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+%{ if machine_hostname != "" ~}
+hostname: ${machine_hostname}
+auto: off
+%{ else ~}
+auto: stable
+%{ endif ~}
+%{ if length(machine_nameservers) > 0 ~}
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+%{ for ns in machine_nameservers ~}
+    - address: ${ns}
+%{ endfor ~}
+%{ endif ~}
+%{ if length(machine_interfaces) > 0 ~}
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: int0
+selector:
+    match: true
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: int0
+up: true
+mtu: ${machine_interfaces[0].mtu}
+%{ if length(machine_interfaces[0].addresses) > 0 ~}
+addresses:
+%{ for addr in machine_interfaces[0].addresses ~}
+    - address: ${addr}
+%{ endfor ~}
+%{ endif ~}
+%{ if machine_interfaces[0].gateway != "" || length(machine_interfaces[0].routes) > 0 ~}
+routes:
+%{ if machine_interfaces[0].gateway != "" ~}
+    - gateway: ${machine_interfaces[0].gateway}
+%{ endif ~}
+%{ for route in machine_interfaces[0].routes ~}
+    - gateway: ${route.gateway}
+%{ if route.destination != "" ~}
+      destination: ${route.destination}
+%{ endif ~}
+%{ endfor ~}
+%{ endif ~}
+%{ endif ~}
+%{ if cluster_vip != "" && machine_type == "controlplane" ~}
+---
+apiVersion: v1alpha1
+kind: Layer2VIPConfig
+name: ${cluster_vip}
+link: int0
+%{ endif ~}

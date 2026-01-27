@@ -13,19 +13,42 @@ variable "talos_cluster_config" {
 variable "machines" {
   description = "A list of machines to create the talos cluster from."
   type = list(object({
-    talos_config      = string # https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/#Config.machine
-    extensions        = optional(list(string), [])
-    extra_kernel_args = optional(list(string), [])
-    secureboot        = optional(bool, false)
-    architecture      = optional(string, "amd64")
-    platform          = optional(string, "nocloud")
-    sbc               = optional(string, "")
+    talos_config = string # https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/#Config.machine
+    hostname     = string
+    primary_ip   = string
+    machine_interfaces = list(object({
+      addresses        = list(string)
+      gateway          = optional(string, "")
+      mtu              = optional(number, 1500)
+      dhcp_routeMetric = optional(number, 100)
+      routes = optional(list(object({
+        gateway     = string
+        destination = optional(string, "")
+      })), [])
+      vlans = optional(list(object({
+        vlanId           = number
+        addresses        = list(string)
+        dhcp_routeMetric = optional(number, 100)
+      })), [])
+    }))
+    machine_nameservers = optional(list(string), [])
+    extensions          = optional(list(string), [])
+    extra_kernel_args   = optional(list(string), [])
+    secureboot          = optional(bool, false)
+    architecture        = optional(string, "amd64")
+    platform            = optional(string, "nocloud")
+    sbc                 = optional(string, "")
   }))
 
   validation {
     condition     = length(var.machines) > 0
     error_message = "At least one machine must be provided."
   }
+}
+
+variable "cluster_vip" {
+  description = "The VIP to use for the Talos cluster. Applied to control plane nodes."
+  type        = string
 }
 
 variable "bootstrap_charts" {

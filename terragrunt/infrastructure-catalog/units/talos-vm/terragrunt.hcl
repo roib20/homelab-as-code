@@ -82,12 +82,21 @@ inputs = {
 
   disks = [
     {
+      # System disk
       interface    = "virtio0"
       file_id      = dependency.download_file.outputs.downloaded_file_id
       datastore_id = try(values.vm_datastore_id, "local-btrfs")
       iothread     = true
       discard      = "on"
-      size         = try(values.disk_size_gb, 64)
+      size         = try(values.system_disk, 100)
+    },
+    {
+      # Data disk for workloads
+      interface    = "virtio1"
+      datastore_id = try(values.vm_datastore_id, "local-btrfs")
+      iothread     = true
+      discard      = "on"
+      size         = try(values.data_disk, 300)
     },
   ]
 

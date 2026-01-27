@@ -1,12 +1,12 @@
 locals {
-  machines = { for v in var.machines : yamldecode(v.talos_config).network.hostname => v }
+  machines = { for v in var.machines : v.hostname => v }
 
   bootstrap_node     = [for k, v in local.machines : k if yamldecode(v.talos_config).type == "controlplane"][0]
-  bootstrap_endpoint = [for k, v in local.machines : split("/", yamldecode(v.talos_config).network.interfaces[0].addresses[0])[0] if yamldecode(v.talos_config).type == "controlplane"][0]
+  bootstrap_endpoint = [for k, v in local.machines : split("/", v.primary_ip)[0] if yamldecode(v.talos_config).type == "controlplane"][0]
 
   nodes            = [for k, v in local.machines : k]
-  node_ips         = [for k, v in local.machines : split("/", yamldecode(v.talos_config).network.interfaces[0].addresses[0])[0]]
-  controlplane_ips = [for k, v in local.machines : split("/", yamldecode(v.talos_config).network.interfaces[0].addresses[0])[0] if yamldecode(v.talos_config).type == "controlplane"]
+  node_ips         = [for k, v in local.machines : split("/", v.primary_ip)[0]]
+  controlplane_ips = [for k, v in local.machines : split("/", v.primary_ip)[0] if yamldecode(v.talos_config).type == "controlplane"]
 
   cluster_name     = try(yamldecode(var.talos_cluster_config).clusterName, "talos.local")
   cluster_endpoint = yamldecode(var.talos_cluster_config).controlPlane.endpoint
@@ -66,8 +66,8 @@ data "talos_machine_configuration" "this" {
       user_volumes = [
         {
           name           = "longhorn"
-          disk_name      = "vdb"
           disk_transport = "virtio"
+          max_size       = "300Gi"
           volumeType     = "partition"
           grow           = true
         }
@@ -76,11 +76,19 @@ data "talos_machine_configuration" "this" {
     templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
       extramounts = local.extramounts
     }),
+    templatefile("${path.module}/resources/talos-patches/network-configuration.yaml.tftpl", {
+      machine_hostname    = try(each.value.hostname, "")
+      machine_nameservers = each.value.machine_nameservers
+      machine_interfaces  = each.value.machine_interfaces
+      machine_type        = yamldecode(each.value.talos_config).type
+      cluster_vip         = var.cluster_vip
+    }),
     templatefile("${path.module}/resources/talos-patches/inline_manifests.yaml.tftpl", {
       type      = yamldecode(each.value.talos_config).type
       manifests = data.helm_template.bootstrap_charts
     }),
     templatefile("${path.module}/resources/talos-patches/talos_api.yaml.tftpl", {}),
+
     templatefile("${path.module}/resources/talos-patches/machine_hostdns.yaml.tftpl", {
       forwardKubeDNSToHost = false
     }),

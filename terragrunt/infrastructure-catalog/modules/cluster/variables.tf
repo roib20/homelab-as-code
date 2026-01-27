@@ -119,7 +119,13 @@ variable "machines" {
     })), [])
     interfaces = list(object({
       addresses        = list(string)
+      gateway          = optional(string, "")
+      mtu              = optional(number, 1500)
       dhcp_routeMetric = optional(number, 100)
+      routes = optional(list(object({
+        gateway     = string
+        destination = optional(string, "")
+      })), [])
       vlans = optional(list(object({
         vlanId           = number
         addresses        = list(string)

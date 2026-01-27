@@ -28,28 +28,35 @@ locals {
   # ─── Machines / IP layout ────────────────────────────────────────────────────
   controlplane_nodes = [
     {
-      name      = "control-plane-01"
-      ip        = "192.168.1.51"
-      vm_id     = 1001
-      cpu_cores = 3
-      memory    = 10240
-      node_name = local.node_names[0] # pve-node-01
+      name        = "control-plane-01"
+      ip          = "192.168.1.51"
+      vm_id       = 1001
+      cpu_cores   = 3
+      memory      = 10240
+      system_disk = 100
+      data_disk   = 300
+      node_name   = local.node_names[0] # pve-node-01
     },
     {
-      name      = "control-plane-02"
-      ip        = "192.168.1.52"
-      vm_id     = 1002
-      cpu_cores = 3
-      memory    = 10240
-      node_name = local.node_names[1] # pve-node-02
+      name             = "control-plane-02"
+      ip               = "192.168.1.52"
+      vm_id            = 1002
+      cpu_cores        = 3
+      memory           = 10240
+      system_disk      = 100
+      data_disk        = 300
+      data_disk_serial = "longhorn-data"
+      node_name        = local.node_names[1] # pve-node-02
     },
     {
-      name      = "control-plane-03"
-      ip        = "192.168.1.53"
-      vm_id     = 1003
-      cpu_cores = 3
-      memory    = 10240
-      node_name = local.node_names[2] # pve-node-03
+      name        = "control-plane-03"
+      ip          = "192.168.1.53"
+      vm_id       = 1003
+      cpu_cores   = 3
+      memory      = 10240
+      system_disk = 100
+      data_disk   = 300
+      node_name   = local.node_names[2] # pve-node-03
     },
   ]
 
@@ -77,7 +84,8 @@ locals {
       }
 
       interfaces = [{
-        addresses = [node.ip]
+        addresses = ["${node.ip}/24"]
+        gateway   = "192.168.1.1"
       }]
       hostname  = node.name
       vm_id     = node.vm_id
@@ -194,13 +202,14 @@ unit "$${local.controlplane_nodes[0].name}" {
     vm_name      = "${local.controlplane_nodes[0].name}"
     ipv4_address = "${local.controlplane_nodes[0].ip}"
 
-    hostname     = "${local.controlplane_nodes[0].name}"
-    vm_id        = "${local.controlplane_nodes[0].vm_id}"
-    region       = "${local.cluster_name}"
-    zone         = "${local.controlplane_nodes[0].node_name}"
-    cpu_cores    = "${local.controlplane_nodes[0].cpu_cores}"
-    memory       = "${local.controlplane_nodes[0].memory}"
-    disk_size_gb = 400
+    hostname    = "${local.controlplane_nodes[0].name}"
+    vm_id       = "${local.controlplane_nodes[0].vm_id}"
+    region      = "${local.cluster_name}"
+    zone        = "${local.controlplane_nodes[0].node_name}"
+    cpu_cores   = "${local.controlplane_nodes[0].cpu_cores}"
+    memory      = "${local.controlplane_nodes[0].memory}"
+    system_disk = "${local.controlplane_nodes[0].system_disk}"
+    data_disk   = "${local.controlplane_nodes[0].data_disk}"
 
     # PCI passthrough mapping for Intel GPU
     pci_mapping = "GPU_${local.controlplane_nodes[0].node_name}"
@@ -238,13 +247,14 @@ unit "$${local.controlplane_nodes[1].name}" {
     vm_name      = "${local.controlplane_nodes[1].name}"
     ipv4_address = "${local.controlplane_nodes[1].ip}"
 
-    hostname     = "${local.controlplane_nodes[1].name}"
-    vm_id        = "${local.controlplane_nodes[1].vm_id}"
-    region       = "${local.cluster_name}"
-    zone         = "${local.controlplane_nodes[1].node_name}"
-    cpu_cores    = "${local.controlplane_nodes[1].cpu_cores}"
-    memory       = "${local.controlplane_nodes[1].memory}"
-    disk_size_gb = 400
+    hostname    = "${local.controlplane_nodes[1].name}"
+    vm_id       = "${local.controlplane_nodes[1].vm_id}"
+    region      = "${local.cluster_name}"
+    zone        = "${local.controlplane_nodes[1].node_name}"
+    cpu_cores   = "${local.controlplane_nodes[1].cpu_cores}"
+    memory      = "${local.controlplane_nodes[1].memory}"
+    system_disk = "${local.controlplane_nodes[1].system_disk}"
+    data_disk   = "${local.controlplane_nodes[1].data_disk}"
 
     # PCI passthrough mapping for Intel GPU
     pci_mapping = "GPU_${local.controlplane_nodes[1].node_name}"
@@ -282,13 +292,14 @@ unit "$${local.controlplane_nodes[2].name}" {
     vm_name      = "${local.controlplane_nodes[2].name}"
     ipv4_address = "${local.controlplane_nodes[2].ip}"
 
-    hostname     = "${local.controlplane_nodes[2].name}"
-    vm_id        = "${local.controlplane_nodes[2].vm_id}"
-    region       = "${local.cluster_name}"
-    zone         = "${local.controlplane_nodes[2].node_name}"
-    cpu_cores    = "${local.controlplane_nodes[2].cpu_cores}"
-    memory       = "${local.controlplane_nodes[2].memory}"
-    disk_size_gb = 400
+    hostname    = "${local.controlplane_nodes[2].name}"
+    vm_id       = "${local.controlplane_nodes[2].vm_id}"
+    region      = "${local.cluster_name}"
+    zone        = "${local.controlplane_nodes[2].node_name}"
+    cpu_cores   = "${local.controlplane_nodes[2].cpu_cores}"
+    memory      = "${local.controlplane_nodes[2].memory}"
+    system_disk = "${local.controlplane_nodes[2].system_disk}"
+    data_disk   = "${local.controlplane_nodes[2].data_disk}"
 
     # PCI passthrough mapping for Intel GPU
     pci_mapping = "GPU_${local.controlplane_nodes[2].node_name}"
