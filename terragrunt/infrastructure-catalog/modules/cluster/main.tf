@@ -25,12 +25,16 @@ locals {
         machine_annotations = machine.annotations
         machine_files       = machine.files
       })
-      extensions        = machine.install.extensions
-      extra_kernel_args = machine.install.extra_kernel_args
-      secureboot        = machine.install.secureboot
-      architecture      = machine.install.architecture
-      platform          = machine.install.platform
-      sbc               = machine.install.sbc
+      hostname            = name
+      primary_ip          = try(machine.interfaces[0].addresses[0], "")
+      machine_interfaces  = machine.interfaces
+      machine_nameservers = var.nameservers
+      extensions          = machine.install.extensions
+      extra_kernel_args   = machine.install.extra_kernel_args
+      secureboot          = machine.install.secureboot
+      architecture        = machine.install.architecture
+      platform            = machine.install.platform
+      sbc                 = machine.install.sbc
     }
   ]
 
@@ -62,6 +66,7 @@ module "talos_cluster" {
   kubernetes_config_path = var.kubernetes_config_path
   talos_cluster_config   = local.talos_cluster_config
   machines               = local.machines
+  cluster_vip            = var.cluster_vip
   bootstrap_charts       = local.bootstrap_charts
   on_destroy             = var.cluster_on_destroy
   ts_authkey             = var.ts_authkey

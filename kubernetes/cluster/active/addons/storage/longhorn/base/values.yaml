@@ -1,6 +1,9 @@
 ---
+defaultSettings:
+  defaultDataLocality: best-effort
+  defaultDataPath: "/var/mnt/longhorn"
+persistence:
+  defaultDataLocality: best-effort
 preUpgradeChecker:
   # -- Setting that allows Longhorn to perform pre-upgrade checks. Disable this setting when installing Longhorn using Argo CD or other GitOps solutions.
   jobEnabled: false
-persistence:
-  defaultDataLocality: best-effort

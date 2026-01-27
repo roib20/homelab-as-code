@@ -1,0 +1,14 @@
+%{ for vol in user_volumes ~}
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: ${vol.name}
+volumeType: ${vol.volumeType}
+provisioning:
+  diskSelector:
+    match: disk.name == "${vol.disk_name}" && disk.transport == "${vol.disk_transport}"
+  maxSize: ${vol.max_size}
+%{ if vol.grow ~}
+  grow: true
+%{ endif ~}
+%{ endfor ~}

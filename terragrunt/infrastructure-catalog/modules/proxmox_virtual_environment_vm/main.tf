@@ -4,6 +4,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
     ignore_changes = [
       cdrom,
       disk,
+      boot_order,
     ]
   }
 

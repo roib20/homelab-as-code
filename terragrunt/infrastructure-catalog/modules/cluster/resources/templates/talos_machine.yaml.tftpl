@@ -3,43 +3,6 @@ kubelet:
   nodeIP:
     validSubnets:
       - ${cluster_node_subnet}
-network:
-  hostname: ${machine_hostname}
-  interfaces:
-%{ for interface in machine_interfaces ~}
-    - deviceSelector:
-        physical: true
-      addresses:
-%{ for address in interface.addresses ~}
-        - ${address}
-%{ endfor ~}
-      mtu: 1500
-      dhcp: true
-      dhcpOptions:
-        routeMetric: ${interface.dhcp_routeMetric}
-        ipv4: true
-%{ if cluster_vip != "" ~}
-%{ if machine_type == "controlplane" ~}
-      vip:
-        ip: ${cluster_vip}
-%{ endif ~}
-%{ endif ~}
-      vlans:
-%{ for vlan in interface.vlans ~}
-        - vlanId: ${vlan.vlanId}
-          addresses:
-%{ for ip in vlan.addresses ~}
-            - ${ip}
-%{ endfor ~}
-          dhcp: true
-          dhcpOptions:
-            routeMetric: ${vlan.dhcp_routeMetric}
-%{ endfor ~}
-%{ endfor ~}
-  nameservers:
-%{ for nameserver in machine_nameservers ~}
-    - ${nameserver}
-%{ endfor ~}
 time:
   servers:
 %{ for timeserver in machine_timeservers ~}
