@@ -4,12 +4,18 @@ server:
   ingress:
     enabled: true
     ingressClassName: tailscale
+    annotations:
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/description: Declarative, GitOps continuous delivery tool for Kubernetes.
+      gethomepage.dev/group: Operations
+      gethomepage.dev/icon: argo-cd.svg
+      gethomepage.dev/name: Argo CD
     extraTls:
       - hosts:
-          - argocd
+          - "argocd.${FQDN_02}"
   ingressGrpc:
     enabled: true
     ingressClassName: tailscale
     extraTls:
       - hosts:
-          - argocd-grpc
+          - "argocd-grpc.${FQDN_02}"
