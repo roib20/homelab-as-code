@@ -66,6 +66,7 @@ data "talos_machine_configuration" "this" {
       user_volumes = [
         {
           name           = "longhorn"
+          disk_name      = "vdb"
           disk_transport = "virtio"
           max_size       = "300Gi"
           volumeType     = "partition"
