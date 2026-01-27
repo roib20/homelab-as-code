@@ -6,6 +6,7 @@ locals {
     cluster_name           = var.cluster_name
     cluster_pod_subnet     = var.cluster_pod_subnet
     cluster_service_subnet = var.cluster_service_subnet
+    cluster_node_subnet    = var.cluster_node_subnet
     cluster_extraManifests = local.extraManifests
   })
 

@@ -9,6 +9,9 @@ network:
     - ${cluster_pod_subnet}
   serviceSubnets:
     - ${cluster_service_subnet}
+etcd:
+  advertisedSubnets:
+    - ${cluster_node_subnet}
 apiServer:
   disablePodSecurityPolicy: true
 proxy:
