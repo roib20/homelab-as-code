@@ -16,6 +16,11 @@ configmap:
         gateway: true # enable gateway-api
       services.yaml: |
         ---
+      settings.yaml: |
+        ---
+        providers:
+          longhorn:
+            url: http://longhorn-frontend.longhorn-system.svc.cluster.local
       widgets.yaml: |
         ---
         - resources:

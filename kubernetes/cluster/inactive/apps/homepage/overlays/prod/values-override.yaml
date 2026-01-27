@@ -23,4 +23,8 @@ workload:
       containers:
         main:
           env:
-            HOMEPAGE_ALLOWED_HOSTS: "home.${FQDN_02}"
+            HOMEPAGE_ALLOWED_HOSTS: "localhost,home.${FQDN_02}"
+          envFrom:
+            - secretRef:
+                name: homepage-secrets
+                expandObjectName: false
