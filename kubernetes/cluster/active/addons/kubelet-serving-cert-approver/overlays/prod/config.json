@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "kubelet-serving-cert-approver",
+  "destName": "in-cluster",
+  "destNamespace": "kubelet-serving-cert-approver",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "kubelet-serving-cert-approver"
+}
