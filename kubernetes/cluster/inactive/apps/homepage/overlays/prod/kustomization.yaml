@@ -1,0 +1,27 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - external-secrets
+patches:
+  - path: patches/clusterrole-gateway-api.yaml
+    target:
+      kind: ClusterRole
+      name: homepage
+helmCharts:
+  - name: homepage
+    repo: oci://oci.trueforge.org/truecharts
+    version: 11.18.6
+    releaseName: homepage
+    namespace: homepage
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+replacements:
+  - path: replacements.yaml

@@ -1,0 +1,29 @@
+---
+global:
+  fallbackDefaults:
+    storageClass: longhorn
+    pvcRetain: false
+    pvcSize: 1Gi
+ingress:
+  main:
+    enabled: true
+    ingressClassName: tailscale
+    hosts:
+      - host: "home.${FQDN_02}"
+        paths:
+          - path: "/"
+            pathType: Prefix
+    tls:
+      - hosts:
+          - "home.${FQDN_02}"
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          env:
+            HOMEPAGE_ALLOWED_HOSTS: "localhost,home.${FQDN_02}"
+          envFrom:
+            - secretRef:
+                name: homepage-secrets
+                expandObjectName: false

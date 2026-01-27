@@ -1,0 +1,25 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_02"
+  targets:
+    # Deployment container env var
+    - select:
+        kind: Deployment
+        name: homepage
+      fieldPaths:
+        - spec.template.spec.containers.[name=homepage].env.[name=HOMEPAGE_ALLOWED_HOSTS].value
+      options:
+        delimiter: "."
+        index: 1
+    # Ingress
+    - select:
+        kind: Ingress
+        name: homepage
+      fieldPaths:
+        - spec.rules.0.host
+        - spec.tls.0.hosts.0
+      options:
+        delimiter: "."
+        index: 1

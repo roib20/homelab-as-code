@@ -10,6 +10,20 @@
       fieldPaths:
         - spec.rules.0.host
 - source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_02"
+  targets:
+    - select:
+        kind: Ingress
+        name: argocd-server
+      fieldPaths:
+        - spec.rules.0.host
+        - spec.tls.0.hosts.0
+      options:
+        delimiter: "."
+        index: 1
+- source:
     kind: Ingress
     name: argocd-server-grpc
     fieldPath: spec.tls.0.hosts.0
@@ -19,6 +33,20 @@
         name: argocd-server-grpc
       fieldPaths:
         - spec.rules.0.host
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_02"
+  targets:
+    - select:
+        kind: Ingress
+        name: argocd-server-grpc
+      fieldPaths:
+        - spec.rules.0.host
+        - spec.tls.0.hosts.0
+      options:
+        delimiter: "."
+        index: 1
 - source:
     kind: ConfigMap
     name: env-vars
