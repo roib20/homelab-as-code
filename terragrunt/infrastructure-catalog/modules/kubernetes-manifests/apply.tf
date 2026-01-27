@@ -27,7 +27,7 @@ resource "kubernetes_manifest" "apply" {
   # }
 }
 
-resource "kubernetes_secret" "apply" {
+resource "kubernetes_secret_v1" "apply" {
   # Render secret templates inside the resource so state stores only the final object
   for_each = {
     for path in local.secret_files :
