@@ -25,4 +25,4 @@ workload:
         main:
           env:
             # Set this to your host (example: home.mydomain.com)
-            HOMEPAGE_ALLOWED_HOSTS: "home.${FQDN_01}"
+            HOMEPAGE_ALLOWED_HOSTS: "home.${FQDN_02}"
