@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "homepage",
+  "destName": "in-cluster",
+  "destNamespace": "homepage",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "homepage"
+}
