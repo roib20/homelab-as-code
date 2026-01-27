@@ -8,7 +8,7 @@
         kind: Deployment
         name: homepage
       fieldPaths:
-        - spec.template.spec.containers.[name=main].env.[name=HOMEPAGE_ALLOWED_HOSTS].value
+        - spec.template.spec.containers.[name=homepage].env.[name=HOMEPAGE_ALLOWED_HOSTS].value
       options:
         delimiter: "."
         index: 1
