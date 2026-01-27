@@ -1,0 +1,77 @@
+---
+name: Container Command Runner
+
+env:
+  REGISTRY: ghcr.io
+
+"on":
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "Command to run in the homelab-as-code container"
+        required: true
+        default: "task --list"
+        type: string
+      working_directory:
+        description: "Working directory (relative to /homelab-as-code)"
+        required: false
+        default: "."
+        type: string
+      timeout_minutes:
+        description: "Timeout in minutes"
+        required: false
+        default: "30"
+        type: string
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  run-command:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Container Registry
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+          version: latest
+          use-cache: "true"
+          args: "--accept-dns=true"
+
+      # - name: Run command in container
+      #   uses: docker://ghcr.io/roib20/homelab-as-code-runner:latest
+      #   with:
+      #     entrypoint: bash
+      #     args: -c "cd ${{ inputs.working_directory }} && ${{ inputs.command }}"
+
+      - name: Allow unprivileged ping
+        run: sudo sysctl -w 'net.ipv4.ping_group_range=0 2147483647'
+
+      - name: Run command in container
+        run: |
+          podman run --rm \
+            --cap-add=NET_RAW \
+            --dns 100.100.100.100 \
+            --volume "${GITHUB_WORKSPACE}:/homelab-as-code:rw,U" \
+            --user "$(id -u):$(id -g)" \
+            --workdir "/homelab-as-code" \
+            ghcr.io/roib20/homelab-as-code-runner:latest \
+            bash -c "cd ${{ inputs.working_directory }} && ${{ inputs.command }}"
+
+      - name: Restore ownership
+        if: always()
+        run: sudo chown -R "$(id -u):$(id -g)" "${GITHUB_WORKSPACE}"
