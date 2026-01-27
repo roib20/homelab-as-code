@@ -5,4 +5,3 @@ resources:
   - ../../base
   - resources/cluster_issuers/letsencrypt-prod.yaml
   - resources/cluster_issuers/letsencrypt-staging.yaml
-  # - certificates/domain.yaml
