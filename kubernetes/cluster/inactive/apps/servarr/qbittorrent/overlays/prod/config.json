@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "qbittorrent",
+  "destName": "in-cluster",
+  "destNamespace": "media",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "qbittorrent"
+}

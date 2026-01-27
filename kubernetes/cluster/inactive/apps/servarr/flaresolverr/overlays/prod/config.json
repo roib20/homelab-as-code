@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "flaresolverr",
+  "destName": "in-cluster",
+  "destNamespace": "media",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "flaresolverr"
+}

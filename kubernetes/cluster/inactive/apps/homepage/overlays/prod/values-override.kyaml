@@ -1,0 +1,43 @@
+---
+{
+  # homepage-values.yaml
+  global: {
+    fallbackDefaults: {
+      storageClass: "hostpath-csi",
+      pvcRetain: false,
+      pvcSize: "53Gi",
+    },
+  },
+  ingress: {
+    main: {
+      enabled: true,
+      ingressClassName: "tailscale",
+      hosts: [{
+        host: "homepage",
+        paths: [{
+          path: "/",
+          pathType: "Prefix",
+        }],
+      }],
+      tls: [{
+        hosts: [
+          "homepage",
+        ],
+      }], # drop this block if you don’t have cert-manager
+    },
+  },
+  workload: {
+    main: {
+      podSpec: {
+        containers: {
+          main: {
+            env: {
+              # Set this to your host (example: home.mydomain.com)
+              HOMEPAGE_ALLOWED_HOSTS: "home.${FQDN_01}"
+            },
+          },
+        },
+      },
+    },
+  },
+}
