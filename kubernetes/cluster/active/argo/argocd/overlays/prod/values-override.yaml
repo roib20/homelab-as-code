@@ -22,3 +22,9 @@ server:
     extraTls:
       - hosts:
           - "argocd-grpc.${FQDN_02}"
+# API Key for Homepage widget: https://gethomepage.dev/widgets/services/argocd/
+configs:
+  cm:
+    accounts.readonly: apiKey
+  rbac:
+    policy.csv: "g, readonly, role:readonly"
