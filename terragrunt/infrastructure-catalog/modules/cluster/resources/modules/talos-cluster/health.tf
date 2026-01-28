@@ -8,7 +8,7 @@ resource "terraform_data" "talos_cluster_health" {
   }
 
   provisioner "local-exec" {
-    command = "talosctl --talosconfig $TALOSCONFIG health --nodes $NODE --wait-timeout $TIMEOUT"
+    command = "talosctl --talosconfig \"$${TALOSCONFIG}\" health --nodes \"$${NODE}\" --wait-timeout \"$${TIMEOUT}\""
 
     environment = {
       TALOSCONFIG = pathexpand("${var.talos_config_path}/config")
