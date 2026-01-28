@@ -87,12 +87,13 @@ locals {
         addresses = ["${node.ip}/24"]
         gateway   = "192.168.1.1"
       }]
-      hostname  = node.name
-      vm_id     = node.vm_id
-      region    = "${local.cluster_name}"
-      zone      = node.node_name
-      cpu_cores = node.cpu_cores
-      memory    = node.memory
+      primary_ip = node.ip
+      hostname   = node.name
+      vm_id      = node.vm_id
+      region     = "${local.cluster_name}"
+      zone       = node.node_name
+      cpu_cores  = node.cpu_cores
+      memory     = node.memory
     }
   }
 
