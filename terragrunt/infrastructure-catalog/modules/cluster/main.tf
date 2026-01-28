@@ -26,8 +26,15 @@ locals {
         machine_annotations = machine.annotations
         machine_files       = machine.files
       })
-      hostname            = name
-      primary_ip          = try(machine.interfaces[0].addresses[0], "")
+      hostname = name
+      primary_ip = try(
+        [
+          for address in machine.interfaces[0].addresses : address
+          if can(cidrcontains(var.cluster_node_subnet, split("/", address)[0]))
+          && cidrcontains(var.cluster_node_subnet, split("/", address)[0])
+        ][0],
+        try(machine.interfaces[0].addresses[0], "")
+      )
       machine_interfaces  = machine.interfaces
       machine_nameservers = var.nameservers
       extensions          = machine.install.extensions
