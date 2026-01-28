@@ -43,13 +43,15 @@ resource "talos_image_factory_schematic" "machine_schematic" {
   schematic = yamlencode(
     {
       customization = {
+        extraKernelArgs = concat(each.value.extra_kernel_args)
         systemExtensions = {
           officialExtensions = try(data.talos_image_factory_extensions_versions.machine_version[each.key].extensions_info[*].name, [])
         }
-        extraKernelArgs = concat(each.value.extra_kernel_args)
         secureboot = {
-          enabled = each.value.secureboot
+          enabled                      = each.value.secureboot
+          includeWellKnownCertificates = true
         }
+        bootloader = "sd-boot"
       }
     }
   )

@@ -11,3 +11,6 @@ customization:
       - siderolabs/qemu-guest-agent
       - siderolabs/tailscale
       - siderolabs/util-linux-tools
+  secureboot:
+    includeWellKnownCertificates: true
+  bootloader: sd-boot
