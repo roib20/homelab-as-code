@@ -1,5 +1,7 @@
 ---
 customization:
+  extraKernelArgs:
+    - console=ttyS0
   systemExtensions:
     officialExtensions:
       - siderolabs/i915

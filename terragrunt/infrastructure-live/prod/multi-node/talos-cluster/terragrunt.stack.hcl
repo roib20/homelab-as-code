@@ -69,8 +69,9 @@ locals {
       type = contains(local.controlplane_nodes, node) ? "controlplane" : "worker"
 
       install = {
-        disk       = "/dev/vda"
-        secureboot = true
+        disk              = "/dev/vda"
+        secureboot        = true
+        extra_kernel_args = ["console=ttyS0"]
         extensions = [
           "siderolabs/i915",
           "siderolabs/intel-ucode",
