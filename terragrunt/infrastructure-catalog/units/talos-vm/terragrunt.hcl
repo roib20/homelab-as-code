@@ -59,8 +59,14 @@ inputs = {
 
   # Display - Serial console (works alongside GPU passthrough)
   vga = {
-    type = "serial1"
+    type = "serial0"
   }
+
+  serial_devices = [
+    {
+      device = "socket"
+    },
+  ]
 
   # Networking
   network_devices = [

@@ -132,6 +132,7 @@ variable "machines" {
         dhcp_routeMetric = optional(number, 100)
       })), [])
     }))
+    primary_ip = optional(string, "")
   }))
 }
 

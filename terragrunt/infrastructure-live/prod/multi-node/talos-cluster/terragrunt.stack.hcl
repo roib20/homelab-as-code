@@ -69,8 +69,9 @@ locals {
       type = contains(local.controlplane_nodes, node) ? "controlplane" : "worker"
 
       install = {
-        disk       = "/dev/vda"
-        secureboot = true
+        disk              = "/dev/vda"
+        secureboot        = true
+        extra_kernel_args = ["console=ttyS0"]
         extensions = [
           "siderolabs/i915",
           "siderolabs/intel-ucode",
@@ -86,12 +87,13 @@ locals {
         addresses = ["${node.ip}/24"]
         gateway   = "192.168.1.1"
       }]
-      hostname  = node.name
-      vm_id     = node.vm_id
-      region    = "${local.cluster_name}"
-      zone      = node.node_name
-      cpu_cores = node.cpu_cores
-      memory    = node.memory
+      primary_ip = node.ip
+      hostname   = node.name
+      vm_id      = node.vm_id
+      region     = "${local.cluster_name}"
+      zone       = node.node_name
+      cpu_cores  = node.cpu_cores
+      memory     = node.memory
     }
   }
 
