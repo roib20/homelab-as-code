@@ -1,0 +1,9 @@
+---
+ingress:
+  enabled: true
+  ingressClassName: tailscale
+  host: "renovate.${FQDN_02}"
+  tls:
+    - hosts:
+        - "renovate.${FQDN_02}"
+  annotations: {}

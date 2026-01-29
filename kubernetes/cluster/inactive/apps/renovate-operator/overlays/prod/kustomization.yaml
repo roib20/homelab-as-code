@@ -4,12 +4,18 @@ kind: Kustomization
 resources:
   - ../../base
 helmCharts:
-  - name: renovate
-    repo: oci://ghcr.io/renovatebot/charts
-    version: 45.74.3
-    releaseName: renovate
+  - name: renovate-operator
+    repo: oci://ghcr.io/mogenius/helm-charts
+    version: 2.0.2
+    releaseName: renovate-operator
     namespace: renovate
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+replacements:
+  - path: replacements.yaml
