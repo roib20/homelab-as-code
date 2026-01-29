@@ -1,0 +1,14 @@
+---
+# hostpath-provisioner-operator: https://github.com/kubevirt/hostpath-provisioner-operator
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - https://raw.githubusercontent.com/kubevirt/hostpath-provisioner-operator/v0.24.0/deploy/namespace.yaml
+  - https://raw.githubusercontent.com/kubevirt/hostpath-provisioner-operator/v0.24.0/deploy/webhook.yaml
+  - https://raw.githubusercontent.com/kubevirt/hostpath-provisioner-operator/v0.24.0/deploy/operator.yaml
+  - https://raw.githubusercontent.com/kubevirt/hostpath-provisioner-operator/v0.24.0/deploy/hostpathprovisioner_cr.yaml
+  - https://raw.githubusercontent.com/kubevirt/hostpath-provisioner-operator/v0.24.0/deploy/storageclass-wffc-csi.yaml
+patches:
+  - path: patches/namespace.yaml
+  - path: patches/tls-crypto-configuration.yaml
+  - path: patches/storageclass.yaml

@@ -1,0 +1,16 @@
+---
+# TLS Crypto Configuration: https://github.com/kubevirt/hostpath-provisioner-operator?tab=readme-ov-file#tls-crypto-configuration
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hostpath-provisioner-operator
+spec:
+  template:
+    spec:
+      containers:
+        - name: hostpath-provisioner-operator
+          env:
+            - name: TLS_CIPHERS_OVERRIDE
+              value: TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256
+            - name: TLS_MIN_VERSION_OVERRIDE
+              value: VersionTLS13
