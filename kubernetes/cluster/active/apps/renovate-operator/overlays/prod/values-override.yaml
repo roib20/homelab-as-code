@@ -6,4 +6,9 @@ ingress:
   tls:
     - hosts:
         - "renovate.${FQDN_02}"
-  annotations: {}
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Operator to streamline renovate executions in Kubernetes.
+    gethomepage.dev/group: Operations
+    gethomepage.dev/icon: mend-renovate.svg
+    gethomepage.dev/name: Renovate Operator
