@@ -11,7 +11,7 @@ server:
       gethomepage.dev/icon: argo-cd.svg
       gethomepage.dev/name: Argo CD
       gethomepage.dev/widget.type: "argocd"
-      gethomepage.dev/widget.url: "http://argocd-server.argocd.svc.cluster.local"
+      gethomepage.dev/widget.url: "https://argocd-server.argocd.svc.cluster.local"
       gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_ARGOCD_KEY}}`}}"
     extraTls:
       - hosts:

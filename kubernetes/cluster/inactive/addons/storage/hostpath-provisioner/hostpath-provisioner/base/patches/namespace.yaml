@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hostpath-provisioner
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
