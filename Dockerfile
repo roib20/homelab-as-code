@@ -38,7 +38,7 @@ RUN STATIC=1 ./configure --bindir="/usr/local/bin" && make && make install
 
 # Stage 2: Build task-ui
 FROM golang:${GO_VERSION}-alpine AS task-ui
-COPY --link --from=ttyrec "/usr/local/bin/tty*" "/usr/local/bin/"
+COPY --link --from=ttyrec /usr/local/bin/tty* "/usr/local/bin/"
 RUN GOBIN="/usr/local/bin" CGO_ENABLED=0 go install github.com/titpetric/task-ui@latest
 
 # Stage 3: Extract tofu binary
@@ -271,7 +271,7 @@ USER root
 
 # Copy task-ui and ttyrec from build stages
 COPY --link --from=task-ui "/usr/local/bin/task-ui" "/usr/local/bin/"
-COPY --link --from=ttyrec "/usr/local/bin/tty*" "/usr/local/bin/"
+COPY --link --from=ttyrec /usr/local/bin/tty* "/usr/local/bin/"
 
 # Create wrapper script that flattens Taskfile.yml for task-ui
 ENV TASK_UI_WRAPPER_PATH="/usr/local/bin/task-ui-wrapper"
