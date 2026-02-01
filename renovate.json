@@ -24,9 +24,12 @@
       ]
     }
   ],
+  "dependencyDashboard": true,
+  "dependencyDashboardApproval": true,
   "extends": [
     "config:recommended",
-    "customManagers:dockerfileVersions"
+    "customManagers:dockerfileVersions",
+    ":disableRateLimiting"
   ],
   "packageRules": [
     {
