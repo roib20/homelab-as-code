@@ -12,7 +12,7 @@ ARG KUSTOMIZE_VERSION=5.7.0
 ARG JQ_VERSION=1.8.1
 ARG PYTHON_VERSION=3.13
 ARG GO_VERSION=1.24
-ARG TTYREC_VERSION=v1.1.7.1
+ARG TTYREC_VERSION=1.1.7.1
 ARG CURL_FLAGS="-sSL --proto '=https' --tlsv1.3 --ciphers 'HIGH:!aNULL:!MD5' --cacert /etc/ssl/certs/ca-certificates.crt --capath /etc/ssl/certs --compressed"
 
 # Stage 1: Build ovh-ttyrec
@@ -20,7 +20,7 @@ FROM alpine:${ALPINE_VERSION} AS ttyrec
 ARG TTYREC_VERSION
 WORKDIR /tmp
 RUN apk --no-cache add build-base git
-RUN git clone --branch ${TTYREC_VERSION} --depth 1 https://github.com/ovh/ovh-ttyrec.git
+RUN git clone --branch v${TTYREC_VERSION} --depth 1 https://github.com/ovh/ovh-ttyrec.git
 WORKDIR /tmp/ovh-ttyrec
 RUN STATIC=1 ./configure --bindir=/usr/local/bin && make && make install
 
