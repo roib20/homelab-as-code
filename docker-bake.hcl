@@ -54,6 +54,8 @@ target "base" {
     KUSTOMIZE_VERSION  = "${kustomize}"
     JQ_VERSION         = "${jq}"
     PYTHON_VERSION     = "${python}"
+    GO_VERSION         = "${go}"
+    TTYREC_VERSION     = "${ttyrec}"
   }
 
   tags = [
