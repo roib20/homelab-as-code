@@ -2,7 +2,7 @@
 
 # Global build arguments
 # renovate: datasource=docker depName=alpine
-ARG ALPINE_VERSION=3.22
+ARG ALPINE_VERSION=3.23
 # renovate: datasource=docker depName=ghcr.io/opentofu/opentofu
 ARG TOFU_VERSION=1.11.4
 # renovate: datasource=github-releases depName=gruntwork-io/terragrunt
