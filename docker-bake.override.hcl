@@ -22,4 +22,4 @@ python = "3.13"
 # renovate: datasource=docker depName=golang
 go = "1.24"
 # renovate: datasource=github-releases depName=ovh/ovh-ttyrec
-ttyrec = "v1.1.7.1"
+ttyrec = "1.1.7.1"
