@@ -201,9 +201,8 @@ FROM ansible AS ansible-requirements
 # Bring in ansible-galaxy requirements file
 COPY --link ansible/galaxy-requirements.yml /requirements.yml
 
-# Install runtime dependencies
-RUN apk add --no-cache openssh-client sshpass ca-certificates less bash \
-    && ansible-galaxy install -r "requirements.yml" --force
+# Install Ansible requirements
+RUN ansible-galaxy install -r "requirements.yml" --force
 
 # Use venv for Ansible
 ENV VIRTUAL_ENV=/opt/venv
