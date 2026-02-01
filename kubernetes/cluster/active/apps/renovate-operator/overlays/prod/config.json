@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "renovate-operator",
+  "destName": "in-cluster",
+  "destNamespace": "renovate",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "renovate-operator"
+}

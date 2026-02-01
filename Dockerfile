@@ -1,34 +1,45 @@
 # syntax=docker/dockerfile:1
 
 # Global build arguments
+# renovate: datasource=docker depName=alpine
 ARG ALPINE_VERSION=3.22
+# renovate: datasource=docker depName=ghcr.io/opentofu/opentofu
 ARG TOFU_VERSION=1.11.2
+# renovate: datasource=github-releases depName=gruntwork-io/terragrunt
 ARG TERRAGRUNT_VERSION=0.97.2
+# renovate: datasource=github-releases depName=go-task/task
 ARG TASK_VERSION=3.44.0
+# renovate: datasource=github-releases depName=siderolabs/talos
 ARG TALOS_VERSION=1.12.2
-ARG YQ_VERSION=4.45.4
+# renovate: datasource=github-releases depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=1.35.0
+# renovate: datasource=github-releases depName=helm/helm
 ARG HELM_VERSION=3.14.2
+# renovate: datasource=github-releases depName=kubernetes-sigs/kustomize
 ARG KUSTOMIZE_VERSION=5.7.0
+# renovate: datasource=github-releases depName=jqlang/jq
 ARG JQ_VERSION=1.8.1
+# renovate: datasource=docker depName=python
 ARG PYTHON_VERSION=3.13
+# renovate: datasource=docker depName=golang
 ARG GO_VERSION=1.24
-ARG TTYREC_VERSION=v1.1.7.1
+# renovate: datasource=github-releases depName=ovh/ovh-ttyrec
+ARG TTYREC_VERSION=1.1.7.1
 ARG CURL_FLAGS="-sSL --proto '=https' --tlsv1.3 --ciphers 'HIGH:!aNULL:!MD5' --cacert /etc/ssl/certs/ca-certificates.crt --capath /etc/ssl/certs --compressed"
 
 # Stage 1: Build ovh-ttyrec
 FROM alpine:${ALPINE_VERSION} AS ttyrec
 ARG TTYREC_VERSION
-WORKDIR /tmp
+WORKDIR "/tmp"
 RUN apk --no-cache add build-base git
-RUN git clone --branch ${TTYREC_VERSION} --depth 1 https://github.com/ovh/ovh-ttyrec.git
-WORKDIR /tmp/ovh-ttyrec
-RUN STATIC=1 ./configure --bindir=/usr/local/bin && make && make install
+RUN git clone --branch "v${TTYREC_VERSION}" --depth 1 "https://github.com/ovh/ovh-ttyrec.git"
+WORKDIR "/tmp/ovh-ttyrec"
+RUN STATIC=1 ./configure --bindir="/usr/local/bin" && make && make install
 
 # Stage 2: Build task-ui
 FROM golang:${GO_VERSION}-alpine AS task-ui
-COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
-RUN GOBIN=/usr/local/bin CGO_ENABLED=0 go install github.com/titpetric/task-ui@latest
+COPY --link --from=ttyrec /usr/local/bin/tty* "/usr/local/bin/"
+RUN GOBIN="/usr/local/bin" CGO_ENABLED=0 go install github.com/titpetric/task-ui@latest
 
 # Stage 3: Extract tofu binary
 FROM ghcr.io/opentofu/opentofu:${TOFU_VERSION}-minimal AS tofu
@@ -39,8 +50,8 @@ ARG CURL_FLAGS
 RUN apk add --no-cache curl
 
 # ----- generic download / verify / (optionally) extract helper -----
-RUN cat <<'EOF' >/usr/local/bin/dl-verify && \
-chmod +x /usr/local/bin/dl-verify
+RUN cat <<'EOF' >"/usr/local/bin/dl-verify" && \
+chmod +x "/usr/local/bin/dl-verify"
 #!/bin/sh
 # dl-verify URL FILE CHECKSUM_URL [DEST=/usr/local/bin]
 set -eu
@@ -48,33 +59,35 @@ set -eu
 url="${1}"                 # full URL to download
 file="${2}"                # filename to download and compare to checksum
 checksum_url="${3}"        # URL of SHA256 checksum file
-install_name="${4:-$(basename "$file")}"         # optional rename
-checksum_hash=$(printf '%s' "${5:-sha256}"| tr '[:upper:]' '[:lower:]')
+install_name="${4:-$(basename "${file}")}"         # optional rename
+checksum_hash="$(printf '%s' "${5:-sha256}" | tr '[:upper:]' '[:lower:]')"
 dest="/usr/local/bin"         # fixed destination
 
 tmp_dir="$(mktemp -d)"
-cleanup() { rm -rf "$tmp_dir"; }
+cleanup() { rm -rf "${tmp_dir}"; }
 trap cleanup EXIT INT TERM
 
-curl ${CURL_FLAGS:-"-sSL"} -o "$tmp_dir/$file" "$url"
-curl ${CURL_FLAGS:-"-sSL"} -o "$tmp_dir/${checksum_hash}sum.txt" "$checksum_url"
+set -- ${CURL_FLAGS:-"-sSL --proto '=https' --tlsv1.3 --ciphers 'HIGH:!aNULL:!MD5' --cacert /etc/ssl/certs/ca-certificates.crt --capath /etc/ssl/certs --compressed"}
+curl "$@" -o "${tmp_dir}/${file}" "${url}"
+curl "$@" -o "${tmp_dir}/${checksum_hash}sum.txt" "${checksum_url}"
 
-CHECKSUM="$(${checksum_hash}sum "$tmp_dir/$file" | awk '{print $1}')"
-EXPECTED_CHECKSUM="$(grep -E "[[:space:]]+$file$" "$tmp_dir/${checksum_hash}sum.txt" | awk '{print $1}')"
+CHECKSUM="$("${checksum_hash}sum" "${tmp_dir}/${file}" | awk '{print $1}')"
+EXPECTED_CHECKSUM="$(grep -E "[[:space:]]+${file}$" "${tmp_dir}/${checksum_hash}sum.txt" | awk '{print $1}')"
 if [ -z "${EXPECTED_CHECKSUM}" ]; then
-  EXPECTED_CHECKSUM="$(awk '{print $1; exit}' "$tmp_dir/${checksum_hash}sum.txt")"
+  EXPECTED_CHECKSUM="$(awk '{print $1; exit}' "${tmp_dir}/${checksum_hash}sum.txt")"
 fi
-[ "$CHECKSUM" = "$EXPECTED_CHECKSUM" ] || { echo "Checksum mismatch for $file" >&2; exit 1; }
+[ "${CHECKSUM}" = "${EXPECTED_CHECKSUM}" ] || { echo "Checksum mismatch for ${file}" >&2; exit 1; }
 
-case "$file" in
+case "${file}" in
   *.tar.gz|*.tgz)
-      tar -xzf "$tmp_dir/$file" -C "$dest"
+      tar -xzf "${tmp_dir}/${file}" -C "${dest}"
       ;;
   *)
-      install -m 0755 "$tmp_dir/$file" "$dest/$install_name"
+      install -m 0755 "${tmp_dir}/${file}" "${dest}/${install_name}"
       ;;
 esac
-chmod +x "$dest/"*
+chmod +x "${dest}/"*
+
 EOF
 
 FROM downloader AS terragrunt
@@ -92,7 +105,7 @@ RUN dl-verify \
 
 # Make terragrunt stage usable as standalone container
 RUN apk add --no-cache ca-certificates bash
-COPY --link --from=tofu /usr/local/bin/tofu /usr/local/bin/
+COPY --link --from=tofu "/usr/local/bin/tofu" "/usr/local/bin/"
 ENTRYPOINT ["/bin/bash"]
 
 FROM downloader AS go-task
@@ -152,7 +165,7 @@ RUN dl-verify \
       "${FILE}" \
       "${URL}/${CHECKSUM_FILE}" \
       helm \
-    && mv "/usr/local/bin/${TARGETOS}-${TARGETARCH}/helm" /usr/local/bin/helm && \
+    && mv "/usr/local/bin/${TARGETOS}-${TARGETARCH}/helm" "/usr/local/bin/helm" && \
     rm -r "/usr/local/bin/${TARGETOS}-${TARGETARCH}"
 
 FROM downloader AS kustomize
@@ -182,51 +195,50 @@ RUN dl-verify \
 
 # Make kubectl stage usable as standalone container with helm and kustomize
 RUN apk add --no-cache ca-certificates bash
-COPY --link --from=helm /usr/local/bin/helm /usr/local/bin/
-COPY --link --from=kustomize /usr/local/bin/kustomize /usr/local/bin/
+COPY --link --from=helm "/usr/local/bin/helm" "/usr/local/bin/"
+COPY --link --from=kustomize "/usr/local/bin/kustomize" "/usr/local/bin/"
 ENTRYPOINT ["/bin/bash"]
 
 # Stage 5: Build Ansible in a venv
 FROM python:${PYTHON_VERSION}-alpine AS ansible
-ENV VIRTUAL_ENV=/opt/venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV VIRTUAL_ENV="/opt/venv"
+ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 
 # Bring in pip requirements file
-COPY --link ansible/pip-requirements.txt /requirements.txt
+COPY --link "ansible/pip-requirements.txt" "/requirements.txt"
 RUN \
-    python3 -m venv $VIRTUAL_ENV \
+    python3 -m venv "${VIRTUAL_ENV}" \
     && pip install --upgrade pip \
-    && pip install --no-cache-dir -r "requirements.txt"
+    && pip install --no-cache-dir -r "/requirements.txt"
 
 FROM ansible AS ansible-requirements
 # Bring in ansible-galaxy requirements file
-COPY --link ansible/galaxy-requirements.yml /requirements.yml
+COPY --link "ansible/galaxy-requirements.yml" "/requirements.yml"
 
-# Install runtime dependencies
-RUN apk add --no-cache openssh-client sshpass ca-certificates less bash \
-    && ansible-galaxy install -r "requirements.yml" --force
+# Install Ansible requirements
+RUN ansible-galaxy install -r "/requirements.yml" --force
 
 # Use venv for Ansible
-ENV VIRTUAL_ENV=/opt/venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV VIRTUAL_ENV="/opt/venv"
+ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 ENTRYPOINT ["/bin/bash"]
 
 # Stage 6: Runtime base image
 FROM python:${PYTHON_VERSION}-alpine AS runtime
-ENV VIRTUAL_ENV=/opt/venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV VIRTUAL_ENV="/opt/venv"
+ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 
 # Copy venv and pre-built binaries
-COPY --link --from=tofu /usr/local/bin/tofu /usr/local/bin/
-COPY --link --from=terragrunt /usr/local/bin/terragrunt /usr/local/bin/
-COPY --link --from=go-task /usr/local/bin/task /usr/local/bin/
-COPY --link --from=jq /usr/local/bin/jq /usr/local/bin/
-COPY --link --from=talosctl /usr/local/bin/talosctl /usr/local/bin/
-COPY --link --from=kubectl /usr/local/bin/kubectl /usr/local/bin/
-COPY --link --from=helm /usr/local/bin/helm /usr/local/bin/
-COPY --link --from=kustomize /usr/local/bin/kustomize /usr/local/bin/
-COPY --link --from=ansible $VIRTUAL_ENV $VIRTUAL_ENV
-COPY --link --from=ansible-requirements /root/.ansible /home/runner/.ansible
+COPY --link --from=tofu "/usr/local/bin/tofu" "/usr/local/bin/"
+COPY --link --from=terragrunt "/usr/local/bin/terragrunt" "/usr/local/bin/"
+COPY --link --from=go-task "/usr/local/bin/task" "/usr/local/bin/"
+COPY --link --from=jq "/usr/local/bin/jq" "/usr/local/bin/"
+COPY --link --from=talosctl "/usr/local/bin/talosctl" "/usr/local/bin/"
+COPY --link --from=kubectl "/usr/local/bin/kubectl" "/usr/local/bin/"
+COPY --link --from=helm "/usr/local/bin/helm" "/usr/local/bin/"
+COPY --link --from=kustomize "/usr/local/bin/kustomize" "/usr/local/bin/"
+COPY --link --from=ansible "${VIRTUAL_ENV}" "${VIRTUAL_ENV}"
+COPY --link --from=ansible-requirements "/root/.ansible" "/home/runner/.ansible"
 
 # Install only runtime dependencies
 RUN apk add --no-cache \
@@ -238,7 +250,7 @@ RUN apk add --no-cache \
         git
 
 # Set rootless permissions
-WORKDIR /homelab-as-code
+WORKDIR "/homelab-as-code"
 ENV USER="runner"
 ENV LOGNAME="${USER}"
 ENV HOME="/home/${USER}"
@@ -258,32 +270,32 @@ FROM runtime AS task-ui-runtime
 USER root
 
 # Copy task-ui and ttyrec from build stages
-COPY --link --from=task-ui /usr/local/bin/task-ui /usr/local/bin/
-COPY --link --from=ttyrec /usr/local/bin/tty* /usr/local/bin/
+COPY --link --from=task-ui "/usr/local/bin/task-ui" "/usr/local/bin/"
+COPY --link --from=ttyrec /usr/local/bin/tty* "/usr/local/bin/"
 
 # Create wrapper script that flattens Taskfile.yml for task-ui
 ENV TASK_UI_WRAPPER_PATH="/usr/local/bin/task-ui-wrapper"
 RUN cat <<'EOS' > "${TASK_UI_WRAPPER_PATH}" \
- && sed -i "s|__HOME__|$HOME|g"  "${TASK_UI_WRAPPER_PATH}" \
- && sed -i "s|__PATH__|$PATH|g" "${TASK_UI_WRAPPER_PATH}"\
+ && sed -i "s|__HOME__|${HOME}|g" "${TASK_UI_WRAPPER_PATH}" \
+ && sed -i "s|__PATH__|${PATH}|g" "${TASK_UI_WRAPPER_PATH}"\
  && chmod +x "${TASK_UI_WRAPPER_PATH}" \
- && chmod -R o+x /root
+ && chmod -R o+x "/root"
 #!/usr/bin/env bash
 set -euo pipefail
 
-UI_DIR="$HOME/task-ui"
-mkdir -p "$UI_DIR"
-mkdir -p "$HOME/history"
-ln -sf "$HOME/task-ui-history" "$UI_DIR/history"
+UI_DIR="${HOME}/task-ui"
+mkdir -p "${UI_DIR}"
+mkdir -p "${HOME}/history"
+ln -sf "${HOME}/task-ui-history" "${UI_DIR}/history"
 
 echo "Generating flattened Taskfile.yml for task-ui…"
-TASKS_JSON=$(task --list-all --json 2>/dev/null || echo '{"tasks":[]}')
+TASKS_JSON=$(task --list-all --json 2>"/dev/null" || echo '{"tasks":[]}')
 
 # Define excluded taskfiles for task-ui
 EXCLUDED_TASKFILES='["task-ui"]'
 
 # ── write header
-cat > "$UI_DIR/Taskfile.yml" <<'YAML'
+cat > "${UI_DIR}/Taskfile.yml" <<'YAML'
 ---
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
@@ -294,21 +306,21 @@ tasks:
 YAML
 
 # ── append proxy tasks (excluding specified taskfiles)
-echo "$TASKS_JSON" | jq -r --arg workdir "$WORKDIR" --argjson excluded "$EXCLUDED_TASKFILES" '
+echo "${TASKS_JSON}" | jq -r --arg workdir "${WORKDIR}" --argjson excluded "${EXCLUDED_TASKFILES}" '
   .tasks[] |
   select(.name | split(":")[0] as $taskfile | ($excluded | index($taskfile)) == null) |
   "  \"" + .name + "\":\n" +
   "    desc: \"" + (.desc // "") + "\"\n" +
   "    interactive: true\n" +
   "    cmds:\n" +
-  "      - bash -c \"export HOME=__HOME__ PATH=__PATH__ && printenv && pushd " +
+  "      - bash -c \"export HOME=__HOME__ PATH=__PATH__ && pushd " +
             $workdir + " && task " + .name + "\"\n"
-' >> "$UI_DIR/Taskfile.yml"
+' >> "${UI_DIR}/Taskfile.yml"
 
-echo "Flattened Taskfile.yml generated with $(echo "$TASKS_JSON" | jq ".tasks|length") tasks"
+echo "Flattened Taskfile.yml generated with $(echo "${TASKS_JSON}" | jq ".tasks|length") tasks"
 
 # ── launch task-ui (single pushd, no cd)
-pushd "$UI_DIR" >/dev/null
+pushd "${UI_DIR}" >"/dev/null"
 exec task-ui "$@"
 EOS
 
@@ -318,6 +330,6 @@ USER "${USER}"
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-    CMD pgrep task-ui >/dev/null && timeout 5 sh -c '</dev/tcp/localhost/3000' || exit 0
+    CMD pgrep task-ui >"/dev/null" && timeout 5 sh -c '</dev/tcp/localhost/3000' || exit 0
 
 CMD ["/usr/local/bin/task-ui-wrapper", "--history-enable"]

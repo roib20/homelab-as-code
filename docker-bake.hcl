@@ -49,12 +49,13 @@ target "base" {
     TERRAGRUNT_VERSION = "${terragrunt}"
     TASK_VERSION       = "${go-task}"
     TALOS_VERSION      = "${talos}"
-    YQ_VERSION         = "${yq}"
     KUBECTL_VERSION    = "${kubectl}"
     HELM_VERSION       = "${helm}"
     KUSTOMIZE_VERSION  = "${kustomize}"
     JQ_VERSION         = "${jq}"
     PYTHON_VERSION     = "${python}"
+    GO_VERSION         = "${go}"
+    TTYREC_VERSION     = "${ttyrec}"
   }
 
   tags = [
