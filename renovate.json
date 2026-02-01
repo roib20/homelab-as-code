@@ -33,7 +33,8 @@
   "extends": [
     "config:recommended",
     "customManagers:dockerfileVersions",
-    ":disableRateLimiting"
+    ":disableRateLimiting",
+    "group:all"
   ],
   "packageRules": [
     {
