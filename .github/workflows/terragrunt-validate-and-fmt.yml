@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install Terragrunt & OpenTofu
         uses: gruntwork-io/terragrunt-action@v3
       - name: Create test account.hcl files from examples
