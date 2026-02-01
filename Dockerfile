@@ -1,17 +1,29 @@
 # syntax=docker/dockerfile:1
 
 # Global build arguments
+# renovate: datasource=docker depName=alpine
 ARG ALPINE_VERSION=3.22
+# renovate: datasource=docker depName=ghcr.io/opentofu/opentofu
 ARG TOFU_VERSION=1.11.2
+# renovate: datasource=github-releases depName=gruntwork-io/terragrunt
 ARG TERRAGRUNT_VERSION=0.97.2
+# renovate: datasource=github-releases depName=go-task/task
 ARG TASK_VERSION=3.44.0
+# renovate: datasource=github-releases depName=siderolabs/talos
 ARG TALOS_VERSION=1.12.2
+# renovate: datasource=github-releases depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=1.35.0
+# renovate: datasource=github-releases depName=helm/helm
 ARG HELM_VERSION=3.14.2
+# renovate: datasource=github-releases depName=kubernetes-sigs/kustomize
 ARG KUSTOMIZE_VERSION=5.7.0
+# renovate: datasource=github-releases depName=jqlang/jq
 ARG JQ_VERSION=1.8.1
+# renovate: datasource=docker depName=python
 ARG PYTHON_VERSION=3.13
-ARG GO_VERSION=1.24
+# renovate: datasource=docker depName=golang
+ARG GO_VERSION="1.24.0"
+# renovate: datasource=github-releases depName=ovh/ovh-ttyrec
 ARG TTYREC_VERSION=1.1.7.1
 ARG CURL_FLAGS="-sSL --proto '=https' --tlsv1.3 --ciphers 'HIGH:!aNULL:!MD5' --cacert /etc/ssl/certs/ca-certificates.crt --capath /etc/ssl/certs --compressed"
 

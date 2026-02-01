@@ -49,6 +49,7 @@ target "base" {
     TERRAGRUNT_VERSION = "${terragrunt}"
     TASK_VERSION       = "${go-task}"
     TALOS_VERSION      = "${talos}"
+    YQ_VERSION         = "${yq}"
     KUBECTL_VERSION    = "${kubectl}"
     HELM_VERSION       = "${helm}"
     KUSTOMIZE_VERSION  = "${kustomize}"
