@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: List all YAML files
         shell: sh
         run: |
@@ -31,21 +31,21 @@ jobs:
           -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 \
           | xargs -0 yamllint -c .yamllint.yml
       - name: ansible-lint for `ansible/pve-single-node`
-        uses: ansible/ansible-lint@v25
+        uses: ansible/ansible-lint@v26
         with:
           args: "--profile=min"
           setup_python: "false"
           working_directory: "ansible/pve-single-node"
           requirements_file: "requirements.yml"
       - name: ansible-lint for `ansible/pve-cluster`
-        uses: ansible/ansible-lint@v25
+        uses: ansible/ansible-lint@v26
         with:
           args: "--profile=min"
           setup_python: "false"
           working_directory: "ansible/pve-cluster"
           requirements_file: "requirements.yml"
       - name: ansible-lint for `ansible/ansible-k8s`
-        uses: ansible/ansible-lint@v25
+        uses: ansible/ansible-lint@v26
         with:
           args: "--profile=min"
           setup_python: "false"

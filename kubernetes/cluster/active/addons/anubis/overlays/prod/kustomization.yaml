@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: app-template
     repo: oci://ghcr.io/bjw-s-labs/helm
-    version: 4.6.0
+    version: 4.6.2
     releaseName: anubis
     namespace: anubis
     valuesFile: ../../base/values.yaml

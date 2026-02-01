@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # 0) Checkout repo for local build context
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       # 1) Generate tags, labels and annotations
       - name: Docker metadata
         id: meta
