@@ -26,6 +26,7 @@
   ],
   "dependencyDashboard": true,
   "dependencyDashboardApproval": true,
+  "dependencyDashboardTitle": "Dependency Dashboard",
   "extends": [
     "config:recommended",
     "customManagers:dockerfileVersions",
