@@ -20,6 +20,6 @@ jq = "1.8.1"
 # renovate: datasource=docker depName=python
 python = "3.13"
 # renovate: datasource=docker depName=golang
-go = "1.24"
+go = "1.25"
 # renovate: datasource=github-releases depName=ovh/ovh-ttyrec
 ttyrec = "1.1.7.1"
