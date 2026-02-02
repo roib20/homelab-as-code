@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: csi-driver-smb
     repo: oci://ghcr.io/home-operations/charts-mirror
-    version: 1.19.1
+    version: 1.20.0
     releaseName: csi-driver-smb
     namespace: kube-system
     valuesFile: ../../base/values.yaml
