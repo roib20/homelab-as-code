@@ -111,49 +111,55 @@ locals {
   # Helm Charts
   helm_charts = {
     cilium = {
-      chart           = "cilium"
-      name            = "cilium"
-      namespace       = "kube-system"
+      chart     = "cilium"
+      name      = "cilium"
+      namespace = "kube-system"
+      # renovate: datasource=docker depName=quay.io/cilium/charts/cilium
       chart_version   = "1.18.6"
       helm_repository = "oci://quay.io/cilium/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cilium/base/values.yaml")
     }
     talos-ccm = {
-      chart           = "talos-cloud-controller-manager"
-      name            = "talos-cloud-controller-manager"
-      namespace       = "kube-system"
+      chart     = "talos-cloud-controller-manager"
+      name      = "talos-cloud-controller-manager"
+      namespace = "kube-system"
+      # renovate: datasource=docker depName=ghcr.io/siderolabs/charts/talos-cloud-controller-manager
       chart_version   = "0.5.4"
       helm_repository = "oci://ghcr.io/siderolabs/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/talos-cloud-controller-manager/base/values.yaml")
     }
     coredns = {
-      chart           = "coredns"
-      name            = "coredns"
-      namespace       = "kube-system"
+      chart     = "coredns"
+      name      = "coredns"
+      namespace = "kube-system"
+      # renovate: datasource=docker depName=ghcr.io/coredns/charts/coredns
       chart_version   = "1.45.0"
       helm_repository = "oci://ghcr.io/coredns/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/coredns/base/values.yaml")
     }
     spegel = {
-      chart           = "spegel"
-      name            = "spegel"
-      namespace       = "kube-system"
+      chart     = "spegel"
+      name      = "spegel"
+      namespace = "kube-system"
+      # renovate: datasource=docker depName=ghcr.io/spegel-org/helm-charts/spegel
       chart_version   = "0.6.0"
       helm_repository = "oci://ghcr.io/spegel-org/helm-charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/spegel/base/values.yaml")
     }
     cert-manager = {
-      chart           = "cert-manager"
-      name            = "cert-manager"
-      namespace       = "kube-system"
+      chart     = "cert-manager"
+      name      = "cert-manager"
+      namespace = "kube-system"
+      # renovate: datasource=docker depName=quay.io/jetstack/charts/cert-manager
       chart_version   = "v1.19.2"
       helm_repository = "oci://quay.io/jetstack/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cert-manager/base/values.yaml")
     }
     tuppr = {
-      chart           = "tuppr"
-      name            = "tuppr"
-      namespace       = "kube-system"
+      chart     = "tuppr"
+      name      = "tuppr"
+      namespace = "kube-system"
+      # renovate: datasource=docker depName=ghcr.io/home-operations/charts/tuppr
       chart_version   = "0.0.51"
       helm_repository = "oci://ghcr.io/home-operations/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/tuppr/base/values.yaml")
