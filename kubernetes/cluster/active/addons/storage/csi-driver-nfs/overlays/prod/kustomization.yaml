@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: csi-driver-nfs
     repo: oci://ghcr.io/home-operations/charts-mirror
-    version: 4.12.1
+    version: 4.13.0
     releaseName: csi-driver-nfs
     namespace: kube-system
     valuesFile: ../../base/values.yaml
