@@ -16,7 +16,6 @@ name: yamllint
 jobs:
   yamllint:
     runs-on: arc-runner-set
-    timeout-minutes: 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v6

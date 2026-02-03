@@ -13,7 +13,6 @@ name: Kustomize Build Validation
 jobs:
   kustomize-build-validation:
     runs-on: arc-runner-set
-    timeout-minutes: 5
     env:
       ENV_FILE: "/tmp/env-vars.env"
     steps:
