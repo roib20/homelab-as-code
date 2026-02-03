@@ -50,153 +50,14 @@
       "minimumGroupSize": 2
     },
     {
-      "description": "OpenTofu Group",
+      "description": "cert-manager Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "groupName": "OpenTofu",
-      "groupSlug": "opentofu",
+      "groupName": "cert-manager",
+      "groupSlug": "cert-manager",
       "matchPackageNames": [
-        "/opentofu/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
-      "description": "Terragrunt Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "Terragrunt",
-      "groupSlug": "terragrunt",
-      "matchPackageNames": [
-        "/terragrunt/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
-      "description": "Go Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "Go",
-      "groupSlug": "go",
-      "matchPackageNames": [
-        "/golang/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
-      "description": "Task Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "Task",
-      "groupSlug": "task",
-      "matchPackageNames": [
-        "/task/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
-      "description": "Talos Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "Talos",
-      "groupSlug": "talos",
-      "matchPackageNames": [
-        "/talos/",
-        "ghcr.io/siderolabs/installer"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
-      "description": "Kubernetes Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "Kubernetes",
-      "groupSlug": "kubernetes",
-      "matchPackageNames": [
-        "kubernetes",
-        "kubernetes/kubernetes",
-        "/kube-apiserver/",
-        "/kube-controller-manager/",
-        "/kube-proxy/",
-        "/kube-scheduler/",
-        "/kubelet/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
-      "description": "Helm Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "Helm",
-      "groupSlug": "helm",
-      "matchPackageNames": [
-        "helm/helm"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
-      "description": "Kustomize Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "Kustomize",
-      "groupSlug": "kustomize",
-      "matchPackageNames": [
-        "/kustomize/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
-      "description": "jq Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "jq",
-      "groupSlug": "jq",
-      "matchPackageNames": [
-        "/jq/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
-      "description": "Python Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "Python",
-      "groupSlug": "python",
-      "matchPackageNames": [
-        "/python/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
-      "description": "ttyrec Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "ttyrec",
-      "groupSlug": "ttyrec",
-      "matchPackageNames": [
-        "/ttyrec/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
-      "description": "External Secrets Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "External Secrets",
-      "groupSlug": "external-secrets",
-      "matchPackageNames": [
-        "/external-secrets/"
+        "/cert-manager/"
       ],
       "minimumGroupSize": 2
     },
@@ -225,6 +86,108 @@
       "minimumGroupSize": 2
     },
     {
+      "description": "External Secrets Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "External Secrets",
+      "groupSlug": "external-secrets",
+      "matchPackageNames": [
+        "/external-secrets/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Go Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Go",
+      "groupSlug": "go",
+      "matchPackageNames": [
+        "/golang/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Helm Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Helm",
+      "groupSlug": "helm",
+      "matchPackageNames": [
+        "helm/helm"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "jq Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "jq",
+      "groupSlug": "jq",
+      "matchPackageNames": [
+        "/jq/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Kubernetes Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Kubernetes",
+      "groupSlug": "kubernetes",
+      "matchPackageNames": [
+        "kubernetes",
+        "kubernetes/kubernetes",
+        "/kube-apiserver/",
+        "/kube-controller-manager/",
+        "/kube-proxy/",
+        "/kube-scheduler/",
+        "/kubelet/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Kustomize Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Kustomize",
+      "groupSlug": "kustomize",
+      "matchPackageNames": [
+        "/kustomize/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "OpenTofu Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "OpenTofu",
+      "groupSlug": "opentofu",
+      "matchPackageNames": [
+        "/opentofu/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Python Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Python",
+      "groupSlug": "python",
+      "matchPackageNames": [
+        "/python/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
       "description": "Spegel Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
@@ -237,14 +200,51 @@
       "minimumGroupSize": 2
     },
     {
-      "description": "cert-manager Group",
+      "description": "Talos Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "groupName": "cert-manager",
-      "groupSlug": "cert-manager",
+      "groupName": "Talos",
+      "groupSlug": "talos",
       "matchPackageNames": [
-        "/cert-manager/"
+        "/talos/",
+        "ghcr.io/siderolabs/installer"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Task Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Task",
+      "groupSlug": "task",
+      "matchPackageNames": [
+        "/task/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Terragrunt Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Terragrunt",
+      "groupSlug": "terragrunt",
+      "matchPackageNames": [
+        "/terragrunt/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "ttyrec Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "ttyrec",
+      "groupSlug": "ttyrec",
+      "matchPackageNames": [
+        "/ttyrec/"
       ],
       "minimumGroupSize": 2
     },
