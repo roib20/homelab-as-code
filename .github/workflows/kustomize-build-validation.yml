@@ -28,10 +28,22 @@ jobs:
           PRIVATE_REPO_01: "https://github.com/github/gitignore.git"
         shell: sh
         run: printenv > "${ENV_FILE}"
+      - name: Install Helm
+        uses: azure/setup-helm@v4
       - name: Install Kustomize
-        uses: kustomize-everything/action-kustomize@v2.1.0
-        with:
-          version: '5.7.1'
+        env:
+          KUSTOMIZE_VERSION: "5.7.1"
+        shell: sh
+        run: |
+          FILE="kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz"
+          URL="https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${KUSTOMIZE_VERSION}"
+          curl -sSL -o "${FILE}" "${URL}/${FILE}"
+          curl -sSL -o checksums.txt "${URL}/checksums.txt"
+          EXPECTED="$(grep "${FILE}" checksums.txt | awk '{print $1}')"
+          ACTUAL="$(sha256sum "${FILE}" | awk '{print $1}')"
+          [ "${ACTUAL}" = "${EXPECTED}" ] || { echo "Checksum mismatch: expected ${EXPECTED}, got ${ACTUAL}" >&2; exit 1; }
+          sudo tar xzf "${FILE}" -C /usr/local/bin
+          kustomize version
       - name: Run kustomize build in parallel
         uses: int128/kustomize-action@v1
         id: kustomize

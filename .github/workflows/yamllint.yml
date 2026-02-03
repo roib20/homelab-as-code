@@ -20,7 +20,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - name: Install wget
+        shell: sh
+        run: sudo apt-get update && sudo apt-get install -y wget
       - uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+          check-latest: true
       - name: Install yamllint
         run: python3 -m pip install yamllint
       - name: List all YAML files
