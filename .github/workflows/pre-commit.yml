@@ -11,5 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
       - uses: gruntwork-io/terragrunt-action@v3
       - uses: pre-commit/action@v3.0.1

@@ -28,6 +28,10 @@ jobs:
           PRIVATE_REPO_01: "https://github.com/github/gitignore.git"
         shell: sh
         run: printenv > "${ENV_FILE}"
+      - name: Install Kustomize
+        uses: kustomize-everything/action-kustomize@v2
+        with:
+          version: '5.7.1'
       - name: Run kustomize build in parallel
         uses: int128/kustomize-action@v1
         id: kustomize

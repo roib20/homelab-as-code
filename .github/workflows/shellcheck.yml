@@ -19,6 +19,8 @@ jobs:
     runs-on: arc-runner-set
     steps:
       - uses: actions/checkout@v6
+      - name: Install xz-utils
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq xz-utils
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@2.0.0
         with:
