@@ -4,6 +4,10 @@ kind: Kustomization
 resources:
   - ../../base
   - external-secrets/github-app-secret.yaml.externalsecret
+  - resources/namespace.yaml
+  - resources/serviceaccount.yaml
+  - resources/role.yaml
+  - resources/rolebinding.yaml
 helmCharts:
   - name: gha-runner-scale-set
     repo: oci://ghcr.io/actions/actions-runner-controller-charts
