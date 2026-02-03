@@ -1,0 +1,12 @@
+# https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/#Config.machine.kernel
+---
+machine:
+  sysctls:
+%{ for key, value in sysctls ~}
+    ${key}: "${value}"
+%{ endfor ~}
+  kernel:
+    modules:
+%{ for mod in kernel_modules ~}
+      - name: ${mod}
+%{ endfor ~}

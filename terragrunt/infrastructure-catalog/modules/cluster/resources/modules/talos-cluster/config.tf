@@ -89,12 +89,22 @@ data "talos_machine_configuration" "this" {
       manifests = data.helm_template.bootstrap_charts
     }),
     templatefile("${path.module}/resources/talos-patches/talos_api.yaml.tftpl", {}),
-
     templatefile("${path.module}/resources/talos-patches/machine_hostdns.yaml.tftpl", {
       forwardKubeDNSToHost = false
     }),
     templatefile("${path.module}/resources/talos-patches/machine_install.yaml.tftpl", {
       machine_install_disk_image = each.value.secureboot ? local.machine_installer_secureboot[each.key] : local.machine_installer[each.key]
+    }),
+    templatefile("${path.module}/resources/talos-patches/machine_kernel.yaml.tftpl", {
+      sysctls = {
+        "vm.nr_hugepages" = "1024"
+      }
+      kernel_modules = [
+        "binfmt_misc",
+        "nvme_tcp",
+        "vfio_pci",
+        # "uio_pci_generic",
+      ]
     }),
     templatefile("${path.module}/resources/talos-patches/machine.yaml.tftpl", {
       machine_config = each.value.talos_config

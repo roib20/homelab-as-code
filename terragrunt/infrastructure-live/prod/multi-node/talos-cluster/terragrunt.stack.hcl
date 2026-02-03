@@ -77,6 +77,7 @@ locals {
         secureboot        = true
         extra_kernel_args = ["console=ttyS0"]
         extensions = [
+          "siderolabs/binfmt-misc",
           "siderolabs/i915",
           "siderolabs/intel-ucode",
           "siderolabs/iscsi-tools",
