@@ -4,7 +4,7 @@ alpine = "3.22"
 # renovate: datasource=docker depName=ghcr.io/opentofu/opentofu
 tofu = "1.11.2"
 # renovate: datasource=github-releases depName=gruntwork-io/terragrunt
-terragrunt = "0.97.2"
+terragrunt = "0.99.1"
 # renovate: datasource=github-releases depName=go-task/task
 go-task = "3.44.0"
 # renovate: datasource=github-releases depName=siderolabs/talos
