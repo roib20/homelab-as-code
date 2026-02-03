@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: cert-manager
     repo: oci://quay.io/jetstack/charts
-    version: v1.19.2
+    version: v1.19.3
     releaseName: cert-manager
     namespace: kube-system
     valuesFile: ../../base/values.yaml
