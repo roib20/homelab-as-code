@@ -74,7 +74,6 @@ jobs:
         with:
           files: |
             docker-bake.hcl
-            docker-bake.override.hcl
             cwd://${{ steps.meta.outputs.bake-file-labels }}
             cwd://${{ steps.meta.outputs.bake-file-annotations }}
           targets: multiarch-push
