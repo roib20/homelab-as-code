@@ -12,7 +12,7 @@ name: Kustomize Build Validation
   workflow_dispatch:
 jobs:
   kustomize-build-validation:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     timeout-minutes: 5
     env:
       ENV_FILE: "/tmp/env-vars.env"

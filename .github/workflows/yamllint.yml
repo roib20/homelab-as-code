@@ -15,11 +15,14 @@ name: yamllint
   workflow_dispatch:
 jobs:
   yamllint:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     timeout-minutes: 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+      - name: Install yamllint
+        run: pip install yamllint
       - name: List all YAML files
         shell: sh
         run: |
