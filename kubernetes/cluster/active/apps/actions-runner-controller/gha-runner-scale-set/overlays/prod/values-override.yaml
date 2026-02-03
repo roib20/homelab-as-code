@@ -8,12 +8,9 @@ githubConfigSecret: github-app-secret
 minRunners: 0
 maxRunners: 5
 
+controllerServiceAccount:
+  name: arc-gha-rs-controller
+  namespace: arc-systems
+
 containerMode:
-  type: "kubernetes"
-  kubernetesModeWorkVolumeClaim:
-    accessModes:
-      - ReadWriteOnce
-    storageClassName: longhorn
-    resources:
-      requests:
-        storage: 1Gi
+  type: "dind"
