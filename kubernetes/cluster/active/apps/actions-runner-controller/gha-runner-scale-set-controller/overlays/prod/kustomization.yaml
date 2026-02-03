@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+helmCharts:
+  - name: gha-runner-scale-set-controller
+    repo: oci://ghcr.io/actions/actions-runner-controller-charts
+    version: 0.13.1
+    releaseName: arc
+    namespace: arc-systems
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true

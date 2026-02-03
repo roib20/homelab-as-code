@@ -30,7 +30,7 @@ permissions:
   id-token: write  # OIDC & cosign
 jobs:
   build-and-sign:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     steps:
       # 0) Checkout repo for local build context
       - uses: actions/checkout@v6

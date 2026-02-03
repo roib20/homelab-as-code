@@ -1,0 +1,16 @@
+---
+# Set to your GitHub repo, org, or enterprise URL
+githubConfigUrl: "https://github.com/roib20/homelab-as-code"
+
+# References the secret created by the ExternalSecret
+githubConfigSecret: github-app-secret
+
+minRunners: 1
+maxRunners: 5
+
+controllerServiceAccount:
+  name: arc-gha-rs-controller
+  namespace: arc-systems
+
+containerMode:
+  type: "dind"
