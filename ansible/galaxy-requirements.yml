@@ -6,5 +6,5 @@ collections:
     source: https://galaxy.ansible.com
   # https://galaxy.ansible.com/ui/repo/published/kubernetes/core/
   - name: kubernetes.core
-    version: ">=6.2.0"
+    version: ">=6.3.0"
     source: https://galaxy.ansible.com
