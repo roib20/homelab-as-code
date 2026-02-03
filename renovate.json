@@ -8,8 +8,7 @@
       "customType": "regex",
       "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
       "managerFilePatterns": [
-        "**",
-        "!Dockerfile"
+        "**"
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*\\S+\\s*=\\s*\"(?<currentValue>[^\"]+)\""
