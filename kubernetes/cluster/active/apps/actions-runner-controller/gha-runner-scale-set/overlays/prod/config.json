@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "gha-runner-scale-set",
+  "destName": "in-cluster",
+  "destNamespace": "arc-runners",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "arc-runner-set"
+}
