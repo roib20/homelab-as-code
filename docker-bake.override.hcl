@@ -6,7 +6,7 @@ tofu = "1.11.2"
 # renovate: datasource=github-releases depName=gruntwork-io/terragrunt
 terragrunt = "0.99.1"
 # renovate: datasource=github-releases depName=go-task/task
-go-task = "3.44.0"
+go-task = "3.48.0"
 # renovate: datasource=github-releases depName=siderolabs/talos
 talos = "1.12.2"
 # renovate: datasource=github-releases depName=kubernetes/kubernetes
