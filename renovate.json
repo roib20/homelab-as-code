@@ -189,6 +189,78 @@
       "minimumGroupSize": 2
     },
     {
+      "description": "External Secrets Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "External Secrets",
+      "groupSlug": "external-secrets",
+      "matchPackageNames": [
+        "/external-secrets/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Cilium Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Cilium",
+      "groupSlug": "cilium",
+      "matchPackageNames": [
+        "/cilium/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "CoreDNS Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "CoreDNS",
+      "groupSlug": "coredns",
+      "matchPackageNames": [
+        "/coredns/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Spegel Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Spegel",
+      "groupSlug": "spegel",
+      "matchPackageNames": [
+        "/spegel/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "cert-manager Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "cert-manager",
+      "groupSlug": "cert-manager",
+      "matchPackageNames": [
+        "/cert-manager/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Tuppr Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Tuppr",
+      "groupSlug": "tuppr",
+      "matchPackageNames": [
+        "/tuppr/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
       "allowedVersions": "<10.0.0",
       "matchPackageNames": [
         "adyanth/cloudflare-operator",
