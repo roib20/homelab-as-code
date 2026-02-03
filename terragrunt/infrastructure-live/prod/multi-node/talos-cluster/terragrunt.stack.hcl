@@ -162,7 +162,7 @@ locals {
       name      = "tuppr"
       namespace = "kube-system"
       # renovate: datasource=docker depName=ghcr.io/home-operations/charts/tuppr
-      chart_version   = "0.0.51"
+      chart_version   = "0.0.52"
       helm_repository = "oci://ghcr.io/home-operations/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/tuppr/base/values.yaml")
     }
