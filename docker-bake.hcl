@@ -32,31 +32,13 @@ variable "OCI_LABELS" {
 target "docker-metadata-action" {}
 
 target "base" {
-  inherits = ["docker-metadata-action"]
-
+  inherits   = ["docker-metadata-action"]
   context    = "."
   dockerfile = "Dockerfile"
-
-  output = [{ type = "cacheonly" }]
+  output     = [{ type = "cacheonly" }]
 
   # Base runtime stage (CLI runner)
   target = "runtime"
-
-  # Pass all version/build args through (populated by `docker-bake.override.hcl`)
-  args = {
-    ALPINE_VERSION     = "${alpine}"
-    TOFU_VERSION       = "${tofu}"
-    TERRAGRUNT_VERSION = "${terragrunt}"
-    TASK_VERSION       = "${go-task}"
-    TALOS_VERSION      = "${talos}"
-    KUBECTL_VERSION    = "${kubectl}"
-    HELM_VERSION       = "${helm}"
-    KUSTOMIZE_VERSION  = "${kustomize}"
-    JQ_VERSION         = "${jq}"
-    PYTHON_VERSION     = "${python}"
-    GO_VERSION         = "${go}"
-    TTYREC_VERSION     = "${ttyrec}"
-  }
 
   tags = [
     "${REGISTRY}/${OWNER}/${REPOSITORY}/${IMAGE_TITLE}:latest",
@@ -93,29 +75,19 @@ target "multiarch-push" {
 
 # Single‑arch build into local daemon (task-ui)
 target "local" {
-  inherits = ["base"]
-
-  # Override to use task-ui-runtime as final stage for local builds too
-  target = "task-ui-runtime"
-
+  inherits  = ["base"]
+  target    = "task-ui-runtime"
   output    = [{ type = "docker" }]
   platforms = ["${BAKE_LOCAL_PLATFORM}"]
-
-  tags = [
-    "${IMAGE_TITLE}:latest",
-  ]
+  tags      = ["${IMAGE_TITLE}:latest"]
 }
 
 # CLI-only runtime stage for local builds
 target "runtime-local" {
-  inherits = ["base"]
-
+  inherits  = ["base"]
   output    = [{ type = "docker" }]
   platforms = ["${BAKE_LOCAL_PLATFORM}"]
-
-  tags = [
-    "${IMAGE_TITLE}:runtime",
-  ]
+  tags      = ["${IMAGE_TITLE}:runtime"]
 }
 
 # # "test" stage
@@ -136,35 +108,18 @@ target "terragrunt-local" {
   context    = "."
   dockerfile = "Dockerfile"
   target     = "terragrunt"
-
-  output    = [{ type = "docker" }]
-  platforms = ["${BAKE_LOCAL_PLATFORM}"]
-
-  args = {
-    ALPINE_VERSION     = "${alpine}"
-    TOFU_VERSION       = "${tofu}"
-    TERRAGRUNT_VERSION = "${terragrunt}"
-  }
-
-  tags = ["${IMAGE_TITLE}:terragrunt"]
+  output     = [{ type = "docker" }]
+  platforms  = ["${BAKE_LOCAL_PLATFORM}"]
+  tags       = ["${IMAGE_TITLE}:terragrunt"]
 }
 
 target "kubectl-local" {
   context    = "."
   dockerfile = "Dockerfile"
   target     = "kubectl"
-
-  output    = [{ type = "docker" }]
-  platforms = ["${BAKE_LOCAL_PLATFORM}"]
-
-  args = {
-    ALPINE_VERSION    = "${alpine}"
-    KUBECTL_VERSION   = "${kubectl}"
-    HELM_VERSION      = "${helm}"
-    KUSTOMIZE_VERSION = "${kustomize}"
-  }
-
-  tags = ["${IMAGE_TITLE}:kubectl"]
+  output     = [{ type = "docker" }]
+  platforms  = ["${BAKE_LOCAL_PLATFORM}"]
+  tags       = ["${IMAGE_TITLE}:kubectl"]
 }
 
 group "default" { targets = ["local"] }
