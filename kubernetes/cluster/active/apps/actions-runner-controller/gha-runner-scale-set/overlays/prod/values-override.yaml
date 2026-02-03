@@ -1,6 +1,6 @@
 ---
 # Set to your GitHub repo, org, or enterprise URL
-githubConfigUrl: "https://github.com/roib20"
+githubConfigUrl: "https://github.com/roib20/homelab-as-code"
 
 # References the secret created by the ExternalSecret
 githubConfigSecret: github-app-secret
