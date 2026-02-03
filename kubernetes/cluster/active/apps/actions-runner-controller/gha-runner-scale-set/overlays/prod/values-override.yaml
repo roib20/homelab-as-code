@@ -1,0 +1,19 @@
+---
+# Set to your GitHub repo, org, or enterprise URL
+githubConfigUrl: ""
+
+# References the secret created by the ExternalSecret
+githubConfigSecret: github-app-secret
+
+minRunners: 0
+maxRunners: 5
+
+containerMode:
+  type: "kubernetes"
+  kubernetesModeWorkVolumeClaim:
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: longhorn
+    resources:
+      requests:
+        storage: 1Gi
