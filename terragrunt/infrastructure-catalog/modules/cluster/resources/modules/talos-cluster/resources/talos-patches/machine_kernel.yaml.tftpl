@@ -1,12 +1,16 @@
 # https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/#Config.machine.kernel
 ---
 machine:
+%{ if length(sysctls) > 0 ~}
   sysctls:
 %{ for key, value in sysctls ~}
     ${key}: "${value}"
 %{ endfor ~}
+%{ endif ~}
+%{ if length(kernel_modules) > 0 ~}
   kernel:
     modules:
 %{ for mod in kernel_modules ~}
       - name: ${mod}
 %{ endfor ~}
+%{ endif ~}
