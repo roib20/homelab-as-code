@@ -5,7 +5,7 @@ githubConfigUrl: "https://github.com/roib20/homelab-as-code"
 # References the secret created by the ExternalSecret
 githubConfigSecret: github-app-secret
 
-minRunners: 0
+minRunners: 1
 maxRunners: 5
 
 controllerServiceAccount:
