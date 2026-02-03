@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v6
       - name: Install wget
         shell: sh
-        run: sudo apt-get update && sudo apt-get install -y wget
+        run: sudo apt-get update -qq && sudo apt-get install --assume-yes -qq wget
       - uses: actions/setup-python@v6
         with:
           python-version: '3.x'
