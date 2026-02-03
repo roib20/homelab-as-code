@@ -105,7 +105,8 @@
       "groupName": "Talos",
       "groupSlug": "talos",
       "matchPackageNames": [
-        "/talos/"
+        "/talos/",
+        "ghcr.io/siderolabs/installer"
       ],
       "minimumGroupSize": 2
     },
