@@ -153,7 +153,7 @@ locals {
       name      = "cert-manager"
       namespace = "kube-system"
       # renovate: datasource=docker depName=quay.io/jetstack/charts/cert-manager
-      chart_version   = "v1.19.2"
+      chart_version   = "v1.19.3"
       helm_repository = "oci://quay.io/jetstack/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cert-manager/base/values.yaml")
     }
