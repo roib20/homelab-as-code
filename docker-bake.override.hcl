@@ -12,7 +12,7 @@ talos = "1.12.2"
 # renovate: datasource=github-releases depName=kubernetes/kubernetes
 kubectl = "1.35.0"
 # renovate: datasource=github-releases depName=helm/helm
-helm = "3.14.2"
+helm = "4.1.0"
 # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize
 kustomize = "5.7.0"
 # renovate: datasource=github-releases depName=jqlang/jq
