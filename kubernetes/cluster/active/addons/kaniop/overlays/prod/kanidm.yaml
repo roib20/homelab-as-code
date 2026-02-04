@@ -24,3 +24,6 @@ spec:
         resources:
           requests:
             storage: 100Mi
+  groupNamespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: kaniop-resources
