@@ -12,14 +12,29 @@ spec:
   hostnames:
     - "photos.${FQDN_01}"
   rules:
-    - backendRefs:
+    - matches:
+        - path:
+            type: Exact
+            value: /.well-known/immich
+      backendRefs:
         - group: ""
           kind: Service
           name: immich-server
           namespace: immich
           port: 2283
           weight: 1
-      matches:
+      timeouts:
+        request: 600s
+    - matches:
         - path:
             type: PathPrefix
             value: /
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: immich-server
+          namespace: immich
+          port: 2283
+          weight: 1
+      timeouts:
+        request: 600s

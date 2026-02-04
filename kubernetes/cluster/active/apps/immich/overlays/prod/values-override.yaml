@@ -4,6 +4,7 @@ controllers:
     containers:
       main:
         image:
+          # renovate: datasource=github-releases depName=immich-app/immich
           tag: v2.4.1
         env:
           - name: REDIS_HOSTNAME
