@@ -38,15 +38,3 @@ spec:
           weight: 1
       timeouts:
         request: 600s
----
-apiVersion: networking.istio.io/v1
-kind: DestinationRule
-metadata:
-  name: ingressgateway-http
-  namespace: istio-ingress
-spec:
-  host: istio-ingressgateway.istio-ingress.svc.cluster.local
-  trafficPolicy:
-    connectionPool:
-      http:
-        h2UpgradePolicy: DO_NOT_UPGRADE
