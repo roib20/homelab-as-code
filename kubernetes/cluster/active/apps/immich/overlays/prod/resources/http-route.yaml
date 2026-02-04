@@ -1,3 +1,4 @@
+---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -37,3 +38,15 @@ spec:
           weight: 1
       timeouts:
         request: 600s
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: immich-server-no-h2
+  namespace: immich
+spec:
+  host: immich-server.immich.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      http:
+        h2UpgradePolicy: DO_NOT_UPGRADE
