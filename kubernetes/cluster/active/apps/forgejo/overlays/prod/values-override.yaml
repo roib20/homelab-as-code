@@ -14,10 +14,10 @@ gitea:
     oauth2_client:
       OPENID_CONNECT_SCOPES: "openid email profile groups forgejo"
       ENABLE_AUTO_REGISTRATION: true
-      USERNAME: email
+      USERNAME: nickname
     openid:
       ENABLE_OPENID_SIGNIN: false
-      ENABLE_OPENID_SIGNUP: true
+      ENABLE_OPENID_SIGNUP: false
     service:
       DISABLE_REGISTRATION: false
       ALLOW_ONLY_EXTERNAL_REGISTRATION: true
