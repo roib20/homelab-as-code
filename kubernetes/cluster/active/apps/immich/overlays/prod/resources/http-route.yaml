@@ -42,10 +42,10 @@ spec:
 apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
-  name: immich-server-no-h2
-  namespace: immich
+  name: ingressgateway-http
+  namespace: istio-ingress
 spec:
-  host: immich-server.immich.svc.cluster.local
+  host: istio-ingressgateway.istio-ingress.svc.cluster.local
   trafficPolicy:
     connectionPool:
       http:
