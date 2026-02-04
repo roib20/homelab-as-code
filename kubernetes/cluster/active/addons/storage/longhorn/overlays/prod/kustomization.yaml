@@ -5,7 +5,7 @@ resources:
   - ../../base
 helmCharts:
   - name: longhorn
-    repo: https://charts.longhorn.io
+    repo: oci://ghcr.io/home-operations/charts-mirror
     version: 1.11.0
     releaseName: longhorn
     namespace: longhorn-system
@@ -21,3 +21,9 @@ patches:
       - op: add
         path: /metadata/annotations/storageclass.kubernetes.io~1is-default-class
         value: "true"
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+replacements:
+  - path: replacements.yaml
