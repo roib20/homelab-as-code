@@ -113,7 +113,7 @@ inputs = {
       mapping = try(values.pci_mapping, "GPU_default")
       pcie    = true
       rombar  = true
-      xvga    = true
+      xvga    = false
     },
   ]
 
