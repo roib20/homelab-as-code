@@ -24,6 +24,9 @@ spec:
         resources:
           requests:
             storage: 100Mi
+  personNamespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: kaniop-resources
   groupNamespaceSelector:
     matchLabels:
       kubernetes.io/metadata.name: kaniop-resources
