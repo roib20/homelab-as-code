@@ -14,10 +14,10 @@ gitea:
     oauth2_client:
       OPENID_CONNECT_SCOPES: "openid email profile groups forgejo"
       ENABLE_AUTO_REGISTRATION: true
-      USERNAME: email
+      USERNAME: nickname
     openid:
       ENABLE_OPENID_SIGNIN: false
-      ENABLE_OPENID_SIGNUP: true
+      ENABLE_OPENID_SIGNUP: false
     service:
       DISABLE_REGISTRATION: false
       ALLOW_ONLY_EXTERNAL_REGISTRATION: true
@@ -44,3 +44,12 @@ httpRoute:
       namespace: istio-ingress
   hostnames:
     - "git.${FQDN_01}"
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Self-hosted lightweight software forge.
+    gethomepage.dev/group: Operations
+    gethomepage.dev/icon: forgejo.svg
+    gethomepage.dev/name: Forgejo
+    gethomepage.dev/widget.type: "gitea"
+    gethomepage.dev/widget.url: "http://forgejo.forgejo.svc.cluster.local:3000"
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_FORGEJO_KEY}}"
