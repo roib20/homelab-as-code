@@ -12,4 +12,4 @@ ingress:
     gethomepage.dev/group: Operations
     gethomepage.dev/icon: renovate.svg
     gethomepage.dev/name: Renovate Operator
-    gethomepage.dev/pod-selector: "app=renovate-operator-renovate-operator"
+    gethomepage.dev/pod-selector: "app=renovate-operator"
