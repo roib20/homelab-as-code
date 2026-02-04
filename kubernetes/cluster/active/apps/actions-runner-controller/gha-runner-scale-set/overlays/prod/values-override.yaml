@@ -6,7 +6,7 @@ githubConfigUrl: "https://github.com/roib20/homelab-as-code"
 githubConfigSecret: github-app-secret
 
 minRunners: 1
-maxRunners: 5
+maxRunners: 4
 
 controllerServiceAccount:
   name: arc-gha-rs-controller
