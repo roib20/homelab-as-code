@@ -1,4 +1,3 @@
----
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -16,6 +15,16 @@ spec:
     initdb:
       database: immich
       owner: immich
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
+    nodeSelector:
+      node-role.kubernetes.io/postgres: ""
+    tolerations:
+      - key: node-role.kubernetes.io/postgres
+        operator: Exists
+        effect: NoSchedule
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
