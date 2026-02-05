@@ -5,16 +5,13 @@ metadata:
   name: immich-database
 spec:
   instances: 1
-
   storage:
     size: 1Gi
-
+    storageClass: longhorn-cnpg
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.0-0.5.3
-
   postgresql:
     shared_preload_libraries:
       - "vchord.so"
-
   bootstrap:
     initdb:
       database: immich
