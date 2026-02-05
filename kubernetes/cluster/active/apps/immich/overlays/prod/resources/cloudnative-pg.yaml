@@ -1,3 +1,4 @@
+---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -20,11 +21,7 @@ spec:
     topologyKey: kubernetes.io/hostname
     podAntiAffinityType: required
   nodeSelector:
-    node-role.kubernetes.io/postgres: ""
-  tolerations:
-    - key: node-role.kubernetes.io/postgres
-      operator: Exists
-      effect: NoSchedule
+    storage-nonrotationaldisk: "true"
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
