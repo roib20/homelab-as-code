@@ -75,7 +75,7 @@ locals {
       install = {
         disk              = "/dev/vda"
         secureboot        = true
-        extra_kernel_args = ["console=ttyS0"]
+        extra_kernel_args = ["console=ttyS0", "talos.dashboard.disabled=1"]
         extensions = [
           "siderolabs/binfmt-misc",
           "siderolabs/i915",
