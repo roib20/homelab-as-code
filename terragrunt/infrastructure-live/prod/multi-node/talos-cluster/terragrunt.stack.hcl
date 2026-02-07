@@ -36,7 +36,7 @@ locals {
       ip          = "192.168.1.51"
       vm_id       = 1001
       cpu_cores   = 4
-      memory      = 13312
+      memory      = 14336
       system_disk = 100
       data_disk   = 300
       node_name   = local.node_names[0] # pve-node-01
@@ -46,7 +46,7 @@ locals {
       ip          = "192.168.1.52"
       vm_id       = 1002
       cpu_cores   = 4
-      memory      = 13312
+      memory      = 12288
       system_disk = 100
       data_disk   = 300
       node_name   = local.node_names[1] # pve-node-02
@@ -56,7 +56,7 @@ locals {
       ip          = "192.168.1.53"
       vm_id       = 1003
       cpu_cores   = 4
-      memory      = 13312
+      memory      = 12288
       system_disk = 100
       data_disk   = 300
       node_name   = local.node_names[2] # pve-node-03
