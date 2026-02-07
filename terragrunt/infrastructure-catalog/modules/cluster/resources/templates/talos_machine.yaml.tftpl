@@ -10,10 +10,6 @@ time:
 %{ endfor ~}
 install:
   disk: ${machine_install.disk}
-  extraKernelArgs:
-%{ for arg in machine_install.extra_kernel_args ~}
-    - ${arg}
-%{ endfor ~}
   wipe: ${machine_install.wipe}
 features:
   hostDNS:
