@@ -13,7 +13,7 @@ patches:
 helmCharts:
   - name: jellyfin
     repo: oci://oci.trueforge.org/truecharts
-    version: 22.2.31
+    version: 22.2.32
     releaseName: jellyfin
     namespace: jellyfin
     valuesFile: ../../base/values.yaml
