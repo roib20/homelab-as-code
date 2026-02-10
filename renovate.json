@@ -97,6 +97,18 @@
       "minimumGroupSize": 2
     },
     {
+      "description": "Kustomize Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Kustomize",
+      "groupSlug": "kustomize",
+      "matchPackageNames": [
+        "kustomize"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
       "description": "Kubernetes Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
