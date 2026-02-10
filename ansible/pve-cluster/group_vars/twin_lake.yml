@@ -14,3 +14,8 @@ pve_gpu_mdev: 0
 
 # Network interface configuration
 bridge_port: enp3s0
+
+# Swap on ZRAM
+zram_generator_config:
+  - {state: present, section: zram0, option: zram-size, value: "min(ram / 2, 8192)"}
+  - {state: present, section: zram0, option: compression-algorithm, value: "lzo-rle zstd(level=3) (type=idle)"}
