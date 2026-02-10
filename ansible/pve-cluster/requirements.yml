@@ -8,6 +8,11 @@ roles:
   - name: lae.proxmox
     version: "v1.10.0"
     source: https://galaxy.ansible.com
+  # https://galaxy.ansible.com/ui/standalone/roles/alvistack/zram_generator/
+  - name: alvistack.zram_generator
+    src: https://github.com/roib20/ansible-role-zram_generator.git
+    scm: git
+    version: "13.3.0b"
 collections:
   # https://galaxy.ansible.com/ui/repo/published/community/general/
   - name: community.general

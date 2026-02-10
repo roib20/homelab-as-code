@@ -68,3 +68,9 @@
         apply:
           tags: pve-resource-mappings
       tags: pve-resource-mappings
+    - name: Configure Swap on ZRAM
+      ansible.builtin.include_role:
+        name: alvistack.zram_generator
+        apply:
+          tags: zram
+      tags: zram
