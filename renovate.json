@@ -11,7 +11,7 @@
         "**"
       ],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*\\S+\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*\\S+\\s*[:=]\\s*\"?(?<currentValue>[^\"\\s]+)\"?"
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     },
@@ -93,6 +93,30 @@
       "groupSlug": "external-secrets",
       "matchPackageNames": [
         "/external-secrets/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Helm Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Helm",
+      "groupSlug": "helm",
+      "matchPackageNames": [
+        "helm/helm"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Kustomize Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Kustomize",
+      "groupSlug": "kustomize",
+      "matchPackageNames": [
+        "kubernetes-sigs/kustomize"
       ],
       "minimumGroupSize": 2
     },
