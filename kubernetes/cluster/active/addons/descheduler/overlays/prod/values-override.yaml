@@ -36,6 +36,9 @@ deschedulerPolicy:
               pods: 50
             metricsUtilization:
               source: KubernetesMetrics
+            evictableNamespaces:
+              exclude:
+                - kube-system
       plugins:
         balance:
           enabled:
