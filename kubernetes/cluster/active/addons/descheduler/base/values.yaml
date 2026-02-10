@@ -1,0 +1,6 @@
+---
+deschedulingInterval: 5m
+kind: Deployment
+leaderElection:
+  enabled: true
+replicas: 2
