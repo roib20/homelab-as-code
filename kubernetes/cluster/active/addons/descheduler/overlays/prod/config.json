@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "descheduler",
+  "destName": "in-cluster",
+  "destNamespace": "kube-system",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "descheduler"
+}
