@@ -11,7 +11,7 @@
         "**"
       ],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*\\S+\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*\\S+\\s*[:=]\\s*\"?(?<currentValue>[^\"\\s]+)\"?"
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     },
