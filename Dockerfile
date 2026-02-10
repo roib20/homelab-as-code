@@ -16,7 +16,7 @@ ARG KUBECTL_VERSION=1.35.0
 # renovate: datasource=github-releases depName=helm/helm
 ARG HELM_VERSION=3.20.0
 # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.+)$
-ARG KUSTOMIZE_VERSION=5.7.1
+ARG KUSTOMIZE_VERSION=5.8.1
 # renovate: datasource=github-releases depName=jqlang/jq
 ARG JQ_VERSION=1.8.1
 # renovate: datasource=docker depName=python

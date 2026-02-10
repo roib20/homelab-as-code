@@ -34,7 +34,7 @@ jobs:
       - name: Install Kustomize
         env:
           # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.+)$
-          KUSTOMIZE_VERSION: "5.7.1"
+          KUSTOMIZE_VERSION: "5.8.1"
         shell: sh
         run: |
           FILE="kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz"
