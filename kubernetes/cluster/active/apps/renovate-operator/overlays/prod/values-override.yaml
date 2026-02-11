@@ -13,3 +13,17 @@ ingress:
     gethomepage.dev/icon: renovate.svg
     gethomepage.dev/name: Renovate Operator
     gethomepage.dev/pod-selector: "app=renovate-operator"
+webhook:
+  enabled: true
+  port: 8082
+  route:
+    enabled: true
+    annotations: {}
+    labels: {}
+    hostnames:
+      - "renovate.${FQDN_01}"
+    parentRefs:
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        name: http-gateway-api
+        namespace: istio-ingress
