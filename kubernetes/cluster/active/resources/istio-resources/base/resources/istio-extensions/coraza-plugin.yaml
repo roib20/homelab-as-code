@@ -19,6 +19,10 @@
 # | 930120  | OS File Access (LFI)    | ProfileImageHash contains .Profile (Jellyfin)   |
 # | 941160  | XSS HTML Injection      | SSO login form contains legitimate <form> tag   |
 #
+# Endpoint-specific exclusions:
+# - Renovate webhook path removes selected 932xxx/941180 signatures to avoid
+#   false positives from dependency dashboard markdown content.
+#
 apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
 metadata:
@@ -46,6 +50,10 @@ spec:
         - SecRuleRemoveById 930120
         # 941160: XSS - matches legitimate HTML in forms
         - SecRuleRemoveById 941160
+        # Renovate webhook false positives (scoped by path + query args)
+        - SecRule REQUEST_FILENAME "@streq /webhook/v1/github" "id:100001,phase:1,pass,nolog,chain"
+        - SecRule ARGS:namespace "@streq renovate" "chain"
+        - SecRule ARGS:job "@streq renovate-github" "ctl:ruleRemoveById=932230,ctl:ruleRemoveById=932235,ctl:ruleRemoveById=932250,ctl:ruleRemoveById=932260,ctl:ruleRemoveById=932370,ctl:ruleRemoveById=941180"
   selector:
     matchLabels:
       app: istio-ingressgateway
