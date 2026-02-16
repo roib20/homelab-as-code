@@ -152,7 +152,7 @@ locals {
     tuppr = {
       chart     = "tuppr"
       name      = "tuppr"
-      namespace = "kube-system"
+      namespace = "default"
       # renovate: datasource=docker depName=ghcr.io/home-operations/charts/tuppr
       chart_version   = "0.0.69"
       helm_repository = "oci://ghcr.io/home-operations/charts"

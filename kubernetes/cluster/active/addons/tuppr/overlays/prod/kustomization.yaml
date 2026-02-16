@@ -8,7 +8,7 @@ helmCharts:
     repo: oci://ghcr.io/home-operations/charts
     version: 0.0.69
     releaseName: tuppr
-    namespace: kube-system
+    namespace: default
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
       - values-override.yaml
