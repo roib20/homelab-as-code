@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: tuppr
     repo: oci://ghcr.io/home-operations/charts
-    version: 0.0.66
+    version: 0.0.68
     releaseName: tuppr
     namespace: kube-system
     valuesFile: ../../base/values.yaml
