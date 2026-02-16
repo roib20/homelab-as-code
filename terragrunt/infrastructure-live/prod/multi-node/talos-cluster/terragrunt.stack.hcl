@@ -149,15 +149,6 @@ locals {
       helm_repository = "oci://ghcr.io/spegel-org/helm-charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/spegel/base/values.yaml")
     }
-    tuppr = {
-      chart     = "tuppr"
-      name      = "tuppr"
-      namespace = "default"
-      # renovate: datasource=docker depName=ghcr.io/home-operations/charts/tuppr
-      chart_version   = "0.0.69"
-      helm_repository = "oci://ghcr.io/home-operations/charts"
-      values          = file("${local.kubernetes_dir}/cluster/active/addons/tuppr/base/values.yaml")
-    }
   }
 }
 
@@ -343,22 +334,5 @@ unit "talos-cluster" {
 
     # Tailscale configuration
     ts_authkey = local.account_vars.locals.tailscale.ts_authkey
-  }
-}
-
-unit "tuppr-upgrades" {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/units/tuppr-upgrades"
-  path   = "tuppr-upgrades"
-
-  values = {
-    manifest_yaml_files = [
-      "${local.terragrunt_dir}/infrastructure-catalog/units/tuppr-upgrades/templates/talos-upgrade.yaml.tftpl",
-      "${local.terragrunt_dir}/infrastructure-catalog/units/tuppr-upgrades/templates/kubernetes-upgrade.yaml.tftpl",
-    ]
-
-    template_vars = {
-      talos_version      = local.versions.talos_version
-      kubernetes_version = local.versions.kubernetes_version
-    }
   }
 }

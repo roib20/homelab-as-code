@@ -2,7 +2,7 @@
   "annotations": {},
   "appName": "tuppr",
   "destName": "in-cluster",
-  "destNamespace": "kube-system",
+  "destNamespace": "default",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
   "project": "default",
