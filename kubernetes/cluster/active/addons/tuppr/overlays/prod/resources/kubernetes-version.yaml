@@ -1,17 +1,11 @@
 apiVersion: tuppr.home-operations.com/v1alpha1
-kind: TalosUpgrade
+kind: KubernetesUpgrade
 metadata:
-  name: cluster
+  name: kubernetes-version
 spec:
-  talos:
-    version: v${talos_version}
-  policy:
-    debug: false
-    force: false
-    placement: soft
-    rebootMode: default
-    stage: false
-    timeout: 30m
+  kubernetes:
+    # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+    version: v1.35.1
   healthChecks:
     - apiVersion: v1
       kind: Node

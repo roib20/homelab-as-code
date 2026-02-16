@@ -8,7 +8,7 @@ helmCharts:
     repo: oci://quay.io/jetstack/charts
     version: v1.19.3
     releaseName: cert-manager
-    namespace: kube-system
+    namespace: cert-manager
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
       - values-override.yaml
