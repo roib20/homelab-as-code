@@ -189,18 +189,6 @@
       "minimumGroupSize": 2
     },
     {
-      "description": "Tuppr Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "Tuppr",
-      "groupSlug": "tuppr",
-      "matchPackageNames": [
-        "/tuppr/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
       "allowedVersions": "<10.0.0",
       "matchPackageNames": [
         "adyanth/cloudflare-operator",
