@@ -5,9 +5,9 @@ resources:
   - ../../base
 helmCharts:
   - name: sealed-secrets
-    repo: https://bitnami-labs.github.io/sealed-secrets
+    repo: oci://registry-1.docker.io/bitnamicharts
     version: 2.18.1
-    releaseName: sealed-secrets-controller
+    releaseName: sealed-secrets
     namespace: kube-system
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
