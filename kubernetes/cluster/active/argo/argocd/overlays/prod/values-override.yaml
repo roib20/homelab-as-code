@@ -5,6 +5,7 @@ server:
     enabled: true
     ingressClassName: tailscale
     annotations:
+      tailscale.com/proxy-group: ingress-proxies
       gethomepage.dev/enabled: "true"
       gethomepage.dev/description: Declarative, GitOps continuous delivery tool for Kubernetes.
       gethomepage.dev/group: Operations
@@ -19,6 +20,8 @@ server:
   ingressGrpc:
     enabled: true
     ingressClassName: tailscale
+    annotations:
+      tailscale.com/proxy-group: ingress-proxies
     extraTls:
       - hosts:
           - "argocd-grpc.${FQDN_02}"

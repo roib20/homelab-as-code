@@ -8,6 +8,8 @@ ingress:
   main:
     enabled: true
     ingressClassName: tailscale
+    annotations:
+      tailscale.com/proxy-group: ingress-proxies
     hosts:
       - host: "home.${FQDN_02}"
         paths:
