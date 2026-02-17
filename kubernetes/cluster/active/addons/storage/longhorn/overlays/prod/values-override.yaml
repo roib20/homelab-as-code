@@ -5,6 +5,7 @@ ingress:
   host: "longhorn.${FQDN_02}"
   tls: true
   annotations:
+    tailscale.com/proxy-group: ingress-proxies
     gethomepage.dev/enabled: "true"
     gethomepage.dev/name: Longhorn
     gethomepage.dev/description: Distributed block storage for Kubernetes.
