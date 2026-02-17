@@ -34,6 +34,11 @@ tasks:
     prompt: "This will DELETE all Tailscale ProxyGroup resources. Are you sure?"
     cmds:
       - echo "Deleting all Tailscale ProxyGroup resources..."
+      - |
+        if ! kubectl get crd proxygroups.tailscale.com >/dev/null 2>&1; then
+          echo "CRD proxygroups.tailscale.com not found; skipping cleanup."
+          exit 0
+        fi
       - kubectl delete proxygroups.tailscale.com --all
       - echo "All Tailscale ProxyGroup resources deleted."
     preconditions:
@@ -44,6 +49,11 @@ tasks:
     cmds:
       - echo "=== DRY RUN - No resources will be deleted ==="
       - echo ""
+      - |
+        if ! kubectl get crd proxygroups.tailscale.com >/dev/null 2>&1; then
+          echo "CRD proxygroups.tailscale.com not found; nothing to show."
+          exit 0
+        fi
       - echo "Would delete the following Tailscale ProxyGroup resources:"
       - kubectl get proxygroups.tailscale.com
     preconditions:
