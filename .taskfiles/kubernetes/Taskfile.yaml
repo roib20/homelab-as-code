@@ -29,23 +29,23 @@ tasks:
       - test -f "{{.TERRAGRUNT_DIR}}/{{.TERRAGRUNT_ENV}}/{{.PVE_NODE}}/bootstrap-k8s-secrets/terragrunt.stack.hcl"
       - which terragrunt
       - which tofu
-  delete-all-ingress:
-    desc: "⚠️  Delete all ingress resources across all namespaces"
-    prompt: "This will DELETE all ingress resources across ALL namespaces. Are you sure?"
+  delete-all-proxygroups:
+    desc: "⚠️  Delete all Tailscale ProxyGroup resources"
+    prompt: "This will DELETE all Tailscale ProxyGroup resources. Are you sure?"
     cmds:
-      - echo "Deleting all ingress resources across all namespaces..."
-      - kubectl delete ingress --all --all-namespaces
-      - echo "All ingress resources deleted."
+      - echo "Deleting all Tailscale ProxyGroup resources..."
+      - kubectl delete proxygroups.tailscale.com --all
+      - echo "All Tailscale ProxyGroup resources deleted."
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
-  delete-all-ingress-dryrun:
-    desc: "Show what ingress resources would be deleted (dry run)"
+  delete-all-proxygroups-dryrun:
+    desc: "Show what Tailscale ProxyGroup resources would be deleted (dry run)"
     cmds:
       - echo "=== DRY RUN - No resources will be deleted ==="
       - echo ""
-      - echo "Would delete the following ingress resources:"
-      - kubectl get ingress --all-namespaces
+      - echo "Would delete the following Tailscale ProxyGroup resources:"
+      - kubectl get proxygroups.tailscale.com
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"

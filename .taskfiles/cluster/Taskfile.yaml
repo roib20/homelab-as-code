@@ -23,8 +23,8 @@ tasks:
     cmds:
       - echo "Disabling Argo CD sync to prevent resource recreation..."
       - task: :argocd:disable-sync
-      - echo "Deleting all ingress resources..."
-      - task: :k8s:delete-all-ingress
+      - echo "Deleting all Tailscale ProxyGroup resources..."
+      - task: :k8s:delete-all-proxygroups
       - echo "Cleaning Cloudflare resources..."
       - task: :cloudflare:clean
       - echo "Destroying cluster infrastructure..."
@@ -43,6 +43,9 @@ tasks:
       - echo ""
       - echo "Would destroy the following infrastructure:"
       - task: :talos:plan-destroy
+      - echo ""
+      - echo "Would delete the following Tailscale ProxyGroup resources:"
+      - task: :k8s:delete-all-proxygroups-dryrun
       - echo ""
       - echo "Would clean the following Cloudflare resources:"
       - task: :cloudflare:clean-dryrun
