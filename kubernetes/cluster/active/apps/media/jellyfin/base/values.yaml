@@ -3,7 +3,7 @@
 image:
   repository: oci.trueforge.org/containerforge/jellyfin
   pullPolicy: IfNotPresent
-  tag: 10.11.6@sha256:826dd44d29f44ab4ee307275d31560abc10eec3a17f0c2c73b3849b28fd0244a
+  tag: 10.11.6@sha256:f013223f9d5ef01e34f552d5fd634c01cbf38a2a5d9159ac84e643f0f335d949
 # -- enable Jellyfin autodiscovery on LAN
 autodiscovery:
   enabled: true
