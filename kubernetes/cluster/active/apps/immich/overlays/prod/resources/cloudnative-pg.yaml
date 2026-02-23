@@ -20,8 +20,6 @@ spec:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname
     podAntiAffinityType: required
-  nodeSelector:
-    storage-nonrotationaldisk: "true"
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
