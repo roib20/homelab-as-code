@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: renovate-operator
     repo: oci://ghcr.io/mogenius/helm-charts
-    version: 2.8.0
+    version: 2.8.5
     releaseName: renovate-operator
     namespace: renovate
     valuesFile: ../../base/values.yaml
