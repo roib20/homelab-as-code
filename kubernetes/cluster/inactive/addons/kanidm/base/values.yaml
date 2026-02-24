@@ -9,7 +9,7 @@ controllers:
       kanidm:
         image:
           repository: kanidm/server
-          tag: 1.9.0
+          tag: 1.9.1
         env:
           - name: KANIDM_DOMAIN
             value: "id.${FQDN_01}"
