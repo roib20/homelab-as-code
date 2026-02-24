@@ -22,8 +22,8 @@ unit "download_file" {
 
   values = {
     node_names         = ["${local.node_name}"]
-    url                = "https://download.sys.truenas.net/TrueNAS-SCALE-Goldeye/25.10.1/TrueNAS-SCALE-25.10.1.iso"
-    checksum           = "d7e325c4e5416f52060f87ee337ae5a4c9c7bb16d34bfcad5e4a69c265ceb5d6"
+    url                = "https://download.sys.truenas.net/TrueNAS-SCALE-Goldeye/25.10.2/TrueNAS-SCALE-25.10.2.iso"
+    checksum           = "84408c5c7578c08eaf61ca4a83bde99ee781c4ea31a1ee9a0c7e54265e94e733"
     checksum_algorithm = "sha256"
     datastore_id       = "local"
   }
