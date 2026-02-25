@@ -7,6 +7,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: kubelet-serving-cert-approver
     app.kubernetes.io/name: kubelet-serving-cert-approver
+    release: kube-prometheus-stack
 spec:
   selector:
     matchLabels:
