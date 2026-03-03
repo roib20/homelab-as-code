@@ -2,6 +2,8 @@
 defaultSettings:
   defaultDataLocality: best-effort
   defaultDataPath: "/var/mnt/longhorn"
+  nodeDrainPolicy: block-for-eviction-if-contains-last-replica
+  detachManuallyAttachedVolumesWhenCordoned: true
 persistence:
   defaultDataLocality: best-effort
 preUpgradeChecker:
