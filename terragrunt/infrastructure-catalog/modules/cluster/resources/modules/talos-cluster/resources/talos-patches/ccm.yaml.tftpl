@@ -7,9 +7,14 @@ machine:
       rotate-server-certificates: true
   features:
     kubernetesTalosAPIAccess:
+      enabled: true
       allowedKubernetesNamespaces:
-        - kube-system
         - system-upgrade
+%{ if type == "controlplane" ~}
+        - kube-system
+%{ endif ~}
       allowedRoles:
         - os:admin
-      enabled: true
+%{ if type == "controlplane" ~}
+        - os:reader
+%{ endif ~}
