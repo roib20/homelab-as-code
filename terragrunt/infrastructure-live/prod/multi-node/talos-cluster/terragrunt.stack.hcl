@@ -25,7 +25,7 @@ locals {
     # renovate: datasource=docker depName=ghcr.io/external-secrets/charts/external-secrets
     external-secrets_version = "2.0.1",
     # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-    gateway-api_version = "1.4.1",
+    gateway-api_version = "1.5.0",
     gateway-api_channel = "experimental",
   }
 
