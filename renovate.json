@@ -49,18 +49,6 @@
       "minimumGroupSize": 2
     },
     {
-      "description": "cert-manager Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "cert-manager",
-      "groupSlug": "cert-manager",
-      "matchPackageNames": [
-        "/cert-manager/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
       "description": "Cilium Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
