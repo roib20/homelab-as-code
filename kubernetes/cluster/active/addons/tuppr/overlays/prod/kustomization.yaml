@@ -8,7 +8,7 @@ resources:
 helmCharts:
   - name: tuppr
     repo: oci://ghcr.io/home-operations/charts
-    version: 0.0.75
+    version: 0.0.79
     releaseName: tuppr
     namespace: system-upgrade
     valuesFile: ../../base/values.yaml
