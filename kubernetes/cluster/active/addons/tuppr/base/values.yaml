@@ -1,0 +1,9 @@
+---
+controller:
+  metrics:
+    enabled: true
+monitoring:
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack

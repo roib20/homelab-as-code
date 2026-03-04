@@ -1,0 +1,4 @@
+---
+immich:
+  metrics:
+    enabled: true

@@ -33,5 +33,15 @@ webhook:
         kind: "Issuer"
         name: "external-secrets-cert-issuer"
       duration: "24h"
+  metrics:
+    service:
+      enabled: true
 certController:
   create: false
+metrics:
+  service:
+    enabled: true
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    release: kube-prometheus-stack

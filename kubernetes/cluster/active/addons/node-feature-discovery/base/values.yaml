@@ -1,0 +1,5 @@
+---
+prometheus:
+  enable: true
+  labels:
+    release: kube-prometheus-stack
