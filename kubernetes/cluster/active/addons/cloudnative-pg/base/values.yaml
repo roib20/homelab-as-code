@@ -5,5 +5,3 @@ monitoring:
     release: kube-prometheus-stack
   grafanaDashboard:
     create: true
-    labels:
-      grafana_dashboard: "1"
