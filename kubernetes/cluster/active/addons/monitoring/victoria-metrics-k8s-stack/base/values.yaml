@@ -1,0 +1,6 @@
+---
+victoria-metrics-operator:
+  enabled: false
+  crds:
+    cleanup:
+      enabled: false
