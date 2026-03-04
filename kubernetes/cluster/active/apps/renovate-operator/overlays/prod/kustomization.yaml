@@ -13,8 +13,6 @@ helmCharts:
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-patches:
-  - path: patches/service-monitor-release-label.yaml
 configMapGenerator:
   - name: env-vars
     envs:

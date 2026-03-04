@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+helmCharts:
+  - name: victoria-metrics-operator
+    repo: oci://ghcr.io/victoriametrics/helm-charts
+    version: 0.59.1
+    releaseName: victoria-metrics-operator
+    namespace: victoria-metrics-operator
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true

@@ -1,0 +1,12 @@
+{
+  "annotations": {
+    "argocd.argoproj.io/sync-wave": "11"
+  },
+  "appName": "victoria-metrics-operator",
+  "destName": "in-cluster",
+  "destNamespace": "victoria-metrics-operator",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "victoria-metrics-operator"
+}

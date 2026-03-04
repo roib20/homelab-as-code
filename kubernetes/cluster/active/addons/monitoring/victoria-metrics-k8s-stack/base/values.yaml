@@ -1,0 +1,11 @@
+---
+victoria-metrics-operator:
+  enabled: false
+  crds:
+    cleanup:
+      enabled: false
+
+grafana:
+  sidecar:
+    dashboards:
+      searchNamespace: ALL

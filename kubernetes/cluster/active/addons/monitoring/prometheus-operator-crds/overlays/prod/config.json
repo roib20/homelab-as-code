@@ -1,0 +1,12 @@
+{
+  "annotations": {
+    "argocd.argoproj.io/sync-wave": "10"
+  },
+  "appName": "prometheus-operator-crds",
+  "destName": "in-cluster",
+  "destNamespace": "monitoring",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "prometheus-operator-crds"
+}

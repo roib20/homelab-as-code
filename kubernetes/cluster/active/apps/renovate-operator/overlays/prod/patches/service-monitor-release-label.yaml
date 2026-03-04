@@ -1,8 +1,0 @@
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: renovate-operator
-  namespace: renovate
-  labels:
-    release: kube-prometheus-stack
