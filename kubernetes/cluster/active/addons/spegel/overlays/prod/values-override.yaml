@@ -5,3 +5,13 @@ spegel:
 service:
   registry:
     hostPort: 29999
+
+serviceMonitor:
+  enabled: true
+  labels:
+    release: kube-prometheus-stack
+
+grafanaDashboard:
+  enabled: true
+  labels:
+    grafana_dashboard: "1"

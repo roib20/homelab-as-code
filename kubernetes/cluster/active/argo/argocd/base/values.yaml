@@ -4,36 +4,12 @@ redis-ha:
   enabled: true
 controller:
   replicas: 1
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      additionalLabels:
-        release: kube-prometheus-stack
 server:
   replicas: 2
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      additionalLabels:
-        release: kube-prometheus-stack
 applicationSet:
   replicas: 2
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      additionalLabels:
-        release: kube-prometheus-stack
 repoServer:
   replicas: 2
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      additionalLabels:
-        release: kube-prometheus-stack
   # Restart when env-vars secret changes
   podAnnotations:
     secret.reloader.stakater.com/reload: "env-vars"
