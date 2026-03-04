@@ -13,3 +13,5 @@ metrics:
     enabled: true
     additionalLabels:
       release: kube-prometheus-stack
+  dashboards:
+    enabled: true
