@@ -32,3 +32,11 @@ spec:
           resources:
             claims:
               - name: gpu
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: immich-server
+  namespace: immich
+  labels:
+    release: kube-prometheus-stack
