@@ -4,3 +4,8 @@ victoria-metrics-operator:
   crds:
     cleanup:
       enabled: false
+
+grafana:
+  sidecar:
+    dashboards:
+      searchNamespace: ALL
