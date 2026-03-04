@@ -6,3 +6,12 @@ webhook:
   ## Use cert-manager to manage webhook TLS certificates
   certManager:
     enabled: true
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    additionalLabels:
+      release: kube-prometheus-stack
+  dashboards:
+    enabled: true

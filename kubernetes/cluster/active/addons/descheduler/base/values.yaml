@@ -4,3 +4,9 @@ kind: Deployment
 leaderElection:
   enabled: true
 replicas: 2
+service:
+  enabled: true
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    release: kube-prometheus-stack

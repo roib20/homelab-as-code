@@ -2,4 +2,8 @@
 # extraArgs:
 #   - --enable-certificate-owner-ref=true
 prometheus:
-  enabled: false
+  enabled: true
+  servicemonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack

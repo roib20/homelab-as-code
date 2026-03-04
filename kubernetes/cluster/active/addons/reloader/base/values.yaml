@@ -6,3 +6,7 @@ reloader:
   readOnlyRootFileSystem: true
   netpol:
     enabled: true
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack
