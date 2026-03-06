@@ -1,5 +1,19 @@
 ---
+controller:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
+
 server:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
   # Ingress
   ingress:
     enabled: true
@@ -25,6 +39,22 @@ server:
     extraTls:
       - hosts:
           - "argocd-grpc.${FQDN_02}"
+
+applicationSet:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
+
+repoServer:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: kube-prometheus-stack
 # API Key for Homepage widget: https://gethomepage.dev/widgets/services/argocd/
 configs:
   cm:

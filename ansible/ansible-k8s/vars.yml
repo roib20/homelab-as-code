@@ -2,7 +2,7 @@
 kustomize_overlays:
   - name: cert-manager
     set: addons
-    overlay: prod
+    overlay: bootstrap
     wait: true
   - name: cert-resources
     set: resources
@@ -10,7 +10,7 @@ kustomize_overlays:
     wait: true
   - name: external-secrets
     set: addons
-    overlay: prod
+    overlay: bootstrap
     wait: false
   - name: argocd
     set: argo
