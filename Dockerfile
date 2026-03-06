@@ -22,7 +22,7 @@ ARG JQ_VERSION=1.8.1
 # renovate: datasource=docker depName=python
 ARG PYTHON_VERSION=3.14.3
 # renovate: datasource=docker depName=golang
-ARG GO_VERSION=1.26.0
+ARG GO_VERSION=1.26.1
 # renovate: datasource=github-releases depName=ovh/ovh-ttyrec
 ARG TTYREC_VERSION=1.1.7.1
 ARG CURL_FLAGS="-sSL --proto '=https' --tlsv1.3 --ciphers 'HIGH:!aNULL:!MD5' --cacert /etc/ssl/certs/ca-certificates.crt --capath /etc/ssl/certs --compressed"
