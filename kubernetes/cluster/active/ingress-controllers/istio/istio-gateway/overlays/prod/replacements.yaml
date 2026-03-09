@@ -1,0 +1,27 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: Service
+        name: istio-ingressgateway
+      fieldPaths:
+        - metadata.annotations.[external-dns.alpha.kubernetes.io/hostname]
+      options:
+        delimiter: ","
+        index: 0
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: Service
+        name: istio-ingressgateway
+      fieldPaths:
+        - metadata.annotations.[external-dns.alpha.kubernetes.io/hostname]
+      options:
+        delimiter: ",*."
+        index: 1

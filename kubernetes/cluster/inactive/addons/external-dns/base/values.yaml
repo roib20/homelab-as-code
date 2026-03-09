@@ -1,0 +1,7 @@
+---
+sources:
+  - service
+annotationFilter: external-dns.alpha.kubernetes.io/hostname
+domainFilters:
+  - "${FQDN_01}"
+policy: sync

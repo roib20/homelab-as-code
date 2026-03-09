@@ -1,5 +1,8 @@
 ---
 service:
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: "${FQDN_01},*.${FQDN_01}"
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
   type: LoadBalancer
   ports:
     - name: status-port
