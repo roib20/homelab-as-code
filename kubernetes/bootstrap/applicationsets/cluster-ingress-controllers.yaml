@@ -62,4 +62,18 @@ spec:
         {{- range $k, $v := .labels }}
         {{ $k }}: {{ $v }}
         {{- end }}
+    spec:
+      ignoreDifferences:
+        - group: argoproj.io
+          jsonPointers:
+            - /status
+          kind: Application
+        {{- if eq .userGivenName "istio-gateway" }}
+        - group: ""
+          kind: Service
+          name: istio-ingressgateway
+          namespace: istio-ingress
+          jsonPointers:
+            - /metadata/annotations/external-dns.alpha.kubernetes.io~1target
+        {{- end }}
 status: {}
