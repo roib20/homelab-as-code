@@ -1,6 +1,6 @@
 ---
 service:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - name: status-port
       port: 15021
