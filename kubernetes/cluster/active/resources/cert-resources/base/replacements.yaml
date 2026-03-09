@@ -1,0 +1,19 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        kind: Certificate
+        name: tls-wildcard
+      fieldPaths:
+        - spec.dnsNames.0
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: Certificate
+        name: tls-wildcard
+      fieldPaths:
+        - spec.dnsNames.1

@@ -26,7 +26,7 @@ locals {
     external-secrets_version = "2.1.0",
     # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
     gateway-api_version = "1.5.0",
-    gateway-api_channel = "experimental",
+    gateway-api_channel = "standard",
   }
 
   # ─── Machines / IP layout ────────────────────────────────────────────────────

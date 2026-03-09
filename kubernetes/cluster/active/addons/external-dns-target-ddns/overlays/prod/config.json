@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "external-dns-target-ddns",
+  "destName": "in-cluster",
+  "destNamespace": "external-dns",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "external-dns-target-ddns"
+}

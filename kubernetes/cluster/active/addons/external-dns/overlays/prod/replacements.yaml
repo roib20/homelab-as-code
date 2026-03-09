@@ -1,0 +1,14 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: Deployment
+        name: external-dns
+      fieldPaths:
+        - spec.template.spec.containers.[name=external-dns].args.6
+      options:
+        delimiter: "="
+        index: 1

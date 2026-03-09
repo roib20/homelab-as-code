@@ -1,6 +1,8 @@
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+resources:
+  - ../../base
 helmCharts:
   - name: gateway
     repo: oci://gcr.io/istio-release/charts
@@ -11,5 +13,9 @@ helmCharts:
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
-resources:
-  - ../../base
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+replacements:
+  - path: replacements.yaml
