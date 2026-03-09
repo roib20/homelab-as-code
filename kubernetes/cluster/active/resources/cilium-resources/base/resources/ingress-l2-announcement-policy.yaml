@@ -1,0 +1,13 @@
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: ingress-l2-announcement-policy
+spec:
+  serviceSelector:
+    matchLabels:
+      io.kubernetes.service.namespace: istio-ingress
+      io.kubernetes.service.name: istio-ingressgateway
+  interfaces:
+    - ^ens18$
+  loadBalancerIPs: true
