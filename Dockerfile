@@ -8,7 +8,7 @@ ARG TOFU_VERSION=1.11.5
 # renovate: datasource=github-releases depName=gruntwork-io/terragrunt
 ARG TERRAGRUNT_VERSION=0.99.4
 # renovate: datasource=github-releases depName=go-task/task
-ARG TASK_VERSION=3.48.0
+ARG TASK_VERSION=3.49.1
 # renovate: datasource=github-releases depName=siderolabs/talos
 ARG TALOS_VERSION=1.12.4
 # renovate: datasource=github-releases depName=kubernetes/kubernetes
