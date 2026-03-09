@@ -3,5 +3,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
-  - resources/cluster_issuers/letsencrypt-prod.yaml
-  - resources/cluster_issuers/letsencrypt-staging.yaml
+  - ../letsencrypt-staging
