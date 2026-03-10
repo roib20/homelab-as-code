@@ -8,7 +8,7 @@
         kind: Deployment
         name: external-dns
       fieldPaths:
-        - spec.template.spec.containers.[name=external-dns].args.6
+        - spec.template.spec.containers.[name=external-dns].args.[=^--domain-filter=\$\{FQDN_01\}$]
       options:
         delimiter: "="
         index: 1
