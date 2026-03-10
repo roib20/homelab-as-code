@@ -122,7 +122,8 @@
         "/kube-controller-manager/",
         "/kube-proxy/",
         "/kube-scheduler/",
-        "/kubelet/"
+        "/kubelet/",
+        "alpine/k8s"
       ],
       "minimumGroupSize": 2
     },
@@ -174,7 +175,7 @@
         "/talos/",
         "ghcr.io/siderolabs/installer"
       ],
-      "minimumGroupSize": 2
+      "minimumGroupSize": 3
     },
     {
       "allowedVersions": "<10.0.0",
