@@ -1,13 +1,33 @@
 ---
+global:
+  fallbackDefaults:
+    pvcRetain: false
+    pvcSize: 1Gi
 persistence:
   config:
     enabled: true
+    mountPath: "/config"
     storageClass: longhorn
-    size: 10Gi
-  # media:
-  #   enabled: true
-  #   type: pvc
-  #   mountPath: /media
-  #   readOnly: true
-  #   existingClaim: smb-mediadata-rox
-  #   subPath: Media
+  data:
+    enabled: true
+    mountPath: "/data"
+    storageClass: longhorn
+  logs:
+    enabled: true
+    mountPath: "/logs"
+    type: "emptyDir"
+  cache:
+    enabled: true
+    mountPath: "/cache"
+    type: "emptyDir"
+  transcode:
+    enabled: true
+    mountPath: "/cache/transcodes"
+    type: "emptyDir"
+  media:
+    enabled: true
+    type: pvc
+    mountPath: "/media"
+    readOnly: true
+    existingClaim: smb-mediadata-rox
+    subPath: Media
