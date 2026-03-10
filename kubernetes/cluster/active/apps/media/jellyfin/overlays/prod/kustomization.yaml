@@ -21,3 +21,11 @@ helmCharts:
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+    options:
+      disableNameSuffixHash: true
+replacements:
+  - path: replacements.yaml
