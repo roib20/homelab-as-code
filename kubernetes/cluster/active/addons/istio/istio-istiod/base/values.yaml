@@ -14,5 +14,5 @@ meshConfig:
   accessLogFile: ""
 env:
   K8S_INGRESS_NS: istio-ingress
-  PILOT_ENABLE_ALPHA_GATEWAY_API: true
+  PILOT_ENABLE_ALPHA_GATEWAY_API: false
   PILOT_ENABLE_QUIC_LISTENERS: true
