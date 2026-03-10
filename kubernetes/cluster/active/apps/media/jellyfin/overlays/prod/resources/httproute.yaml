@@ -1,0 +1,34 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: jellyfin
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: The Free Software Media System
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: jellyfin.svg
+    gethomepage.dev/name: Jellyfin
+    gethomepage.dev/widget.type: "jellyfin"
+    gethomepage.dev/widget.url: "http://jellyfin.jellyfin.svc.cluster.local:8096"
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_JELLYFIN_KEY}}"
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: istio-ingress
+  hostnames:
+    - "media.${FQDN_01}"
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: jellyfin
+          namespace: jellyfin
+          port: 8096
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /

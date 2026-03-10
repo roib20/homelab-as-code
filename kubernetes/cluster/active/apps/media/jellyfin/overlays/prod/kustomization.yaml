@@ -3,10 +3,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
-  - pvc-smb-mediadata-rox.yaml
-  - resource-claim-template.yaml
+  - resources/httproute.yaml
+  - resources/pvc-smb-mediadata-rox.yaml
+  - resources/resource-claim-template.yaml
 patches:
-  - path: deployment-patch.yaml
+  - path: patches/deployment-patch.yaml
     target:
       kind: Deployment
       name: jellyfin
@@ -20,3 +21,9 @@ helmCharts:
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+replacements:
+  - path: replacements.yaml
