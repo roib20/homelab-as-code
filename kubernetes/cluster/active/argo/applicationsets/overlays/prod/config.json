@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "applicationsets",
+  "destName": "in-cluster",
+  "destNamespace": "argocd",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "applicationsets"
+}
