@@ -53,14 +53,14 @@ spec:
       annotations:
         {{- /* copy every key/value under .annotations in config.json */}}
         {{- range $k, $v := .annotations }}
-        {{ $k }}: {{ $v }}
+        {{ $k }}: {{ $v | quote }}
         {{- end }}
       labels:
         app.kubernetes.io/managed-by: argocd
         app.kubernetes.io/name: '{{ .userGivenName }}'
         {{- /* copy every key/value under .labels in config.json */}}
         {{- range $k, $v := .labels }}
-        {{ $k }}: {{ $v }}
+        {{ $k }}: {{ $v | quote }}
         {{- end }}
     spec:
       ignoreDifferences:
