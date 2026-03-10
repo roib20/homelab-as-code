@@ -19,14 +19,14 @@ tasks:
         msg: "ansible-playbook is required"
   down:
     desc: "⚠️  DESTROY cluster with confirmation"
-    prompt: "This will DESTROY the entire cluster and clean Cloudflare resources. Are you sure?"
+    prompt: "This will DESTROY the entire cluster. Are you sure?"
     cmds:
       - echo "Disabling Argo CD sync to prevent resource recreation..."
       - task: :argocd:disable-sync
       - echo "Deleting all Tailscale ProxyGroup resources..."
       - task: :k8s:delete-all-proxygroups
-      - echo "Cleaning Cloudflare resources..."
-      - task: :cloudflare:clean
+      # - echo "Cleaning Cloudflare resources..."
+      # - task: :cloudflare:clean
       - echo "Destroying cluster infrastructure..."
       - task: :talos:destroy
     preconditions:
@@ -47,8 +47,8 @@ tasks:
       - echo "Would delete the following Tailscale ProxyGroup resources:"
       - task: :k8s:delete-all-proxygroups-dryrun
       - echo ""
-      - echo "Would clean the following Cloudflare resources:"
-      - task: :cloudflare:clean-dryrun
+      # - echo "Would clean the following Cloudflare resources:"
+      # - task: :cloudflare:clean-dryrun
     preconditions:
       - sh: which terragrunt
         msg: "terragrunt is required"
