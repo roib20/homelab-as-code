@@ -4,21 +4,22 @@ kind: Cluster
 metadata:
   name: immich-database
 spec:
-  instances: 1
-
+  instances: 2
   storage:
     size: 1Gi
-
+    storageClass: longhorn-cnpg
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.0-0.5.3
-
   postgresql:
     shared_preload_libraries:
       - "vchord.so"
-
   bootstrap:
     initdb:
       database: immich
       owner: immich
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
