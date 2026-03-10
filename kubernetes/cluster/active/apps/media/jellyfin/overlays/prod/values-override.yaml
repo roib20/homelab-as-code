@@ -4,10 +4,12 @@ persistence:
     enabled: true
     mountPath: "/config"
     storageClass: longhorn
+    size: 10Gi
   data:
     enabled: true
     mountPath: "/data"
     storageClass: longhorn
+    size: 10Gi
   logs:
     enabled: true
     mountPath: "/logs"
