@@ -1,8 +1,8 @@
 ---
 global:
   fallbackDefaults:
-    pvcRetain: false
-    pvcSize: 1Gi
+    pvcRetain: true
+    pvcSize: 100Gi
 persistence:
   config:
     enabled: true
