@@ -16,7 +16,7 @@ spec:
   privateKey:
     algorithm: ECDSA
     rotationPolicy: Always
-    size: 384
+    size: 256
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
