@@ -1,7 +1,15 @@
 ---
-sources:
-  - service
 annotationFilter: external-dns.alpha.kubernetes.io/hostname
 domainFilters:
   - "${FQDN_01}"
+extraArgs:
+  - --cloudflare-dns-records-per-page=1000
+  - --cloudflare-record-comment="provisioned by external-dns"
+podAnnotations:
+  secret.reloader.stakater.com/reload: cloudflare-dns-secret
 policy: sync
+serviceMonitor:
+  enabled: true
+sources:
+  - crd
+  - service

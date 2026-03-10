@@ -21,7 +21,8 @@ spec:
               type: RuntimeDefault
           containers:
             - name: external-dns-target-ddns
-              image: alpine/k8s:1.35.1
+              # renovate: datasource=docker depName=alpine/k8s
+              image: alpine/k8s:1.35.2
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:

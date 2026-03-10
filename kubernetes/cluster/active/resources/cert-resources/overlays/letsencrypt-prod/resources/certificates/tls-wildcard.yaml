@@ -9,11 +9,17 @@ spec:
     - "*.${FQDN_01}"
     - "${FQDN_01}"
   issuerRef:
-    name: letsencrypt-prod
     kind: ClusterIssuer
+    name: letsencrypt-prod
+  duration: 160h
+  usages: ["digital signature"]
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+    size: 256
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "kanidm,kaniop,istio-ingress,default"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "istio-ingress,kaniop"
       reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
-      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "kanidm,kaniop,istio-ingress,default"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "istio-ingress,kaniop"

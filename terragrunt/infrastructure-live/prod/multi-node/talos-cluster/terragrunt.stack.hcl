@@ -19,7 +19,7 @@ locals {
   versions = {
     # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
     kubernetes_version    = "1.35.2",
-    initial_talos_version = "1.12.2", # Do not change this value after initial deployment
+    initial_talos_version = "1.12.5", # Do not change this value after initial deployment
     # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
     talos_version = "1.12.5", # Change this value to safely upgrade the Talos version
     # renovate: datasource=docker depName=ghcr.io/external-secrets/charts/external-secrets
@@ -118,7 +118,7 @@ locals {
       name      = "cilium"
       namespace = "kube-system"
       # renovate: datasource=docker depName=quay.io/cilium/charts/cilium
-      chart_version   = "1.18.6"
+      chart_version   = "1.18.7"
       helm_repository = "oci://quay.io/cilium/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cilium/base/values.yaml")
     }
