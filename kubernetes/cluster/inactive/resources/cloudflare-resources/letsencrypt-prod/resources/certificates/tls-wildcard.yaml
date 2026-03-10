@@ -13,6 +13,10 @@ spec:
     name: letsencrypt-prod
   duration: 160h
   usages: ["digital signature"]
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+    size: 384
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
