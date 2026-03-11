@@ -1,0 +1,22 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - resources/pvc-smb-mediadata-rwx.yaml
+helmCharts:
+  - name: qbittorrent
+    repo: oci://oci.trueforge.org/truecharts
+    version: 24.6.0
+    releaseName: qbittorrent
+    namespace: qbittorrent
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+replacements:
+  - path: replacements.yaml

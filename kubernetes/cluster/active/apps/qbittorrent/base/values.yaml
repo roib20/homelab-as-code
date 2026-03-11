@@ -1,0 +1,11 @@
+---
+qbitportforward:
+  enabled: false
+service:
+  torrent:
+    enabled: true
+  gluetun:
+    enabled: false
+workload:
+  qbitportforward:
+    enabled: false

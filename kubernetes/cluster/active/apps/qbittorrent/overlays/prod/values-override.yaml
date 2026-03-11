@@ -1,0 +1,30 @@
+---
+global:
+  fallbackDefaults:
+    storageClass: longhorn
+    pvcRetain: false
+    pvcSize: 1Gi
+ingress:
+  main:
+    enabled: true
+    ingressClassName: tailscale
+    annotations:
+      tailscale.com/proxy-group: ingress-proxies
+    hosts:
+      - host: "qbit.${FQDN_02}"
+        paths:
+          - path: "/"
+            pathType: Prefix
+    tls:
+      - hosts:
+          - "qbit.${FQDN_02}"
+persistence:
+  config:
+    enabled: true
+    mountPath: "/config"
+  mediadata:
+    enabled: true
+    type: pvc
+    mountPath: "/MediaData"
+    readOnly: false
+    existingClaim: smb-mediadata-rwx
