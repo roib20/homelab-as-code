@@ -1,0 +1,45 @@
+---
+global:
+  fallbackDefaults:
+    storageClass: longhorn
+    pvcRetain: false
+    pvcSize: 1Gi
+ingress:
+  main:
+    enabled: true
+    ingressClassName: tailscale
+    annotations:
+      tailscale.com/proxy-group: ingress-proxies
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/description: Bazarr is a companion application to Sonarr and Radarr that manages and downloads subtitles.
+      gethomepage.dev/group: Servarr
+      gethomepage.dev/icon: bazarr.svg
+      gethomepage.dev/name: Bazarr
+      gethomepage.dev/widget.type: "bazarr"
+      gethomepage.dev/widget.url: "http://bazarr.servarr.svc.cluster.local:6767"
+      gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_BAZARR_KEY}}`}}"
+    hosts:
+      - host: "bazarr.${FQDN_02}"
+        paths:
+          - path: "/"
+            pathType: Prefix
+    tls:
+      - hosts:
+          - "bazarr.${FQDN_02}"
+persistence:
+  config:
+    enabled: true
+    mountPath: "/config"
+    targetSelector:
+      main:
+        main:
+          mountPath: /config
+        exportarr:
+          mountPath: /config
+          readOnly: true
+  mediadata:
+    enabled: true
+    type: pvc
+    mountPath: "/MediaData"
+    readOnly: false
+    existingClaim: smb-mediadata-rwx

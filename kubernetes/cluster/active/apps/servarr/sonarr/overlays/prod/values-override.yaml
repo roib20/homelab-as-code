@@ -1,0 +1,67 @@
+---
+global:
+  fallbackDefaults:
+    storageClass: longhorn
+    pvcRetain: false
+    pvcSize: 1Gi
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          env:
+            SONARR__AUTH__METHOD: External
+            SONARR__AUTH__REQUIRED: Enabled
+            SONARR__APP__THEME: dark
+            SONARR__APP__INSTANCENAME: Sonarr
+            SONARR__LOG__LEVEL: info
+            SONARR__LOG__ANALYTICSENABLED: false
+ingress:
+  main:
+    enabled: true
+    ingressClassName: tailscale
+    annotations:
+      tailscale.com/proxy-group: ingress-proxies
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/description: Sonarr is an internet PVR for Usenet and Torrents.
+      gethomepage.dev/group: Servarr
+      gethomepage.dev/icon: sonarr.svg
+      gethomepage.dev/name: Sonarr
+      gethomepage.dev/widget.type: "sonarr"
+      gethomepage.dev/widget.url: "http://sonarr.servarr.svc.cluster.local:8989"
+      gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_SONARR_KEY}}`}}"
+    hosts:
+      - host: "sonarr.${FQDN_02}"
+        paths:
+          - path: "/"
+            pathType: Prefix
+    tls:
+      - hosts:
+          - "sonarr.${FQDN_02}"
+persistence:
+  config:
+    enabled: true
+    mountPath: "/config"
+    targetSelector:
+      main:
+        main:
+          mountPath: /config
+        exportarr:
+          mountPath: /config
+          readOnly: true
+  mediadata:
+    enabled: true
+    type: pvc
+    mountPath: "/MediaData"
+    readOnly: false
+    existingClaim: smb-mediadata-rwx
+metrics:
+  main:
+    enabled: true
+    type: "servicemonitor"
+    endpoints:
+      - port: metrics
+        path: /metrics
+    targetSelector: metrics
+    prometheusRule:
+      enabled: true
