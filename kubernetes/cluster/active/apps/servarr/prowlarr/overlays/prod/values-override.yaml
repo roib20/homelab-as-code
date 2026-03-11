@@ -16,6 +16,28 @@ workload:
             PROWLARR__APP__INSTANCENAME: Prowlarr
             PROWLARR__LOG__LEVEL: info
             PROWLARR__LOG__ANALYTICSENABLED: false
+            PROWLARR__POSTGRES__HOST:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: host
+                expandObjectName: false
+            PROWLARR__POSTGRES__PORT:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: port
+                expandObjectName: false
+            PROWLARR__POSTGRES__USER:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: user
+                expandObjectName: false
+            PROWLARR__POSTGRES__PASSWORD:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: password
+                expandObjectName: false
+            PROWLARR__POSTGRES__MAINDB: prowlarr
+            PROWLARR__POSTGRES__LOGDB: prowlarr-log
 ingress:
   main:
     enabled: true

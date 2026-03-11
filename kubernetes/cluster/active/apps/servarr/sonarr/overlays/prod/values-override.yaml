@@ -16,6 +16,28 @@ workload:
             SONARR__APP__INSTANCENAME: Sonarr
             SONARR__LOG__LEVEL: info
             SONARR__LOG__ANALYTICSENABLED: false
+            SONARR__POSTGRES__HOST:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: host
+                expandObjectName: false
+            SONARR__POSTGRES__PORT:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: port
+                expandObjectName: false
+            SONARR__POSTGRES__USER:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: user
+                expandObjectName: false
+            SONARR__POSTGRES__PASSWORD:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: password
+                expandObjectName: false
+            SONARR__POSTGRES__MAINDB: sonarr
+            SONARR__POSTGRES__LOGDB: sonarr-log
 ingress:
   main:
     enabled: true

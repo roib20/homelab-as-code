@@ -16,6 +16,28 @@ workload:
             RADARR__APP__INSTANCENAME: Radarr
             RADARR__LOG__LEVEL: info
             RADARR__LOG__ANALYTICSENABLED: false
+            RADARR__POSTGRES__HOST:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: host
+                expandObjectName: false
+            RADARR__POSTGRES__PORT:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: port
+                expandObjectName: false
+            RADARR__POSTGRES__USER:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: user
+                expandObjectName: false
+            RADARR__POSTGRES__PASSWORD:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: password
+                expandObjectName: false
+            RADARR__POSTGRES__MAINDB: radarr
+            RADARR__POSTGRES__LOGDB: radarr-log
 ingress:
   main:
     enabled: true
