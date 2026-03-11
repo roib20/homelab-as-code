@@ -53,5 +53,5 @@ httpRoute:
     gethomepage.dev/icon: forgejo.svg
     gethomepage.dev/name: Forgejo
     gethomepage.dev/widget.type: "gitea"
-    gethomepage.dev/widget.url: "http://forgejo.forgejo.svc.cluster.local:3000"
+    gethomepage.dev/widget.url: "http://forgejo-http.forgejo.svc.cluster.local:3000"
     gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_FORGEJO_KEY}}"
