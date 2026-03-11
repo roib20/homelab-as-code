@@ -5,5 +5,5 @@ resources:
   - ../../base
   - resources/smb-credentials.yaml.externalsecret
   - resources/storageclass-mediadata.yaml
-  # - resources/pvc-mediadata-rox.yaml
-  # - resources/pvc-mediadata-rwx.yaml
+  - resources/pvc-mediadata-rox.yaml
+  - resources/pvc-mediadata-rwx.yaml
