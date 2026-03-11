@@ -5,7 +5,7 @@ metadata:
   name: smb-mediadata
 provisioner: smb.csi.k8s.io
 parameters:
-  source: "//truenas.local/MediaData"
+  source: "//192.168.1.5/MediaData"
   csi.storage.k8s.io/node-stage-secret-name: "smb-credentials"
   csi.storage.k8s.io/node-stage-secret-namespace: "smb"
 reclaimPolicy: Delete
