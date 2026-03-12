@@ -1,0 +1,19 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: servarr-postgres
+spec:
+  instances: 1
+  bootstrap:
+    initdb:
+      database: servarr
+      owner: servarr
+  managed:
+    services:
+      disabledDefaultServices:
+        - ro
+        - r
+  storage:
+    size: 10Gi
+    storageClass: longhorn-cnpg

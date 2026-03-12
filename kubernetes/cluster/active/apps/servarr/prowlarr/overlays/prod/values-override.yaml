@@ -1,0 +1,94 @@
+---
+global:
+  fallbackDefaults:
+    storageClass: longhorn
+    pvcRetain: false
+    pvcSize: 1Gi
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          env:
+            PROWLARR__AUTH__METHOD: External
+            PROWLARR__AUTH__REQUIRED: Enabled
+            PROWLARR__AUTH__APIKEY:
+              secretKeyRef:
+                name: servarr-api-keys
+                key: prowlarr_api_key
+                expandObjectName: false
+            PROWLARR__APP__THEME: dark
+            PROWLARR__APP__INSTANCENAME: Prowlarr
+            PROWLARR__LOG__LEVEL: info
+            PROWLARR__LOG__ANALYTICSENABLED: false
+            PROWLARR__POSTGRES__HOST:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: host
+                expandObjectName: false
+            PROWLARR__POSTGRES__PORT:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: port
+                expandObjectName: false
+            PROWLARR__POSTGRES__USER:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: user
+                expandObjectName: false
+            PROWLARR__POSTGRES__PASSWORD:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: password
+                expandObjectName: false
+            PROWLARR__POSTGRES__MAINDB: prowlarr
+            PROWLARR__POSTGRES__LOGDB: prowlarr-log
+ingress:
+  main:
+    enabled: true
+    ingressClassName: tailscale
+    annotations:
+      tailscale.com/proxy-group: ingress-proxies
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/description: The Ultimate Indexer Manager.
+      gethomepage.dev/group: Servarr
+      gethomepage.dev/icon: prowlarr.svg
+      gethomepage.dev/name: Prowlarr
+      gethomepage.dev/widget.type: "prowlarr"
+      gethomepage.dev/widget.url: "http://prowlarr.servarr.svc.cluster.local:9696"
+      gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_PROWLARR_KEY}}`}}"
+    hosts:
+      - host: "prowlarr.${FQDN_02}"
+        paths:
+          - path: "/"
+            pathType: Prefix
+    tls:
+      - hosts:
+          - "prowlarr.${FQDN_02}"
+persistence:
+  config:
+    enabled: true
+    mountPath: "/config"
+    targetSelector:
+      main:
+        main:
+          mountPath: /config
+        exportarr:
+          mountPath: /config
+          readOnly: true
+  mediadata:
+    enabled: true
+    type: pvc
+    mountPath: "/MediaData"
+    readOnly: false
+    existingClaim: smb-mediadata-rwx
+metrics:
+  main:
+    enabled: true
+    type: "servicemonitor"
+    endpoints:
+      - port: metrics
+        path: /metrics
+    targetSelector: metrics
+    prometheusRule:
+      enabled: true

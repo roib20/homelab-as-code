@@ -1,0 +1,21 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: servarr-postgres-radarr-4k
+spec:
+  name: radarr-4k
+  owner: servarr
+  cluster:
+    name: servarr-postgres
+
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: servarr-postgres-radarr-4k-log
+spec:
+  name: radarr-4k-log
+  owner: servarr
+  cluster:
+    name: servarr-postgres

@@ -1,0 +1,94 @@
+---
+global:
+  fallbackDefaults:
+    storageClass: longhorn
+    pvcRetain: false
+    pvcSize: 1Gi
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          env:
+            RADARR__AUTH__METHOD: External
+            RADARR__AUTH__REQUIRED: Enabled
+            RADARR__AUTH__APIKEY:
+              secretKeyRef:
+                name: servarr-api-keys
+                key: radarr_4k_api_key
+                expandObjectName: false
+            RADARR__APP__THEME: dark
+            RADARR__APP__INSTANCENAME: Radarr 4K
+            RADARR__LOG__LEVEL: info
+            RADARR__LOG__ANALYTICSENABLED: false
+            RADARR__POSTGRES__HOST:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: host
+                expandObjectName: false
+            RADARR__POSTGRES__PORT:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: port
+                expandObjectName: false
+            RADARR__POSTGRES__USER:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: user
+                expandObjectName: false
+            RADARR__POSTGRES__PASSWORD:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: password
+                expandObjectName: false
+            RADARR__POSTGRES__MAINDB: radarr-4k
+            RADARR__POSTGRES__LOGDB: radarr-4k-log
+ingress:
+  main:
+    enabled: true
+    ingressClassName: tailscale
+    annotations:
+      tailscale.com/proxy-group: ingress-proxies
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/description: Movie organizer/manager for usenet and torrent users (4K).
+      gethomepage.dev/group: Servarr
+      gethomepage.dev/icon: radarr.svg
+      gethomepage.dev/name: Radarr 4K
+      gethomepage.dev/widget.type: "radarr"
+      gethomepage.dev/widget.url: "http://radarr-4k.servarr.svc.cluster.local:7878"
+      gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_RADARR_4K_KEY}}`}}"
+    hosts:
+      - host: "radarr-4k.${FQDN_02}"
+        paths:
+          - path: "/"
+            pathType: Prefix
+    tls:
+      - hosts:
+          - "radarr-4k.${FQDN_02}"
+persistence:
+  config:
+    enabled: true
+    mountPath: "/config"
+    targetSelector:
+      main:
+        main:
+          mountPath: /config
+        exportarr:
+          mountPath: /config
+          readOnly: true
+  mediadata:
+    enabled: true
+    type: pvc
+    mountPath: "/MediaData"
+    readOnly: false
+    existingClaim: smb-mediadata-rwx
+metrics:
+  main:
+    enabled: true
+    type: "servicemonitor"
+    endpoints:
+      - port: metrics
+        path: /metrics
+    targetSelector: metrics
+    prometheusRule:
+      enabled: true
