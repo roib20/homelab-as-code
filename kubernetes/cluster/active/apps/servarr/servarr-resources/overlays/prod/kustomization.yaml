@@ -6,7 +6,9 @@ resources:
   - resources/databases/cluster-servarr-postgres.yaml
   - resources/databases/database-prowlarr.yaml
   - resources/databases/database-radarr.yaml
+  - resources/databases/database-radarr-4k.yaml
   - resources/databases/database-sonarr.yaml
+  - resources/databases/database-sonarr-4k.yaml
   - resources/secrets/servarr-api-keys.yaml.externalsecret
   - resources/storage/pvc-smb-mediadata-rox.yaml
   - resources/storage/pvc-smb-mediadata-rwx.yaml

@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "sonarr-4k",
+  "destName": "in-cluster",
+  "destNamespace": "servarr",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "sonarr-4k"
+}
