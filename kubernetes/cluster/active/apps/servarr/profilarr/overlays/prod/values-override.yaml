@@ -1,0 +1,32 @@
+---
+global:
+  fallbackDefaults:
+    storageClass: longhorn
+    pvcRetain: false
+    pvcSize: 1Gi
+podOptions:
+  defaultAffinity: false
+ingress:
+  main:
+    enabled: true
+    ingressClassName: tailscale
+    annotations:
+      tailscale.com/proxy-group: ingress-proxies
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/description: Configuration Management Platform for Radarr/Sonarr
+      gethomepage.dev/group: Servarr
+      gethomepage.dev/icon: profilarr.svg
+      gethomepage.dev/name: profilarr
+      gethomepage.dev/pod-selector: "app.kubernetes.io/instance=profilarr"
+    hosts:
+      - host: "profilarr.${FQDN_02}"
+        paths:
+          - path: "/"
+            pathType: Prefix
+    tls:
+      - hosts:
+          - "profilarr.${FQDN_02}"
+persistence:
+  config:
+    enabled: true
+    mountPath: "/config"

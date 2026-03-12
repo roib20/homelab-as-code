@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+helmCharts:
+  - name: profilarr
+    repo: oci://oci.trueforge.org/truecharts
+    version: 2.18.2
+    releaseName: profilarr
+    namespace: servarr
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+configMapGenerator:
+  - name: env-vars-profilarr
+    envs:
+      - /tmp/env-vars.env
+replacements:
+  - path: replacements.yaml
