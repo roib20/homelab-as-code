@@ -4,6 +4,8 @@ global:
     storageClass: longhorn
     pvcRetain: false
     pvcSize: 1Gi
+podOptions:
+  defaultAffinity: false
 ingress:
   main:
     enabled: true
