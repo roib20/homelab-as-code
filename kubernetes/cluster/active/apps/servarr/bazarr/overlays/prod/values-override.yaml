@@ -17,6 +17,7 @@ ingress:
       gethomepage.dev/group: Servarr
       gethomepage.dev/icon: bazarr.svg
       gethomepage.dev/name: Bazarr
+      gethomepage.dev/pod-selector: "app=bazarr"
       gethomepage.dev/widget.type: "bazarr"
       gethomepage.dev/widget.url: "http://bazarr.servarr.svc.cluster.local:6767"
       gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_BAZARR_KEY}}`}}"
