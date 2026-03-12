@@ -45,3 +45,16 @@ persistence:
     mountPath: "/MediaData"
     readOnly: false
     existingClaim: smb-mediadata-rwx
+metrics:
+  main:
+    enabled: true
+    type: "servicemonitor"
+    endpoints:
+      - port: metrics
+        path: /metrics
+    targetSelector: metrics
+    apiKey:
+      secretKeyRef:
+        name: servarr-api-keys
+        key: bazarr_api_key
+        expandObjectName: false
