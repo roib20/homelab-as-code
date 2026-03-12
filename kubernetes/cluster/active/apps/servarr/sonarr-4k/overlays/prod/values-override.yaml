@@ -63,7 +63,7 @@ ingress:
       gethomepage.dev/group: Servarr
       gethomepage.dev/icon: sonarr.svg
       gethomepage.dev/name: Sonarr 4K
-      gethomepage.dev/pod-selector: "app=sonarr-4k"
+      gethomepage.dev/pod-selector: "app.kubernetes.io/instance=sonarr-4k"
       gethomepage.dev/widget.type: "sonarr"
       gethomepage.dev/widget.url: "http://sonarr-4k.servarr.svc.cluster.local:8989"
       gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_SONARR_4K_KEY}}`}}"

@@ -63,7 +63,7 @@ ingress:
       gethomepage.dev/group: Servarr
       gethomepage.dev/icon: radarr.svg
       gethomepage.dev/name: Radarr 4K
-      gethomepage.dev/pod-selector: "app=radarr-4k"
+      gethomepage.dev/pod-selector: "app.kubernetes.io/instance=radarr-4k"
       gethomepage.dev/widget.type: "radarr"
       gethomepage.dev/widget.url: "http://radarr-4k.servarr.svc.cluster.local:7878"
       gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_RADARR_4K_KEY}}`}}"
