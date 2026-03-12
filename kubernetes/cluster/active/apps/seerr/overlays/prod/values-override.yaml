@@ -14,13 +14,13 @@ ingress:
     gethomepage.dev/widget.url: "http://seerr.seerr.svc.cluster.local:80"
     gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_SEERR_KEY}}"
   hosts:
-    - host: "get.${FQDN_02}"
+    - host: "seerr.${FQDN_02}"
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
     - hosts:
-        - "get.${FQDN_02}"
+        - "seerr.${FQDN_02}"
 
 route:
   main:
