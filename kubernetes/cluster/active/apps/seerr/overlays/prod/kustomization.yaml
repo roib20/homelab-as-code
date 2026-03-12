@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+helmCharts:
+  - name: seerr-chart
+    repo: oci://ghcr.io/seerr-team/seerr
+    version: 3.3.0
+    releaseName: seerr
+    namespace: seerr
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+configMapGenerator:
+  - name: env-vars-seerr
+    envs:
+      - /tmp/env-vars.env
+replacements:
+  - path: replacements.yaml

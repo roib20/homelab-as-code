@@ -1,0 +1,31 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars-seerr
+    fieldPath: "data.FQDN_02"
+  targets:
+    # Ingress
+    - select:
+        kind: Ingress
+        name: seerr
+      fieldPaths:
+        - spec.rules.0.host
+        - spec.tls.0.hosts.0
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars-seerr
+    fieldPath: "data.FQDN_01"
+  targets:
+    # HTTPRoute
+    - select:
+        group: gateway.networking.k8s.io
+        kind: HTTPRoute
+        name: seerr
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1

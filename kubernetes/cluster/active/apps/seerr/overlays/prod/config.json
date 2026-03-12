@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "seerr-chart",
+  "destName": "in-cluster",
+  "destNamespace": "seerr",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "seerr"
+}
