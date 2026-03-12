@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: radarr
     repo: oci://oci.trueforge.org/truecharts
-    version: 26.7.0
+    version: 26.7.2
     releaseName: radarr
     namespace: servarr
     valuesFile: ../../base/values.yaml
