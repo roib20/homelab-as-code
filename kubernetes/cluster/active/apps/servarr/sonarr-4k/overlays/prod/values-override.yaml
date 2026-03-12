@@ -45,6 +45,13 @@ workload:
                 expandObjectName: false
             SONARR__POSTGRES__MAINDB: sonarr-4k
             SONARR__POSTGRES__LOGDB: sonarr-4k-log
+        exportarr:
+          env:
+            API_KEY:
+              secretKeyRef:
+                name: servarr-api-keys
+                key: sonarr_4k_api_key
+                expandObjectName: false
 ingress:
   main:
     enabled: true

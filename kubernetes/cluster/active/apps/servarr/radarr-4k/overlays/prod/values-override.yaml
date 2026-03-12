@@ -45,6 +45,13 @@ workload:
                 expandObjectName: false
             RADARR__POSTGRES__MAINDB: radarr-4k
             RADARR__POSTGRES__LOGDB: radarr-4k-log
+        exportarr:
+          env:
+            API_KEY:
+              secretKeyRef:
+                name: servarr-api-keys
+                key: radarr_4k_api_key
+                expandObjectName: false
 ingress:
   main:
     enabled: true

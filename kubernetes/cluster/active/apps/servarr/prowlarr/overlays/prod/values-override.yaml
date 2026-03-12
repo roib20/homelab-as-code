@@ -45,6 +45,13 @@ workload:
                 expandObjectName: false
             PROWLARR__POSTGRES__MAINDB: prowlarr
             PROWLARR__POSTGRES__LOGDB: prowlarr-log
+        exportarr:
+          env:
+            API_KEY:
+              secretKeyRef:
+                name: servarr-api-keys
+                key: prowlarr_api_key
+                expandObjectName: false
 ingress:
   main:
     enabled: true
