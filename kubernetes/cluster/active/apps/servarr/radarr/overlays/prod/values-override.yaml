@@ -4,6 +4,8 @@ global:
     storageClass: longhorn
     pvcRetain: false
     pvcSize: 1Gi
+podOptions:
+  defaultAffinity: false
 workload:
   main:
     podSpec:
@@ -43,6 +45,13 @@ workload:
                 expandObjectName: false
             RADARR__POSTGRES__MAINDB: radarr
             RADARR__POSTGRES__LOGDB: radarr-log
+        exportarr:
+          env:
+            API_KEY:
+              secretKeyRef:
+                name: servarr-api-keys
+                key: radarr_api_key
+                expandObjectName: false
 ingress:
   main:
     enabled: true
