@@ -1,7 +1,7 @@
 ---
 - source:
     kind: ConfigMap
-    name: env-vars
+    name: env-vars-radarr
     fieldPath: "data.FQDN_02"
   targets:
     # Ingress

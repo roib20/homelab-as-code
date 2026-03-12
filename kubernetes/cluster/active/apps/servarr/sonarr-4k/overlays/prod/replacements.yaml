@@ -1,7 +1,7 @@
 ---
 - source:
     kind: ConfigMap
-    name: env-vars
+    name: env-vars-sonarr-4k
     fieldPath: "data.FQDN_02"
   targets:
     # Ingress

@@ -14,7 +14,7 @@ helmCharts:
       - values-override.yaml
     includeCRDs: true
 configMapGenerator:
-  - name: env-vars
+  - name: env-vars-bazarr
     envs:
       - /tmp/env-vars.env
 replacements:
