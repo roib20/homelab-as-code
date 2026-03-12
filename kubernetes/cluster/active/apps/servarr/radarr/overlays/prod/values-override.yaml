@@ -12,6 +12,11 @@ workload:
           env:
             RADARR__AUTH__METHOD: External
             RADARR__AUTH__REQUIRED: Enabled
+            RADARR__AUTH__APIKEY:
+              secretKeyRef:
+                name: servarr-api-keys
+                key: radarr_api_key
+                expandObjectName: false
             RADARR__APP__THEME: dark
             RADARR__APP__INSTANCENAME: Radarr
             RADARR__LOG__LEVEL: info
