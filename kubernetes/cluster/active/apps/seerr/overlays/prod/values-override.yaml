@@ -1,0 +1,25 @@
+---
+ingress:
+  enabled: true
+  ingressClassName: tailscale
+  annotations:
+    tailscale.com/proxy-group: ingress-proxies
+  hosts:
+    - host: "get.${FQDN_02}"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - "get.${FQDN_02}"
+
+route:
+  main:
+    enabled: true
+    parentRefs:
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        name: http-gateway-api
+        namespace: istio-ingress
+    hostnames:
+      - "get.${FQDN_01}"

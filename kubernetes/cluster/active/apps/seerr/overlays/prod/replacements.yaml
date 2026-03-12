@@ -14,3 +14,18 @@
       options:
         delimiter: "."
         index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars-seerr
+    fieldPath: "data.FQDN_01"
+  targets:
+    # HTTPRoute
+    - select:
+        group: gateway.networking.k8s.io
+        kind: HTTPRoute
+        name: seerr
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
