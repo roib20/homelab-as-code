@@ -1,0 +1,32 @@
+---
+byparrImage:
+  repository: ghcr.io/thephaseless/byparr
+  # renovate: datasource=docker depName=ghcr.io/thephaseless/byparr
+  tag: 2.1.0
+  pullPolicy: IfNotPresent
+
+workload:
+  main:
+    podSpec:
+      containers:
+        byparr:
+          enabled: true
+          primary: false
+          imageSelector: byparrImage
+          env:
+            HOST: "localhost"
+            PORT: "8191"
+          probes:
+            liveness:
+              enabled: false
+            readiness:
+              enabled: false
+            startup:
+              enabled: false
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
