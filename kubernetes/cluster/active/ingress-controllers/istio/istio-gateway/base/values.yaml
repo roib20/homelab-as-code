@@ -23,7 +23,7 @@ service:
       protocol: UDP
 autoscaling:
   enabled: false
-replicaCount: 1
+replicaCount: 3
 labels:
   "istio": ingressgateway
   # By default, don't enroll gateways into the ambient dataplane
