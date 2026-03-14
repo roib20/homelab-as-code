@@ -2,3 +2,6 @@
 global:
   image:
     registry: "quay.io"
+  env:
+    - name: "VM_VMALERTMANAGER_ALERTMANAGERDEFAULTBASEIMAGE"
+      value: "quay.io/prometheus/alertmanager"
