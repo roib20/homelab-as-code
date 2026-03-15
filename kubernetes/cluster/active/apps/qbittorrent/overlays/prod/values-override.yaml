@@ -10,6 +10,14 @@ ingress:
     ingressClassName: tailscale
     annotations:
       tailscale.com/proxy-group: ingress-proxies
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/description: BitTorrent client.
+      gethomepage.dev/group: Servarr
+      gethomepage.dev/icon: qbittorrent.svg
+      gethomepage.dev/name: qBittorrent
+      gethomepage.dev/pod-selector: "app.kubernetes.io/instance=qbittorrent"
+      gethomepage.dev/widget.type: "qbittorrent"
+      gethomepage.dev/widget.url: "http://qbittorrent.qbittorrent.svc.cluster.local:10095"
     hosts:
       - host: "qbit.${FQDN_02}"
         paths:
