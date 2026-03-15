@@ -70,5 +70,6 @@ module "talos_cluster" {
   cluster_vip            = var.cluster_vip
   bootstrap_charts       = local.bootstrap_charts
   on_destroy             = var.cluster_on_destroy
+  zswap                  = var.zswap
   ts_authkey             = var.ts_authkey
 }

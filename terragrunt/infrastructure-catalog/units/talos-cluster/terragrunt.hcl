@@ -46,6 +46,12 @@ inputs = {
 
   timeout = try(values.timeout, "10m")
 
+  zswap = try(values.zswap, {
+    enabled          = false
+    max_pool_percent = 20
+    shrinker_enabled = true
+  })
+
   # machines map
   machines = jsonencode(values.machines)
 

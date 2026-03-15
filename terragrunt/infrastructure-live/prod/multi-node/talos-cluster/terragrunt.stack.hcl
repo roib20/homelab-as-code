@@ -111,6 +111,12 @@ locals {
 
   timeout = "10m"
 
+  zswap = {
+    enabled          = true
+    max_pool_percent = 20
+    shrinker_enabled = true
+  }
+
   # Helm Charts
   helm_charts = {
     cilium = {
@@ -324,6 +330,7 @@ unit "talos-cluster" {
     # other locals
     timeout  = local.timeout
     machines = local.machines
+    zswap    = local.zswap
 
     # Fix for UEFI + GPU passthrough destroy timeouts - skip all cleanup
     cluster_on_destroy = {

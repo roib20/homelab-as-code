@@ -1,0 +1,10 @@
+# https://docs.siderolabs.com/talos/latest/reference/configuration/block/swapvolumeconfig
+---
+apiVersion: v1alpha1
+kind: SwapVolumeConfig
+name: zswap
+provisioning:
+  diskSelector:
+    match: 'disk.dev_path == "/dev/vdc" && disk.transport == "virtio"'
+  minSize: 32GiB
+  maxSize: 32GiB

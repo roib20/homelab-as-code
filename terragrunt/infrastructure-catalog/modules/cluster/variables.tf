@@ -44,6 +44,25 @@ variable "cluster_on_destroy" {
   }
 }
 
+variable "zswap" {
+  description = "Zswap configuration for Talos nodes."
+  type = object({
+    enabled          = bool
+    max_pool_percent = number
+    shrinker_enabled = bool
+  })
+  default = {
+    enabled          = false
+    max_pool_percent = 25
+    shrinker_enabled = true
+  }
+
+  validation {
+    condition     = var.zswap.max_pool_percent >= 0 && var.zswap.max_pool_percent <= 100
+    error_message = "zswap.max_pool_percent must be between 0 and 100."
+  }
+}
+
 variable "helm_charts" {
   description = "Configuration for each Helm chart: values, chart, release name, namespace, version, and repository."
   type = map(object({

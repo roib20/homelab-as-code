@@ -104,6 +104,14 @@ inputs = {
       discard      = "on"
       size         = try(values.data_disk, 300)
     },
+    {
+      # Swap backing disk for zswap
+      interface    = "virtio2"
+      datastore_id = try(values.vm_datastore_id, "local-btrfs")
+      iothread     = true
+      discard      = "on"
+      size         = try(values.zswap_disk, 32)
+    },
   ]
 
   # Host PCI passthrough
