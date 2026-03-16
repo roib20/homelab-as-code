@@ -12,6 +12,12 @@ workload:
       containers:
         main:
           env:
+            DYNACONF_AUTH__TYPE: basic
+            DYNACONF_AUTH__APIKEY:
+              secretKeyRef:
+                name: servarr-api-keys
+                key: bazarr_api_key
+                expandObjectName: false
             POSTGRES_ENABLED: true
             POSTGRES_HOST:
               secretKeyRef:
