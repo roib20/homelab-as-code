@@ -10,7 +10,10 @@ locals {
   # Root "terragrunt" directory, containing "infrastructure-catalog" and "infrastructure-live" directories
   terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
 
-  agent = try(values.agent.enabled, true)
+  agent             = try(values.agent.enabled, true)
+  swap_disk_raw     = try(values.swap_disk, 0)
+  swap_disk_size    = can(tonumber(local.swap_disk_raw)) ? tonumber(local.swap_disk_raw) : 0
+  swap_disk_enabled = local.swap_disk_size > 0
 }
 
 terraform {
@@ -86,25 +89,39 @@ inputs = {
     dedicated = try(values.memory, 4096)
   }
 
-  disks = [
-    {
-      # System disk
-      interface    = "virtio0"
-      file_id      = dependency.download_file.outputs.downloaded_file_id
-      datastore_id = try(values.vm_datastore_id, "local-btrfs")
-      iothread     = true
-      discard      = "on"
-      size         = try(values.system_disk, 100)
-    },
-    {
-      # Data disk for workloads
-      interface    = "virtio1"
-      datastore_id = try(values.vm_datastore_id, "local-btrfs")
-      iothread     = true
-      discard      = "on"
-      size         = try(values.data_disk, 300)
-    },
-  ]
+  disks = concat(
+    [
+      {
+        # System disk
+        interface    = "virtio0"
+        file_id      = dependency.download_file.outputs.downloaded_file_id
+        datastore_id = try(values.vm_datastore_id, "local-btrfs")
+        iothread     = true
+        discard      = "on"
+        size         = try(values.system_disk, 100)
+      },
+      {
+        # Data disk for workloads
+        interface    = "virtio1"
+        datastore_id = try(values.vm_datastore_id, "local-btrfs")
+        iothread     = true
+        discard      = "on"
+        size         = try(values.data_disk, 300)
+      },
+    ],
+    local.swap_disk_enabled ? [
+      {
+        # Swap backing disk for zswap
+        interface    = "virtio2"
+        datastore_id = try(values.vm_datastore_id, "local-btrfs")
+        iothread     = true
+        discard      = "on"
+        size         = local.swap_disk_size
+        backup       = false
+        replicate    = false
+      },
+    ] : []
+  )
 
   # Host PCI passthrough
   hostpci_devices = [

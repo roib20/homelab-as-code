@@ -29,6 +29,8 @@ locals {
     gateway-api_channel = "standard",
   }
 
+  default_swap_disk = 32
+
   # ─── Machines / IP layout ────────────────────────────────────────────────────
   controlplane_nodes = [
     {
@@ -39,6 +41,7 @@ locals {
       memory      = 14336
       system_disk = 100
       data_disk   = 300
+      swap_disk   = local.default_swap_disk
       node_name   = local.node_names[0] # pve-node-01
     },
     {
@@ -49,6 +52,7 @@ locals {
       memory      = 12288
       system_disk = 100
       data_disk   = 300
+      swap_disk   = local.default_swap_disk
       node_name   = local.node_names[1] # pve-node-02
     },
     {
@@ -59,6 +63,7 @@ locals {
       memory      = 12288
       system_disk = 100
       data_disk   = 300
+      swap_disk   = local.default_swap_disk
       node_name   = local.node_names[2] # pve-node-03
     },
   ]
@@ -66,6 +71,10 @@ locals {
   worker_nodes = []
 
   talos_nodes = concat(local.controlplane_nodes, local.worker_nodes)
+
+  swap_disk_values = distinct([for node in local.talos_nodes : try(node.swap_disk, 0) if try(node.swap_disk, 0) > 0])
+  swap_disk_min_gb = length(local.swap_disk_values) > 0 ? min(local.swap_disk_values...) : 0
+  swap_disk_max_gb = length(local.swap_disk_values) > 0 ? max(local.swap_disk_values...) : 0
 
   machines = {
     for node in local.talos_nodes :
@@ -110,6 +119,12 @@ locals {
   cluster_service_subnet = "10.96.0.0/12"
 
   timeout = "10m"
+
+  zswap = {
+    enabled          = true
+    max_pool_percent = 25
+    shrinker_enabled = true
+  }
 
   # Helm Charts
   helm_charts = {
@@ -204,6 +219,7 @@ unit "$${local.controlplane_nodes[0].name}" {
     memory      = "${local.controlplane_nodes[0].memory}"
     system_disk = "${local.controlplane_nodes[0].system_disk}"
     data_disk   = "${local.controlplane_nodes[0].data_disk}"
+    swap_disk   = local.controlplane_nodes[0].swap_disk
 
     # PCI passthrough mapping for Intel GPU
     pci_mapping = "GPU_${local.controlplane_nodes[0].node_name}"
@@ -249,6 +265,7 @@ unit "$${local.controlplane_nodes[1].name}" {
     memory      = "${local.controlplane_nodes[1].memory}"
     system_disk = "${local.controlplane_nodes[1].system_disk}"
     data_disk   = "${local.controlplane_nodes[1].data_disk}"
+    swap_disk   = local.controlplane_nodes[1].swap_disk
 
     # PCI passthrough mapping for Intel GPU
     pci_mapping = "GPU_${local.controlplane_nodes[1].node_name}"
@@ -294,6 +311,7 @@ unit "$${local.controlplane_nodes[2].name}" {
     memory      = "${local.controlplane_nodes[2].memory}"
     system_disk = "${local.controlplane_nodes[2].system_disk}"
     data_disk   = "${local.controlplane_nodes[2].data_disk}"
+    swap_disk   = local.controlplane_nodes[2].swap_disk
 
     # PCI passthrough mapping for Intel GPU
     pci_mapping = "GPU_${local.controlplane_nodes[2].node_name}"
@@ -322,8 +340,11 @@ unit "talos-cluster" {
     helm_charts = local.helm_charts
 
     # other locals
-    timeout  = local.timeout
-    machines = local.machines
+    timeout       = local.timeout
+    machines      = local.machines
+    zswap         = local.zswap
+    swap_disk_min = local.swap_disk_min_gb
+    swap_disk_max = local.swap_disk_max_gb
 
     # Fix for UEFI + GPU passthrough destroy timeouts - skip all cleanup
     cluster_on_destroy = {

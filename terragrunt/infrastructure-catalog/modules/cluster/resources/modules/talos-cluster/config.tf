@@ -14,6 +14,8 @@ locals {
   extramounts = [
     "/var/mnt/longhorn", # Longhorn: https://longhorn.io/docs/latest/advanced-resources/os-distro-specific/talos-linux-support/
   ]
+
+  zswap_patches_enabled = var.zswap.enabled && var.swap_disk_min > 0 && var.swap_disk_max > 0
 }
 
 data "helm_template" "bootstrap_charts" {
@@ -74,6 +76,17 @@ data "talos_machine_configuration" "this" {
         }
       ]
     }),
+    local.zswap_patches_enabled ? templatefile("${path.module}/resources/talos-patches/swap-volume.yaml.tftpl", {
+      disk_name      = "vdc"
+      disk_transport = "virtio"
+      swap_disk_min  = var.swap_disk_min
+      swap_disk_max  = var.swap_disk_max
+    }) : "",
+    local.zswap_patches_enabled ? templatefile("${path.module}/resources/talos-patches/zswap.yaml.tftpl", {
+      max_pool_percent = var.zswap.max_pool_percent
+      shrinker_enabled = var.zswap.shrinker_enabled
+    }) : "",
+    local.zswap_patches_enabled ? templatefile("${path.module}/resources/talos-patches/kubelet-memory-swap.yaml.tftpl", {}) : "",
     templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
       extramounts = local.extramounts
     }),
@@ -95,9 +108,15 @@ data "talos_machine_configuration" "this" {
       machine_install_disk_image = each.value.secureboot ? local.machine_installer_secureboot[each.key] : local.machine_installer[each.key]
     }),
     templatefile("${path.module}/resources/talos-patches/machine_kernel.yaml.tftpl", {
-      sysctls = {
-        "vm.nr_hugepages" = "1024"
-      }
+      sysctls = merge(
+        {
+          "vm.nr_hugepages" = "1024"
+        },
+        var.zswap.enabled ? {
+          "vm.swappiness"   = "130"
+          "vm.page-cluster" = "0"
+        } : {}
+      )
       kernel_modules = [
         "binfmt_misc",
         "nvme_tcp",

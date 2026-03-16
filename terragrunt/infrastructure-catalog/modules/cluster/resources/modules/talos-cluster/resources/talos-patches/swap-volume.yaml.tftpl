@@ -1,0 +1,10 @@
+# https://docs.siderolabs.com/talos/latest/reference/configuration/block/swapvolumeconfig
+---
+apiVersion: v1alpha1
+kind: SwapVolumeConfig
+name: zswap
+provisioning:
+  diskSelector:
+    match: disk.dev_path == "/dev/${disk_name}" && disk.transport == "${disk_transport}"
+  minSize: ${swap_disk_min}GB
+  maxSize: ${swap_disk_max}GB
