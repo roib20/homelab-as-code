@@ -52,7 +52,7 @@ inputs = {
     shrinker_enabled = true
   })
 
-  swap_disk = try(values.swap_disk, 32)
+  swap_disk = try(values.swap_disk, 0)
 
   # machines map
   machines = jsonencode(values.machines)

@@ -100,7 +100,7 @@ variable "zswap" {
 variable "swap_disk" {
   description = "Swap disk size in GB for Talos VM swap backing disk"
   type        = number
-  default     = 32
+  default     = 0
 
   validation {
     condition     = var.swap_disk >= 0 && (!var.zswap.enabled || var.swap_disk > 0)
