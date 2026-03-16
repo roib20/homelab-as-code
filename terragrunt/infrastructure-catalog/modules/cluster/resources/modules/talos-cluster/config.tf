@@ -14,6 +14,8 @@ locals {
   extramounts = [
     "/var/mnt/longhorn", # Longhorn: https://longhorn.io/docs/latest/advanced-resources/os-distro-specific/talos-linux-support/
   ]
+
+  zswap_patches_enabled = var.zswap.enabled && var.swap_disk > 0
 }
 
 data "helm_template" "bootstrap_charts" {
@@ -74,16 +76,16 @@ data "talos_machine_configuration" "this" {
         }
       ]
     }),
-    var.zswap.enabled && var.swap_disk > 0 ? templatefile("${path.module}/resources/talos-patches/swap-volume.yaml.tftpl", {
+    local.zswap_patches_enabled ? templatefile("${path.module}/resources/talos-patches/swap-volume.yaml.tftpl", {
       disk_name      = "vdc"
       disk_transport = "virtio"
       swap_disk      = var.swap_disk
     }) : "",
-    var.zswap.enabled && var.swap_disk > 0 ? templatefile("${path.module}/resources/talos-patches/zswap.yaml.tftpl", {
+    local.zswap_patches_enabled ? templatefile("${path.module}/resources/talos-patches/zswap.yaml.tftpl", {
       max_pool_percent = var.zswap.max_pool_percent
       shrinker_enabled = var.zswap.shrinker_enabled
     }) : "",
-    var.zswap.enabled && var.swap_disk > 0 ? templatefile("${path.module}/resources/talos-patches/kubelet-memory-swap.yaml.tftpl", {}) : "",
+    local.zswap_patches_enabled ? templatefile("${path.module}/resources/talos-patches/kubelet-memory-swap.yaml.tftpl", {}) : "",
     templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
       extramounts = local.extramounts
     }),
