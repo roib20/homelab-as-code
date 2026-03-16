@@ -11,7 +11,7 @@ locals {
   terragrunt_dir = "${dirname(find_in_parent_folders("root.hcl"))}/.."
 
   agent             = try(values.agent.enabled, true)
-  swap_disk_size    = try(values.swap_disk, 32)
+  swap_disk_size    = try(values.swap_disk, 0)
   swap_disk_enabled = local.swap_disk_size > 0
 }
 
