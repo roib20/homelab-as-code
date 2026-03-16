@@ -6,6 +6,17 @@ global:
     pvcSize: 1Gi
 podOptions:
   defaultAffinity: false
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          env:
+            DYNACONF_AUTH__APIKEY:
+              secretKeyRef:
+                name: servarr-api-keys
+                key: bazarr_api_key
+                expandObjectName: false
 ingress:
   main:
     enabled: true
