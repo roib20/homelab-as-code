@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
   - resources/databases/cluster-servarr-postgres.yaml
+  - resources/databases/database-bazarr.yaml
   - resources/databases/database-prowlarr.yaml
   - resources/databases/database-radarr.yaml
   - resources/databases/database-radarr-4k.yaml
