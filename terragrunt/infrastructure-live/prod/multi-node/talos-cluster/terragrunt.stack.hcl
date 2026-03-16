@@ -72,7 +72,7 @@ locals {
 
   talos_nodes = concat(local.controlplane_nodes, local.worker_nodes)
 
-  swap_disk_values = distinct([for node in local.talos_nodes : try(node.swap_disk, 0)])
+  swap_disk_values = distinct([for node in local.talos_nodes : node.swap_disk if try(node.swap_disk, 0) > 0])
   swap_disk_min_gb = length(local.swap_disk_values) > 0 ? min(local.swap_disk_values...) : 0
   swap_disk_max_gb = length(local.swap_disk_values) > 0 ? max(local.swap_disk_values...) : 0
 
