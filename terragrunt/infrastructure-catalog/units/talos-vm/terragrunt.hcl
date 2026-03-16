@@ -116,6 +116,8 @@ inputs = {
         iothread     = true
         discard      = "on"
         size         = local.swap_disk_size
+        backup       = false
+        replicate    = false
       },
     ] : []
   )
