@@ -104,7 +104,7 @@ variable "swap_disk" {
 
   validation {
     condition     = var.swap_disk >= 0 && (!var.zswap.enabled || var.swap_disk > 0)
-    error_message = "swap_disk must be 0 (disabled) or greater than 0 when zswap is enabled."
+    error_message = "swap_disk must be non-negative, and greater than 0 when zswap is enabled."
   }
 }
 
