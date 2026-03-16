@@ -16,6 +16,11 @@ spec:
     initdb:
       database: immich
       owner: immich
+  managed:
+    services:
+      disabledDefaultServices:
+        - ro
+        - r
   affinity:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname
