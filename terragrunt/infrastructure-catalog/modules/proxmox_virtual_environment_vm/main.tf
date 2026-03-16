@@ -1,9 +1,10 @@
 resource "proxmox_virtual_environment_vm" "vm" {
-  # Avoid unnecessary changes when CDROM or boot order are updated (disk/image changes are managed normally)
+  # Avoid unnecessary changes when CDROM, boot order, or the system disk image identifier are updated externally
   lifecycle {
     ignore_changes = [
       cdrom,
       boot_order,
+      disk[0].file_id,
     ]
   }
 
