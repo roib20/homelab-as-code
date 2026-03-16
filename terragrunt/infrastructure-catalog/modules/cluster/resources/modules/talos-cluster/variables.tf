@@ -87,7 +87,7 @@ variable "zswap" {
   })
   default = {
     enabled          = false
-    max_pool_percent = 20
+    max_pool_percent = 25
     shrinker_enabled = true
   }
 
