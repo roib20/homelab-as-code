@@ -69,8 +69,8 @@ variable "swap_disk" {
   default     = 32
 
   validation {
-    condition     = var.swap_disk > 0
-    error_message = "swap_disk must be greater than 0."
+    condition     = var.zswap.enabled ? var.swap_disk > 0 : var.swap_disk >= 0
+    error_message = "swap_disk must be non-negative, and greater than 0 when zswap.enabled is true."
   }
 }
 
