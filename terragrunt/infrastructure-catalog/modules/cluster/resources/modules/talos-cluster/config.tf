@@ -101,9 +101,15 @@ data "talos_machine_configuration" "this" {
       machine_install_disk_image = each.value.secureboot ? local.machine_installer_secureboot[each.key] : local.machine_installer[each.key]
     }),
     templatefile("${path.module}/resources/talos-patches/machine_kernel.yaml.tftpl", {
-      sysctls = {
-        "vm.nr_hugepages" = "1024"
-      }
+      sysctls = merge(
+        {
+          "vm.nr_hugepages" = "1024"
+        },
+        var.zswap.enabled ? {
+          "vm.swappiness"   = "130"
+          "vm.page-cluster" = "0"
+        } : {}
+      )
       kernel_modules = [
         "binfmt_misc",
         "nvme_tcp",
