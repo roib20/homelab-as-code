@@ -97,14 +97,25 @@ variable "zswap" {
   }
 }
 
-variable "swap_disk" {
-  description = "Swap disk size in GB for Talos VM swap backing disk"
+variable "swap_disk_min" {
+  description = "Minimum swap disk size in GB across Talos VM swap backing disks"
   type        = number
   default     = 0
 
   validation {
-    condition     = var.swap_disk >= 0 && (!var.zswap.enabled || var.swap_disk > 0)
-    error_message = "swap_disk must be non-negative, and greater than 0 when zswap is enabled."
+    condition     = var.swap_disk_min >= 0 && (!var.zswap.enabled || var.swap_disk_min > 0)
+    error_message = "swap_disk_min must be non-negative, and greater than 0 when zswap is enabled."
+  }
+}
+
+variable "swap_disk_max" {
+  description = "Maximum swap disk size in GB across Talos VM swap backing disks"
+  type        = number
+  default     = 0
+
+  validation {
+    condition     = var.swap_disk_max >= var.swap_disk_min && (!var.zswap.enabled || var.swap_disk_max > 0)
+    error_message = "swap_disk_max must be >= swap_disk_min, and greater than 0 when zswap is enabled."
   }
 }
 

@@ -15,7 +15,7 @@ locals {
     "/var/mnt/longhorn", # Longhorn: https://longhorn.io/docs/latest/advanced-resources/os-distro-specific/talos-linux-support/
   ]
 
-  zswap_patches_enabled = var.zswap.enabled && var.swap_disk > 0
+  zswap_patches_enabled = var.zswap.enabled && var.swap_disk_min > 0 && var.swap_disk_max > 0
 }
 
 data "helm_template" "bootstrap_charts" {
@@ -79,7 +79,8 @@ data "talos_machine_configuration" "this" {
     local.zswap_patches_enabled ? templatefile("${path.module}/resources/talos-patches/swap-volume.yaml.tftpl", {
       disk_name      = "vdc"
       disk_transport = "virtio"
-      swap_disk      = var.swap_disk
+      swap_disk_min  = var.swap_disk_min
+      swap_disk_max  = var.swap_disk_max
     }) : "",
     local.zswap_patches_enabled ? templatefile("${path.module}/resources/talos-patches/zswap.yaml.tftpl", {
       max_pool_percent = var.zswap.max_pool_percent

@@ -71,6 +71,7 @@ module "talos_cluster" {
   bootstrap_charts       = local.bootstrap_charts
   on_destroy             = var.cluster_on_destroy
   zswap                  = var.zswap
-  swap_disk              = var.swap_disk
+  swap_disk_min          = var.swap_disk_min
+  swap_disk_max          = var.swap_disk_max
   ts_authkey             = var.ts_authkey
 }

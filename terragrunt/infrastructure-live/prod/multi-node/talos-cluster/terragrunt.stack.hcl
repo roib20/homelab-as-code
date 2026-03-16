@@ -73,7 +73,8 @@ locals {
   talos_nodes = concat(local.controlplane_nodes, local.worker_nodes)
 
   swap_disk_values = distinct([for node in local.talos_nodes : try(node.swap_disk, 0)])
-  swap_disk        = length(local.swap_disk_values) > 0 ? local.swap_disk_values[0] : 0
+  swap_disk_min_gb = length(local.swap_disk_values) > 0 ? min(local.swap_disk_values...) : 0
+  swap_disk_max_gb = length(local.swap_disk_values) > 0 ? max(local.swap_disk_values...) : 0
 
   machines = {
     for node in local.talos_nodes :
@@ -339,10 +340,11 @@ unit "talos-cluster" {
     helm_charts = local.helm_charts
 
     # other locals
-    timeout   = local.timeout
-    machines  = local.machines
-    zswap     = local.zswap
-    swap_disk = local.swap_disk
+    timeout       = local.timeout
+    machines      = local.machines
+    zswap         = local.zswap
+    swap_disk_min = local.swap_disk_min_gb
+    swap_disk_max = local.swap_disk_max_gb
 
     # Fix for UEFI + GPU passthrough destroy timeouts - skip all cleanup
     cluster_on_destroy = {

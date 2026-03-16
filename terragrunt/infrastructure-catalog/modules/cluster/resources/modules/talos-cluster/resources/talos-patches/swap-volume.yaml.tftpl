@@ -6,5 +6,5 @@ name: zswap
 provisioning:
   diskSelector:
     match: disk.dev_path == "/dev/${disk_name}" && disk.transport == "${disk_transport}"
-  minSize: ${swap_disk}GB
-  maxSize: ${swap_disk}GB
+  minSize: ${swap_disk_min}GB
+  maxSize: ${swap_disk_max}GB
