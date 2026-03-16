@@ -63,6 +63,17 @@ variable "zswap" {
   }
 }
 
+variable "swap_disk" {
+  description = "Swap disk size in GB for Talos VM swap backing disk."
+  type        = number
+  default     = 32
+
+  validation {
+    condition     = var.swap_disk > 0
+    error_message = "swap_disk must be greater than 0."
+  }
+}
+
 variable "helm_charts" {
   description = "Configuration for each Helm chart: values, chart, release name, namespace, version, and repository."
   type = map(object({

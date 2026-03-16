@@ -110,7 +110,7 @@ inputs = {
       datastore_id = try(values.vm_datastore_id, "local-btrfs")
       iothread     = true
       discard      = "on"
-      size         = try(values.zswap_disk, 32)
+      size         = try(values.swap_disk, 32)
     },
   ]
 

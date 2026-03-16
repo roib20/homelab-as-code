@@ -97,6 +97,17 @@ variable "zswap" {
   }
 }
 
+variable "swap_disk" {
+  description = "Swap disk size in GB for Talos VM swap backing disk"
+  type        = number
+  default     = 32
+
+  validation {
+    condition     = var.swap_disk > 0
+    error_message = "swap_disk must be greater than 0."
+  }
+}
+
 variable "talos_config_path" {
   description = "The path to output the Talos configuration file."
   type        = string

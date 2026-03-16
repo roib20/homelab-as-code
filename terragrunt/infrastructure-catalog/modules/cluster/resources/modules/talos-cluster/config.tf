@@ -74,7 +74,9 @@ data "talos_machine_configuration" "this" {
         }
       ]
     }),
-    var.zswap.enabled ? templatefile("${path.module}/resources/talos-patches/swap-volume.yaml.tftpl", {}) : "",
+    var.zswap.enabled ? templatefile("${path.module}/resources/talos-patches/swap-volume.yaml.tftpl", {
+      swap_disk = var.swap_disk
+    }) : "",
     var.zswap.enabled ? templatefile("${path.module}/resources/talos-patches/zswap.yaml.tftpl", {
       max_pool_percent = var.zswap.max_pool_percent
       shrinker_enabled = var.zswap.shrinker_enabled

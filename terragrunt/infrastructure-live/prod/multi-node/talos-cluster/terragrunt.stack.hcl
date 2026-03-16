@@ -111,6 +111,8 @@ locals {
 
   timeout = "10m"
 
+  swap_disk = 32
+
   zswap = {
     enabled          = true
     max_pool_percent = 25
@@ -210,6 +212,7 @@ unit "$${local.controlplane_nodes[0].name}" {
     memory      = "${local.controlplane_nodes[0].memory}"
     system_disk = "${local.controlplane_nodes[0].system_disk}"
     data_disk   = "${local.controlplane_nodes[0].data_disk}"
+    swap_disk   = local.swap_disk
 
     # PCI passthrough mapping for Intel GPU
     pci_mapping = "GPU_${local.controlplane_nodes[0].node_name}"
@@ -255,6 +258,7 @@ unit "$${local.controlplane_nodes[1].name}" {
     memory      = "${local.controlplane_nodes[1].memory}"
     system_disk = "${local.controlplane_nodes[1].system_disk}"
     data_disk   = "${local.controlplane_nodes[1].data_disk}"
+    swap_disk   = local.swap_disk
 
     # PCI passthrough mapping for Intel GPU
     pci_mapping = "GPU_${local.controlplane_nodes[1].node_name}"
@@ -300,6 +304,7 @@ unit "$${local.controlplane_nodes[2].name}" {
     memory      = "${local.controlplane_nodes[2].memory}"
     system_disk = "${local.controlplane_nodes[2].system_disk}"
     data_disk   = "${local.controlplane_nodes[2].data_disk}"
+    swap_disk   = local.swap_disk
 
     # PCI passthrough mapping for Intel GPU
     pci_mapping = "GPU_${local.controlplane_nodes[2].node_name}"
@@ -328,9 +333,10 @@ unit "talos-cluster" {
     helm_charts = local.helm_charts
 
     # other locals
-    timeout  = local.timeout
-    machines = local.machines
-    zswap    = local.zswap
+    timeout   = local.timeout
+    machines  = local.machines
+    zswap     = local.zswap
+    swap_disk = local.swap_disk
 
     # Fix for UEFI + GPU passthrough destroy timeouts - skip all cleanup
     cluster_on_destroy = {
