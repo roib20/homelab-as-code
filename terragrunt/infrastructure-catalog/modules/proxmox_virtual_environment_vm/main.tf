@@ -1,5 +1,5 @@
 resource "proxmox_virtual_environment_vm" "vm" {
-  # Avoid destroying a VM when an image gets replaced
+  # Avoid unnecessary changes when CDROM or boot order are updated (disk/image changes are managed normally)
   lifecycle {
     ignore_changes = [
       cdrom,
