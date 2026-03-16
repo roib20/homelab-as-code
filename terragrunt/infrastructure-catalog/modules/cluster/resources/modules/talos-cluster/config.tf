@@ -74,16 +74,16 @@ data "talos_machine_configuration" "this" {
         }
       ]
     }),
-    var.zswap.enabled ? templatefile("${path.module}/resources/talos-patches/swap-volume.yaml.tftpl", {
+    var.zswap.enabled && try(each.value.swap_disk, false) ? templatefile("${path.module}/resources/talos-patches/swap-volume.yaml.tftpl", {
       disk_name      = "vdc"
       disk_transport = "virtio"
       swap_disk      = var.swap_disk
     }) : "",
-    var.zswap.enabled ? templatefile("${path.module}/resources/talos-patches/zswap.yaml.tftpl", {
+    var.zswap.enabled && try(each.value.swap_disk, false) ? templatefile("${path.module}/resources/talos-patches/zswap.yaml.tftpl", {
       max_pool_percent = var.zswap.max_pool_percent
       shrinker_enabled = var.zswap.shrinker_enabled
     }) : "",
-    var.zswap.enabled ? templatefile("${path.module}/resources/talos-patches/kubelet-memory-swap.yaml.tftpl", {}) : "",
+    var.zswap.enabled && try(each.value.swap_disk, false) ? templatefile("${path.module}/resources/talos-patches/kubelet-memory-swap.yaml.tftpl", {}) : "",
     templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
       extramounts = local.extramounts
     }),
