@@ -75,7 +75,9 @@ data "talos_machine_configuration" "this" {
       ]
     }),
     var.zswap.enabled ? templatefile("${path.module}/resources/talos-patches/swap-volume.yaml.tftpl", {
-      swap_disk = var.swap_disk
+      disk_name      = "vdc"
+      disk_transport = "virtio"
+      swap_disk      = var.swap_disk
     }) : "",
     var.zswap.enabled ? templatefile("${path.module}/resources/talos-patches/zswap.yaml.tftpl", {
       max_pool_percent = var.zswap.max_pool_percent

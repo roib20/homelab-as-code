@@ -5,6 +5,6 @@ kind: SwapVolumeConfig
 name: zswap
 provisioning:
   diskSelector:
-    match: 'disk.dev_path == "/dev/vdc" && disk.transport == "virtio"'
+    match: disk.dev_path == "/dev/${disk_name}" && disk.transport == "${disk_transport}"
   minSize: ${swap_disk}GB
   maxSize: ${swap_disk}GB
