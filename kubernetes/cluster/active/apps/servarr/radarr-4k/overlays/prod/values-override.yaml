@@ -19,7 +19,7 @@ workload:
                 name: servarr-secrets
                 key: radarr_4k_api_key
                 expandObjectName: false
-            RADARR__APP__THEME: dark
+            RADARR__APP__THEME: auto
             RADARR__APP__INSTANCENAME: Radarr 4K
             RADARR__LOG__LEVEL: info
             RADARR__LOG__ANALYTICSENABLED: false

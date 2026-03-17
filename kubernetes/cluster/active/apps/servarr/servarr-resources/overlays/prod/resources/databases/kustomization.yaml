@@ -1,0 +1,12 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - cluster-servarr-postgres.yaml
+  - database-bazarr.yaml
+  - database-bazarr-4k.yaml
+  - database-prowlarr.yaml
+  - database-radarr.yaml
+  - database-radarr-4k.yaml
+  - database-sonarr.yaml
+  - database-sonarr-4k.yaml

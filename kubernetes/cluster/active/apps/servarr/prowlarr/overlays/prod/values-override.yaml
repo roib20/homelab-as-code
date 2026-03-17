@@ -19,7 +19,7 @@ workload:
                 name: servarr-secrets
                 key: prowlarr_api_key
                 expandObjectName: false
-            PROWLARR__APP__THEME: dark
+            PROWLARR__APP__THEME: auto
             PROWLARR__APP__INSTANCENAME: Prowlarr
             PROWLARR__LOG__LEVEL: info
             PROWLARR__LOG__ANALYTICSENABLED: false

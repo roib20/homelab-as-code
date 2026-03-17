@@ -3,13 +3,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
-  - resources/databases/cluster-servarr-postgres.yaml
-  - resources/databases/database-bazarr.yaml
-  - resources/databases/database-prowlarr.yaml
-  - resources/databases/database-radarr.yaml
-  - resources/databases/database-radarr-4k.yaml
-  - resources/databases/database-sonarr.yaml
-  - resources/databases/database-sonarr-4k.yaml
-  - resources/external-secrets/servarr-secrets.yaml.externalsecret
-  - resources/storage/pvc-smb-mediadata-rox.yaml
-  - resources/storage/pvc-smb-mediadata-rwx.yaml
+  - resources/databases
+  - resources/external-secrets
+  - resources/storage
