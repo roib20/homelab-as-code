@@ -15,7 +15,7 @@ workload:
             DYNACONF_AUTH__TYPE: basic
             DYNACONF_AUTH__APIKEY:
               secretKeyRef:
-                name: servarr-api-keys
+                name: servarr-secrets
                 key: bazarr_api_key
                 expandObjectName: false
             POSTGRES_ENABLED: true
@@ -44,7 +44,7 @@ workload:
           env:
             API_KEY:
               secretKeyRef:
-                name: servarr-api-keys
+                name: servarr-secrets
                 key: bazarr_api_key
                 expandObjectName: false
 ingress:
