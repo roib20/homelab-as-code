@@ -3,6 +3,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - external-secrets
+  - database/cloudnative-pg.yaml
 helmCharts:
   - name: seerr-chart
     repo: oci://ghcr.io/seerr-team/seerr

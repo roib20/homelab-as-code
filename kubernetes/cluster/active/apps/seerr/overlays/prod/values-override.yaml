@@ -22,6 +22,42 @@ ingress:
     - hosts:
         - "seerr.${FQDN_02}"
 
+extraEnv:
+  - name: API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: seerr-secrets
+        key: seerr_api_key
+  - name: DB_TYPE
+    value: postgres
+  - name: DB_LOG_QUERIES
+    value: "false"
+  - name: DB_HOST
+    valueFrom:
+      secretKeyRef:
+        name: seerr-postgres-app
+        key: host
+  - name: DB_PORT
+    valueFrom:
+      secretKeyRef:
+        name: seerr-postgres-app
+        key: port
+  - name: DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: seerr-postgres-app
+        key: user
+  - name: DB_PASS
+    valueFrom:
+      secretKeyRef:
+        name: seerr-postgres-app
+        key: password
+  - name: DB_NAME
+    valueFrom:
+      secretKeyRef:
+        name: seerr-postgres-app
+        key: dbname
+
 route:
   main:
     enabled: false

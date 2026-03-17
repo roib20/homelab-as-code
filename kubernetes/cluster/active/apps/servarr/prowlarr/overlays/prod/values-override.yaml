@@ -16,7 +16,7 @@ workload:
             PROWLARR__AUTH__REQUIRED: Enabled
             PROWLARR__AUTH__APIKEY:
               secretKeyRef:
-                name: servarr-api-keys
+                name: servarr-secrets
                 key: prowlarr_api_key
                 expandObjectName: false
             PROWLARR__APP__THEME: dark
@@ -49,7 +49,7 @@ workload:
           env:
             API_KEY:
               secretKeyRef:
-                name: servarr-api-keys
+                name: servarr-secrets
                 key: prowlarr_api_key
                 expandObjectName: false
 ingress:

@@ -6,6 +6,47 @@ global:
     pvcSize: 1Gi
 podOptions:
   defaultAffinity: false
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          env:
+            DYNACONF_AUTH__TYPE: basic
+            DYNACONF_AUTH__APIKEY:
+              secretKeyRef:
+                name: servarr-secrets
+                key: bazarr_api_key
+                expandObjectName: false
+            POSTGRES_ENABLED: true
+            POSTGRES_HOST:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: host
+                expandObjectName: false
+            POSTGRES_PORT:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: port
+                expandObjectName: false
+            POSTGRES_USERNAME:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: user
+                expandObjectName: false
+            POSTGRES_PASSWORD:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: password
+                expandObjectName: false
+            POSTGRES_DATABASE: bazarr
+        exportarr:
+          env:
+            API_KEY:
+              secretKeyRef:
+                name: servarr-secrets
+                key: bazarr_api_key
+                expandObjectName: false
 ingress:
   main:
     enabled: true
@@ -46,3 +87,13 @@ persistence:
     mountPath: "/MediaData"
     readOnly: false
     existingClaim: smb-mediadata-rwx
+metrics:
+  main:
+    enabled: true
+    type: "servicemonitor"
+    endpoints:
+      - port: metrics
+        path: /metrics
+    targetSelector: metrics
+    prometheusRule:
+      enabled: true
