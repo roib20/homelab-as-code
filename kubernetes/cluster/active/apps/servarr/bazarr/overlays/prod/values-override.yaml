@@ -12,12 +12,34 @@ workload:
       containers:
         main:
           env:
-            DYNACONF_AUTH__TYPE: basic
-            DYNACONF_AUTH__APIKEY:
+            DYNACONF_analytics__enabled: false
+            DYNACONF_auth__APIKEY:
               secretKeyRef:
                 name: servarr-secrets
                 key: bazarr_api_key
                 expandObjectName: false
+            DYNACONF_auth__TYPE: "@null"
+            DYNACONF_general__debug: false
+            DYNACONF_general__instance_name: Bazarr
+            DYNACONF_general__theme: dark
+            DYNACONF_general__use_radarr: true
+            DYNACONF_general__use_sonarr: true
+            DYNACONF_radarr__apikey:
+              secretKeyRef:
+                name: servarr-secrets
+                key: radarr_api_key
+                expandObjectName: false
+            DYNACONF_radarr__ip: radarr.servarr.svc.cluster.local
+            DYNACONF_radarr__port: 7878
+            DYNACONF_radarr__ssl: false
+            DYNACONF_sonarr__apikey:
+              secretKeyRef:
+                name: servarr-secrets
+                key: sonarr_api_key
+                expandObjectName: false
+            DYNACONF_sonarr__ip: sonarr.servarr.svc.cluster.local
+            DYNACONF_sonarr__port: 8989
+            DYNACONF_sonarr__ssl: false
             POSTGRES_ENABLED: true
             POSTGRES_HOST:
               secretKeyRef:
