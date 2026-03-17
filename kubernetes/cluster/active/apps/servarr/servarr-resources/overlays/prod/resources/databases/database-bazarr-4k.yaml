@@ -1,0 +1,10 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: servarr-postgres-bazarr-4k
+spec:
+  name: bazarr-4k
+  owner: servarr
+  cluster:
+    name: servarr-postgres
