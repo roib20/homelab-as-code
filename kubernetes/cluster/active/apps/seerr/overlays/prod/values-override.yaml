@@ -1,27 +1,4 @@
 ---
-ingress:
-  enabled: true
-  ingressClassName: tailscale
-  annotations:
-    tailscale.com/proxy-group: ingress-proxies
-    gethomepage.dev/enabled: "true"
-    gethomepage.dev/description: Request management and media discovery for Jellyfin.
-    gethomepage.dev/group: Servarr
-    gethomepage.dev/icon: overseerr.svg
-    gethomepage.dev/name: Seerr
-    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=seerr"
-    gethomepage.dev/widget.type: "jellyseerr"
-    gethomepage.dev/widget.url: "http://seerr.seerr.svc.cluster.local:80"
-    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_SEERR_KEY}}"
-  hosts:
-    - host: "seerr.${FQDN_02}"
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - hosts:
-        - "seerr.${FQDN_02}"
-
 extraEnv:
   - name: API_KEY
     valueFrom:
@@ -57,6 +34,29 @@ extraEnv:
       secretKeyRef:
         name: seerr-postgres-app
         key: dbname
+
+ingress:
+  enabled: true
+  ingressClassName: tailscale
+  annotations:
+    tailscale.com/proxy-group: ingress-proxies
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Request management and media discovery for Jellyfin.
+    gethomepage.dev/group: Servarr
+    gethomepage.dev/icon: overseerr.svg
+    gethomepage.dev/name: Seerr
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=seerr"
+    gethomepage.dev/widget.type: "jellyseerr"
+    gethomepage.dev/widget.url: "http://seerr.seerr.svc.cluster.local:80"
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_SEERR_KEY}}"
+  hosts:
+    - host: "seerr.${FQDN_02}"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - "seerr.${FQDN_02}"
 
 route:
   main:
