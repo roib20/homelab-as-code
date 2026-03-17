@@ -27,7 +27,7 @@ extraEnv:
     valueFrom:
       secretKeyRef:
         name: seerr-secrets
-        key: SEERR_API_KEY
+        key: seerr_api_key
   - name: DB_TYPE
     value: postgres
   - name: DB_LOG_QUERIES
