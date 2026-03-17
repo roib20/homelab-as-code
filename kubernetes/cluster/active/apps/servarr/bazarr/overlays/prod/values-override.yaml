@@ -21,7 +21,7 @@ workload:
             DYNACONF_auth__TYPE: "@null"
             DYNACONF_general__debug: false
             DYNACONF_general__instance_name: Bazarr
-            DYNACONF_general__theme: dark
+            DYNACONF_general__theme: auto
             DYNACONF_general__use_radarr: true
             DYNACONF_general__use_sonarr: true
             DYNACONF_radarr__apikey:

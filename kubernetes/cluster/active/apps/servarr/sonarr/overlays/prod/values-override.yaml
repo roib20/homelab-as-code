@@ -19,7 +19,7 @@ workload:
                 name: servarr-secrets
                 key: sonarr_api_key
                 expandObjectName: false
-            SONARR__APP__THEME: dark
+            SONARR__APP__THEME: auto
             SONARR__APP__INSTANCENAME: Sonarr
             SONARR__LOG__LEVEL: info
             SONARR__LOG__ANALYTICSENABLED: false
