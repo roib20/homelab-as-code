@@ -10,6 +10,6 @@ resources:
   - resources/databases/database-radarr-4k.yaml
   - resources/databases/database-sonarr.yaml
   - resources/databases/database-sonarr-4k.yaml
-  - resources/secrets/servarr-api-keys.yaml.externalsecret
+  - resources/external-secrets/servarr-api-keys.yaml.externalsecret
   - resources/storage/pvc-smb-mediadata-rox.yaml
   - resources/storage/pvc-smb-mediadata-rwx.yaml
