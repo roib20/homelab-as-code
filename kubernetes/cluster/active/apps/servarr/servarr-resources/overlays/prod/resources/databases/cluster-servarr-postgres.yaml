@@ -4,7 +4,7 @@ kind: Cluster
 metadata:
   name: servarr-postgres
 spec:
-  instances: 3
+  instances: 2
   affinity:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname

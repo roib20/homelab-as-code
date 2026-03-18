@@ -5,9 +5,6 @@
   serial: 1
 
   tasks:
-    - name: Shutdown Talos VM
-      ansible.builtin.include_role:
-        name: talos-shutdown
 
     - name: Reboot PVE node (wait for up to 20 minutes)
       become: true
