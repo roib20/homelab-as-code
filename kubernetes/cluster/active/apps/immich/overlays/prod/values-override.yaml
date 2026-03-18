@@ -32,6 +32,13 @@ controllers:
                 name: immich-database-app
                 key: dbname
 
+server:
+  controllers:
+    main:
+      pod:
+        annotations:
+          secret.reloader.stakater.com/reload: immich-database-app
+
 immich:
   persistence:
     library:

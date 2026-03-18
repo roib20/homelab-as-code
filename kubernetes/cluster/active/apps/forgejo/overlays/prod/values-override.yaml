@@ -12,6 +12,9 @@ gitea:
       iconUrl: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/kanidm.svg"
       scopes: "openid email profile groups_name ssh_publickeys"
 
+  podAnnotations:
+    secret.reloader.stakater.com/reload: "forgejo-oauth-secret,gitea-admin-secret"
+
   config:
     oauth2_client:
       OPENID_CONNECT_SCOPES: "openid email profile groups_name ssh_publickeys"

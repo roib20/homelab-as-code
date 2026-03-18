@@ -13,6 +13,9 @@ controllerServiceAccount:
   namespace: arc-systems
 
 template:
+  metadata:
+    annotations:
+      secret.reloader.stakater.com/reload: github-app-secret
   spec:
     serviceAccountName: arc-runner-set-gha-rs-buildkit
     initContainers:
@@ -85,3 +88,7 @@ template:
         emptyDir: {}
       - name: dind-externals
         emptyDir: {}
+listenerTemplate:
+  metadata:
+    annotations:
+      secret.reloader.stakater.com/reload: github-app-secret

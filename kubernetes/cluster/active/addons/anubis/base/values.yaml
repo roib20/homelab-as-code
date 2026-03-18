@@ -82,6 +82,9 @@ service:
         port: *port
       metrics:
         port: 9090
+defaultPodOptions:
+  annotations:
+    secret.reloader.stakater.com/reload: anubis-key
 anubisPodOptions:
   securityContext:
     runAsUser: 1000
