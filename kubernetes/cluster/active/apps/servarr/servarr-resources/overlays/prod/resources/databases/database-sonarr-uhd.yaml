@@ -1,0 +1,21 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: servarr-postgres-sonarr-uhd
+spec:
+  name: sonarr-uhd
+  owner: servarr
+  cluster:
+    name: servarr-postgres
+
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: servarr-postgres-sonarr-uhd-log
+spec:
+  name: sonarr-uhd-log
+  owner: servarr
+  cluster:
+    name: servarr-postgres

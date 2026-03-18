@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "radarr-hd",
+  "destName": "in-cluster",
+  "destNamespace": "servarr",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "radarr-hd"
+}
