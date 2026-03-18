@@ -9,6 +9,8 @@ podOptions:
 workload:
   main:
     podSpec:
+      annotations:
+        secret.reloader.stakater.com/reload: "servarr-postgres-app,servarr-secrets"
       containers:
         main:
           env:
