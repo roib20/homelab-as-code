@@ -22,6 +22,7 @@ workload:
   main:
     podSpec:
       annotations:
+        configmap.reloader.stakater.com/reload: homepage-config
         secret.reloader.stakater.com/reload: homepage-secrets
       containers:
         main:
