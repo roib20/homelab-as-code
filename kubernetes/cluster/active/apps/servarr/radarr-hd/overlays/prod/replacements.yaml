@@ -1,0 +1,16 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars-radarr-hd
+    fieldPath: "data.FQDN_02"
+  targets:
+    # Ingress
+    - select:
+        kind: Ingress
+        name: radarr-hd
+      fieldPaths:
+        - spec.rules.0.host
+        - spec.tls.0.hosts.0
+      options:
+        delimiter: "."
+        index: 1
