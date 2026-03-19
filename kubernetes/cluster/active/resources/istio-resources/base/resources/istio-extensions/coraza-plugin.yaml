@@ -22,6 +22,9 @@
 # Endpoint-specific exclusions:
 # - Renovate webhook path removes selected 932xxx/941180 signatures to avoid
 #   false positives from dependency dashboard markdown content.
+# - Outline auth config endpoint removes 920440 false positive on `.config` path.
+# - Outline file upload endpoint skips multipart body parse false positive.
+# - Jellyfin image endpoint removes 920420 content-type false positive.
 #
 apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
@@ -37,6 +40,16 @@ spec:
         - Include @demo-conf
         - SecDebugLogLevel 9
         - SecRuleEngine On
+        # Endpoint-specific runtime exclusions must execute before CRS includes.
+        # Outline auth config false positive (920440: restricted file extension)
+        - SecRule REQUEST_METHOD "@streq POST" "id:100002,phase:1,pass,nolog,chain"
+        - SecRule REQUEST_FILENAME "@streq /api/auth.config" "ctl:ruleRemoveById=920440"
+        # Outline file upload false positive (200002: multipart parse EOF)
+        - SecRule REQUEST_METHOD "@streq POST" "id:100003,phase:1,pass,nolog,chain"
+        - SecRule REQUEST_FILENAME "@streq /api/files.create" "ctl:requestBodyAccess=Off,ctl:ruleRemoveById=200002"
+        # Jellyfin image fetch false positive (920420: request content type policy)
+        - SecRule REQUEST_METHOD "@streq GET" "id:100004,phase:1,pass,nolog,chain"
+        - SecRule REQUEST_FILENAME "@rx ^/Items/[A-Za-z0-9]+/Images/Primary$" "ctl:ruleRemoveById=920420"
         - Include @crs-setup-conf
         - Include @owasp_crs/*.conf
         # --- Rule Exclusions ---

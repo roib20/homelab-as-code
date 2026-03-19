@@ -1,0 +1,32 @@
+global:
+  fallbackDefaults:
+    storageClass: longhorn
+    pvcRetain: false
+    pvcSize: 1Gi
+cnpg:
+  main:
+    cluster:
+      storage:
+        storageClass: longhorn-cnpg
+      walStorage:
+        storageClass: longhorn-cnpg
+ingress:
+  main:
+    enabled: true
+    ingressClassName: tailscale
+    # annotations:
+    #   tailscale.com/proxy-group: ingress-proxies
+    #   gethomepage.dev/enabled: "true"
+    #   gethomepage.dev/description: Team knowledge base & wiki.
+    #   gethomepage.dev/group: Productivity
+    #   gethomepage.dev/icon: outline.svg
+    #   gethomepage.dev/name: outline
+    #   gethomepage.dev/pod-selector: "app.kubernetes.io/instance=outline"
+    hosts:
+      - host: "outline.${FQDN_02}"
+        paths:
+          - path: "/"
+            pathType: Prefix
+    tls:
+      - hosts:
+          - "outline.${FQDN_02}"
