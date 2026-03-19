@@ -62,7 +62,7 @@ ingress:
       tailscale.com/proxy-group: ingress-proxies
       gethomepage.dev/enabled: "true"
       gethomepage.dev/description: Movie organizer/manager for usenet and torrent users (UHD).
-      gethomepage.dev/group: Servarr
+      gethomepage.dev/group: Media Automation (4K Ultra HD Video)
       gethomepage.dev/icon: radarr.svg
       gethomepage.dev/name: Radarr UHD
       gethomepage.dev/pod-selector: "app.kubernetes.io/instance=radarr-uhd"

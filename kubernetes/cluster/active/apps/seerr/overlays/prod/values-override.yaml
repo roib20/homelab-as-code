@@ -45,7 +45,7 @@ ingress:
     tailscale.com/proxy-group: ingress-proxies
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Request management and media discovery for Jellyfin.
-    gethomepage.dev/group: Servarr
+    gethomepage.dev/group: Media Requests
     gethomepage.dev/icon: overseerr.svg
     gethomepage.dev/name: Seerr
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=seerr"

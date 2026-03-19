@@ -62,7 +62,7 @@ ingress:
       tailscale.com/proxy-group: ingress-proxies
       gethomepage.dev/enabled: "true"
       gethomepage.dev/description: The Ultimate Indexer Manager.
-      gethomepage.dev/group: Servarr
+      gethomepage.dev/group: Media Automation (Configuration)
       gethomepage.dev/icon: prowlarr.svg
       gethomepage.dev/name: Prowlarr
       gethomepage.dev/pod-selector: "app.kubernetes.io/instance=prowlarr"

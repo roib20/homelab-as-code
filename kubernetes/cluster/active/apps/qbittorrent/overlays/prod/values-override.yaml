@@ -12,7 +12,7 @@ ingress:
       tailscale.com/proxy-group: ingress-proxies
       gethomepage.dev/enabled: "true"
       gethomepage.dev/description: BitTorrent client.
-      gethomepage.dev/group: Servarr
+      gethomepage.dev/group: Downloads
       gethomepage.dev/icon: qbittorrent.svg
       gethomepage.dev/name: qBittorrent
       gethomepage.dev/pod-selector: "app.kubernetes.io/instance=qbittorrent"

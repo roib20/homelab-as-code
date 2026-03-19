@@ -62,7 +62,7 @@ ingress:
       tailscale.com/proxy-group: ingress-proxies
       gethomepage.dev/enabled: "true"
       gethomepage.dev/description: Sonarr is an internet PVR for Usenet and Torrents.
-      gethomepage.dev/group: Servarr
+      gethomepage.dev/group: Media Automation (HD Video)
       gethomepage.dev/icon: sonarr.svg
       gethomepage.dev/name: Sonarr HD
       gethomepage.dev/pod-selector: "app.kubernetes.io/instance=sonarr-hd"
