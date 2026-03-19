@@ -1,0 +1,69 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars-outline
+    fieldPath: "data.FQDN_02"
+  targets:
+    # Ingress
+    - select:
+        kind: Ingress
+        name: outline
+      fieldPaths:
+        - spec.rules.0.host
+        - spec.tls.0.hosts.0
+      options:
+        delimiter: "."
+        index: 1
+    # # Deployment container env var
+    # - select:
+    #     kind: Deployment
+    #     name: outline
+    #   fieldPaths:
+    #     - spec.template.spec.containers.[name=outline].env.[name=URL].value
+    #   options:
+    #     delimiter: "."
+    #     index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars-outline
+    fieldPath: "data.FQDN_01"
+  targets:
+    # HTTPRoute hostname
+    - select:
+        kind: HTTPRoute
+        name: outline
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    # Deployment container env vars
+    - select:
+        kind: Deployment
+        name: outline
+      fieldPaths:
+        - spec.template.spec.containers.[name=outline].env.[name=URL].value
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: ConfigMap
+        name: env-vars-outline
+      fieldPaths:
+        - data.OIDC_AUTH_DOMAIN
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars-outline
+    fieldPath: "data.OIDC_AUTH_DOMAIN"
+  targets:
+    - select:
+        kind: Deployment
+        name: outline
+      fieldPaths:
+        - spec.template.spec.containers.[name=outline].env.[name=OIDC_ISSUER_URL].value
+      options:
+        delimiter: "/"
+        index: 2

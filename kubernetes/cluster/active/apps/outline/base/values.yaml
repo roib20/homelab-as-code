@@ -1,0 +1,72 @@
+redis:
+  enabled: true
+  redisUsername: default
+cnpg:
+  main:
+    enabled: true
+    user: outline
+    database: outline
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          probes:
+            liveness:
+              path: "/_health"
+            readiness:
+              path: "/_health"
+            startup:
+              path: "/_health"
+          env:
+            FORCE_HTTPS: false
+            PGSSLMODE: "disable"
+            PORT: "{{ .Values.service.main.ports.main.port }}"
+            # User defined
+            URL: "https://outline.${FQDN_01}"
+            SLACK_MESSAGE_ACTIONS: false
+            ENABLE_UPDATES: true
+            WEB_CONCURRENCY: 1
+            FILE_STORAGE_IMPORT_MAX_SIZE: 5120000
+            DEFAULT_LANGUAGE: "en_US"
+            FILE_STORAGE: "local"
+            FILE_STORAGE_UPLOAD_MAX_SIZE: 26214400
+            # Generic OIDC provider
+            # DOCS: https://docs.getoutline.com/s/hosting/doc/oidc-8CPBm6uC0I
+            OIDC_CLIENT_ID:
+              secretKeyRef:
+                expandObjectName: false
+                name: outline-kanidm-oauth2-credentials
+                key: CLIENT_ID
+            OIDC_CLIENT_SECRET:
+              secretKeyRef:
+                expandObjectName: false
+                name: outline-kanidm-oauth2-credentials
+                key: CLIENT_SECRET
+            OIDC_ISSUER_URL: "https://auth.${FQDN_01}/oauth2/openid/outline"
+            OIDC_DISABLE_REDIRECT: true
+            OIDC_USERNAME_CLAIM: "preferred_username"
+            OIDC_DISPLAY_NAME: "Kanidm"
+            OIDC_SCOPES: "openid profile email"
+
+            DATABASE_URL:
+              secretKeyRef:
+                name: cnpg-main-urls
+                key: std
+            REDIS_URL:
+              secretKeyRef:
+                expandObjectName: false
+                name: '{{ printf "%s-%s" .Release.Name "rediscreds" }}'
+                key: url
+            SECRET_KEY:
+              secretKeyRef:
+                name: secrets
+                key: SECRET_KEY
+            UTILS_SECRET:
+              secretKeyRef:
+                name: secrets
+                key: UTILS_SECRET
+persistence:
+  data:
+    enabled: true
+    mountPath: /var/lib/outline/data

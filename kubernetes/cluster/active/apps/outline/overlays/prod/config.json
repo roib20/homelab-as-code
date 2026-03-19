@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "outline",
+  "destName": "in-cluster",
+  "destNamespace": "outline",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "outline"
+}

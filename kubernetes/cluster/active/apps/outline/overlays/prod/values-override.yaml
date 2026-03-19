@@ -1,0 +1,29 @@
+global:
+  fallbackDefaults:
+    storageClass: longhorn
+    pvcRetain: false
+    pvcSize: 1Gi
+    vctSize: 10Gi
+cnpg:
+  main:
+    cluster:
+      storage:
+        storageClass: longhorn-cnpg
+        pvcRetain: false
+      walStorage:
+        storageClass: longhorn-cnpg
+        pvcRetain: false
+ingress:
+  main:
+    enabled: true
+    ingressClassName: tailscale
+    annotations:
+      tailscale.com/proxy-group: ingress-proxies
+    hosts:
+      - host: "outline.${FQDN_02}"
+        paths:
+          - path: "/"
+            pathType: Prefix
+    tls:
+      - hosts:
+          - "outline.${FQDN_02}"
