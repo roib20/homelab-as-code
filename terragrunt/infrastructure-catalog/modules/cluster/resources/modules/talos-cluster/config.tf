@@ -109,9 +109,9 @@ data "talos_machine_configuration" "this" {
     }),
     templatefile("${path.module}/resources/talos-patches/machine_kernel.yaml.tftpl", {
       sysctls = merge(
-        {
-          "vm.nr_hugepages" = "1024"
-        },
+        # {
+        #   "vm.nr_hugepages" = "1024"
+        # },
         var.zswap.enabled ? {
           "vm.swappiness"   = "130"
           "vm.page-cluster" = "0"
