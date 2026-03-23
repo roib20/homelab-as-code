@@ -133,7 +133,7 @@ locals {
       name      = "cilium"
       namespace = "kube-system"
       # renovate: datasource=docker depName=quay.io/cilium/charts/cilium
-      chart_version   = "1.19.1"
+      chart_version   = "1.19.2"
       helm_repository = "oci://quay.io/cilium/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/cilium/base/values.yaml")
     }
