@@ -24,3 +24,8 @@ configMapGenerator:
       - OIDC_ISSUER_PATH=oauth2/openid/outline
 replacements:
   - path: replacements.yaml
+patches:
+  - path: patches/remove-checksum-secrets-deployment.yaml
+    target:
+      kind: Deployment
+      name: outline
