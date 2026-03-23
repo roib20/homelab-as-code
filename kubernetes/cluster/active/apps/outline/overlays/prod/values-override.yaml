@@ -10,7 +10,7 @@ workload:
   main:
     podSpec:
       annotations:
-        secret.reloader.stakater.com/reload: "outline-kanidm-oauth2-credentials,outline-postgres-app,outline-rediscreds,outline-secrets"
+        secret.reloader.stakater.com/reload: "outline-app-secrets,outline-kanidm-oauth2-credentials,outline-postgres-app,outline-rediscreds"
       containers:
         main:
           env:

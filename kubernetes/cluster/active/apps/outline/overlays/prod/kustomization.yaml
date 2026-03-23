@@ -3,6 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - external-secrets
   - resources/cnpg-cluster.yaml
   - resources/httproute.yaml
 helmCharts:

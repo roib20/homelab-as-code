@@ -55,11 +55,13 @@ workload:
                 key: url
             SECRET_KEY:
               secretKeyRef:
-                name: secrets
+                expandObjectName: false
+                name: outline-app-secrets
                 key: SECRET_KEY
             UTILS_SECRET:
               secretKeyRef:
-                name: secrets
+                expandObjectName: false
+                name: outline-app-secrets
                 key: UTILS_SECRET
 persistence:
   data:
