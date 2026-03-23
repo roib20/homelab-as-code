@@ -1,6 +1,0 @@
----
-global:
-  fallbackDefaults:
-    storageClass: longhorn
-    pvcRetain: false
-    pvcSize: 1Gi
