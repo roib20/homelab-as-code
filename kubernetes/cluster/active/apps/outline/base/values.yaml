@@ -3,7 +3,7 @@ redis:
   redisUsername: default
 cnpg:
   main:
-    enabled: true
+    enabled: false
     user: outline
     database: outline
 workload:
@@ -48,11 +48,6 @@ workload:
             OIDC_USERNAME_CLAIM: "preferred_username"
             OIDC_DISPLAY_NAME: "Kanidm"
             OIDC_SCOPES: "openid profile email"
-
-            DATABASE_URL:
-              secretKeyRef:
-                name: cnpg-main-urls
-                key: std
             REDIS_URL:
               secretKeyRef:
                 expandObjectName: false
