@@ -9,6 +9,8 @@ cnpg:
 workload:
   main:
     podSpec:
+      annotations:
+        secret.reloader.stakater.com/reload: "outline-app-secrets,outline-kanidm-oauth2-credentials,outline-postgres-app,outline-rediscreds"
       containers:
         main:
           env:
@@ -17,17 +19,3 @@ workload:
                 name: outline-postgres-app
                 key: uri
                 expandObjectName: false
-ingress:
-  main:
-    enabled: true
-    ingressClassName: tailscale
-    annotations:
-      tailscale.com/proxy-group: ingress-proxies
-    hosts:
-      - host: "outline.${FQDN_02}"
-        paths:
-          - path: "/"
-            pathType: Prefix
-    tls:
-      - hosts:
-          - "outline.${FQDN_02}"

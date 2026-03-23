@@ -1,0 +1,4 @@
+{
+  "SECRET_KEY": "openssl rand -hex 32",
+  "UTILS_SECRET": "openssl rand -hex 32"
+}

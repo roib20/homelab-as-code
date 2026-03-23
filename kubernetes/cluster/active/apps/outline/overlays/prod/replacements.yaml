@@ -2,20 +2,6 @@
 - source:
     kind: ConfigMap
     name: env-vars-outline
-    fieldPath: "data.FQDN_02"
-  targets:
-    - select:
-        kind: Ingress
-        name: outline
-      fieldPaths:
-        - spec.rules.0.host
-        - spec.tls.0.hosts.0
-      options:
-        delimiter: "."
-        index: 1
-- source:
-    kind: ConfigMap
-    name: env-vars-outline
     fieldPath: "data.FQDN_01"
   targets:
     - select:
