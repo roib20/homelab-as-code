@@ -1,0 +1,49 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars-outline
+    fieldPath: "data.FQDN_02"
+  targets:
+    - select:
+        kind: Ingress
+        name: outline
+      fieldPaths:
+        - spec.rules.0.host
+        - spec.tls.0.hosts.0
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars-outline
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        kind: HTTPRoute
+        name: outline
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: Deployment
+        name: outline
+      fieldPaths:
+        - spec.template.spec.containers.[name=outline].env.[name=URL].value
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars-outline
+    fieldPath: "data.OIDC_ISSUER_PATH"
+  targets:
+    - select:
+        kind: Deployment
+        name: outline
+      fieldPaths:
+        - spec.template.spec.containers.[name=outline].env.[name=OIDC_ISSUER_URL].value
+      options:
+        delimiter: "/"
+        index: 3
