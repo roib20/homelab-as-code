@@ -22,9 +22,6 @@ spec:
   storage:
     size: 10Gi
     storageClass: longhorn-cnpg
-  walStorage:
-    size: 10Gi
-    storageClass: longhorn-cnpg
   resources:
     requests:
       cpu: 75m
