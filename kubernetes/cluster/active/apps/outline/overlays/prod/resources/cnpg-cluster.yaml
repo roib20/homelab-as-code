@@ -5,6 +5,7 @@ metadata:
   name: outline-postgres
 spec:
   instances: 2
+  primaryUpdateMethod: switchover
   affinity:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname
@@ -21,3 +22,13 @@ spec:
   storage:
     size: 10Gi
     storageClass: longhorn-cnpg
+  walStorage:
+    size: 10Gi
+    storageClass: longhorn-cnpg
+  resources:
+    requests:
+      cpu: 75m
+      memory: 200Mi
+    limits:
+      cpu: 1500m
+      memory: 2400Mi
