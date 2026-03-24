@@ -1,0 +1,49 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    # HTTPRoute hostname
+    - select:
+        kind: HTTPRoute
+        name: mealie
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    # Build auth host used by OIDC URL
+    - select:
+        kind: ConfigMap
+        name: mealie-oidc
+      fieldPaths:
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+    # Public app BASE_URL in mealie-api secret
+    - select:
+        kind: Secret
+        name: mealie-api
+      fieldPaths:
+        - stringData.BASE_URL
+        - stringData.OIDC_USER_GROUP
+        - stringData.OIDC_ADMIN_GROUP
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: mealie-oidc
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    # OIDC discovery URL in mealie-api secret
+    - select:
+        kind: Secret
+        name: mealie-api
+      fieldPaths:
+        - stringData.OIDC_CONFIGURATION_URL
+      options:
+        delimiter: "/"
+        index: 2

@@ -1,0 +1,84 @@
+mealie:
+  frontend:
+    theme:
+      light_primary: "#E58325"
+      light_accent: "#007A99"
+      light_secondary: "#973542"
+      light_success: "#43A047"
+      light_info: "#1976D2"
+      light_warning: "#FF6D00"
+      light_error: "#EF5350"
+      dark_primary: "#E58325"
+      dark_accent: "#007A99"
+      dark_secondary: "#973542"
+      dark_success: "#43A047"
+      dark_info: "#1976D2"
+      dark_warning: "#FF6D00"
+      dark_error: "#EF5350"
+  api:
+    general:
+      allow_signup: false
+      default_group: Home
+      base_url: "https://mealie.${FQDN_01}"
+      token_time: 48
+    security:
+      max_login_attempts: 5
+      user_lockout_time: 24
+    oidc:
+      auth_enabled: true
+      signup_enabled: true
+      configuration_url: "https://auth.${FQDN_01}/oauth2/openid/mealie/.well-known/openid-configuration"
+      user_group: "mealie-users@auth.${FQDN_01}"
+      admin_group: "mealie-admins@auth.${FQDN_01}"
+      auto_redirect: true
+      provider_name: "Kanidm"
+      remember_me: false
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          envFrom:
+            - secretRef:
+                name: frontend
+            - secretRef:
+                name: api
+          env:
+            ALLOW_PASSWORD_LOGIN: "false"
+            OIDC_CLIENT_ID:
+              secretKeyRef:
+                name: mealie-kanidm-oauth2-credentials
+                key: CLIENT_ID
+                expandObjectName: false
+            OIDC_CLIENT_SECRET:
+              secretKeyRef:
+                name: mealie-kanidm-oauth2-credentials
+                key: CLIENT_SECRET
+                expandObjectName: false
+persistence:
+  data:
+    enabled: true
+    targetSelector:
+      main:
+        main:
+          mountPath: /app/data
+  nltk:
+    enabled: true
+    type: emptyDir
+    size: 5Gi
+    targetSelector:
+      main:
+        main:
+          mountPath: /nltk_data
+cnpg:
+  main:
+    enabled: true
+    user: mealie
+    database: mealie
+
+ingress:
+  main:
+    integrations:
+      homepage:
+        widget:
+          version: 2

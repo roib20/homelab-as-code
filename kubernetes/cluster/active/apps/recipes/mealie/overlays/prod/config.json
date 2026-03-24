@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "mealie",
+  "destName": "in-cluster",
+  "destNamespace": "mealie",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "mealie"
+}
