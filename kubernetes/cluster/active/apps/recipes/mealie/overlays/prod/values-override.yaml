@@ -4,3 +4,20 @@ global:
     storageClass: longhorn
     pvcRetain: false
     pvcSize: 1Gi
+cnpg:
+  main:
+    enabled: false
+workload:
+  main:
+    podSpec:
+      annotations:
+        secret.reloader.stakater.com/reload: "mealie-api,mealie-frontend,mealie-kanidm-oauth2-credentials,mealie-postgres-app"
+      containers:
+        main:
+          env:
+            DB_ENGINE: postgres
+            POSTGRES_URL_OVERRIDE:
+              secretKeyRef:
+                name: mealie-postgres-app
+                key: uri
+                expandObjectName: false

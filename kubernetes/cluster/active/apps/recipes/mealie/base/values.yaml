@@ -72,7 +72,7 @@ persistence:
           mountPath: /nltk_data
 cnpg:
   main:
-    enabled: true
+    enabled: false
     user: mealie
     database: mealie
 
