@@ -28,7 +28,7 @@ jobs:
         shell: sh
         run: printenv > "${ENV_FILE}"
       - name: Install Helm
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
         with:
           # renovate: datasource=github-releases depName=helm/helm
           version: v4.1.3
