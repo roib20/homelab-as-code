@@ -32,22 +32,22 @@ spec:
             - |
               # shellcheck shell=sh
               settings_public_url="http://seerr.seerr.svc.cluster.local:80/api/v1/settings/public"
-              check_interval_seconds=5
+              check_interval_seconds=10
 
               echo "Waiting for Seerr initialization before creating HTTPRoute."
               echo "If needed: kubectl -n seerr port-forward svc/seerr 8080:80"
 
-              attempt=0
+              start_epoch="$(date +%s)"
               while true; do
-                attempt=$((attempt + 1))
+                elapsed_seconds="$(( $(date +%s) - start_epoch ))"
 
                 if curl -fsS "${settings_public_url}" | jq -e '.initialized == true' >/dev/null; then
-                  echo "Seerr initialized after ${attempt} checks; restarting StatefulSet to apply custom settings from ConfigMap."
+                  echo "Seerr initialized after ${elapsed_seconds}s; restarting StatefulSet to apply custom settings from ConfigMap."
                   kubectl -n seerr rollout restart statefulset.apps/seerr
                   exit 0
                 fi
 
-                echo "Seerr not initialized yet (attempt=${attempt}), retrying..."
+                echo "Seerr not initialized yet (${elapsed_seconds}s elapsed), retrying..."
                 sleep "${check_interval_seconds}"
               done
 
