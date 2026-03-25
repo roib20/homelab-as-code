@@ -11,6 +11,7 @@ spec:
   backoffLimit: 0
   template:
     spec:
+      serviceAccountName: seerr-httproute-gate
       restartPolicy: Never
       securityContext:
         runAsNonRoot: true
@@ -20,50 +21,39 @@ spec:
           type: RuntimeDefault
       containers:
         - name: wait-for-seerr-initialized
-          # renovate: datasource=docker depName=python
-          image: python:3.14.3-alpine
+          # renovate: datasource=docker depName=alpine/k8s
+          image: alpine/k8s:1.35.2
+          env:
+            - name: HOME
+              value: /tmp
           command:
-            - python
-            - -c
+            - sh
+            - -ec
             - |
-              import json
-              import sys
-              import time
-              from urllib import error, request
+              # shellcheck shell=sh
+              settings_public_url="http://seerr.seerr.svc.cluster.local:80/api/v1/settings/public"
+              check_interval_seconds=5
 
-              SETTINGS_PUBLIC_URL = "http://seerr.seerr.svc.cluster.local:80/api/v1/settings/public"
-              CHECK_INTERVAL_SECONDS = 5
-              REQUEST_TIMEOUT_SECONDS = 5
+              echo "Waiting for Seerr initialization before creating HTTPRoute."
+              echo "If needed: kubectl -n seerr port-forward svc/seerr 8080:80"
 
+              attempt=0
+              while true; do
+                attempt=$((attempt + 1))
 
-              def out(message: str) -> None:
-                  sys.stdout.write(f"{message}\n")
-                  sys.stdout.flush()
+                if curl -fsS "${settings_public_url}" | jq -e '.initialized == true' >/dev/null; then
+                  echo "Seerr initialized after ${attempt} checks; restarting StatefulSet to apply custom settings from ConfigMap."
+                  kubectl -n seerr rollout restart statefulset.apps/seerr
+                  exit 0
+                fi
 
+                echo "Seerr not initialized yet (attempt=${attempt}), retrying..."
+                sleep "${check_interval_seconds}"
+              done
 
-              out("Waiting for Seerr initialization before creating HTTPRoute.")
-              out("If needed: kubectl -n seerr port-forward svc/seerr 8080:80")
-
-              attempt = 0
-
-              while True:
-                  attempt += 1
-                  try:
-                      with request.urlopen(  # noqa: S310
-                          SETTINGS_PUBLIC_URL,
-                          timeout=REQUEST_TIMEOUT_SECONDS,
-                      ) as response:
-                          payload = json.loads(response.read())
-
-                      if isinstance(payload, dict) and payload.get("initialized") is True:
-                          out(f"Seerr initialized after {attempt} checks.")
-                          raise SystemExit(0)
-
-                      out(f"Seerr not initialized yet (attempt={attempt}), retrying...")
-                  except (error.URLError, OSError, ValueError) as exc:
-                      out(f"Seerr status check failed (attempt={attempt}): {exc}")
-
-                  time.sleep(CHECK_INTERVAL_SECONDS)
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -71,3 +61,6 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
+      volumes:
+        - name: tmp
+          emptyDir: {}

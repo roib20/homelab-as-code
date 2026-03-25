@@ -6,6 +6,7 @@ resources:
   - external-secrets
   - database/cloudnative-pg.yaml
   - resources/seerr-settings.yaml
+  - resources/httproute-gate-rbac.yaml
   - resources/httproute-gate-job.yaml
   - resources/httproute.yaml
 helmCharts:
