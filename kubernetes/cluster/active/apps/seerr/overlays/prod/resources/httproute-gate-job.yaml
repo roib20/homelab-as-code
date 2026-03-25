@@ -1,0 +1,73 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: seerr-httproute-gate
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: wait-for-seerr-initialized
+          # renovate: datasource=docker depName=python
+          image: python:3.14.3-alpine
+          command:
+            - python
+            - -c
+            - |
+              import json
+              import sys
+              import time
+              from urllib import error, request
+
+              SETTINGS_PUBLIC_URL = "http://seerr.seerr.svc.cluster.local:80/api/v1/settings/public"
+              CHECK_INTERVAL_SECONDS = 5
+              REQUEST_TIMEOUT_SECONDS = 5
+
+
+              def out(message: str) -> None:
+                  sys.stdout.write(f"{message}\n")
+                  sys.stdout.flush()
+
+
+              out("Waiting for Seerr initialization before creating HTTPRoute.")
+              out("If needed: kubectl -n seerr port-forward svc/seerr 8080:80")
+
+              attempt = 0
+
+              while True:
+                  attempt += 1
+                  try:
+                      with request.urlopen(  # noqa: S310
+                          SETTINGS_PUBLIC_URL,
+                          timeout=REQUEST_TIMEOUT_SECONDS,
+                      ) as response:
+                          payload = json.loads(response.read())
+
+                      if isinstance(payload, dict) and payload.get("initialized") is True:
+                          out(f"Seerr initialized after {attempt} checks.")
+                          raise SystemExit(0)
+
+                      out(f"Seerr not initialized yet (attempt={attempt}), retrying...")
+                  except (error.URLError, OSError, ValueError) as exc:
+                      out(f"Seerr status check failed (attempt={attempt}): {exc}")
+
+                  time.sleep(CHECK_INTERVAL_SECONDS)
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true

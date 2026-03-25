@@ -4,6 +4,7 @@ kind: HTTPRoute
 metadata:
   name: seerr
   annotations:
+    argocd.argoproj.io/sync-wave: "10"
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Request management and media discovery for Jellyfin.
     gethomepage.dev/group: Media Requests
