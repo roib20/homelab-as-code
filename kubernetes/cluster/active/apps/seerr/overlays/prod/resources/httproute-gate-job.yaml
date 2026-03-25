@@ -35,7 +35,8 @@ spec:
               check_interval_seconds=10
 
               echo "Waiting for Seerr initialization before creating HTTPRoute."
-              echo "If needed: kubectl -n seerr port-forward svc/seerr 8080:80"
+              echo "Complete Seerr onboarding in the web UI."
+              echo "Run \`kubectl -n seerr port-forward svc/seerr 5055:80\` and open http://localhost:5055."
 
               start_epoch="$(date +%s)"
               while true; do
