@@ -16,10 +16,12 @@ spec:
               import json
               import os
               import re
+              from pathlib import Path
 
-              settings_path = "/app/config/settings.json"
-              settings_dir = "/secrets"
-              placeholder_re = re.compile(r"\$\{([A-Za-z0-9_]+)\}")
+              SETTINGS_PATH = Path("/app/config/settings.json")
+              SETTINGS_DIR = Path("/secrets")
+              PLACEHOLDER_RE = re.compile(r"\$\{([A-Za-z0-9_]+)\}")
+
 
               def merge_dict(base, patch):
                   for key, value in patch.items():
@@ -29,23 +31,25 @@ spec:
                           base[key] = value
                   return base
 
+
               def substitute_placeholders(value):
                   if isinstance(value, dict):
                       return {k: substitute_placeholders(v) for k, v in value.items()}
                   if isinstance(value, list):
                       return [substitute_placeholders(v) for v in value]
                   if isinstance(value, str):
+
                       def replace(match):
                           key = match.group(1)
-                          resolved = (
-                              os.getenv(key)
-                              or os.getenv(key.upper())
-                              or os.getenv(key.lower())
-                          )
-                          return resolved if resolved is not None else match.group(0)
+                          for candidate in (key, key.upper(), key.lower()):
+                              resolved = os.getenv(candidate)
+                              if resolved is not None:
+                                  return resolved
+                          return match.group(0)
 
-                      return placeholder_re.sub(replace, value)
+                      return PLACEHOLDER_RE.sub(replace, value)
                   return value
+
 
               def pick_arr_key(item, hd_key, uhd_key):
                   host = str(item.get("hostname", "")).lower()
@@ -65,6 +69,7 @@ spec:
 
                   return hd_key or uhd_key
 
+
               def set_arr_api_keys(items, hd_key, uhd_key):
                   if not isinstance(items, list):
                       return
@@ -75,32 +80,26 @@ spec:
                       if key:
                           item["apiKey"] = key
 
-              def load_patch(path):
-                  settings_json = os.path.join(path, "settings.json")
-                  if os.path.isfile(settings_json):
-                      with open(settings_json, "r", encoding="utf-8") as f:
-                          loaded = json.load(f)
+
+              def load_patch():
+                  settings_json = SETTINGS_DIR / "settings.json"
+                  if settings_json.is_file():
+                      loaded = json.loads(settings_json.read_text(encoding="utf-8"))
                       return loaded if isinstance(loaded, dict) else {}
 
                   patch = {}
-                  if not os.path.isdir(path):
+                  if not SETTINGS_DIR.is_dir():
                       return patch
 
-                  for entry in sorted(os.listdir(path)):
-                      if entry.startswith("."):
+                  for file_path in sorted(SETTINGS_DIR.iterdir()):
+                      if file_path.name.startswith(".") or not file_path.is_file():
                           continue
 
-                      file_path = os.path.join(path, entry)
-                      if not os.path.isfile(file_path):
-                          continue
-
-                      with open(file_path, "r", encoding="utf-8") as f:
-                          content = f.read().strip()
-
+                      content = file_path.read_text(encoding="utf-8").strip()
                       if not content:
                           continue
 
-                      key = entry[:-5] if entry.endswith(".json") else entry
+                      key = file_path.stem if file_path.suffix == ".json" else file_path.name
                       value = json.loads(content)
 
                       if key == "settings" and isinstance(value, dict):
@@ -111,46 +110,53 @@ spec:
 
                   return patch
 
-              if not os.path.exists(settings_path):
-                  raise SystemExit(0)
 
-              with open(settings_path, "r", encoding="utf-8") as f:
-                  base = json.load(f)
+              def main():
+                  if not SETTINGS_PATH.exists():
+                      return
 
-              patch = load_patch(settings_dir)
-              patch = json.loads(json.dumps(patch))
+                  base = json.loads(SETTINGS_PATH.read_text(encoding="utf-8"))
+                  if not isinstance(base, dict):
+                      raise ValueError(f"Base settings must be an object: {SETTINGS_PATH}")
 
-              merged = merge_dict(base, patch)
-              merged = substitute_placeholders(merged)
+                  merged = substitute_placeholders(merge_dict(base, load_patch()))
 
-              providers = merged.get("oidc", {}).get("providers")
-              if isinstance(providers, list):
-                  for provider in providers:
-                      if not isinstance(provider, dict):
-                          continue
-                      if provider.get("slug") == "kanidm":
-                          if os.getenv("OIDC_CLIENT_ID"):
-                              provider["clientId"] = os.getenv("OIDC_CLIENT_ID")
-                          if os.getenv("OIDC_CLIENT_SECRET"):
-                              provider["clientSecret"] = os.getenv("OIDC_CLIENT_SECRET")
+                  oidc = merged.get("oidc")
+                  if isinstance(oidc, dict):
+                      providers = oidc.get("providers")
+                      if isinstance(providers, list):
+                          oidc_client_id = os.getenv("OIDC_CLIENT_ID")
+                          oidc_client_secret = os.getenv("OIDC_CLIENT_SECRET")
+                          for provider in providers:
+                              if not isinstance(provider, dict) or provider.get("slug") != "kanidm":
+                                  continue
+                              if oidc_client_id:
+                                  provider["clientId"] = oidc_client_id
+                              if oidc_client_secret:
+                                  provider["clientSecret"] = oidc_client_secret
 
-              set_arr_api_keys(
-                  merged.get("radarr"),
-                  os.getenv("RADARR_HD_API_KEY"),
-                  os.getenv("RADARR_UHD_API_KEY"),
-              )
-              set_arr_api_keys(
-                  merged.get("sonarr"),
-                  os.getenv("SONARR_HD_API_KEY"),
-                  os.getenv("SONARR_UHD_API_KEY"),
-              )
+                  set_arr_api_keys(
+                      merged.get("radarr"),
+                      os.getenv("RADARR_HD_API_KEY"),
+                      os.getenv("RADARR_UHD_API_KEY"),
+                  )
+                  set_arr_api_keys(
+                      merged.get("sonarr"),
+                      os.getenv("SONARR_HD_API_KEY"),
+                      os.getenv("SONARR_UHD_API_KEY"),
+                  )
 
-              tmp_path = f"{settings_path}.tmp"
-              with open(tmp_path, "w", encoding="utf-8") as f:
-                  json.dump(merged, f, indent=1, ensure_ascii=False)
-                  f.write("\n")
+                  rendered = json.dumps(merged, indent=1, ensure_ascii=False) + "\n"
+                  if SETTINGS_PATH.read_text(encoding="utf-8") == rendered:
+                      return
 
-              os.replace(tmp_path, settings_path)
+                  tmp_path = Path(f"{SETTINGS_PATH}.tmp")
+                  with tmp_path.open("w", encoding="utf-8") as handle:
+                      handle.write(rendered)
+                  os.replace(tmp_path, SETTINGS_PATH)
+
+
+              main()
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
