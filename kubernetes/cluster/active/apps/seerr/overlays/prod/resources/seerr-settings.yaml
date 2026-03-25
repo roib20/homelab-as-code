@@ -20,7 +20,7 @@ data:
       "localLogin": false,
       "mediaServerLogin": true,
       "oidcLogin": true,
-      "newPlexLogin": true,
+      "newPlexLogin": false,
       "discoverRegion": "",
       "streamingRegion": "IL",
       "originalLanguage": "",
