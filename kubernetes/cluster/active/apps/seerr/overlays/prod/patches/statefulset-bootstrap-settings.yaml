@@ -1,0 +1,176 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: seerr
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: bootstrap-settings-json
+          image: python:3.14-alpine
+          command:
+            - python
+            - -c
+            - |
+              import json
+              import os
+              import re
+
+              settings_path = "/app/config/settings.json"
+              patch_path = "/secrets/settings.json"
+              placeholder_re = re.compile(r"\$\{([A-Za-z0-9_]+)\}")
+
+              def merge_dict(base, patch):
+                  for key, value in patch.items():
+                      if isinstance(value, dict) and isinstance(base.get(key), dict):
+                          merge_dict(base[key], value)
+                      else:
+                          base[key] = value
+                  return base
+
+              def substitute_placeholders(value):
+                  if isinstance(value, dict):
+                      return {k: substitute_placeholders(v) for k, v in value.items()}
+                  if isinstance(value, list):
+                      return [substitute_placeholders(v) for v in value]
+                  if isinstance(value, str):
+                      def replace(match):
+                          key = match.group(1)
+                          resolved = (
+                              os.getenv(key)
+                              or os.getenv(key.upper())
+                              or os.getenv(key.lower())
+                          )
+                          return resolved if resolved is not None else match.group(0)
+
+                      return placeholder_re.sub(replace, value)
+                  return value
+
+              def pick_arr_key(item, hd_key, uhd_key):
+                  host = str(item.get("hostname", "")).lower()
+                  name = str(item.get("name", "")).lower()
+                  combined = f"{host} {name}"
+
+                  if "uhd" in combined or "4k" in combined:
+                      return uhd_key or hd_key
+                  if "hd" in combined:
+                      return hd_key or uhd_key
+
+                  is_4k = item.get("is4k")
+                  if is_4k is True:
+                      return uhd_key or hd_key
+                  if is_4k is False:
+                      return hd_key or uhd_key
+
+                  return hd_key or uhd_key
+
+              def set_arr_api_keys(items, hd_key, uhd_key):
+                  if not isinstance(items, list):
+                      return
+                  for item in items:
+                      if not isinstance(item, dict):
+                          continue
+                      key = pick_arr_key(item, hd_key, uhd_key)
+                      if key:
+                          item["apiKey"] = key
+
+              if not os.path.exists(settings_path):
+                  raise SystemExit(0)
+
+              with open(settings_path, "r", encoding="utf-8") as f:
+                  base = json.load(f)
+
+              with open(patch_path, "r", encoding="utf-8") as f:
+                  patch = json.load(f)
+
+              merged = merge_dict(base, patch)
+              merged = substitute_placeholders(merged)
+
+              providers = merged.get("oidc", {}).get("providers")
+              if isinstance(providers, list):
+                  for provider in providers:
+                      if not isinstance(provider, dict):
+                          continue
+                      if provider.get("slug") == "kanidm":
+                          if os.getenv("OIDC_CLIENT_ID"):
+                              provider["clientId"] = os.getenv("OIDC_CLIENT_ID")
+                          if os.getenv("OIDC_CLIENT_SECRET"):
+                              provider["clientSecret"] = os.getenv("OIDC_CLIENT_SECRET")
+
+              set_arr_api_keys(
+                  merged.get("radarr"),
+                  os.getenv("RADARR_HD_API_KEY"),
+                  os.getenv("RADARR_UHD_API_KEY"),
+              )
+              set_arr_api_keys(
+                  merged.get("sonarr"),
+                  os.getenv("SONARR_HD_API_KEY"),
+                  os.getenv("SONARR_UHD_API_KEY"),
+              )
+
+              tmp_path = f"{settings_path}.tmp"
+              with open(tmp_path, "w", encoding="utf-8") as f:
+                  json.dump(merged, f, indent=1, ensure_ascii=False)
+                  f.write("\n")
+
+              os.replace(tmp_path, settings_path)
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-kanidm-oauth2-credentials
+                  key: CLIENT_ID
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-kanidm-oauth2-credentials
+                  key: CLIENT_SECRET
+            - name: RADARR_HD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-servarr-secrets
+                  key: radarr_hd_api_key
+            - name: RADARR_UHD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-servarr-secrets
+                  key: radarr_uhd_api_key
+            - name: SONARR_HD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-servarr-secrets
+                  key: sonarr_hd_api_key
+            - name: SONARR_UHD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-servarr-secrets
+                  key: sonarr_uhd_api_key
+            - name: FQDN_01
+              valueFrom:
+                configMapKeyRef:
+                  name: env-vars-seerr
+                  key: FQDN_01
+            - name: FQDN_02
+              valueFrom:
+                configMapKeyRef:
+                  name: env-vars-seerr
+                  key: FQDN_02
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+            - name: seerr-settings
+              mountPath: /secrets
+              readOnly: true

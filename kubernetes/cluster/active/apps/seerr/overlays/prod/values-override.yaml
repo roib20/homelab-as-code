@@ -1,6 +1,7 @@
 ---
 podAnnotations:
-  secret.reloader.stakater.com/reload: "seerr-postgres-app,seerr-secrets"
+  secret.reloader.stakater.com/reload: "seerr-kanidm-oauth2-credentials,seerr-postgres-app,seerr-secrets,seerr-servarr-secrets"
+  configmap.reloader.stakater.com/reload: "seerr-settings"
 
 extraEnv:
   - name: API_KEY
@@ -37,6 +38,14 @@ extraEnv:
       secretKeyRef:
         name: seerr-postgres-app
         key: dbname
+
+volumes:
+  - name: seerr-settings
+    configMap:
+      name: seerr-settings
+      items:
+        - key: settings
+          path: settings.json
 
 ingress:
   enabled: true
