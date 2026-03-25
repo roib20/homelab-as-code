@@ -20,6 +20,14 @@ rules:
     verbs:
       - get
       - patch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - httproutes
+    resourceNames:
+      - seerr
+    verbs:
+      - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding

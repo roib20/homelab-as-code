@@ -38,6 +38,11 @@ spec:
               echo "Complete Seerr onboarding in the web UI."
               echo "Run \`kubectl -n seerr port-forward svc/seerr 5055:80\` and open http://localhost:5055."
 
+              if kubectl -n seerr get httproute.gateway.networking.k8s.io/seerr >/dev/null 2>&1; then
+                echo "HTTPRoute seerr already exists; skipping gate and StatefulSet restart."
+                exit 0
+              fi
+
               start_epoch="$(date +%s)"
               while true; do
                 elapsed_seconds="$(( $(date +%s) - start_epoch ))"
