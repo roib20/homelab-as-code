@@ -8,7 +8,8 @@ spec:
     spec:
       initContainers:
         - name: bootstrap-settings-json
-          image: python:3.14-alpine
+          # renovate: datasource=docker depName=python
+          image: python:3.14.3-alpine
           command:
             - python
             - -c
