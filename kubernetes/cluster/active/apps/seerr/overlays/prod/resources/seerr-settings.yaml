@@ -5,16 +5,15 @@ metadata:
   name: seerr-settings
   namespace: seerr
 data:
-  settings: |
+  main: |
     {
-     "main": {
       "applicationTitle": "Seerr",
       "applicationUrl": "https://get.${FQDN_01}",
       "cacheImages": false,
       "defaultPermissions": 32,
       "defaultQuotas": {
-       "movie": {},
-       "tv": {}
+        "movie": {},
+        "tv": {}
       },
       "hideAvailable": false,
       "hideBlocklisted": false,
@@ -32,273 +31,282 @@ data:
       "enableSpecialEpisodes": false,
       "locale": "en",
       "youtubeUrl": ""
-     },
-     "plex": {
+    }
+  plex: |
+    {
       "name": "",
       "ip": "",
       "port": 32400,
       "useSsl": false,
       "libraries": []
-     },
-     "jellyfin": {
+    }
+  jellyfin: |
+    {
       "ip": "jellyfin.jellyfin.svc.cluster.local",
       "port": 8096,
       "useSsl": false,
       "urlBase": "",
       "externalHostname": "https://media.${FQDN_01}",
       "jellyfinForgotPasswordUrl": "https://auth.${FQDN_01}/ui/update_credentials"
-     },
-     "oidc": {
+    }
+  oidc: |
+    {
       "providers": [
-       {
-        "slug": "kanidm",
-        "name": "Kanidm",
-        "issuerUrl": "https://auth.${FQDN_01}/oauth2/openid/seerr",
-        "scopes": "openid profile email groups",
-        "newUserLogin": true
-       }
+        {
+          "slug": "kanidm",
+          "name": "Kanidm",
+          "issuerUrl": "https://auth.${FQDN_01}/oauth2/openid/seerr",
+          "scopes": "openid profile email groups",
+          "newUserLogin": true
+        }
       ]
-     },
-     "tautulli": {},
-     "metadataSettings": {
+    }
+  tautulli: |
+    {}
+  metadataSettings: |
+    {
       "tv": "tmdb",
       "anime": "tmdb"
-     },
-     "radarr": [
+    }
+  radarr: |
+    [
       {
-       "name": "Radarr (HD)",
-       "hostname": "radarr-hd.servarr.svc.cluster.local",
-       "port": 7878,
-       "useSsl": false,
-       "baseUrl": "",
-       "activeProfileId": 7,
-       "activeProfileName": "1080p Efficient",
-       "activeDirectory": "/MediaData/Media/Video/Movies/HD Movies",
-       "is4k": false,
-       "minimumAvailability": "released",
-       "tags": [],
-       "isDefault": true,
-       "syncEnabled": true,
-       "preventSearch": false,
-       "tagRequests": false,
-       "id": 0
+        "name": "Radarr (HD)",
+        "hostname": "radarr-hd.servarr.svc.cluster.local",
+        "port": 7878,
+        "useSsl": false,
+        "baseUrl": "",
+        "activeProfileId": 7,
+        "activeProfileName": "1080p Efficient",
+        "activeDirectory": "/MediaData/Media/Video/Movies/HD Movies",
+        "is4k": false,
+        "minimumAvailability": "released",
+        "tags": [],
+        "isDefault": true,
+        "syncEnabled": true,
+        "preventSearch": false,
+        "tagRequests": false,
+        "id": 0
       },
       {
-       "name": "Radarr (4K)",
-       "hostname": "radarr-uhd.servarr.svc.cluster.local",
-       "port": 7878,
-       "useSsl": false,
-       "baseUrl": "",
-       "activeProfileId": 7,
-       "activeProfileName": "2160p Efficient",
-       "activeDirectory": "/MediaData/Media/Video/Movies/4K UHD Movies",
-       "is4k": true,
-       "minimumAvailability": "released",
-       "tags": [],
-       "isDefault": true,
-       "syncEnabled": true,
-       "preventSearch": false,
-       "tagRequests": false,
-       "id": 1
+        "name": "Radarr (4K)",
+        "hostname": "radarr-uhd.servarr.svc.cluster.local",
+        "port": 7878,
+        "useSsl": false,
+        "baseUrl": "",
+        "activeProfileId": 7,
+        "activeProfileName": "2160p Efficient",
+        "activeDirectory": "/MediaData/Media/Video/Movies/4K UHD Movies",
+        "is4k": true,
+        "minimumAvailability": "released",
+        "tags": [],
+        "isDefault": true,
+        "syncEnabled": true,
+        "preventSearch": false,
+        "tagRequests": false,
+        "id": 1
       }
-     ],
-     "sonarr": [
+    ]
+  sonarr: |
+    [
       {
-       "name": "Sonarr (HD)",
-       "hostname": "sonarr-hd.servarr.svc.cluster.local",
-       "port": 8989,
-       "useSsl": false,
-       "baseUrl": "",
-       "activeProfileId": 40,
-       "activeProfileName": "1080p Compact",
-       "activeDirectory": "/MediaData/Media/Video/TV/HDTV",
-       "tags": [],
-       "animeTags": [],
-       "is4k": false,
-       "isDefault": true,
-       "enableSeasonFolders": true,
-       "syncEnabled": true,
-       "preventSearch": false,
-       "tagRequests": false,
-       "monitorNewItems": "none",
-       "id": 0
+        "name": "Sonarr (HD)",
+        "hostname": "sonarr-hd.servarr.svc.cluster.local",
+        "port": 8989,
+        "useSsl": false,
+        "baseUrl": "",
+        "activeProfileId": 40,
+        "activeProfileName": "1080p Compact",
+        "activeDirectory": "/MediaData/Media/Video/TV/HDTV",
+        "tags": [],
+        "animeTags": [],
+        "is4k": false,
+        "isDefault": true,
+        "enableSeasonFolders": true,
+        "syncEnabled": true,
+        "preventSearch": false,
+        "tagRequests": false,
+        "monitorNewItems": "none",
+        "id": 0
       },
       {
-       "name": "Sonarr (4K)",
-       "hostname": "sonarr-uhd.servarr.svc.cluster.local",
-       "port": 8989,
-       "useSsl": false,
-       "activeProfileId": 40,
-       "activeProfileName": "2160p Efficient",
-       "activeDirectory": "/MediaData/Media/Video/TV/UHDTV",
-       "tags": [],
-       "animeTags": [],
-       "is4k": false,
-       "isDefault": false,
-       "enableSeasonFolders": true,
-       "syncEnabled": true,
-       "preventSearch": false,
-       "tagRequests": false,
-       "monitorNewItems": "none",
-       "id": 1
+        "name": "Sonarr (4K)",
+        "hostname": "sonarr-uhd.servarr.svc.cluster.local",
+        "port": 8989,
+        "useSsl": false,
+        "activeProfileId": 40,
+        "activeProfileName": "2160p Efficient",
+        "activeDirectory": "/MediaData/Media/Video/TV/UHDTV",
+        "tags": [],
+        "animeTags": [],
+        "is4k": false,
+        "isDefault": false,
+        "enableSeasonFolders": true,
+        "syncEnabled": true,
+        "preventSearch": false,
+        "tagRequests": false,
+        "monitorNewItems": "none",
+        "id": 1
       }
-     ],
-     "notifications": {
+    ]
+  notifications: |
+    {
       "agents": {
-       "email": {
-        "enabled": false,
-        "embedPoster": true,
-        "options": {
-         "userEmailRequired": false,
-         "emailFrom": "",
-         "smtpHost": "",
-         "smtpPort": 587,
-         "secure": false,
-         "ignoreTls": false,
-         "requireTls": false,
-         "allowSelfSigned": false,
-         "senderName": "Seerr"
+        "email": {
+          "enabled": false,
+          "embedPoster": true,
+          "options": {
+            "userEmailRequired": false,
+            "emailFrom": "",
+            "smtpHost": "",
+            "smtpPort": 587,
+            "secure": false,
+            "ignoreTls": false,
+            "requireTls": false,
+            "allowSelfSigned": false,
+            "senderName": "Seerr"
+          }
+        },
+        "discord": {
+          "enabled": false,
+          "embedPoster": true,
+          "types": 0,
+          "options": {
+            "webhookUrl": "",
+            "webhookRoleId": "",
+            "enableMentions": true
+          }
+        },
+        "slack": {
+          "enabled": false,
+          "embedPoster": true,
+          "types": 0,
+          "options": {
+            "webhookUrl": ""
+          }
+        },
+        "telegram": {
+          "enabled": false,
+          "embedPoster": true,
+          "types": 0,
+          "options": {
+            "botAPI": "",
+            "chatId": "",
+            "messageThreadId": "",
+            "sendSilently": false
+          }
+        },
+        "pushbullet": {
+          "enabled": false,
+          "embedPoster": false,
+          "types": 0,
+          "options": {
+            "accessToken": ""
+          }
+        },
+        "pushover": {
+          "enabled": false,
+          "embedPoster": true,
+          "types": 0,
+          "options": {
+            "accessToken": "",
+            "userToken": "",
+            "sound": ""
+          }
+        },
+        "webhook": {
+          "enabled": false,
+          "embedPoster": true,
+          "types": 0
+        },
+        "webpush": {
+          "enabled": false,
+          "embedPoster": true,
+          "options": {}
+        },
+        "gotify": {
+          "enabled": false,
+          "embedPoster": false,
+          "types": 0,
+          "options": {
+            "url": "",
+            "token": "",
+            "priority": 0
+          }
+        },
+        "ntfy": {
+          "enabled": false,
+          "embedPoster": true,
+          "types": 0,
+          "options": {
+            "url": "",
+            "topic": "",
+            "priority": 3
+          }
         }
-       },
-       "discord": {
-        "enabled": false,
-        "embedPoster": true,
-        "types": 0,
-        "options": {
-         "webhookUrl": "",
-         "webhookRoleId": "",
-         "enableMentions": true
-        }
-       },
-       "slack": {
-        "enabled": false,
-        "embedPoster": true,
-        "types": 0,
-        "options": {
-         "webhookUrl": ""
-        }
-       },
-       "telegram": {
-        "enabled": false,
-        "embedPoster": true,
-        "types": 0,
-        "options": {
-         "botAPI": "",
-         "chatId": "",
-         "messageThreadId": "",
-         "sendSilently": false
-        }
-       },
-       "pushbullet": {
-        "enabled": false,
-        "embedPoster": false,
-        "types": 0,
-        "options": {
-         "accessToken": ""
-        }
-       },
-       "pushover": {
-        "enabled": false,
-        "embedPoster": true,
-        "types": 0,
-        "options": {
-         "accessToken": "",
-         "userToken": "",
-         "sound": ""
-        }
-       },
-       "webhook": {
-        "enabled": false,
-        "embedPoster": true,
-        "types": 0
-       },
-       "webpush": {
-        "enabled": false,
-        "embedPoster": true,
-        "options": {}
-       },
-       "gotify": {
-        "enabled": false,
-        "embedPoster": false,
-        "types": 0,
-        "options": {
-         "url": "",
-         "token": "",
-         "priority": 0
-        }
-       },
-       "ntfy": {
-        "enabled": false,
-        "embedPoster": true,
-        "types": 0,
-        "options": {
-         "url": "",
-         "topic": "",
-         "priority": 3
-        }
-       }
       }
-     },
-     "jobs": {
+    }
+  jobs: |
+    {
       "plex-recently-added-scan": {
-       "schedule": "0 */5 * * * *"
+        "schedule": "0 */5 * * * *"
       },
       "plex-full-scan": {
-       "schedule": "0 0 3 * * *"
+        "schedule": "0 0 3 * * *"
       },
       "plex-watchlist-sync": {
-       "schedule": "0 */3 * * * *"
+        "schedule": "0 */3 * * * *"
       },
       "plex-refresh-token": {
-       "schedule": "0 0 5 * * *"
+        "schedule": "0 0 5 * * *"
       },
       "radarr-scan": {
-       "schedule": "0 0 4 * * *"
+        "schedule": "0 0 4 * * *"
       },
       "sonarr-scan": {
-       "schedule": "0 30 4 * * *"
+        "schedule": "0 30 4 * * *"
       },
       "availability-sync": {
-       "schedule": "0 0 5 * * *"
+        "schedule": "0 0 5 * * *"
       },
       "download-sync": {
-       "schedule": "0 * * * * *"
+        "schedule": "0 * * * * *"
       },
       "download-sync-reset": {
-       "schedule": "0 0 1 * * *"
+        "schedule": "0 0 1 * * *"
       },
       "jellyfin-recently-added-scan": {
-       "schedule": "0 */5 * * * *"
+        "schedule": "0 */5 * * * *"
       },
       "jellyfin-full-scan": {
-       "schedule": "0 0 3 * * *"
+        "schedule": "0 0 3 * * *"
       },
       "image-cache-cleanup": {
-       "schedule": "0 0 5 * * *"
+        "schedule": "0 0 5 * * *"
       },
       "process-blocklisted-tags": {
-       "schedule": "0 30 1 */7 * *"
+        "schedule": "0 30 1 */7 * *"
       }
-     },
-     "network": {
+    }
+  network: |
+    {
       "csrfProtection": true,
       "forceIpv4First": false,
       "trustProxy": true,
       "proxy": {
-       "enabled": false,
-       "hostname": "",
-       "port": 8080,
-       "useSsl": false,
-       "user": "",
-       "password": "",
-       "bypassFilter": "",
-       "bypassLocalAddresses": true
+        "enabled": false,
+        "hostname": "",
+        "port": 8080,
+        "useSsl": false,
+        "user": "",
+        "password": "",
+        "bypassFilter": "",
+        "bypassLocalAddresses": true
       },
       "dnsCache": {
-       "enabled": true,
-       "forceMinTtl": 0,
-       "forceMaxTtl": -1
+        "enabled": true,
+        "forceMinTtl": 0,
+        "forceMaxTtl": -1
       },
       "apiRequestTimeout": 10000
-     }
     }

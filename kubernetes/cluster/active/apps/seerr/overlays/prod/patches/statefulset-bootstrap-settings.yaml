@@ -18,7 +18,7 @@ spec:
               import re
 
               settings_path = "/app/config/settings.json"
-              patch_path = "/secrets/settings.json"
+              settings_dir = "/secrets"
               placeholder_re = re.compile(r"\$\{([A-Za-z0-9_]+)\}")
 
               def merge_dict(base, patch):
@@ -75,14 +75,50 @@ spec:
                       if key:
                           item["apiKey"] = key
 
+              def load_patch(path):
+                  settings_json = os.path.join(path, "settings.json")
+                  if os.path.isfile(settings_json):
+                      with open(settings_json, "r", encoding="utf-8") as f:
+                          loaded = json.load(f)
+                      return loaded if isinstance(loaded, dict) else {}
+
+                  patch = {}
+                  if not os.path.isdir(path):
+                      return patch
+
+                  for entry in sorted(os.listdir(path)):
+                      if entry.startswith("."):
+                          continue
+
+                      file_path = os.path.join(path, entry)
+                      if not os.path.isfile(file_path):
+                          continue
+
+                      with open(file_path, "r", encoding="utf-8") as f:
+                          content = f.read().strip()
+
+                      if not content:
+                          continue
+
+                      key = entry[:-5] if entry.endswith(".json") else entry
+                      value = json.loads(content)
+
+                      if key == "settings" and isinstance(value, dict):
+                          merge_dict(patch, value)
+                          continue
+
+                      patch[key] = value
+
+                  return patch
+
               if not os.path.exists(settings_path):
                   raise SystemExit(0)
 
               with open(settings_path, "r", encoding="utf-8") as f:
                   base = json.load(f)
 
-              with open(patch_path, "r", encoding="utf-8") as f:
-                  patch = json.load(f)
+              patch = load_patch(settings_dir)
+              patch = json.loads(json.dumps(patch))
 
               merged = merge_dict(base, patch)
               merged = substitute_placeholders(merged)

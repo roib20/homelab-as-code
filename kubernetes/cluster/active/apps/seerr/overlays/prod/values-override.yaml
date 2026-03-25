@@ -43,9 +43,6 @@ volumes:
   - name: seerr-settings
     configMap:
       name: seerr-settings
-      items:
-        - key: settings
-          path: settings.json
 
 ingress:
   enabled: true
