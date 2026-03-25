@@ -20,7 +20,7 @@ spec:
       name: http-gateway-api
       namespace: istio-ingress
   hostnames:
-    - "seerr.${FQDN_01}"
+    - "get.${FQDN_01}"
   rules:
     - backendRefs:
         - group: ""
