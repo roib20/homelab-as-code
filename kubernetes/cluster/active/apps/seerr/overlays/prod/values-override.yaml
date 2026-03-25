@@ -1,6 +1,7 @@
 ---
 podAnnotations:
-  secret.reloader.stakater.com/reload: "seerr-postgres-app,seerr-secrets"
+  secret.reloader.stakater.com/reload: "seerr-kanidm-oauth2-credentials,seerr-postgres-app,seerr-secrets,seerr-servarr-secrets"
+  configmap.reloader.stakater.com/reload: "seerr-settings"
 
 extraEnv:
   - name: API_KEY
@@ -38,20 +39,16 @@ extraEnv:
         name: seerr-postgres-app
         key: dbname
 
+volumes:
+  - name: seerr-settings
+    configMap:
+      name: seerr-settings
+
 ingress:
   enabled: true
   ingressClassName: tailscale
   annotations:
     tailscale.com/proxy-group: ingress-proxies
-    gethomepage.dev/enabled: "true"
-    gethomepage.dev/description: Request management and media discovery for Jellyfin.
-    gethomepage.dev/group: Media Requests
-    gethomepage.dev/icon: overseerr.svg
-    gethomepage.dev/name: Seerr
-    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=seerr"
-    gethomepage.dev/widget.type: "jellyseerr"
-    gethomepage.dev/widget.url: "http://seerr.seerr.svc.cluster.local:80"
-    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_SEERR_KEY}}"
   hosts:
     - host: "seerr.${FQDN_02}"
       paths:

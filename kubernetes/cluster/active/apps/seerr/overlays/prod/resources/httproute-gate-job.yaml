@@ -1,0 +1,72 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: seerr-httproute-gate
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      serviceAccountName: seerr-httproute-gate
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: wait-for-seerr-initialized
+          # renovate: datasource=docker depName=alpine/k8s
+          image: alpine/k8s:1.35.2
+          env:
+            - name: HOME
+              value: /tmp
+          command:
+            - sh
+            - -ec
+            - |
+              # shellcheck shell=sh
+              settings_public_url="http://seerr.seerr.svc.cluster.local:80/api/v1/settings/public"
+              check_interval_seconds=10
+
+              echo "Waiting for Seerr initialization before creating HTTPRoute."
+              echo "Complete Seerr onboarding in the web UI."
+              echo "Run \`kubectl -n seerr port-forward svc/seerr 5055:80\` and open http://localhost:5055."
+
+              if kubectl -n seerr get httproute.gateway.networking.k8s.io/seerr >/dev/null 2>&1; then
+                echo "HTTPRoute seerr already exists; skipping gate and StatefulSet restart."
+                exit 0
+              fi
+
+              start_epoch="$(date +%s)"
+              while true; do
+                elapsed_seconds="$(( $(date +%s) - start_epoch ))"
+
+                if curl -fsS "${settings_public_url}" | jq -e '.initialized == true' >/dev/null; then
+                  echo "Seerr initialized after ${elapsed_seconds}s; restarting StatefulSet to apply custom settings from ConfigMap."
+                  kubectl -n seerr rollout restart statefulset.apps/seerr
+                  exit 0
+                fi
+
+                echo "Seerr not initialized yet (${elapsed_seconds}s elapsed), retrying..."
+                sleep "${check_interval_seconds}"
+              done
+
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+      volumes:
+        - name: tmp
+          emptyDir: {}

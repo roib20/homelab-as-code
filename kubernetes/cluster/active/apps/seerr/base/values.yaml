@@ -1,8 +1,8 @@
 ---
 image:
   registry: ghcr.io
-  repository: v3djg6gl/seerr
+  repository: seerr-team/seerr
   pullPolicy: IfNotPresent
-  tag: 'feat-oidc-jellyfin-quickconnect'
-  sha: 'd2b09093792b8970a2f3d9c723dda7339f69706565f2bb896c2d3440148411c0'
+  tag: 'preview-new-oidc'
+  sha: 'deb28ef85800e3de28f9b96965127cdd6d5a2408df3545cddb6f6c37fc479a81'
 nameOverride: 'seerr'

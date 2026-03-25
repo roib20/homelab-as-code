@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: seerr-httproute-gate
+  namespace: seerr
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: seerr-httproute-gate
+  namespace: seerr
+rules:
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+    resourceNames:
+      - seerr
+    verbs:
+      - get
+      - patch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - httproutes
+    resourceNames:
+      - seerr
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: seerr-httproute-gate
+  namespace: seerr
+subjects:
+  - kind: ServiceAccount
+    name: seerr-httproute-gate
+    namespace: seerr
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: seerr-httproute-gate

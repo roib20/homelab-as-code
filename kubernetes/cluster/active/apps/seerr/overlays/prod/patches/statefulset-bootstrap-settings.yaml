@@ -1,0 +1,224 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: seerr
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: bootstrap-settings-json
+          # renovate: datasource=docker depName=python
+          image: python:3.14.3-alpine
+          command:
+            - python
+            - -c
+            - |
+              import json
+              import os
+              import re
+              from pathlib import Path
+
+              SETTINGS_PATH = Path("/app/config/settings.json")
+              SETTINGS_DIR = Path("/secrets")
+              PLACEHOLDER_RE = re.compile(r"\$\{([A-Za-z0-9_]+)\}")
+
+
+              def merge_dict(base, patch):
+                  for key, value in patch.items():
+                      if isinstance(value, dict) and isinstance(base.get(key), dict):
+                          merge_dict(base[key], value)
+                      else:
+                          base[key] = value
+                  return base
+
+
+              def substitute_placeholders(value):
+                  if isinstance(value, dict):
+                      return {k: substitute_placeholders(v) for k, v in value.items()}
+                  if isinstance(value, list):
+                      return [substitute_placeholders(v) for v in value]
+                  if isinstance(value, str):
+
+                      def replace(match):
+                          key = match.group(1)
+                          for candidate in (key, key.upper(), key.lower()):
+                              resolved = os.getenv(candidate)
+                              if resolved is not None:
+                                  return resolved
+                          return match.group(0)
+
+                      return PLACEHOLDER_RE.sub(replace, value)
+                  return value
+
+
+              def pick_arr_key(item, hd_key, uhd_key):
+                  host = str(item.get("hostname", "")).lower()
+                  name = str(item.get("name", "")).lower()
+                  combined = f"{host} {name}"
+
+                  if "uhd" in combined or "4k" in combined:
+                      return uhd_key or hd_key
+                  if "hd" in combined:
+                      return hd_key or uhd_key
+
+                  is_4k = item.get("is4k")
+                  if is_4k is True:
+                      return uhd_key or hd_key
+                  if is_4k is False:
+                      return hd_key or uhd_key
+
+                  return hd_key or uhd_key
+
+
+              def set_arr_api_keys(items, hd_key, uhd_key):
+                  if not isinstance(items, list):
+                      return
+                  for item in items:
+                      if not isinstance(item, dict):
+                          continue
+                      key = pick_arr_key(item, hd_key, uhd_key)
+                      if key:
+                          item["apiKey"] = key
+
+
+              def load_patch():
+                  settings_json = SETTINGS_DIR / "settings.json"
+                  if settings_json.is_file():
+                      loaded = json.loads(settings_json.read_text(encoding="utf-8"))
+                      return loaded if isinstance(loaded, dict) else {}
+
+                  patch = {}
+                  if not SETTINGS_DIR.is_dir():
+                      return patch
+
+                  for file_path in sorted(SETTINGS_DIR.iterdir()):
+                      if file_path.name.startswith(".") or not file_path.is_file():
+                          continue
+
+                      content = file_path.read_text(encoding="utf-8").strip()
+                      if not content:
+                          continue
+
+                      key = file_path.stem if file_path.suffix == ".json" else file_path.name
+                      value = json.loads(content)
+
+                      if key == "settings" and isinstance(value, dict):
+                          merge_dict(patch, value)
+                          continue
+
+                      patch[key] = value
+
+                  return patch
+
+
+              def main():
+                  if not SETTINGS_PATH.exists():
+                      return
+
+                  base = json.loads(SETTINGS_PATH.read_text(encoding="utf-8"))
+                  if not isinstance(base, dict):
+                      raise ValueError(f"Base settings must be an object: {SETTINGS_PATH}")
+
+                  merged = substitute_placeholders(merge_dict(base, load_patch()))
+
+                  oidc = merged.get("oidc")
+                  if isinstance(oidc, dict):
+                      providers = oidc.get("providers")
+                      if isinstance(providers, list):
+                          oidc_client_id = os.getenv("OIDC_CLIENT_ID")
+                          oidc_client_secret = os.getenv("OIDC_CLIENT_SECRET")
+                          for provider in providers:
+                              if not isinstance(provider, dict) or provider.get("slug") != "kanidm":
+                                  continue
+                              if oidc_client_id:
+                                  provider["clientId"] = oidc_client_id
+                              if oidc_client_secret:
+                                  provider["clientSecret"] = oidc_client_secret
+
+                  set_arr_api_keys(
+                      merged.get("radarr"),
+                      os.getenv("RADARR_HD_API_KEY"),
+                      os.getenv("RADARR_UHD_API_KEY"),
+                  )
+                  set_arr_api_keys(
+                      merged.get("sonarr"),
+                      os.getenv("SONARR_HD_API_KEY"),
+                      os.getenv("SONARR_UHD_API_KEY"),
+                  )
+
+                  rendered = json.dumps(merged, indent=1, ensure_ascii=False) + "\n"
+                  if SETTINGS_PATH.read_text(encoding="utf-8") == rendered:
+                      return
+
+                  tmp_path = Path(f"{SETTINGS_PATH}.tmp")
+                  with tmp_path.open("w", encoding="utf-8") as handle:
+                      handle.write(rendered)
+                  os.replace(tmp_path, SETTINGS_PATH)
+
+
+              main()
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-kanidm-oauth2-credentials
+                  key: CLIENT_ID
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-kanidm-oauth2-credentials
+                  key: CLIENT_SECRET
+            - name: RADARR_HD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-servarr-secrets
+                  key: radarr_hd_api_key
+            - name: RADARR_UHD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-servarr-secrets
+                  key: radarr_uhd_api_key
+            - name: SONARR_HD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-servarr-secrets
+                  key: sonarr_hd_api_key
+            - name: SONARR_UHD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: seerr-servarr-secrets
+                  key: sonarr_uhd_api_key
+            - name: FQDN_01
+              valueFrom:
+                configMapKeyRef:
+                  name: env-vars-seerr
+                  key: FQDN_01
+            - name: FQDN_02
+              valueFrom:
+                configMapKeyRef:
+                  name: env-vars-seerr
+                  key: FQDN_02
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+            - name: seerr-settings
+              mountPath: /secrets
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
