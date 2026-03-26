@@ -126,7 +126,7 @@ data:
         "syncEnabled": true,
         "preventSearch": false,
         "tagRequests": false,
-        "monitorNewItems": "none",
+        "monitorNewItems": "all",
         "id": 0
       },
       {
