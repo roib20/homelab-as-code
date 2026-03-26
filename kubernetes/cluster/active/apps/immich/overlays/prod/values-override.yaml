@@ -5,7 +5,7 @@ controllers:
       main:
         image:
           # renovate: datasource=github-releases depName=immich-app/immich
-          tag: v2.6.2
+          tag: v2.6.3
         env:
           - name: REDIS_HOSTNAME
             value: '{{ printf "%s-valkey" .Release.Name }}'
