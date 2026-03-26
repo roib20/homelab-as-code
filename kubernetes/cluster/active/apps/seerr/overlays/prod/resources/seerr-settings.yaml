@@ -10,7 +10,7 @@ data:
       "applicationTitle": "Seerr",
       "applicationUrl": "https://get.${FQDN_01}",
       "cacheImages": false,
-      "defaultPermissions": 32,
+      "defaultPermissions": 12616864,
       "defaultQuotas": {
         "movie": {},
         "tv": {}
