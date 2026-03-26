@@ -10,7 +10,7 @@ data:
       "applicationTitle": "Seerr",
       "applicationUrl": "https://get.${FQDN_01}",
       "cacheImages": false,
-      "defaultPermissions": 32,
+      "defaultPermissions": 12616864,
       "defaultQuotas": {
         "movie": {},
         "tv": {}
@@ -20,7 +20,7 @@ data:
       "localLogin": false,
       "mediaServerLogin": true,
       "oidcLogin": true,
-      "newPlexLogin": true,
+      "newPlexLogin": false,
       "discoverRegion": "",
       "streamingRegion": "IL",
       "originalLanguage": "",
@@ -139,8 +139,8 @@ data:
         "activeDirectory": "/MediaData/Media/Video/TV/UHDTV",
         "tags": [],
         "animeTags": [],
-        "is4k": false,
-        "isDefault": false,
+        "is4k": true,
+        "isDefault": true,
         "enableSeasonFolders": true,
         "syncEnabled": true,
         "preventSearch": false,
