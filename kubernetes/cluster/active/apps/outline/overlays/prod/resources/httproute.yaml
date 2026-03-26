@@ -9,7 +9,7 @@ metadata:
     gethomepage.dev/description: Team knowledge base & wiki.
     gethomepage.dev/group: Productivity
     gethomepage.dev/icon: outline.svg
-    gethomepage.dev/name: outline
+    gethomepage.dev/name: Outline
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=outline"
 spec:
   parentRefs:
