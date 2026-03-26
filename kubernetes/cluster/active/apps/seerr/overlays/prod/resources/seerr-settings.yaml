@@ -304,7 +304,7 @@ data:
         "bypassLocalAddresses": true
       },
       "dnsCache": {
-        "enabled": true,
+        "enabled": false,
         "forceMinTtl": 0,
         "forceMaxTtl": -1
       },
