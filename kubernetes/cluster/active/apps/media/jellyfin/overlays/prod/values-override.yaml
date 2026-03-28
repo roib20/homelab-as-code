@@ -31,3 +31,11 @@ persistence:
     readOnly: true
     existingClaim: smb-mediadata-rox
     subPath: Media
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          resources:
+            limits:
+              memory: 8Gi
