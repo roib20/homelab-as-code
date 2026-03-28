@@ -57,7 +57,8 @@ data:
           "name": "Kanidm",
           "issuerUrl": "https://auth.${FQDN_01}/oauth2/openid/seerr",
           "scopes": "openid profile email groups",
-          "newUserLogin": true
+          "newUserLogin": true,
+          "logo": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/kanidm.svg"
         }
       ]
     }
