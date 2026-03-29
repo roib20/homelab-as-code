@@ -9,11 +9,9 @@ controllers:
         image:
           tag: '{{ .Values.immichVersion }}'
         env:
-          - name: REDIS_HOSTNAME
-            value: '{{ printf "%s-valkey" .Release.Name }}'
-          - name: IMMICH_MACHINE_LEARNING_URL
-            value: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
-          - DB_URL:
+          REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
+          IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
+          DB_URL:
             valueFrom:
               secretKeyRef:
                 name: immich-database-app
