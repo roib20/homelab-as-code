@@ -2,6 +2,10 @@
 # renovate: datasource=github-releases depName=immich-app/immich
 immichVersion: v2.6.3
 
+defaultPodOptions:
+  annotations:
+    secret.reloader.stakater.com/reload: immich-database-app
+
 controllers:
   main:
     containers:
