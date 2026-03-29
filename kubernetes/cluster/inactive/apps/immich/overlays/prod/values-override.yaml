@@ -1,7 +1,4 @@
 ---
-# renovate: datasource=github-releases depName=immich-app/immich
-immichVersion: v2.6.3
-
 defaultPodOptions:
   annotations:
     secret.reloader.stakater.com/reload: immich-database-app
@@ -10,8 +7,6 @@ controllers:
   main:
     containers:
       main:
-        image:
-          tag: '{{ .Values.immichVersion }}'
         env: &immichCommonEnv
           REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
           IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
@@ -39,9 +34,6 @@ server:
             resourceClaimTemplateName: immich-gpu-claim
       containers:
         main:
-          image:
-            repository: ghcr.io/immich-app/immich-server
-            tag: '{{ .Values.immichVersion }}'
           env:
             <<: *immichCommonEnv
             IMMICH_WORKERS_EXCLUDE: api
@@ -163,12 +155,6 @@ immich:
 
 valkey:
   enabled: true
-  controllers:
-    main:
-      containers:
-        main:
-          image:
-            repository: ghcr.io/valkey-io/valkey
   persistence:
     data:
       enabled: true
@@ -187,5 +173,3 @@ machine-learning:
         main:
           resources:
             claims: *gpuContainerClaims
-          image:
-            tag: '{{ .Values.immichVersion }}-openvino'
