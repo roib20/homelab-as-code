@@ -20,6 +20,7 @@ controllers:
               secretKeyRef:
                 name: immich-database-app
                 key: uri
+          DB_VECTOR_EXTENSION: vectorchord
 
 server:
   enabled: true
