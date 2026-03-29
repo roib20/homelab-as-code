@@ -55,6 +55,13 @@ valkey:
         main:
           image:
             repository: ghcr.io/valkey-io/valkey
+  persistence:
+    data:
+      enabled: true
+      size: 1Gi
+      type: persistentVolumeClaim
+      accessMode: ReadWriteOnce
+      storageClass: longhorn
 
 machine-learning:
   enabled: true
