@@ -21,6 +21,7 @@ controllers:
                 name: immich-database-app
                 key: uri
           DB_VECTOR_EXTENSION: vectorchord
+          IMMICH_ALLOW_SETUP: false
 
 server:
   enabled: true
