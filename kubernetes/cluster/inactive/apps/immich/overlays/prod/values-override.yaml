@@ -1,7 +1,7 @@
 ---
 defaultPodOptions:
   annotations:
-    secret.reloader.stakater.com/reload: immich-database-app
+    secret.reloader.stakater.com/reload: immich-cnpg-app
 
 controllers:
   main:
@@ -13,7 +13,7 @@ controllers:
           DB_URL:
             valueFrom:
               secretKeyRef:
-                name: immich-database-app
+                name: immich-cnpg-app
                 key: uri
           DB_VECTOR_EXTENSION: vectorchord
           IMMICH_ALLOW_SETUP: false
@@ -108,7 +108,7 @@ server:
     cnpg-cluster:
       apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
-      forceRename: immich-database
+      forceRename: immich-cnpg
       spec:
         spec:
           instances: 2
@@ -135,13 +135,13 @@ server:
     cnpg-database:
       apiVersion: postgresql.cnpg.io/v1
       kind: Database
-      forceRename: immich-database-immich
+      forceRename: immich-database
       spec:
         spec:
           name: immich
           owner: immich
           cluster:
-            name: immich-database
+            name: immich-cnpg
           extensions:
             - name: vector
             - name: cube
