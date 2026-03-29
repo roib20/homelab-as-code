@@ -13,26 +13,11 @@ controllers:
             value: '{{ printf "%s-valkey" .Release.Name }}'
           - name: IMMICH_MACHINE_LEARNING_URL
             value: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
-          - name: DB_HOSTNAME
+          - DB_URL:
             valueFrom:
               secretKeyRef:
                 name: immich-database-app
-                key: host
-          - name: DB_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: immich-database-app
-                key: user
-          - name: DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: immich-database-app
-                key: password
-          - name: DB_DATABASE_NAME
-            valueFrom:
-              secretKeyRef:
-                name: immich-database-app
-                key: dbname
+                key: uri
 
 server:
   controllers:
