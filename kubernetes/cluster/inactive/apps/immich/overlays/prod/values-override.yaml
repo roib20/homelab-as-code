@@ -1,11 +1,13 @@
 ---
+# renovate: datasource=github-releases depName=immich-app/immich
+immichVersion: v2.6.3
+
 controllers:
   main:
     containers:
       main:
         image:
-          # renovate: datasource=github-releases depName=immich-app/immich
-          tag: v2.6.3
+          tag: '{{ .Values.immichVersion }}'
         env:
           - name: REDIS_HOSTNAME
             value: '{{ printf "%s-valkey" .Release.Name }}'
@@ -54,4 +56,4 @@ machine-learning:
       containers:
         main:
           image:
-            tag: release-openvino
+            tag: '{{ .Values.immichVersion }}-openvino'
