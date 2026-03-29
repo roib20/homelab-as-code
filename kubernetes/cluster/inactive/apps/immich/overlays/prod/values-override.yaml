@@ -49,6 +49,12 @@ immich:
 
 valkey:
   enabled: true
+  controllers:
+    main:
+      containers:
+        main:
+          image:
+            repository: ghcr.io/valkey-io/valkey
 
 machine-learning:
   enabled: true
