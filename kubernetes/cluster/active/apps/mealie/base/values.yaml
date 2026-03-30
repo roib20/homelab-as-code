@@ -1,3 +1,4 @@
+---
 mealie:
   frontend:
     theme:
@@ -27,7 +28,6 @@ mealie:
     oidc:
       auth_enabled: true
       signup_enabled: true
-      configuration_url: "https://auth.${FQDN_01}/oauth2/openid/mealie/.well-known/openid-configuration"
       user_group: "mealie-users@auth.${FQDN_01}"
       admin_group: "mealie-admins@auth.${FQDN_01}"
       auto_redirect: true
@@ -55,6 +55,7 @@ workload:
                 name: mealie-kanidm-oauth2-credentials
                 key: CLIENT_SECRET
                 expandObjectName: false
+            OIDC_CONFIGURATION_URL: "https://auth.${FQDN_01}/oauth2/openid/$(OIDC_CLIENT_ID)/.well-known/openid-configuration"
 persistence:
   data:
     enabled: true
