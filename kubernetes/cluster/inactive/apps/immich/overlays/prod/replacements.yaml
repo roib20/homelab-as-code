@@ -1,7 +1,7 @@
 ---
 - source:
     kind: ConfigMap
-    name: env-vars
+    name: env-vars-immich
     fieldPath: "data.FQDN_01"
   targets:
     - select:
@@ -12,3 +12,8 @@
       options:
         delimiter: "."
         index: 1
+    - select:
+        kind: Secret
+        name: env-vars
+      fieldPaths:
+        - stringData.FQDN_01
