@@ -7,6 +7,19 @@ controllers:
   main:
     containers:
       main:
+        securityContext: &immichCommonSecurityContext
+          runAsUser: 1000
+          runAsGroup: 1000
+          runAsNonRoot: true
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          privileged: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            add: []
+            drop:
+              - ALL
         env: &immichCommonEnv
           REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
           IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
@@ -22,6 +35,10 @@ server:
   enabled: true
   controllers:
     main:
+      pod:
+        securityContext: &immichPodSecurityContext
+          fsGroup: 1000
+          fsGroupChangePolicy: OnRootMismatch
       containers:
         main:
           env:
@@ -29,6 +46,7 @@ server:
     microservices:
       type: deployment
       pod:
+        securityContext: *immichPodSecurityContext
         resourceClaims: &gpuPodClaims
           - name: gpu
             resourceClaimTemplateName: immich-gpu-claim
@@ -37,6 +55,7 @@ server:
           env:
             <<: *immichCommonEnv
             IMMICH_WORKERS_EXCLUDE: api
+          securityContext: *immichCommonSecurityContext
           resources:
             claims: &gpuContainerClaims
               - name: gpu
@@ -155,6 +174,27 @@ immich:
 
 valkey:
   enabled: true
+  controllers:
+    main:
+      pod:
+        securityContext: &valkeyPodSecurityContext
+          fsGroup: 999
+          fsGroupChangePolicy: OnRootMismatch
+      containers:
+        main:
+          securityContext: &valkeyContainerSecurityContext
+            runAsUser: 999
+            runAsGroup: 999
+            runAsNonRoot: true
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+            privileged: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              add: []
+              drop:
+                - ALL
   persistence:
     data:
       enabled: true
@@ -168,8 +208,12 @@ machine-learning:
   controllers:
     main:
       pod:
+        securityContext: *immichPodSecurityContext
         resourceClaims: *gpuPodClaims
       containers:
         main:
+          workingDir: /tmp
+          env:
+            HOME: /tmp
           resources:
             claims: *gpuContainerClaims
