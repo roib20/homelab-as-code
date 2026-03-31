@@ -55,6 +55,10 @@ server:
           env:
             <<: *immichCommonEnv
             IMMICH_WORKERS_EXCLUDE: api
+          ports:
+            - name: metrics-ms
+              containerPort: 8082
+              protocol: TCP
           probes:
             readiness:
               enabled: true
@@ -81,6 +85,38 @@ server:
           resources:
             claims: &gpuContainerClaims
               - name: gpu
+  service:
+    microservices:
+      enabled: true
+      controller: microservices
+      type: ClusterIP
+      ports:
+        metrics-ms:
+          enabled: true
+          port: 8082
+          targetPort: metrics-ms
+          protocol: HTTP
+  serviceMonitor:
+    main:
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: immich
+          app.kubernetes.io/name: server
+      endpoints:
+        - port: metrics-api
+          scheme: http
+          relabelings:
+            - action: keep
+              sourceLabels:
+                - __meta_kubernetes_service_name
+              regex: '{{ printf "%s-server-main" .Release.Name }}'
+        - port: metrics-ms
+          scheme: http
+          relabelings:
+            - action: keep
+              sourceLabels:
+                - __meta_kubernetes_service_name
+              regex: '{{ printf "%s-server-microservices" .Release.Name }}'
   rawResources:
     http-route:
       apiVersion: gateway.networking.k8s.io/v1
@@ -103,7 +139,7 @@ server:
               backendRefs:
                 - group: ""
                   kind: Service
-                  name: immich-server
+                  name: immich-server-main
                   namespace: immich
                   port: 2283
                   weight: 1
@@ -116,7 +152,7 @@ server:
               backendRefs:
                 - group: ""
                   kind: Service
-                  name: immich-server
+                  name: immich-server-main
                   namespace: immich
                   port: 2283
                   weight: 1
