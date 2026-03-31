@@ -55,6 +55,28 @@ server:
           env:
             <<: *immichCommonEnv
             IMMICH_WORKERS_EXCLUDE: api
+          probes:
+            readiness:
+              enabled: true
+              custom: true
+              spec:
+                exec:
+                  command:
+                    - immich-healthcheck
+            liveness:
+              enabled: true
+              custom: true
+              spec:
+                exec:
+                  command:
+                    - immich-healthcheck
+            startup:
+              enabled: true
+              custom: true
+              spec:
+                exec:
+                  command:
+                    - immich-healthcheck
           securityContext: *immichCommonSecurityContext
           resources:
             claims: &gpuContainerClaims
