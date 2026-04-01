@@ -6,14 +6,15 @@ gitea:
   oauth:
     - name: "kanidm"
       provider: "openidConnect"
-      existingSecret: "forgejo-oauth-secret"
-      # Uses shell variable - expanded at runtime from env var
-      autoDiscoverUrl: "https://${OAUTH_IDP_DOMAIN}/oauth2/openid/forgejo/.well-known/openid-configuration"
+      # Uses shell variables - expanded at runtime from env vars
+      key: "${OAUTH_CLIENT_ID}"
+      secret: "${OAUTH_CLIENT_SECRET}"
+      autoDiscoverUrl: "https://${OAUTH_IDP_DOMAIN}/oauth2/openid/${OAUTH_CLIENT_ID}/.well-known/openid-configuration"
       iconUrl: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/kanidm.svg"
       scopes: "openid email profile groups_name ssh_publickeys"
 
   podAnnotations:
-    secret.reloader.stakater.com/reload: "forgejo-oauth-secret,gitea-admin-secret"
+    secret.reloader.stakater.com/reload: "forgejo-kanidm-oauth2-credentials,gitea-admin-secret"
 
   config:
     oauth2_client:
@@ -39,6 +40,16 @@ deployment:
       value: "https://git.${FQDN_01}"
     - name: OAUTH_IDP_DOMAIN
       value: "auth.${FQDN_01}"
+    - name: OAUTH_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-kanidm-oauth2-credentials
+          key: CLIENT_ID
+    - name: OAUTH_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-kanidm-oauth2-credentials
+          key: CLIENT_SECRET
 
 httpRoute:
   enabled: true

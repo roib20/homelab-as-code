@@ -38,12 +38,12 @@
     name: mealie-oidc
     fieldPath: "data.AUTH_HOST"
   targets:
-    # OIDC discovery URL in mealie-api secret
+    # OIDC discovery URL injected as explicit env var (uses $(OIDC_CLIENT_ID))
     - select:
-        kind: Secret
-        name: mealie-api
+        kind: Deployment
+        name: mealie
       fieldPaths:
-        - stringData.OIDC_CONFIGURATION_URL
+        - spec.template.spec.containers.[name=mealie].env.[name=OIDC_CONFIGURATION_URL].value
       options:
         delimiter: "/"
         index: 2
