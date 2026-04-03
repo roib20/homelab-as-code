@@ -35,7 +35,6 @@ auth:
     clientId: ""
     existingSecret: renovate-operator-kanidm-oauth2-credentials
     secretKey: CLIENT_SECRET
-    sessionSecretKey: CLIENT_SECRET
     redirectUrl: "https://renovate.${FQDN_02}/auth/callback"
     additionalScopes:
       - groups
