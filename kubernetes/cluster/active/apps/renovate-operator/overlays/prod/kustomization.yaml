@@ -17,5 +17,16 @@ configMapGenerator:
   - name: env-vars
     envs:
       - /tmp/env-vars.env
+  - name: renovate-operator-oidc
+    literals:
+      - OIDC_ISSUER_HOST=auth.${FQDN_01}
+      - OIDC_REDIRECT_HOST=renovate.${FQDN_02}
+    options:
+      disableNameSuffixHash: true
 replacements:
   - path: replacements.yaml
+patches:
+  - path: patches/deployment-oidc-client-id-secretref.yaml
+    target:
+      kind: Deployment
+      name: renovate-operator

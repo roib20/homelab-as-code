@@ -26,3 +26,50 @@
       options:
         delimiter: "."
         index: 1
+    - select:
+        kind: ConfigMap
+        name: renovate-operator-oidc
+      fieldPaths:
+        - data.OIDC_ISSUER_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_02"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: renovate-operator-oidc
+      fieldPaths:
+        - data.OIDC_REDIRECT_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: renovate-operator-oidc
+    fieldPath: "data.OIDC_ISSUER_HOST"
+  targets:
+    - select:
+        kind: Deployment
+        name: renovate-operator
+      fieldPaths:
+        - spec.template.spec.containers.[name=renovate-operator].env.[name=OIDC_ISSUER_URL].value
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: renovate-operator-oidc
+    fieldPath: "data.OIDC_REDIRECT_HOST"
+  targets:
+    - select:
+        kind: Deployment
+        name: renovate-operator
+      fieldPaths:
+        - spec.template.spec.containers.[name=renovate-operator].env.[name=OIDC_REDIRECT_URL].value
+      options:
+        delimiter: "/"
+        index: 2

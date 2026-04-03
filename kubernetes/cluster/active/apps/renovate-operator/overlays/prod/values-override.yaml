@@ -28,3 +28,16 @@ webhook:
         kind: Gateway
         name: http-gateway-api
         namespace: istio-ingress
+auth:
+  oidc:
+    enabled: true
+    issuerUrl: "https://auth.${FQDN_01}/oauth2/openid/renovate-operator"
+    clientId: ""
+    existingSecret: renovate-operator-kanidm-oauth2-credentials
+    secretKey: CLIENT_SECRET
+    sessionSecretKey: CLIENT_SECRET
+    redirectUrl: "https://renovate.${FQDN_02}/auth/callback"
+    additionalScopes:
+      - groups
+  github:
+    enabled: false
