@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: reflector
     repo: oci://ghcr.io/emberstack/helm-charts
-    version: 10.0.26
+    version: 10.0.27
     releaseName: reflector
     namespace: kube-system
     valuesFile: ../../base/values.yaml
