@@ -122,6 +122,23 @@ server:
               sourceLabels:
                 - __meta_kubernetes_service_name
               regex: '{{ printf "%s-server-microservices" .Release.Name }}'
+  persistence:
+    thumbs:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: longhorn
+      accessMode: ReadWriteMany
+      size: 20Gi
+      globalMounts:
+        - path: /data/thumbs
+    profile:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: longhorn
+      accessMode: ReadWriteMany
+      size: 1Gi
+      globalMounts:
+        - path: /data/profile
   rawResources:
     http-route:
       apiVersion: gateway.networking.k8s.io/v1
