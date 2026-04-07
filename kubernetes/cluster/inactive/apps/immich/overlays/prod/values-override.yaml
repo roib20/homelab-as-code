@@ -30,6 +30,11 @@ controllers:
                 key: uri
           DB_VECTOR_EXTENSION: vectorchord
           IMMICH_ALLOW_SETUP: false
+          UPLOAD_LOCATION: /data
+          THUMB_LOCATION: /data/thumbs
+          ENCODED_VIDEO_LOCATION: /data/encoded-video
+          PROFILE_LOCATION: /data/profile
+          BACKUP_LOCATION: /data/backups
 
 server:
   enabled: true
