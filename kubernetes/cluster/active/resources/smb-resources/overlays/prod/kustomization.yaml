@@ -7,3 +7,4 @@ resources:
   - storageclass-mediadata.yaml
   # - pvc-mediadata-rox.yaml
   # - pvc-mediadata-rwx.yaml
+  - storageclass-userdata.yaml

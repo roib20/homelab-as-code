@@ -180,18 +180,18 @@ server:
                   weight: 1
               timeouts:
                 request: 600s
-    library-pvc:
+    smb-userdata-rwx-pvc:
       apiVersion: v1
       kind: PersistentVolumeClaim
-      forceRename: immich-library
+      forceRename: smb-userdata-rwx
       spec:
         spec:
           accessModes:
             - ReadWriteMany
-          storageClassName: longhorn
+          storageClassName: smb-userdata
           resources:
             requests:
-              storage: 10Gi
+              storage: 10Ti
     gpu-claim-template:
       apiVersion: resource.k8s.io/v1
       kind: ResourceClaimTemplate
@@ -250,7 +250,7 @@ server:
 immich:
   persistence:
     library:
-      existingClaim: immich-library
+      existingClaim: smb-userdata-rwx
 
 valkey:
   enabled: true

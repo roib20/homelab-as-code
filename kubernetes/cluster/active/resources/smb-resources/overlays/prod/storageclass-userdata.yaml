@@ -1,0 +1,21 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: smb-userdata
+provisioner: smb.csi.k8s.io
+parameters:
+  source: "//192.168.1.5/UserData"
+  csi.storage.k8s.io/node-stage-secret-name: "smb-credentials"
+  csi.storage.k8s.io/node-stage-secret-namespace: "smb"
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=3000
+  - gid=3000
+  - noperm
+  - mfsymlinks
+  - cache=strict
+  - noserverino
