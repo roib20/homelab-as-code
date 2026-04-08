@@ -100,7 +100,8 @@ server:
           enabled: true
           port: 8082
           targetPort: metrics-ms
-          protocol: HTTP
+          protocol: TCP
+          appProtocol: http
   serviceMonitor:
     main:
       selector:
