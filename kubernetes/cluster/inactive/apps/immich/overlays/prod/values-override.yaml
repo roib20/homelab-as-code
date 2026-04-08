@@ -125,12 +125,12 @@ server:
   persistence:
     data:
       # Create directories in advance on the mounted SMB share:
-      # `mkdir -p "Immich/data" "Immich/external-libraries"`
+      # `mkdir -p "immich/data" "immich/external-libraries"`
       globalMounts:
         - path: "/data"
-          subPath: "Immich/data"
+          subPath: "immich/data"
         - path: "/external-libraries"
-          subPath: "Immich/external-libraries"
+          subPath: "immich/external-libraries"
           readOnly: true
     thumbs:
       enabled: true
