@@ -123,6 +123,13 @@ server:
                 - __meta_kubernetes_service_name
               regex: '{{ printf "%s-server-microservices" .Release.Name }}'
   persistence:
+    data:
+      globalMounts:
+        - path: "/data"
+          subPath: "Immich/data"
+        - path: "/external-libraries"
+          subPath: "Immich/external-libraries"
+          readOnly: true
     thumbs:
       enabled: true
       type: persistentVolumeClaim
