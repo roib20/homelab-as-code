@@ -2,10 +2,10 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: smb-userdata
+  name: smb-imagedata
 provisioner: smb.csi.k8s.io
 parameters:
-  source: "//192.168.1.5/UserData"
+  source: "//192.168.1.5/ImageData"
   csi.storage.k8s.io/node-stage-secret-name: "smb-credentials"
   csi.storage.k8s.io/node-stage-secret-namespace: "smb"
 reclaimPolicy: Delete

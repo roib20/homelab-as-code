@@ -180,15 +180,15 @@ server:
                   weight: 1
               timeouts:
                 request: 600s
-    smb-userdata-rwx-pvc:
+    smb-imagedata-rwx-pvc:
       apiVersion: v1
       kind: PersistentVolumeClaim
-      forceRename: smb-userdata-rwx
+      forceRename: smb-imagedata-rwx
       spec:
         spec:
           accessModes:
             - ReadWriteMany
-          storageClassName: smb-userdata
+          storageClassName: smb-imagedata
           resources:
             requests:
               storage: 10Ti
@@ -250,7 +250,7 @@ server:
 immich:
   persistence:
     library:
-      existingClaim: smb-userdata-rwx
+      existingClaim: smb-imagedata-rwx
 
 valkey:
   enabled: true
