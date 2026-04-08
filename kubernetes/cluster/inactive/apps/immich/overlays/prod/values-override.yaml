@@ -124,6 +124,8 @@ server:
               regex: '{{ printf "%s-server-microservices" .Release.Name }}'
   persistence:
     data:
+      # Create directories in advance on the mounted SMB share:
+      # `mkdir -p "Immich/data" "Immich/external-libraries"`
       globalMounts:
         - path: "/data"
           subPath: "Immich/data"
