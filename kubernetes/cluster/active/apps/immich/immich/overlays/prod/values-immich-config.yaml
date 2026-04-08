@@ -85,8 +85,8 @@ server:
                       enabled: true
                       keepLastAmount: 14
                   ffmpeg:
-                    accel: "disabled"
-                    accelDecode: false
+                    accel: "qsv"
+                    accelDecode: true
                     acceptedAudioCodecs:
                       - "aac"
                       - "mp3"
