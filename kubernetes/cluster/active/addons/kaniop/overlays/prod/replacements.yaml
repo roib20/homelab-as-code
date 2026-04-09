@@ -20,3 +20,17 @@
       options:
         delimiter: "."
         index: 1
+    - select:
+        kind: HTTPRoute
+        name: idm-redirect
+      fieldPaths:
+        - spec.hostnames.0
+    - select:
+        kind: HTTPRoute
+        name: idm-redirect
+      fieldPaths:
+        - spec.hostnames.1
+        - spec.rules.0.filters.0.requestRedirect.hostname
+      options:
+        delimiter: "."
+        index: 1

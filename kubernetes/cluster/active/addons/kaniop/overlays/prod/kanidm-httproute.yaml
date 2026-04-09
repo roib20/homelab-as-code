@@ -19,3 +19,23 @@ spec:
           namespace: kaniop
           port: 8443
           weight: 1
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: idm-redirect
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: istio-ingress
+  hostnames:
+    - "${FQDN_01}"
+    - "www.${FQDN_01}"
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            hostname: "auth.${FQDN_01}"
+            statusCode: 302
