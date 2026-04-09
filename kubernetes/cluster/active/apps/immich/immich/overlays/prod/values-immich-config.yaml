@@ -85,8 +85,8 @@ server:
                       enabled: true
                       keepLastAmount: 14
                   ffmpeg:
-                    accel: "disabled"
-                    accelDecode: false
+                    accel: "qsv"
+                    accelDecode: true
                     acceptedAudioCodecs:
                       - "aac"
                       - "mp3"
@@ -103,10 +103,10 @@ server:
                     gopSize: 0
                     maxBitrate: "0"
                     preferredHwDevice: "auto"
-                    preset: "ultrafast"
+                    preset: "medium"
                     refs: 0
-                    targetAudioCodec: "aac"
-                    targetResolution: "720"
+                    targetAudioCodec: "opus"
+                    targetResolution: "1080"
                     targetVideoCodec: "h264"
                     temporalAQ: false
                     threads: 0
