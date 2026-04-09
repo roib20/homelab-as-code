@@ -1,0 +1,27 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: ConfigMap
+        name: coredns-rewrite-rules
+      fieldPaths:
+        - data.REWRITE_RULE
+      options:
+        delimiter: "(?:)"
+        index: 1
+- source:
+    kind: ConfigMap
+    name: coredns-rewrite-rules
+    fieldPath: data.REWRITE_RULE
+  targets:
+    - select:
+        kind: ConfigMap
+        name: coredns
+      fieldPaths:
+        - data.Corefile
+      options:
+        delimiter: "\n"
+        index: 6

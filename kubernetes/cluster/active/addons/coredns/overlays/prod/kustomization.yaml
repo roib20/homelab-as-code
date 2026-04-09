@@ -13,3 +13,12 @@ helmCharts:
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+  - name: coredns-rewrite-rules
+    literals:
+      - REWRITE_RULE=name regex (^|.*[.])(?:)FQDN_01(?:)([.]|$).* istio-ingressgateway.istio-ingress.svc.cluster.local.
+replacements:
+  - path: replacements.yaml
