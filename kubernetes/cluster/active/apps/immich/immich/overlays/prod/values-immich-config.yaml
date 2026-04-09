@@ -217,7 +217,7 @@ server:
                         secure: false
                         username: ""
                   oauth:
-                    autoLaunch: false
+                    autoLaunch: true
                     autoRegister: true
                     buttonText: "Login with Kanidm"
                     clientId: '{{ printf "{{ .CLIENT_ID }}" }}'
