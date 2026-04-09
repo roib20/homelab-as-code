@@ -3,24 +3,19 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
-  - resources/cloudnative-pg.yaml
-  - resources/pvc-immich-library.yaml
-  - resources/resource-claim-template.yaml
-  - resources/http-route.yaml
-patches:
-  - path: patches/deployment-patches.yaml
 helmCharts:
   - name: immich
     repo: oci://ghcr.io/immich-app/immich-charts
-    version: 0.11.0
+    version: 0.11.1
     releaseName: immich
     namespace: immich
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
       - values-override.yaml
+      - values-immich-config.yaml
     includeCRDs: true
 configMapGenerator:
-  - name: env-vars
+  - name: env-vars-immich
     envs:
       - /tmp/env-vars.env
 replacements:

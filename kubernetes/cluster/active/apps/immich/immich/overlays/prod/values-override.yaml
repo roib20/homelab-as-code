@@ -1,0 +1,309 @@
+---
+defaultPodOptions:
+  annotations:
+    secret.reloader.stakater.com/reload: immich-cnpg-app
+
+controllers:
+  main:
+    containers:
+      main:
+        securityContext: &immichCommonSecurityContext
+          runAsUser: 1000
+          runAsGroup: 1000
+          runAsNonRoot: true
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          privileged: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            add: []
+            drop:
+              - ALL
+        env: &immichCommonEnv
+          REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
+          IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
+          DB_URL:
+            valueFrom:
+              secretKeyRef:
+                name: immich-cnpg-app
+                key: uri
+          DB_VECTOR_EXTENSION: vectorchord
+          IMMICH_ALLOW_SETUP: false
+          UPLOAD_LOCATION: /data
+          THUMB_LOCATION: /data/thumbs
+          ENCODED_VIDEO_LOCATION: /data/encoded-video
+          PROFILE_LOCATION: /data/profile
+          BACKUP_LOCATION: /data/backups
+
+server:
+  enabled: true
+  controllers:
+    main:
+      pod:
+        securityContext: &immichPodSecurityContext
+          fsGroup: 1000
+          fsGroupChangePolicy: OnRootMismatch
+      containers:
+        main:
+          env:
+            IMMICH_WORKERS_INCLUDE: api
+    microservices:
+      type: deployment
+      pod:
+        securityContext: *immichPodSecurityContext
+        resourceClaims: &gpuPodClaims
+          - name: gpu
+            resourceClaimTemplateName: immich-gpu-claim
+      containers:
+        main:
+          env:
+            <<: *immichCommonEnv
+            IMMICH_WORKERS_EXCLUDE: api
+          ports:
+            - name: metrics-ms
+              containerPort: 8082
+              protocol: TCP
+          probes:
+            readiness:
+              enabled: true
+              custom: true
+              spec:
+                exec:
+                  command:
+                    - immich-healthcheck
+            liveness:
+              enabled: true
+              custom: true
+              spec:
+                exec:
+                  command:
+                    - immich-healthcheck
+            startup:
+              enabled: true
+              custom: true
+              spec:
+                exec:
+                  command:
+                    - immich-healthcheck
+          securityContext: *immichCommonSecurityContext
+          resources:
+            claims: &gpuContainerClaims
+              - name: gpu
+  service:
+    microservices:
+      enabled: true
+      controller: microservices
+      type: ClusterIP
+      ports:
+        metrics-ms:
+          enabled: true
+          port: 8082
+          targetPort: metrics-ms
+          protocol: TCP
+          appProtocol: http
+  serviceMonitor:
+    main:
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: immich
+          app.kubernetes.io/name: server
+      endpoints:
+        - port: metrics-api
+          scheme: http
+          relabelings:
+            - action: keep
+              sourceLabels:
+                - __meta_kubernetes_service_name
+              regex: '{{ printf "%s-server-main" .Release.Name }}'
+        - port: metrics-ms
+          scheme: http
+          relabelings:
+            - action: keep
+              sourceLabels:
+                - __meta_kubernetes_service_name
+              regex: '{{ printf "%s-server-microservices" .Release.Name }}'
+  persistence:
+    data:
+      # Create directories in advance on the mounted SMB share:
+      # `mkdir -p "immich/data" "immich/external-libraries"`
+      globalMounts:
+        - path: "/data"
+          subPath: "immich/data"
+        - path: "/external-libraries"
+          subPath: "immich/external-libraries"
+          readOnly: true
+    thumbs:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: longhorn
+      accessMode: ReadWriteMany
+      size: 20Gi
+      globalMounts:
+        - path: /data/thumbs
+    profile:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: longhorn
+      accessMode: ReadWriteMany
+      size: 1Gi
+      globalMounts:
+        - path: /data/profile
+  rawResources:
+    http-route:
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      forceRename: immich
+      spec:
+        spec:
+          parentRefs:
+            - group: gateway.networking.k8s.io
+              kind: Gateway
+              name: http-gateway-api
+              namespace: istio-ingress
+          hostnames:
+            - "photos.${FQDN_01}"
+          rules:
+            - matches:
+                - path:
+                    type: Exact
+                    value: /.well-known/immich
+              backendRefs:
+                - group: ""
+                  kind: Service
+                  name: immich-server-main
+                  namespace: immich
+                  port: 2283
+                  weight: 1
+              timeouts:
+                request: 600s
+            - matches:
+                - path:
+                    type: PathPrefix
+                    value: /
+              backendRefs:
+                - group: ""
+                  kind: Service
+                  name: immich-server-main
+                  namespace: immich
+                  port: 2283
+                  weight: 1
+              timeouts:
+                request: 600s
+    smb-imagedata-rwx-pvc:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      forceRename: smb-imagedata-rwx
+      spec:
+        spec:
+          accessModes:
+            - ReadWriteMany
+          storageClassName: smb-imagedata
+          resources:
+            requests:
+              storage: 10Ti
+    gpu-claim-template:
+      apiVersion: resource.k8s.io/v1
+      kind: ResourceClaimTemplate
+      forceRename: immich-gpu-claim
+      spec:
+        spec:
+          spec:
+            devices:
+              requests:
+                - name: gpu
+                  exactly:
+                    deviceClassName: gpu.intel.com
+    cnpg-cluster:
+      apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      forceRename: immich-cnpg
+      spec:
+        spec:
+          instances: 2
+          storage:
+            size: 10Gi
+            storageClass: longhorn-cnpg
+          imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.0-0.5.3
+          postgresql:
+            shared_preload_libraries:
+              - "vchord.so"
+          bootstrap:
+            initdb:
+              database: immich
+              owner: immich
+          managed:
+            services:
+              disabledDefaultServices:
+                - ro
+                - r
+          affinity:
+            enablePodAntiAffinity: true
+            topologyKey: kubernetes.io/hostname
+            podAntiAffinityType: required
+    cnpg-database:
+      apiVersion: postgresql.cnpg.io/v1
+      kind: Database
+      forceRename: immich-database
+      spec:
+        spec:
+          name: immich
+          owner: immich
+          cluster:
+            name: immich-cnpg
+          extensions:
+            - name: vector
+            - name: cube
+            - name: vchord
+            - name: earthdistance
+
+immich:
+  persistence:
+    library:
+      existingClaim: smb-imagedata-rwx
+
+valkey:
+  enabled: true
+  controllers:
+    main:
+      pod:
+        securityContext: &valkeyPodSecurityContext
+          fsGroup: 999
+          fsGroupChangePolicy: OnRootMismatch
+      containers:
+        main:
+          securityContext: &valkeyContainerSecurityContext
+            runAsUser: 999
+            runAsGroup: 999
+            runAsNonRoot: true
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+            privileged: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              add: []
+              drop:
+                - ALL
+  persistence:
+    data:
+      enabled: true
+      size: 1Gi
+      type: persistentVolumeClaim
+      accessMode: ReadWriteOnce
+      storageClass: longhorn
+
+machine-learning:
+  enabled: true
+  controllers:
+    main:
+      pod:
+        securityContext: *immichPodSecurityContext
+        resourceClaims: *gpuPodClaims
+      containers:
+        main:
+          workingDir: /tmp
+          env:
+            HOME: /tmp
+          resources:
+            claims: *gpuContainerClaims

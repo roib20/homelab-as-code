@@ -1,0 +1,39 @@
+---
+# renovate: datasource=github-releases depName=immich-app/immich
+immichVersion: v2.7.2
+
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          tag: '{{ .Values.immichVersion }}'
+
+server:
+  controllers:
+    microservices:
+      containers:
+        main:
+          image:
+            repository: ghcr.io/immich-app/immich-server
+            tag: '{{ .Values.immichVersion }}'
+
+machine-learning:
+  controllers:
+    main:
+      containers:
+        main:
+          image:
+            tag: '{{ .Values.immichVersion }}-openvino'
+
+valkey:
+  controllers:
+    main:
+      containers:
+        main:
+          image:
+            repository: ghcr.io/valkey-io/valkey
+
+immich:
+  metrics:
+    enabled: true

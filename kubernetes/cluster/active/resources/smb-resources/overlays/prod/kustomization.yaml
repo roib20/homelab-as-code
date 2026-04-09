@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
   - smb-credentials.yaml.externalsecret
+  - storageclass-imagedata.yaml
   - storageclass-mediadata.yaml
   # - pvc-mediadata-rox.yaml
   # - pvc-mediadata-rwx.yaml

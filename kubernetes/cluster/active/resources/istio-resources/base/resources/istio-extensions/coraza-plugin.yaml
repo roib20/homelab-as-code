@@ -13,6 +13,8 @@
 #
 # | Rule ID | Name                    | Reason                                          |
 # |---------|-------------------------|-------------------------------------------------|
+# | 200002  | Multipart Parse EOF     | Multipart upload false positives across services |
+# | 200003  | Multipart Strict Check  | Multipart strict validation false positives     |
 # | 911100  | Method Enforcement      | REST APIs need DELETE/PATCH (Jellyfin, Immich)  |
 # | 920274  | Invalid Header Chars    | Cloudflare cf-visitor and Envoy headers         |
 # | 920430  | HTTP Protocol Version   | Istio/Envoy uses HTTP/2 internally              |
@@ -23,7 +25,6 @@
 # - Renovate webhook path removes selected 932xxx/941180 signatures to avoid
 #   false positives from dependency dashboard markdown content.
 # - Outline auth config endpoint removes 920440 false positive on `.config` path.
-# - Outline file upload endpoint skips multipart body parse false positive.
 # - Jellyfin image endpoint removes 920420 content-type false positive.
 #
 apiVersion: extensions.istio.io/v1alpha1
@@ -44,15 +45,16 @@ spec:
         # Outline auth config false positive (920440: restricted file extension)
         - SecRule REQUEST_METHOD "@streq POST" "id:100002,phase:1,pass,nolog,chain"
         - SecRule REQUEST_FILENAME "@streq /api/auth.config" "ctl:ruleRemoveById=920440"
-        # Outline file upload false positive (200002: multipart parse EOF)
-        - SecRule REQUEST_METHOD "@streq POST" "id:100003,phase:1,pass,nolog,chain"
-        - SecRule REQUEST_FILENAME "@streq /api/files.create" "ctl:requestBodyAccess=Off,ctl:ruleRemoveById=200002"
         # Jellyfin image fetch false positive (920420: request content type policy)
         - SecRule REQUEST_METHOD "@streq GET" "id:100004,phase:1,pass,nolog,chain"
         - SecRule REQUEST_FILENAME "@rx ^/Items/[A-Za-z0-9]+/Images/Primary$" "ctl:ruleRemoveById=920420"
         - Include @crs-setup-conf
         - Include @owasp_crs/*.conf
         # --- Rule Exclusions ---
+        # 200002: multipart request-body parse false positives
+        - SecRuleRemoveById 200002
+        # 200003: multipart strict validation false positives
+        - SecRuleRemoveById 200003
         # 911100: Method enforcement - REST APIs need DELETE/PATCH/PUT
         - SecRuleRemoveById 911100
         # 920274: Invalid header chars - Cloudflare cf-visitor and Envoy headers
