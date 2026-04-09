@@ -10,9 +10,9 @@ applicationSet:
   replicas: 2
 repoServer:
   replicas: 2
-  # Restart when env-vars secret changes
+  # Restart on secrets change
   podAnnotations:
-    secret.reloader.stakater.com/reload: "env-vars"
+    secret.reloader.stakater.com/reload: "argocd-secret-merge,env-vars,git-credentials"
   # Mount env-vars
   envFrom:
     - secretRef:
