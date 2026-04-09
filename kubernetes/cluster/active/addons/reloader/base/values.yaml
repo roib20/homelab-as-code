@@ -1,6 +1,7 @@
 ---
 reloader:
   enableHA: true
+  reloadOnCreate: true
   deployment:
     replicas: 1
   readOnlyRootFileSystem: true
