@@ -128,15 +128,14 @@
       "minimumGroupSize": 2
     },
     {
-      "description": "OpenTofu and Terragrunt Group",
+      "description": "OpenTofu Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "groupName": "OpenTofu and Terragrunt",
-      "groupSlug": "opentofu-and-terragrunt",
+      "groupName": "OpenTofu",
+      "groupSlug": "opentofu",
       "matchPackageNames": [
-        "/opentofu/",
-        "/terragrunt/"
+        "/opentofu/"
       ],
       "minimumGroupSize": 2
     },
@@ -176,6 +175,18 @@
         "ghcr.io/siderolabs/installer"
       ],
       "minimumGroupSize": 3
+    },
+    {
+      "description": "Terragrunt Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Terragrunt",
+      "groupSlug": "terragrunt",
+      "matchPackageNames": [
+        "/terragrunt/"
+      ],
+      "minimumGroupSize": 2
     },
     {
       "allowedVersions": "<10.0.0",
