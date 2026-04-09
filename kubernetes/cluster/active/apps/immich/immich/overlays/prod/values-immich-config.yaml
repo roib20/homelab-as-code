@@ -105,7 +105,7 @@ server:
                     preferredHwDevice: "auto"
                     preset: "ultrafast"
                     refs: 0
-                    targetAudioCodec: "aac"
+                    targetAudioCodec: "opus"
                     targetResolution: "1080"
                     targetVideoCodec: "h264"
                     temporalAQ: false
