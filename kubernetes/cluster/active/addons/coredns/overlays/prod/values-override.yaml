@@ -13,7 +13,9 @@ servers:
           lameduck 5s
       - name: rewrite
         configBlock: |-
+          # __REWRITE_RULE_MARKER__
           REWRITE_RULE_PLACEHOLDER
+          # __REWRITE_RULE_MARKER__
           answer auto
       - name: ready
       - name: kubernetes

@@ -23,5 +23,5 @@
       fieldPaths:
         - data.Corefile
       options:
-        delimiter: "\n"
-        index: 6
+        delimiter: "\n        # __REWRITE_RULE_MARKER__\n"
+        index: 1
