@@ -1,0 +1,22 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: ConfigMap
+        name: coredns
+      fieldPaths:
+        - data.Corefile
+      options:
+        delimiter: "%"
+        index: 1
+    - select:
+        kind: ConfigMap
+        name: coredns
+      fieldPaths:
+        - data.Corefile
+      options:
+        delimiter: "^"
+        index: 1

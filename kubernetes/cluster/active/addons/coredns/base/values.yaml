@@ -42,6 +42,10 @@ servers:
       - name: log
         configBlock: |-
           class error
+      - name: rewrite
+        configBlock: |-
+          name exact %FQDN_01% istio-ingressgateway.istio-ingress.svc.cluster.local
+          name suffix .^FQDN_01^ istio-ingressgateway.istio-ingress.svc.cluster.local
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
