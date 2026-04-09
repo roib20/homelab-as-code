@@ -225,8 +225,8 @@ server:
                     defaultStorageQuota: null
                     enabled: true
                     issuerUrl: 'https://auth.{{ printf "{{ .FQDN_01 }}" }}/oauth2/openid/{{ printf "{{ .CLIENT_ID }}" }}/.well-known/openid-configuration'
-                    mobileOverrideEnabled: true
-                    mobileRedirectUri: 'https://photos.{{ printf "{{ .FQDN_01 }}" }}/api/oauth/mobile-redirect'
+                    mobileOverrideEnabled: false
+                    mobileRedirectUri: ""
                     profileSigningAlgorithm: "ES256"
                     roleClaim: "immich_role"
                     scope: "openid email profile"
