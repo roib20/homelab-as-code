@@ -19,6 +19,6 @@ configMapGenerator:
       - /tmp/env-vars.env
   - name: coredns-rewrite-rules
     literals:
-      - REWRITE_RULE=name regex (^|.*[.])(?:)FQDN_01(?:)([.]?)$ istio-ingressgateway.istio-ingress.svc.cluster.local.
+      - REWRITE_RULE=name regex (^|.*[.])(?:)FQDN_01_REGEX(?:)(?:$|[.]$|[.]cluster[.]local[.]?$|[.](?:[a-z0-9-]+[.])?svc[.]cluster[.]local[.]?$) istio-ingressgateway.istio-ingress.svc.cluster.local.
 replacements:
   - path: replacements.yaml
