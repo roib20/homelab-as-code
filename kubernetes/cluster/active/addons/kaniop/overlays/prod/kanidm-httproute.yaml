@@ -38,4 +38,4 @@ spec:
         - type: RequestRedirect
           requestRedirect:
             hostname: "auth.${FQDN_01}"
-            statusCode: 302
+            statusCode: 308
