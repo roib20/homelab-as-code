@@ -2,7 +2,7 @@
 - source:
     kind: ConfigMap
     name: env-vars
-    fieldPath: data.FQDN_01
+    fieldPath: data.FQDN_01_REGEX
   targets:
     - select:
         kind: ConfigMap
