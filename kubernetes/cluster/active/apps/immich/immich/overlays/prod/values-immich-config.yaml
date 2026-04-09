@@ -103,7 +103,7 @@ server:
                     gopSize: 0
                     maxBitrate: "0"
                     preferredHwDevice: "auto"
-                    preset: "ultrafast"
+                    preset: "medium"
                     refs: 0
                     targetAudioCodec: "opus"
                     targetResolution: "1080"
