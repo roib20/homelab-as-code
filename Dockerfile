@@ -14,7 +14,7 @@ ARG TALOS_VERSION=1.12.6
 # renovate: datasource=github-releases depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=1.35.2
 # renovate: datasource=github-releases depName=helm/helm
-ARG HELM_VERSION=4.1.3
+ARG HELM_VERSION=4.1.4
 # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.+)$
 ARG KUSTOMIZE_VERSION=5.8.1
 # renovate: datasource=github-releases depName=jqlang/jq
