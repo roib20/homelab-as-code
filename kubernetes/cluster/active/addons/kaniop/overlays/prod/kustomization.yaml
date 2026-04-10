@@ -19,5 +19,10 @@ configMapGenerator:
   - name: env-vars
     envs:
       - /tmp/env-vars.env
+  - name: kanidm-ui-override-css
+    files:
+      - files/override.css
+    options:
+      disableNameSuffixHash: true
 replacements:
   - path: replacements.yaml

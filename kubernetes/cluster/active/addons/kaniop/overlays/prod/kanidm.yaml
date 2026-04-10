@@ -6,6 +6,18 @@ metadata:
 spec:
   domain: "auth.${FQDN_01}"
   tlsSecretName: tls-wildcard
+  volumes:
+    - name: override-css
+      configMap:
+        name: kanidm-ui-override-css
+        items:
+          - key: override.css
+            path: override.css
+  volumeMounts:
+    - name: override-css
+      mountPath: /hpkg/override.css
+      subPath: override.css
+      readOnly: true
   oauth2ClientNamespaceSelector:
     matchLabels: {}  # Watch all namespaces
   replicaGroups:
