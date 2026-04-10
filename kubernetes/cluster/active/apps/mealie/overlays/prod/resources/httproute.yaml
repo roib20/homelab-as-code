@@ -10,6 +10,10 @@ metadata:
     gethomepage.dev/icon: mealie.svg
     gethomepage.dev/name: Mealie
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=mealie"
+    gethomepage.dev/widget.type: "mealie"
+    gethomepage.dev/widget.url: "http://mealie.mealie.svc.cluster.local:10018"
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_MEALIE_KEY}}"
+    gethomepage.dev/widget.version: "3"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

@@ -154,6 +154,17 @@ server:
       apiVersion: gateway.networking.k8s.io/v1
       kind: HTTPRoute
       forceRename: immich
+      annotations:
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/description: Self-hosted photo and video backup solution.
+        gethomepage.dev/group: Media
+        gethomepage.dev/icon: immich.svg
+        gethomepage.dev/name: Immich
+        gethomepage.dev/pod-selector: "app.kubernetes.io/instance=immich"
+        gethomepage.dev/widget.type: "immich"
+        gethomepage.dev/widget.url: "http://immich-server-main.immich.svc.cluster.local:2283"
+        gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_IMMICH_KEY}}`}}"
+        gethomepage.dev/widget.version: "2"
       spec:
         spec:
           parentRefs:
