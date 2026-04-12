@@ -8,13 +8,13 @@
             "access_token": {
               "header": "x-access-token"
             },
-            "callback_uri": "CALLBACK_URI_PLACEHOLDER",
+            "callback_uri": "https://cyberchef.${FQDN_01}/callback",
             "client_id": "cyberchef",
             "client_secret_ref": {
               "name": "cyberchef-oidc-client-secret",
               "namespace": "authservice"
             },
-            "configuration_uri": "CONFIGURATION_URI_PLACEHOLDER",
+            "configuration_uri": "https://auth.${FQDN_01}/oauth2/openid/cyberchef/.well-known/openid-configuration",
             "id_token": {
               "header": "authorization",
               "preamble": "Bearer"

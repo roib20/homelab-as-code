@@ -1,5 +1,4 @@
 ---
-# STAGE 1: Build the hostnames (auth.example.com, etc)
 - source:
     kind: ConfigMap
     name: env-vars
@@ -14,14 +13,6 @@
       options:
         delimiter: "."
         index: 1
-
-# STAGE 2: Build the full OIDC URLs
-# We target the segment between "https://" and the first "/"
-- source:
-    kind: ConfigMap
-    name: authservice-hosts
-    fieldPath: "data.AUTH_HOST"
-  targets:
     - select:
         kind: ConfigMap
         name: authservice-urls
@@ -30,12 +21,6 @@
       options:
         delimiter: "/"
         index: 2
-
-- source:
-    kind: ConfigMap
-    name: authservice-hosts
-    fieldPath: "data.CYBERCHEF_HOST"
-  targets:
     - select:
         kind: ConfigMap
         name: authservice-urls
@@ -45,7 +30,7 @@
         delimiter: "/"
         index: 2
 
-# STAGE 3: Pull the monolithic config registry skeleton
+# Pull the monolithic config from the local file in the overlay
 - source:
     kind: ConfigMap
     name: authservice-config-src
@@ -57,7 +42,8 @@
       fieldPaths:
         - data.config\.json
 
-# STAGE 4: Inject the finalized URLs into the registry JSON
+# Inject the FINAL URLs into the config using double-quote as delimiter.
+# This replaces the whole string value at the exact index.
 # Index 17: callback_uri value
 # Index 35: configuration_uri value
 - source:

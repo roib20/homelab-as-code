@@ -9,14 +9,14 @@ configMapGenerator:
       - /tmp/env-vars.env
   - name: authservice-hosts
     literals:
-      - AUTH_HOST=auth.PLACEHOLDER
-      - CYBERCHEF_HOST=cyberchef.PLACEHOLDER
+      - AUTH_HOST=auth.${FQDN_01}
+      - CYBERCHEF_HOST=cyberchef.${FQDN_01}
     options:
       disableNameSuffixHash: true
   - name: authservice-urls
     literals:
-      - CONFIGURATION_URI=https://auth.PLACEHOLDER/oauth2/openid/cyberchef/.well-known/openid-configuration
-      - CALLBACK_URI=https://cyberchef.PLACEHOLDER/callback
+      - CONFIGURATION_URI=https://auth.${FQDN_01}/oauth2/openid/cyberchef/.well-known/openid-configuration
+      - CALLBACK_URI=https://cyberchef.${FQDN_01}/callback
     options:
       disableNameSuffixHash: true
 
