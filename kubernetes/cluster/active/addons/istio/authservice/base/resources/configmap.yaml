@@ -19,7 +19,5 @@ data:
           ]
         }
       ],
-      "chains": [
-        "CHAIN_PLACEHOLDER"
-      ]
+      "chains": []
     }

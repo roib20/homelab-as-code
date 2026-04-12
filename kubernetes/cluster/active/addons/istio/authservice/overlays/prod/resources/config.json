@@ -1,0 +1,45 @@
+{
+  "allow_unmatched_requests": false,
+  "chains": [
+    {
+      "filters": [
+        {
+          "oidc": {
+            "access_token": {
+              "header": "x-access-token"
+            },
+            "callback_uri": "CALLBACK_URI_PLACEHOLDER",
+            "client_id": "cyberchef",
+            "client_secret_ref": {
+              "name": "cyberchef-oidc-client-secret",
+              "namespace": "authservice"
+            },
+            "configuration_uri": "CONFIGURATION_URI_PLACEHOLDER",
+            "id_token": {
+              "header": "authorization",
+              "preamble": "Bearer"
+            },
+            "scopes": [
+              "email",
+              "profile",
+              "groups_name"
+            ]
+          }
+        }
+      ],
+      "name": "cyberchef"
+    }
+  ],
+  "listen_address": "0.0.0.0",
+  "listen_port": "10003",
+  "log_level": "info",
+  "trigger_rules": [
+    {
+      "included_paths": [
+        {
+          "prefix": "/"
+        }
+      ]
+    }
+  ]
+}

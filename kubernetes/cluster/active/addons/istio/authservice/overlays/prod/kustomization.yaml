@@ -9,70 +9,21 @@ configMapGenerator:
       - /tmp/env-vars.env
   - name: authservice-hosts
     literals:
-      - AUTH_HOST=auth.${FQDN_01}
-      - CYBERCHEF_HOST=cyberchef.${FQDN_01}
+      - AUTH_HOST=auth.PLACEHOLDER
+      - CYBERCHEF_HOST=cyberchef.PLACEHOLDER
     options:
       disableNameSuffixHash: true
   - name: authservice-urls
     literals:
-      - CONFIGURATION_URI=https://auth.${FQDN_01}/oauth2/openid/cyberchef/.well-known/openid-configuration
-      - CALLBACK_URI=https://cyberchef.${FQDN_01}/callback
+      - CONFIGURATION_URI=https://auth.PLACEHOLDER/oauth2/openid/cyberchef/.well-known/openid-configuration
+      - CALLBACK_URI=https://cyberchef.PLACEHOLDER/callback
     options:
       disableNameSuffixHash: true
 
-patches:
-  - target:
-      kind: ConfigMap
-      name: authservice-config
-    patch: |
-      - op: replace
-        path: /data/config.json
-        value: |
-          {
-            "listen_address": "0.0.0.0",
-            "listen_port": "10003",
-            "log_level": "info",
-            "allow_unmatched_requests": false,
-            "trigger_rules": [
-              {
-                "included_paths": [
-                  {
-                    "prefix": "/"
-                  }
-                ]
-              }
-            ],
-            "chains": [
-              {
-                "name": "cyberchef",
-                "filters": [
-                  {
-                    "oidc": {
-                      "configuration_uri": "CONFIGURATION_URI_PLACEHOLDER",
-                      "callback_uri": "CALLBACK_URI_PLACEHOLDER",
-                      "client_id": "cyberchef",
-                      "client_secret_ref": {
-                        "namespace": "authservice",
-                        "name": "cyberchef-oidc-client-secret"
-                      },
-                      "scopes": [
-                        "email",
-                        "profile",
-                        "groups_name"
-                      ],
-                      "id_token": {
-                        "preamble": "Bearer",
-                        "header": "authorization"
-                      },
-                      "access_token": {
-                        "header": "x-access-token"
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
+  # The Registry of OIDC configurations
+  - name: authservice-config-src
+    files:
+      - config.json=resources/config.json
 
 replacements:
   - path: replacements.yaml
