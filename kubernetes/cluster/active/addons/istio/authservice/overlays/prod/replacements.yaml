@@ -1,0 +1,69 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: authservice-hosts
+      fieldPaths:
+        - data.AUTH_HOST
+        - data.CYBERCHEF_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: authservice-hosts
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: authservice-urls
+      fieldPaths:
+        - data.CONFIGURATION_URI
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: authservice-hosts
+    fieldPath: "data.CYBERCHEF_HOST"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: authservice-urls
+      fieldPaths:
+        - data.CALLBACK_URI
+      options:
+        delimiter: "/"
+        index: 2
+
+- source:
+    kind: ConfigMap
+    name: authservice-urls
+    fieldPath: "data.CONFIGURATION_URI"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: authservice-config
+      fieldPaths:
+        - data.config\.json
+      options:
+        delimiter: '"'
+        index: 35
+
+- source:
+    kind: ConfigMap
+    name: authservice-urls
+    fieldPath: "data.CALLBACK_URI"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: authservice-config
+      fieldPaths:
+        - data.config\.json
+      options:
+        delimiter: '"'
+        index: 39

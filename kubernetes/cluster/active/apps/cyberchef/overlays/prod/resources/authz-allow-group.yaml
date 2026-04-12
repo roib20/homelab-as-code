@@ -1,0 +1,24 @@
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: cyberchef-deny-non-members
+  namespace: istio-ingress
+spec:
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+  action: DENY
+  rules:
+    - from:
+        - source:
+            requestPrincipals:
+              - "*"
+      to:
+        - operation:
+            hosts:
+              - cyberchef.${FQDN_01}
+      when:
+        - key: request.auth.claims[groups]
+          notValues:
+            - cyberchef-users@auth.${FQDN_01}

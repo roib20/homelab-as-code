@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authservice
+  namespace: authservice
+  labels:
+    app: authservice
+spec:
+  selector:
+    app: authservice
+  ports:
+    - name: grpc-authservice
+      port: 10003
+      targetPort: 10003
+      protocol: TCP
+    - name: grpc-health
+      port: 10004
+      targetPort: 10004
+      protocol: TCP

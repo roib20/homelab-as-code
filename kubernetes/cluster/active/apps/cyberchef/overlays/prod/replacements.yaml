@@ -13,3 +13,58 @@
       options:
         delimiter: "."
         index: 1
+    - select:
+        kind: ConfigMap
+        name: cyberchef-oidc
+      fieldPaths:
+        - data.AUTH_HOST
+        - data.CYBERCHEF_HOST
+      options:
+        delimiter: "."
+        index: 1
+
+- source:
+    kind: ConfigMap
+    name: cyberchef-oidc
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    - select:
+        kind: RequestAuthentication
+        name: cyberchef-kanidm
+      fieldPaths:
+        - spec.jwtRules.0.issuer
+      options:
+        delimiter: "/"
+        index: 2
+
+- source:
+    kind: ConfigMap
+    name: cyberchef-oidc
+    fieldPath: "data.CYBERCHEF_HOST"
+  targets:
+    - select:
+        kind: AuthorizationPolicy
+        name: cyberchef-authservice
+      fieldPaths:
+        - spec.rules.0.to.0.operation.hosts.0
+    - select:
+        kind: AuthorizationPolicy
+        name: cyberchef-deny-non-members
+      fieldPaths:
+        - spec.rules.0.to.0.operation.hosts.0
+
+- source:
+    kind: ConfigMap
+    name: cyberchef-oidc
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    # AuthorizationPolicy (Groups)
+    - select:
+        group: security.istio.io
+        kind: AuthorizationPolicy
+        name: cyberchef-deny-non-members
+      fieldPaths:
+        - spec.rules.*.when.*.notValues.*
+      options:
+        delimiter: "@"
+        index: 1

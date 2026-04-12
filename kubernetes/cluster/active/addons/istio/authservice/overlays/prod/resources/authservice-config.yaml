@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authservice-config
+  namespace: authservice
+data:
+  config.json: |
+    {
+      "listen_address": "0.0.0.0",
+      "listen_port": "10003",
+      "log_level": "trace",
+      "allow_unmatched_requests": false,
+      "trigger_rules": [
+        {
+          "included_paths": [
+            {
+              "prefix": "/"
+            }
+          ]
+        }
+      ],
+      "chains": [
+        {
+          "name": "cyberchef",
+          "filters": [
+            {
+              "oidc": {
+                "configuration_uri": "CONFIGURATION_URI_PLACEHOLDER",
+                "callback_uri": "CALLBACK_URI_PLACEHOLDER",
+                "client_id": "cyberchef",
+                "client_secret_ref": {
+                  "namespace": "authservice",
+                  "name": "cyberchef-oidc-client-secret"
+                },
+                "scopes": [
+                  "email",
+                  "profile",
+                  "groups"
+                ],
+                "id_token": {
+                  "preamble": "Bearer",
+                  "header": "authorization"
+                },
+                "access_token": {
+                  "header": "x-access-token"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
