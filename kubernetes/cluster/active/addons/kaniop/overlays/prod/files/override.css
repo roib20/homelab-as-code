@@ -1,11 +1,12 @@
 /* custom styles */
 @supports selector(.col-md-3:has(img)) {
-  main .col-md-3:has(img#forgejo) { order: 1; }
-  main .col-md-3:has(img#immich) { order: 2; }
-  main .col-md-3:has(img#jellyfin) { order: 3; }
-  main .col-md-3:has(img#mealie) { order: 4; }
-  main .col-md-3:has(img#outline) { order: 5; }
-  main .col-md-3:has(img#pve) { order: 6; }
-  main .col-md-3:has(img#renovate-operator) { order: 7; }
-  main .col-md-3:has(img#seerr) { order: 8; }
+  main .col-md-3:has(img#cyberchef) { order: 1; }
+  main .col-md-3:has(img#forgejo) { order: 2; }
+  main .col-md-3:has(img#immich) { order: 3; }
+  main .col-md-3:has(img#jellyfin) { order: 4; }
+  main .col-md-3:has(img#mealie) { order: 5; }
+  main .col-md-3:has(img#outline) { order: 6; }
+  main .col-md-3:has(img#pve) { order: 7; }
+  main .col-md-3:has(img#renovate-operator) { order: 8; }
+  main .col-md-3:has(img#seerr) { order: 9; }
 }
