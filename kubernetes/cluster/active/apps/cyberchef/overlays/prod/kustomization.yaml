@@ -7,6 +7,8 @@ resources:
   - resources/request-authentication.yaml
   - resources/authz-custom.yaml
   - resources/authz-allow-group.yaml
+  - resources/authservice/cyberchef-client-secret.yaml.externalsecret
+  - resources/authservice/cyberchef-kubernetes-secret-store.yaml
 helmCharts:
   - name: cyberchef
     repo: oci://oci.trueforge.org/truecharts

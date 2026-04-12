@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authservice-config
+  namespace: authservice
+data:
+  config.json: |
+    {
+      "listen_address": "0.0.0.0",
+      "listen_port": "10003",
+      "log_level": "info",
+      "allow_unmatched_requests": false,
+      "trigger_rules": [
+        {
+          "included_paths": [
+            {
+              "prefix": "/"
+            }
+          ]
+        }
+      ],
+      "chains": [
+        "CHAIN_PLACEHOLDER"
+      ]
+    }
