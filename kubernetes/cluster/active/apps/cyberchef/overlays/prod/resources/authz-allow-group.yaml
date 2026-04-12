@@ -21,4 +21,4 @@ spec:
       when:
         - key: request.auth.claims[groups]
           notValues:
-            - cyberchef-users@auth.${FQDN_01}
+            - cyberchef-users
