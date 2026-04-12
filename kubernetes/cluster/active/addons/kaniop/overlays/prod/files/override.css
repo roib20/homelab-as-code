@@ -1,8 +1,10 @@
-main .row.row-cols-1.row-cols-sm-2.row-cols-md-3.g-3 > .col-md-3:has(img#forgejo) { order: 1; }
-main .row.row-cols-1.row-cols-sm-2.row-cols-md-3.g-3 > .col-md-3:has(img#immich) { order: 2; }
-main .row.row-cols-1.row-cols-sm-2.row-cols-md-3.g-3 > .col-md-3:has(img#jellyfin) { order: 3; }
-main .row.row-cols-1.row-cols-sm-2.row-cols-md-3.g-3 > .col-md-3:has(img#mealie) { order: 4; }
-main .row.row-cols-1.row-cols-sm-2.row-cols-md-3.g-3 > .col-md-3:has(img#outline) { order: 5; }
-main .row.row-cols-1.row-cols-sm-2.row-cols-md-3.g-3 > .col-md-3:has(img#pve) { order: 6; }
-main .row.row-cols-1.row-cols-sm-2.row-cols-md-3.g-3 > .col-md-3:has(img#renovate-operator) { order: 7; }
-main .row.row-cols-1.row-cols-sm-2.row-cols-md-3.g-3 > .col-md-3:has(img#seerr) { order: 8; }
+@supports selector(.col-md-3:has(img)) {
+  main .col-md-3:has(img#forgejo) { order: 1; }
+  main .col-md-3:has(img#immich) { order: 2; }
+  main .col-md-3:has(img#jellyfin) { order: 3; }
+  main .col-md-3:has(img#mealie) { order: 4; }
+  main .col-md-3:has(img#outline) { order: 5; }
+  main .col-md-3:has(img#pve) { order: 6; }
+  main .col-md-3:has(img#renovate-operator) { order: 7; }
+  main .col-md-3:has(img#seerr) { order: 8; }
+}
