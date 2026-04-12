@@ -6,12 +6,27 @@ metadata:
 spec:
   domain: "auth.${FQDN_01}"
   tlsSecretName: tls-wildcard
+  volumes:
+    - name: override-css
+      configMap:
+        name: kanidm-ui-override-css
+        items:
+          - key: override.css
+            path: override.css
+  volumeMounts:
+    - name: override-css
+      mountPath: /hpkg/override.css
+      subPath: override.css
+      readOnly: true
   oauth2ClientNamespaceSelector:
     matchLabels: {}  # Watch all namespaces
   replicaGroups:
     - name: default
       replicas: 1
       primaryNode: true
+      statefulSetAnnotations:
+        configmap.reloader.stakater.com/reload: "kanidm-ui-override-css"
+        secret.reloader.stakater.com/reload: "tls-wildcard"
   logLevel: info
   # Enable LDAPS service on port 3636
   # Kanidm uses its TLS certificates for both HTTPS and LDAPS
