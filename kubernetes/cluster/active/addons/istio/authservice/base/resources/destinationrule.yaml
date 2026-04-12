@@ -1,0 +1,11 @@
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: authservice
+  namespace: istio-ingress
+spec:
+  host: authservice.authservice.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE

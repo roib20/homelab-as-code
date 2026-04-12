@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authservice
+  namespace: authservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authservice
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: authservice
+        version: v1
+    spec:
+      serviceAccountName: authservice
+      containers:
+        - name: authservice
+          image: ghcr.io/istio-ecosystem/authservice/authservice:1.1.5
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: authz
+              containerPort: 10003
+              protocol: TCP
+            - name: health
+              containerPort: 10004
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /etc/authservice
+          livenessProbe:
+            initialDelaySeconds: 1
+            periodSeconds: 5
+            tcpSocket:
+              port: 10003
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            httpGet:
+              port: 10004
+              path: /healthz
+      volumes:
+        - name: config
+          configMap:
+            name: authservice-config

@@ -4,6 +4,9 @@ kind: Kustomization
 resources:
   - ../../base
   - resources/httproute.yaml
+  - resources/request-authentication.yaml
+  - resources/authz-custom.yaml
+  - resources/authz-allow-group.yaml
 helmCharts:
   - name: cyberchef
     repo: oci://oci.trueforge.org/truecharts
@@ -21,6 +24,7 @@ configMapGenerator:
   - name: cyberchef-oidc
     literals:
       - AUTH_HOST=auth.${FQDN_01}
+      - CYBERCHEF_HOST=cyberchef.${FQDN_01}
     options:
       disableNameSuffixHash: true
 replacements:

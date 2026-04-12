@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "authservice",
+  "destName": "in-cluster",
+  "destNamespace": "authservice",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "authservice"
+}
