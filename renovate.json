@@ -175,7 +175,7 @@
         "**/*.hcl"
       ],
       "matchManagers": [
-        "regex"
+        "custom.regex"
       ],
       "matchPackageNames": [
         "opentofu/opentofu"
