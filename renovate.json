@@ -8,10 +8,10 @@
       "customType": "regex",
       "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
       "managerFilePatterns": [
-        "**"
+        "/(^|/).+\\.(?:tf|tofu|hcl|toml|ya?ml)$/"
       ],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*\\S+\\s*[:=]\\s*\"?(?<currentValue>[^\"\\s]+)\"?"
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?(?: extractVersion=(?<extractVersion>\\S+))?\\n.+(?:[:=]\\s|=)(&\\S+\\s)?\"?(?<currentValue>[^\"\\n]+)\"?"
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     },
@@ -128,6 +128,7 @@
       "minimumGroupSize": 2
     },
     {
+      "branchTopic": "opentofu",
       "description": "OpenTofu Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
@@ -135,7 +136,49 @@
       "groupName": "OpenTofu",
       "groupSlug": "opentofu",
       "matchPackageNames": [
-        "/opentofu/"
+        "opentofu/opentofu",
+        "ghcr.io/opentofu/opentofu"
+      ],
+      "matchSourceUrls": [
+        "https://github.com/opentofu/opentofu"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Handle OpenTofu `required_version` via regex manager",
+      "enabled": false,
+      "matchDepTypes": [
+        "required_version"
+      ],
+      "matchManagers": [
+        "terraform"
+      ]
+    },
+    {
+      "description": "Bump OpenTofu `required_version` floor",
+      "matchFileNames": [
+        "**/*.tf",
+        "**/*.tofu",
+        "**/*.hcl"
+      ],
+      "matchManagers": [
+        "regex"
+      ],
+      "matchPackageNames": [
+        "opentofu/opentofu"
+      ],
+      "rangeStrategy": "bump"
+    },
+    {
+      "branchTopic": "bpg-proxmox",
+      "description": "Proxmox Provider Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Proxmox Provider",
+      "groupSlug": "bpg-proxmox",
+      "matchPackageNames": [
+        "bpg/proxmox"
       ],
       "minimumGroupSize": 2
     },
@@ -177,6 +220,7 @@
       "minimumGroupSize": 3
     },
     {
+      "branchTopic": "terragrunt",
       "description": "Terragrunt Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
@@ -184,7 +228,10 @@
       "groupName": "Terragrunt",
       "groupSlug": "terragrunt",
       "matchPackageNames": [
-        "/terragrunt/"
+        "gruntwork-io/terragrunt"
+      ],
+      "matchSourceUrls": [
+        "https://github.com/gruntwork-io/terragrunt"
       ],
       "minimumGroupSize": 2
     },
