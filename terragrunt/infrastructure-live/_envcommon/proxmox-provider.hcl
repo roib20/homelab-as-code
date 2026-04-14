@@ -24,13 +24,11 @@ generate "proxmox_versions" {
   if_exists = "skip"
   contents  = <<EOF
 terraform {
-  # renovate: datasource=github-releases depName=opentofu/opentofu versioning=hashicorp extractVersion=^v(?<version>.*)$
   required_version = ">= 1.11.0"
 
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      # renovate: datasource=terraform-provider depName=bpg/proxmox versioning=hashicorp
       version = "~> 0.78"
     }
   }
