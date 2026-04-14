@@ -22,9 +22,9 @@
         "/(^|/).+\\.ya?ml$/"
       ],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>docker) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?(?: extractVersion=(?<extractVersion>\\S+))?\\n\\s*image:\\s*[\"']?[^\\s\"'@]+:(?<currentValue>[^\\s\"'@]+)[\"']?",
+        "# renovate: datasource=(?<datasource>docker) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?(?: extractVersion=(?<extractVersion>\\S+))?\\n\\s*image:\\s*[\"']?[^\\s\"'@]+:(?<currentValue>[^\\s\"'@]+)(?:@[^\\s\"']+)?[\"']?",
         "# renovate: datasource=(?<datasource>docker) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?(?: extractVersion=(?<extractVersion>\\S+))?\\n\\s*(?:version|tag):\\s*[\"']?(?<currentValue>[^\"'\\s]+)[\"']?",
-        "# renovate: datasource=(?<datasource>github-releases|terraform-provider|github-tags|helm|pypi) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?(?: extractVersion=(?<extractVersion>\\S+))?\\n.+(?:[:=]\\s|=)(&\\S+\\s)?\"?(?<currentValue>[^\"\\n]+)\"?"
+        "# renovate: datasource=(?<datasource>(?!docker)\\S+) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?(?: extractVersion=(?<extractVersion>\\S+))?\\n.+(?:[:=]\\s|=)(&\\S+\\s)?\"?(?<currentValue>[^\"\\n]+)\"?"
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     },
