@@ -1,0 +1,76 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        apiVersion: gateway.networking.k8s.io/v1
+        kind: Gateway
+        name: http-gateway-api
+      fieldPaths:
+        - spec.listeners.[name=http-wildcard].hostname
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        apiVersion: gateway.networking.k8s.io/v1
+        kind: Gateway
+        name: http-gateway-api
+      fieldPaths:
+        - spec.listeners.[name=http-apex].hostname
+    - select:
+        apiVersion: gateway.networking.k8s.io/v1
+        kind: Gateway
+        name: http-gateway-api
+      fieldPaths:
+        - spec.listeners.[name=https-wildcard].hostname
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        apiVersion: gateway.networking.k8s.io/v1
+        kind: Gateway
+        name: http-gateway-api
+      fieldPaths:
+        - spec.listeners.[name=https-apex].hostname
+    - select:
+        apiVersion: gateway.networking.k8s.io/v1
+        kind: BackendTLSPolicy
+        name: idm-backend-tls
+      fieldPaths:
+        - spec.validation.hostname
+      options:
+        delimiter: "."
+        index: 1
+
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        apiVersion: gateway.envoyproxy.io/v1alpha1
+        kind: EnvoyProxy
+        name: http-gateway-api
+      fieldPaths:
+        - spec.provider.kubernetes.envoyService.annotations.[external-dns.alpha.kubernetes.io/hostname]
+      options:
+        delimiter: ","
+        index: 0
+
+- source:
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: Gateway
+    name: http-gateway-api
+    fieldPath: spec.listeners.[name=https-wildcard].hostname
+  targets:
+    - select:
+        apiVersion: gateway.envoyproxy.io/v1alpha1
+        kind: EnvoyProxy
+        name: http-gateway-api
+      fieldPaths:
+        - spec.provider.kubernetes.envoyService.annotations.[external-dns.alpha.kubernetes.io/hostname]
+      options:
+        delimiter: ","
+        index: 1

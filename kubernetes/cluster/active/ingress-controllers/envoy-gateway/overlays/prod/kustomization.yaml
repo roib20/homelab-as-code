@@ -1,0 +1,33 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+helmCharts:
+  - name: gateway-helm
+    repo: oci://docker.io/envoyproxy
+    version: 1.7.1
+    releaseName: envoy-gateway
+    namespace: envoy-gateway-system
+    valuesFile: ../../base/values/gateway-helm-values.yaml
+    additionalValuesFiles:
+      - values/gateway-helm-values-override.yaml
+    includeCRDs: false
+  - name: gateway-crds-helm
+    repo: oci://docker.io/envoyproxy
+    version: 1.7.1
+    releaseName: envoy-gateway
+    namespace: envoy-gateway-system
+    valuesFile: ../../base/values/gateway-crds-helm-values.yaml
+    additionalValuesFiles:
+      - values/gateway-crds-helm-values-override.yaml
+    includeCRDs: true
+    # - name: gateway-addons-helm
+    #   repo: oci://docker.io/envoyproxy
+    #   version: 1.7.1
+    #   releaseName: envoy-gateway
+    #   namespace: envoy-gateway-system
+    #   valuesFile: ../../base/values/gateway-addons-helm-values.yaml
+    #   additionalValuesFiles:
+    #     - values/gateway-addons-helm-values-override.yaml
+    #   includeCRDs: false

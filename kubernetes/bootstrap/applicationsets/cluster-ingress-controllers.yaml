@@ -22,7 +22,7 @@ spec:
             destination: {}
             project: ""
   syncPolicy:
-    preserveResourcesOnDeletion: true
+    preserveResourcesOnDeletion: false
   template:
     metadata:
       name: '{{ .userGivenName }}'
@@ -68,11 +68,11 @@ spec:
           jsonPointers:
             - /status
           kind: Application
-        {{- if eq .userGivenName "istio-gateway" }}
+        {{- if eq .userGivenName "envoy-gateway" }}
         - group: ""
           kind: Service
-          name: istio-ingressgateway
-          namespace: istio-ingress
+          name: http-gateway-api
+          namespace: envoy-gateway-ingress
           jsonPointers:
             - /metadata/annotations/external-dns.alpha.kubernetes.io~1target
         {{- end }}

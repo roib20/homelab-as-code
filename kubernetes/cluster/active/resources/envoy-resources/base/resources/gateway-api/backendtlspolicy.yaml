@@ -1,0 +1,15 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: idm-backend-tls
+  namespace: kaniop
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: idm
+      sectionName: https
+  validation:
+    hostname: auth.${FQDN_01}
+    wellKnownCACertificates: System

@@ -20,6 +20,6 @@ spec:
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "istio-ingress,kaniop"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "envoy-gateway-ingress,istio-ingress,kaniop"
       reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
-      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "istio-ingress,kaniop"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "envoy-gateway-ingress,istio-ingress,kaniop"

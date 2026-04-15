@@ -8,7 +8,7 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: http-gateway-api
-      namespace: istio-ingress
+      namespace: envoy-gateway-ingress
   hostnames:
     - "auth.${FQDN_01}"
   rules:
@@ -29,7 +29,7 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: http-gateway-api
-      namespace: istio-ingress
+      namespace: envoy-gateway-ingress
   hostnames:
     - "${FQDN_01}"
     - "www.${FQDN_01}"
@@ -39,4 +39,4 @@ spec:
           requestRedirect:
             hostname: "auth.${FQDN_01}"
             scheme: https
-            statusCode: 308
+            statusCode: 302

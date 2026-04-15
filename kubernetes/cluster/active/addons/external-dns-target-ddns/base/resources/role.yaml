@@ -3,14 +3,14 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: external-dns-target-ddns
-  namespace: istio-ingress
+  namespace: envoy-gateway-ingress
 rules:
   - apiGroups:
       - ""
     resources:
       - services
     resourceNames:
-      - istio-ingressgateway
+      - http-gateway-api
     verbs:
       - get
       - patch

@@ -10,7 +10,7 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: http-gateway-api
-      namespace: istio-ingress
+      namespace: envoy-gateway-ingress
   hostnames:
     - "argocd.${FQDN_01}"
   rules:
@@ -23,5 +23,5 @@ spec:
           kind: Service
           name: argocd-server
           namespace: argocd
-          port: 443
+          port: 80
           weight: 1

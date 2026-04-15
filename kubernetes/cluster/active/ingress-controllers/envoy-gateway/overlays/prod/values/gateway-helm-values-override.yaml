@@ -1,0 +1,8 @@
+---
+config:
+  envoyGateway:
+    provider:
+      kubernetes:
+        deploy:
+          # Gateway Namespace Mode: https://gateway.envoyproxy.io/docs/tasks/operations/gateway-namespace-mode/
+          type: GatewayNamespace

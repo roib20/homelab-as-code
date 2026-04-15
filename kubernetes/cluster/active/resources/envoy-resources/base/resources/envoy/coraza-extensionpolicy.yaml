@@ -1,0 +1,54 @@
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyExtensionPolicy
+metadata:
+  name: coraza-proxy-wasm
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+  wasm:
+    - name: wasm-filter
+      failOpen: false
+      rootID: waf
+      code:
+        type: Image
+        image:
+          url: ghcr.io/corazawaf/coraza-proxy-wasm:0.6.0
+          sha256: 65d6009b9da2e8965e592a08b74a86725435fc01aa39c756dce0bd5ea64b3f4e
+      config:
+        default_directives: default
+        directives_map:
+          default:
+            - Include @recommended-conf
+            - SecDebugLogLevel 9
+            - SecRuleEngine On
+            # Endpoint-specific runtime exclusions must execute before CRS includes.
+            # Outline auth config false positive (920440: restricted file extension)
+            - SecRule REQUEST_METHOD "@streq POST" "id:100002,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@streq /api/auth.config" "ctl:ruleRemoveById=920440"
+            # Jellyfin image fetch false positive (920420: request content type policy)
+            - SecRule REQUEST_METHOD "@streq GET" "id:100004,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@rx ^/Items/[A-Za-z0-9]+/Images/Primary$" "ctl:ruleRemoveById=920420"
+            - Include @crs-setup-conf
+            - Include @owasp_crs/*.conf
+            # --- Rule Exclusions ---
+            # 200002: multipart request-body parse false positives
+            - SecRuleRemoveById 200002
+            # 200003: multipart strict validation false positives
+            - SecRuleRemoveById 200003
+            # 911100: Method enforcement - REST APIs need DELETE/PATCH/PUT
+            - SecRuleRemoveById 911100
+            # 920274: Invalid header chars - Cloudflare cf-visitor and Envoy headers
+            - SecRuleRemoveById 920274
+            # 920430: HTTP protocol version - Istio/Envoy uses HTTP/2 internally
+            - SecRuleRemoveById 920430
+            # 930120: LFI - matches legitimate field names like .Profile
+            - SecRuleRemoveById 930120
+            # 941160: XSS - matches legitimate HTML in forms
+            - SecRuleRemoveById 941160
+            # Renovate webhook false positives (scoped by path + query args)
+            - SecRule REQUEST_FILENAME "@streq /webhook/v1/github" "id:100001,phase:1,pass,nolog,chain"
+            - SecRule ARGS:namespace "@streq renovate" "chain"
+            - SecRule ARGS:job "@streq renovate-github" "ctl:ruleRemoveById=932230,ctl:ruleRemoveById=932235,ctl:ruleRemoveById=932250,ctl:ruleRemoveById=932260,ctl:ruleRemoveById=932370,ctl:ruleRemoveById=941180"

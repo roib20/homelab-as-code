@@ -1,0 +1,7 @@
+---
+crds:
+  gatewayAPI:
+    enabled: false
+    channel: standard
+  envoyGateway:
+    enabled: true

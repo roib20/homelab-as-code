@@ -1,0 +1,53 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: http-gateway-api
+spec:
+  gatewayClassName: envoy-gateway
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: http-gateway-api
+  listeners:
+    - name: http-apex
+      hostname: "${FQDN_01}"
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: http-wildcard
+      hostname: "*.${FQDN_01}"
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: https-apex
+      hostname: "${FQDN_01}"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ''
+            kind: Secret
+            name: tls-wildcard
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https-wildcard
+      hostname: "*.${FQDN_01}"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ''
+            kind: Secret
+            name: tls-wildcard
+      allowedRoutes:
+        namespaces:
+          from: All
