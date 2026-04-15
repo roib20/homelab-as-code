@@ -7,6 +7,10 @@ spec:
   provider:
     type: Kubernetes
     kubernetes:
+      envoyDeployment:
+        replicas: 2
+      envoyPDB:
+        minAvailable: 1
       envoyService:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "${FQDN_01},*.${FQDN_01}"

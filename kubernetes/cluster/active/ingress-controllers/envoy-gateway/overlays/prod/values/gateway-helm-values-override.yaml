@@ -6,3 +6,7 @@ config:
         deploy:
           # Gateway Namespace Mode: https://gateway.envoyproxy.io/docs/tasks/operations/gateway-namespace-mode/
           type: GatewayNamespace
+deployment:
+  replicas: 2
+podDisruptionBudget:
+  minAvailable: 1
