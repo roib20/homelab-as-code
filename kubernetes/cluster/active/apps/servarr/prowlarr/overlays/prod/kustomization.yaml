@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: prowlarr
     repo: oci://oci.trueforge.org/truecharts
-    version: 22.0.4
+    version: 22.0.5
     releaseName: prowlarr
     namespace: servarr
     valuesFile: ../../base/values.yaml
