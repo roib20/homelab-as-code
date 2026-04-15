@@ -40,8 +40,8 @@ spec:
                   REAL_IP="$(curl -4fsS "https://ipv4.icanhazip.com" | tr -d '\r\n')"
                   printf '%s\n' "${REAL_IP}" | grep -Eq '^([0-9]{1,3}\.){3}[0-9]{1,3}$'
 
-                  EXISTING_IP="$(kubectl --namespace "istio-ingress" \
-                    get service "istio-ingressgateway" \
+                  EXISTING_IP="$(kubectl --namespace "envoy-gateway-ingress" \
+                    get service "envoy-gateway-ingress" \
                     -o jsonpath='{.metadata.annotations.external-dns\.alpha\.kubernetes\.io/target}')"
 
                   if [ "${REAL_IP}" = "${EXISTING_IP}" ]; then
@@ -49,8 +49,8 @@ spec:
                     exit 0
                   fi
 
-                  kubectl --namespace "istio-ingress" \
-                    annotate service "istio-ingressgateway" \
+                  kubectl --namespace "envoy-gateway-ingress" \
+                    annotate service "envoy-gateway-ingress" \
                     external-dns.alpha.kubernetes.io/target="${REAL_IP}" \
                     --overwrite
 

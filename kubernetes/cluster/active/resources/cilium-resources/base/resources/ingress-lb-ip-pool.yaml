@@ -9,5 +9,5 @@ spec:
       stop: 192.168.1.60
   serviceSelector:
     matchLabels:
-      io.kubernetes.service.namespace: istio-ingress
-      io.kubernetes.service.name: istio-ingressgateway
+      io.kubernetes.service.namespace: envoy-gateway-ingress
+      io.kubernetes.service.name: envoy-gateway-ingress

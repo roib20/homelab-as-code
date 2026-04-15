@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: external-dns-target-ddns
-  namespace: istio-ingress
+  namespace: envoy-gateway-ingress
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

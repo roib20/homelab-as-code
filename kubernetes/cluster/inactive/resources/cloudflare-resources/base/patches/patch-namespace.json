@@ -2,6 +2,6 @@
   {
     "op": "replace",
     "path": "/metadata/namespace",
-    "value": "istio-ingress"
+    "value": "envoy-gateway-ingress"
   }
 ]

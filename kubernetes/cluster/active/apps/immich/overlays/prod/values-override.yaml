@@ -171,7 +171,7 @@ server:
             - group: gateway.networking.k8s.io
               kind: Gateway
               name: http-gateway-api
-              namespace: istio-ingress
+              namespace: envoy-gateway-ingress
           hostnames:
             - "photos.${FQDN_01}"
           rules:

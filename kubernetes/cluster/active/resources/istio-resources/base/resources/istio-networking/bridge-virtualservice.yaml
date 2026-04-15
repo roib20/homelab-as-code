@@ -21,7 +21,7 @@ spec:
         #       number: 8923
         # Direct routing with TLS termination
         - destination:
-            host: istio-ingressgateway.istio-ingress.svc.cluster.local
+            host: envoy-gateway-ingress.envoy-gateway-ingress.svc.cluster.local
             port:
               number: 80
           headers:

@@ -7,8 +7,8 @@ helmCharts:
   - name: gateway
     repo: oci://gcr.io/istio-release/charts
     version: 1.29.2
-    releaseName: istio-ingressgateway
-    namespace: istio-ingress
+    releaseName: envoy-gateway-ingress
+    namespace: envoy-gateway-ingress
     valuesFile: ../../base/values.yaml
     additionalValuesFiles:
       - values-override.yaml
