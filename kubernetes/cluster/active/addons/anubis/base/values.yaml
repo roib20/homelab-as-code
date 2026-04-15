@@ -19,7 +19,7 @@ controllers:
           - name: SERVE_ROBOTS_TXT
             value: "true"
           - name: TARGET
-            value: "http://envoy-gateway-ingress.envoy-gateway-ingress.svc.cluster.local:80"
+            value: "http://http-gateway-api.envoy-gateway-ingress.svc.cluster.local:80"
           - name: OG_PASSTHROUGH
             value: "false"
           - name: USE_REMOTE_ADDRESS

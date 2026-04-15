@@ -9,7 +9,7 @@ sidecarInjectorWebhook:
   enableNamespacesByDefault: false
 meshConfig:
   ingressSelector: ingressgateway
-  ingressService: envoy-gateway-ingress
+  ingressService: http-gateway-api
   enablePrometheusMerge: false
   accessLogFile: ""
 env:

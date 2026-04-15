@@ -7,7 +7,7 @@ spec:
   serviceSelector:
     matchLabels:
       io.kubernetes.service.namespace: envoy-gateway-ingress
-      io.kubernetes.service.name: envoy-gateway-ingress
+      io.kubernetes.service.name: http-gateway-api
   interfaces:
     - ^ens18$
   loadBalancerIPs: true

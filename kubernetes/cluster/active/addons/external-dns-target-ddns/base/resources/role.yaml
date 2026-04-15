@@ -10,7 +10,7 @@ rules:
     resources:
       - services
     resourceNames:
-      - envoy-gateway-ingress
+      - http-gateway-api
     verbs:
       - get
       - patch

@@ -71,7 +71,7 @@ spec:
         {{- if eq .userGivenName "istio-gateway" }}
         - group: ""
           kind: Service
-          name: envoy-gateway-ingress
+          name: http-gateway-api
           namespace: envoy-gateway-ingress
           jsonPointers:
             - /metadata/annotations/external-dns.alpha.kubernetes.io~1target
