@@ -2,5 +2,5 @@
 - name: "Upgrade APT packages: `sudo apt-get update && sudo aptitude safe-upgrade`"
   become: true
   ansible.builtin.apt:
-    update_cache: yes
-    upgrade: no
+    update_cache: true
+    upgrade: false
