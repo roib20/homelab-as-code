@@ -4,7 +4,7 @@
 # renovate: datasource=docker depName=alpine
 ARG ALPINE_VERSION=3.23
 # renovate: datasource=github-releases depName=opentofu/opentofu extractVersion=^v(?<version>.*)$
-ARG TOFU_VERSION=1.11.5
+ARG TOFU_VERSION=1.11.6
 # renovate: datasource=github-releases depName=gruntwork-io/terragrunt extractVersion=^v(?<version>.*)$
 ARG TERRAGRUNT_VERSION=0.99.5
 # renovate: datasource=github-releases depName=go-task/task
