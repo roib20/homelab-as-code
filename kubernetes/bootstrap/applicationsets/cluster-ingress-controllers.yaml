@@ -68,7 +68,7 @@ spec:
           jsonPointers:
             - /status
           kind: Application
-        {{- if eq .userGivenName "istio-gateway" }}
+        {{- if eq .userGivenName "envoy-gateway" }}
         - group: ""
           kind: Service
           name: http-gateway-api
