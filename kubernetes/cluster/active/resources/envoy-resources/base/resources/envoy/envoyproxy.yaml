@@ -8,4 +8,7 @@ spec:
     type: Kubernetes
     kubernetes:
       envoyService:
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: "${FQDN_01},*.${FQDN_01}"
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
         type: LoadBalancer

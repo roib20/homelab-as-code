@@ -50,11 +50,11 @@
     fieldPath: "data.FQDN_01"
   targets:
     - select:
-        apiVersion: v1
-        kind: Service
-        name: envoy-gateway-ingress
+        apiVersion: gateway.envoyproxy.io/v1alpha1
+        kind: EnvoyProxy
+        name: http-gateway-api
       fieldPaths:
-        - metadata.annotations.[external-dns.alpha.kubernetes.io/hostname]
+        - spec.provider.kubernetes.envoyService.annotations.[external-dns.alpha.kubernetes.io/hostname]
       options:
         delimiter: ","
         index: 0
@@ -66,11 +66,11 @@
     fieldPath: spec.listeners.[name=https-wildcard].hostname
   targets:
     - select:
-        apiVersion: v1
-        kind: Service
-        name: envoy-gateway-ingress
+        apiVersion: gateway.envoyproxy.io/v1alpha1
+        kind: EnvoyProxy
+        name: http-gateway-api
       fieldPaths:
-        - metadata.annotations.[external-dns.alpha.kubernetes.io/hostname]
+        - spec.provider.kubernetes.envoyService.annotations.[external-dns.alpha.kubernetes.io/hostname]
       options:
         delimiter: ","
         index: 1

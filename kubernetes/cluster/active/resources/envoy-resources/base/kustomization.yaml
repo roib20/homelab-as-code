@@ -4,4 +4,3 @@ kind: Kustomization
 resources:
   - resources/gateway-api
   - resources/envoy
-  - resources/core-networking
