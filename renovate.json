@@ -98,6 +98,22 @@
       "minimumGroupSize": 2
     },
     {
+      "description": "GitHub Runner Scale Set Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "GitHub Runner Scale Set",
+      "groupSlug": "gha-runner-scale-set",
+      "matchPackageNames": [
+        "/gha-runner-scale-set(?:-controller)?$/",
+        "/actions-runner-controller-charts/gha-runner-scale-set(?:-controller)?$/"
+      ],
+      "matchSourceUrls": [
+        "https://github.com/actions/actions-runner-controller"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
       "description": "Helm Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
