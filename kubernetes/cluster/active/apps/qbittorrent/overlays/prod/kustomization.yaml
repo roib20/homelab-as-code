@@ -7,7 +7,7 @@ resources:
 helmCharts:
   - name: qbittorrent
     repo: oci://oci.trueforge.org/truecharts
-    version: 25.0.3
+    version: 25.0.4
     releaseName: qbittorrent
     namespace: qbittorrent
     valuesFile: ../../base/values.yaml
