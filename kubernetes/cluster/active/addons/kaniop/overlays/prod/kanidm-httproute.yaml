@@ -39,4 +39,4 @@ spec:
           requestRedirect:
             hostname: "auth.${FQDN_01}"
             scheme: https
-            statusCode: 308
+            statusCode: 302
