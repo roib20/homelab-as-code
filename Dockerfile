@@ -12,7 +12,7 @@ ARG TASK_VERSION=3.50.0
 # renovate: datasource=github-releases depName=siderolabs/talos
 ARG TALOS_VERSION=1.12.6
 # renovate: datasource=github-releases depName=kubernetes/kubernetes
-ARG KUBECTL_VERSION=1.35.3
+ARG KUBECTL_VERSION=1.35.4
 # renovate: datasource=github-releases depName=helm/helm
 ARG HELM_VERSION=4.1.4
 # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.+)$
