@@ -1,6 +1,6 @@
 terraform {
   # renovate: datasource=github-releases depName=opentofu/opentofu versioning=hashicorp extractVersion=^v(?<version>.*)$
-  required_version = ">= 1.0.0"
+  required_version = ">= 1.11.6"
 
   required_providers {
     kubernetes = {
