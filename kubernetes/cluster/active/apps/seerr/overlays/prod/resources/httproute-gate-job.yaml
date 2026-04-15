@@ -20,7 +20,7 @@ spec:
       containers:
         - name: wait-for-seerr-initialized
           # renovate: datasource=docker depName=alpine/k8s
-          image: alpine/k8s:1.35.2
+          image: alpine/k8s:1.35.3
           env:
             - name: HOME
               value: /tmp
