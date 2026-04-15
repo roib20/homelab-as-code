@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "envoy-gateway",
+  "destName": "in-cluster",
+  "destNamespace": "envoy-gateway",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "envoy-gateway"
+}
