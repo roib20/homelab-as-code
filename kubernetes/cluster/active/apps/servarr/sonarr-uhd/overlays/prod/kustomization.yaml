@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: sonarr
     repo: oci://oci.trueforge.org/truecharts
-    version: 26.0.4
+    version: 26.0.5
     releaseName: sonarr-uhd
     namespace: servarr
     valuesFile: ../../base/values.yaml
