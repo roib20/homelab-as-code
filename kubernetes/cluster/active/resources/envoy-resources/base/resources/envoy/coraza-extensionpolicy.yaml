@@ -21,7 +21,7 @@ spec:
         default_directives: default
         directives_map:
           default:
-            - Include @demo-conf
+            - Include @recommended-conf
             - SecDebugLogLevel 9
             - SecRuleEngine On
             # Endpoint-specific runtime exclusions must execute before CRS includes.
