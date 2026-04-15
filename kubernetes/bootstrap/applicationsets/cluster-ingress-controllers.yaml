@@ -22,7 +22,7 @@ spec:
             destination: {}
             project: ""
   syncPolicy:
-    preserveResourcesOnDeletion: true
+    preserveResourcesOnDeletion: false
   template:
     metadata:
       name: '{{ .userGivenName }}'
