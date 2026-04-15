@@ -24,6 +24,7 @@ spec:
             - Include @recommended-conf
             - SecDebugLogLevel 9
             - SecRuleEngine On
+            - SecResponseBodyAccess Off
             # Endpoint-specific runtime exclusions must execute before CRS includes.
             # Outline auth config false positive (920440: restricted file extension)
             - SecRule REQUEST_METHOD "@streq POST" "id:100002,phase:1,pass,nolog,chain"
