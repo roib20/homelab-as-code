@@ -43,3 +43,34 @@
       options:
         delimiter: "."
         index: 1
+
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        apiVersion: v1
+        kind: Service
+        name: envoy-gateway-ingress
+      fieldPaths:
+        - metadata.annotations.[external-dns.alpha.kubernetes.io/hostname]
+      options:
+        delimiter: ","
+        index: 0
+
+- source:
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: Gateway
+    name: http-gateway-api
+    fieldPath: spec.listeners.[name=https-wildcard].hostname
+  targets:
+    - select:
+        apiVersion: v1
+        kind: Service
+        name: envoy-gateway-ingress
+      fieldPaths:
+        - metadata.annotations.[external-dns.alpha.kubernetes.io/hostname]
+      options:
+        delimiter: ","
+        index: 1
