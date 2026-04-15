@@ -38,7 +38,7 @@ spec:
     default_directives: default
     directives_map:
       default:
-        - Include @recommended-conf
+        - Include @demo-conf
         - SecDebugLogLevel 9
         - SecRuleEngine On
         # Endpoint-specific runtime exclusions must execute before CRS includes.
@@ -71,5 +71,5 @@ spec:
         - SecRule ARGS:job "@streq renovate-github" "ctl:ruleRemoveById=932230,ctl:ruleRemoveById=932235,ctl:ruleRemoveById=932250,ctl:ruleRemoveById=932260,ctl:ruleRemoveById=932370,ctl:ruleRemoveById=941180"
   selector:
     matchLabels:
-      app: http-gateway-api
+      app: istio-ingressgateway
   url: oci://ghcr.io/corazawaf/coraza-proxy-wasm

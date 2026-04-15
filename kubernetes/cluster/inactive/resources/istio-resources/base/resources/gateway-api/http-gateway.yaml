@@ -13,7 +13,7 @@ spec:
   gatewayClassName: istio
   addresses:
     - type: Hostname
-      value: http-gateway-api.envoy-gateway-ingress.svc.cluster.local
+      value: istio-ingressgateway.istio-ingress.svc.cluster.local
   listeners:
     # Only HTTP listener for HTTPRoute traffic from VirtualService bridge
     - name: wildcard

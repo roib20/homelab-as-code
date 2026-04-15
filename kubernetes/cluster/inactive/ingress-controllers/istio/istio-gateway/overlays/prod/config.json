@@ -2,7 +2,7 @@
   "annotations": {},
   "appName": "gateway",
   "destName": "in-cluster",
-  "destNamespace": "envoy-gateway-ingress",
+  "destNamespace": "istio-ingress",
   "destServer": "https://kubernetes.default.svc",
   "labels": {},
   "project": "default",
