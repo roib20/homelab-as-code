@@ -9,7 +9,7 @@ resources:
 helmCharts:
   - name: outline
     repo: oci://oci.trueforge.org/truecharts
-    version: 20.0.4
+    version: 20.0.5
     releaseName: outline
     namespace: outline
     valuesFile: ../../base/values.yaml
