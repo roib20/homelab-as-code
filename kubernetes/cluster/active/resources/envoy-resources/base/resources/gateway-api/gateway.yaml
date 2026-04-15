@@ -32,7 +32,8 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - kind: Secret
+          - group: ''
+            kind: Secret
             name: tls-wildcard
       allowedRoutes:
         namespaces:
@@ -44,7 +45,8 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - kind: Secret
+          - group: ''
+            kind: Secret
             name: tls-wildcard
       allowedRoutes:
         namespaces:

@@ -5,9 +5,13 @@ metadata:
   name: tls-redirect
 spec:
   parentRefs:
-    - name: http-gateway-api
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
       sectionName: http-apex
-    - name: http-gateway-api
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
       sectionName: http-wildcard
   rules:
     - filters:
@@ -15,3 +19,7 @@ spec:
           requestRedirect:
             scheme: https
             statusCode: 302
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
