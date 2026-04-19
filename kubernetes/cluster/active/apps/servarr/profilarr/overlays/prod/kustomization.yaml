@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: profilarr
     repo: oci://oci.trueforge.org/truecharts
-    version: 3.0.2
+    version: 3.1.0
     releaseName: profilarr
     namespace: servarr
     valuesFile: ../../base/values.yaml
