@@ -31,7 +31,7 @@ terraform {
     proxmox = {
       source  = "bpg/proxmox"
       # renovate: datasource=terraform-provider depName=bpg/proxmox versioning=hashicorp
-      version = "~> 0.102"
+      version = "~> 0.103"
     }
   }
 }
