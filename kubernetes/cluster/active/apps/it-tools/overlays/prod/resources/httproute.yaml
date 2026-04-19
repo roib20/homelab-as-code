@@ -1,0 +1,32 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: it-tools
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Useful tools for developer and people working in IT.
+    gethomepage.dev/group: Productivity
+    gethomepage.dev/icon: it-tools.svg
+    gethomepage.dev/name: it-tools
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=it-tools"
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: envoy-gateway-ingress
+  hostnames:
+    - "it-tools.${FQDN_01}"
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: it-tools
+          namespace: it-tools
+          port: 18082
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /

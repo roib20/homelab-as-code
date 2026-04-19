@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "cyberchef",
+  "destName": "in-cluster",
+  "destNamespace": "cyberchef",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "cyberchef"
+}

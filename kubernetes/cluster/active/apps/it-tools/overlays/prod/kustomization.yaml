@@ -1,0 +1,22 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - resources/httproute.yaml
+helmCharts:
+  - name: it-tools
+    repo: oci://oci.trueforge.org/truecharts
+    version: 9.1.0
+    releaseName: it-tools
+    namespace: it-tools
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+replacements:
+  - path: replacements.yaml
