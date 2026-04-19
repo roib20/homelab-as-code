@@ -98,6 +98,20 @@
       "minimumGroupSize": 2
     },
     {
+      "description": "Envoy Gateway Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Envoy Gateway",
+      "groupSlug": "envoy-gateway",
+      "matchPackageNames": [
+        "gateway-helm",
+        "gateway-crds-helm",
+        "gateway-addons-helm"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
       "description": "GitHub Runner Scale Set Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
