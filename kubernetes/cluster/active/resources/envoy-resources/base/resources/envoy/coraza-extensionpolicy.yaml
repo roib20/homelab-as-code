@@ -32,6 +32,10 @@ spec:
             # Jellyfin image fetch false positive (920420: request content type policy)
             - SecRule REQUEST_METHOD "@streq GET" "id:100004,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@rx ^/Items/[A-Za-z0-9]+/Images/Primary$" "ctl:ruleRemoveById=920420"
+            # MeTube socket.io polling false positive (920420: request content type policy)
+            - SecRule REQUEST_METHOD "@streq POST" "id:100005,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^metube\." "chain"
+            - SecRule REQUEST_FILENAME "@beginsWith /socket.io/" "ctl:ruleRemoveById=920420"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---
