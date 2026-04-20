@@ -9,4 +9,5 @@ workload:
           # https://github.com/alexta69/metube?tab=readme-ov-file#%EF%B8%8F-configuration-via-environment-variables
           env:
             MAX_CONCURRENT_DOWNLOADS: 3
+            DELETE_FILE_ON_TRASHCAN: true
             YTDL_OPTIONS: '{"writesubtitles": true, "writeautomaticsub": true, "subtitleslangs": ["^en(?!-en-).*", "^he(?!-he-).*"], "postprocessors": [{"key": "FFmpegEmbedSubtitle"}]}'
