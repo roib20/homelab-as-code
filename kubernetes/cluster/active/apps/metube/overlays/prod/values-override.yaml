@@ -1,0 +1,12 @@
+---
+global:
+  fallbackDefaults:
+    pvcRetain: true
+    pvcSize: 10Gi
+persistence:
+  config:
+    enabled: true
+    mountPath: /config
+  downloads:
+    enabled: true
+    mountPath: /downloads
