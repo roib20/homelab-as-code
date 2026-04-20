@@ -30,6 +30,7 @@ spec:
         - path:
             type: PathPrefix
             value: /
+      # https://github.com/alam00000/bentopdf/blob/main/docs/self-hosting/kubernetes.md#if-youre-using-gateway-api-and-want-to-force-add-headers
       filters:
         - type: ResponseHeaderModifier
           responseHeaderModifier:
