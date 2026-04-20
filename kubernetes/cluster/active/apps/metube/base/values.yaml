@@ -7,4 +7,4 @@ workload:
       containers:
         main:
           env:
-            YTDL_OPTIONS: '{"writesubtitles": true, "writeautomaticsub": true, "subtitleslangs": ["en.*", "he.*"]}'
+            YTDL_OPTIONS: '{"writesubtitles": true, "writeautomaticsub": true, "subtitleslangs": ["en.*", "he.*"], "postprocessors": [{"key": "FFmpegEmbedSubtitle"}]}'
