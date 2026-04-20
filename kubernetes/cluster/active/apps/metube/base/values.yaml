@@ -7,4 +7,5 @@ workload:
       containers:
         main:
           env:
+            MAX_CONCURRENT_DOWNLOADS: "3"
             YTDL_OPTIONS: '{"writesubtitles": true, "writeautomaticsub": true, "subtitleslangs": ["^en(?!-en-).*", "^he(?!-he-).*"], "postprocessors": [{"key": "FFmpegEmbedSubtitle"}]}'
