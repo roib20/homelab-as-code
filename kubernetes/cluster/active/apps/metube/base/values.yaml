@@ -21,3 +21,7 @@ workload:
             # Link: https://github.com/alexta69/metube/wiki/YTDL_OPTIONS-Cookbook
             # yamllint disable-line rule:line-length
             YTDL_OPTIONS: '{"writesubtitles": true, "writeautomaticsub": true, "subtitleslangs": ["^en(?!-en-).*", "^he(?!-he-).*", "-live_chat"], "updatetime": false, "postprocessors": [{"key": "Exec", "exec_cmd": "chmod 0664", "when": "after_move"}, {"key": "FFmpegEmbedSubtitle", "already_have_subtitle": false}, {"key": "FFmpegMetadata", "add_chapters": true}]}'
+            # SponsorBlock Preset
+            # Link: https://github.com/alexta69/metube#presets
+            # yamllint disable-line rule:line-length
+            YTDL_OPTIONS_PRESETS: '{"sponsorblock": {"postprocessors": [{"key": "SponsorBlock", "categories": ["sponsor"]}, {"key": "ModifyChapters", "remove_sponsor_segments": ["sponsor"]}]}}'
