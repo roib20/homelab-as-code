@@ -1,0 +1,10 @@
+---
+podOptions:
+  hostUsers: true
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          env:
+            YTDL_OPTIONS: '{"writesubtitles": true, "writeautomaticsub": true, "subtitleslangs": ["^en(?!-en-).*", "^he(?!-he-).*"], "postprocessors": [{"key": "FFmpegEmbedSubtitle"}]}'

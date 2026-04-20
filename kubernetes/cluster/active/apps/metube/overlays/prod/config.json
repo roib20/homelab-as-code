@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "metube",
+  "destName": "in-cluster",
+  "destNamespace": "metube",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "metube"
+}
