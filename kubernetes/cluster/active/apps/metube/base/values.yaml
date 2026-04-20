@@ -10,4 +10,5 @@ workload:
           env:
             MAX_CONCURRENT_DOWNLOADS: 3
             DELETE_FILE_ON_TRASHCAN: true
+            CLEAR_COMPLETED_AFTER: 86400 # 24 hours
             YTDL_OPTIONS: '{"writesubtitles": true, "writeautomaticsub": true, "subtitleslangs": ["^en(?!-en-).*", "^he(?!-he-).*"], "postprocessors": [{"key": "FFmpegEmbedSubtitle"}]}'
