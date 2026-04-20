@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "bentopdf",
+  "destName": "in-cluster",
+  "destNamespace": "pdf",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "bentopdf"
+}
