@@ -9,25 +9,28 @@ immich:
 
 server:
   rawResources:
+    immich-kubernetes-secretstore-serviceaccount:
+      apiVersion: v1
+      kind: ServiceAccount
+      forceRename: immich-kubernetes-secretstore
+
     immich-kubernetes-secretstore:
       apiVersion: external-secrets.io/v1
-      kind: ClusterSecretStore
+      kind: SecretStore
       forceRename: immich-kubernetes-secretstore
       spec:
         spec:
           provider:
             kubernetes:
+              remoteNamespace: immich
               server:
                 caProvider:
                   type: ConfigMap
                   name: kube-root-ca.crt
-                  namespace: kube-system
                   key: ca.crt
               auth:
                 serviceAccount:
-                  name: external-secrets
-                  namespace: external-secrets
-              remoteNamespace: immich
+                  name: immich-kubernetes-secretstore
 
     immich-kubernetes-secretstore-role:
       apiVersion: rbac.authorization.k8s.io/v1
@@ -38,6 +41,9 @@ server:
           - apiGroups: [""]
             resources: ["secrets"]
             verbs: ["get", "list", "watch"]
+          - apiGroups: ["authorization.k8s.io"]
+            resources: ["selfsubjectrulesreviews"]
+            verbs: ["create"]
 
     immich-kubernetes-secretstore-rolebinding:
       apiVersion: rbac.authorization.k8s.io/v1
@@ -50,8 +56,8 @@ server:
           name: immich-kubernetes-secretstore
         subjects:
           - kind: ServiceAccount
-            name: external-secrets
-            namespace: external-secrets
+            name: immich-kubernetes-secretstore
+            namespace: immich
 
     env-vars:
       apiVersion: v1
@@ -70,7 +76,7 @@ server:
           refreshInterval: 1h
           secretStoreRef:
             name: immich-kubernetes-secretstore
-            kind: ClusterSecretStore
+            kind: SecretStore
           target:
             name: immich-config
             creationPolicy: Owner
