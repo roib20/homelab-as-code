@@ -8,6 +8,9 @@ controller:
         release: kube-prometheus-stack
 
 server:
+  podAnnotations:
+    configmap.reloader.stakater.com/reload: "argocd-cm,argocd-cmd-params-cm,argocd-rbac-cm"
+    secret.reloader.stakater.com/reload: "argocd-secret"
   metrics:
     enabled: true
     serviceMonitor:
@@ -55,9 +58,27 @@ repoServer:
       enabled: true
       additionalLabels:
         release: kube-prometheus-stack
-# API Key for Homepage widget: https://gethomepage.dev/widgets/services/argocd/
 configs:
   cm:
+    url: "https://argocd.${FQDN_02}"
+    # Existing OIDC Provider:
+    # https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#existing-oidc-provider
+    oidc.config: |
+      name: Kanidm
+      issuer: https://auth.${FQDN_01}/oauth2/openid/argocd
+      clientID: $oidc.kanidm.clientID
+      clientSecret: $oidc.kanidm.clientSecret
+      requestedScopes: ["openid", "profile", "email", "groups_name"]
+      requestedIDTokenClaims: {"groups_name": {"essential": true}}
+      enableUserInfoGroups: true
+      userInfoPath: /userinfo
+      userInfoCacheExpiration: "5m"
+      enablePKCEAuthentication: true
+    # API Key for Homepage widget: https://gethomepage.dev/widgets/services/argocd/
     accounts.readonly: apiKey
   rbac:
-    policy.csv: "g, readonly, role:readonly"
+    scopes: "[groups]"
+    policy.csv: |
+      g, readonly, role:readonly
+      g, argocd-users, role:readonly
+      g, argocd-admins, role:admin

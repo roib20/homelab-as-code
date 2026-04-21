@@ -11,7 +11,7 @@
         - spec.rules.0.host
 - source:
     kind: ConfigMap
-    name: env-vars
+    name: env-vars-argocd
     fieldPath: "data.FQDN_02"
   targets:
     - select:
@@ -35,7 +35,7 @@
         - spec.rules.0.host
 - source:
     kind: ConfigMap
-    name: env-vars
+    name: env-vars-argocd
     fieldPath: "data.FQDN_02"
   targets:
     - select:
@@ -49,14 +49,61 @@
         index: 1
 - source:
     kind: ConfigMap
-    name: env-vars
+    name: env-vars-argocd
     fieldPath: "data.FQDN_01"
   targets:
+    - select:
+        kind: ConfigMap
+        name: env-vars-argocd
+      fieldPaths:
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
     - select:
         kind: HTTPRoute
         name: argocd-server-webhook
       fieldPaths:
         - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars-argocd
+    fieldPath: "data.OIDC_CLIENT_ID"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: env-vars-argocd
+      fieldPaths:
+        - data.OIDC_ISSUER_LINE
+      options:
+        delimiter: "/"
+        index: 5
+- source:
+    kind: ConfigMap
+    name: env-vars-argocd
+    fieldPath: "data.OIDC_ISSUER_LINE"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: argocd-cm
+      fieldPaths:
+        - data.[oidc.config]
+      options:
+        delimiter: "\n"
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars-argocd
+    fieldPath: "data.FQDN_02"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: argocd-cm
+      fieldPaths:
+        - data.url
       options:
         delimiter: "."
         index: 1

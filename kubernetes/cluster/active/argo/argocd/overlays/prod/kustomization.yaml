@@ -3,8 +3,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
-  - argocd-server-webhook-httproute.yaml
-  - git-webhook.yaml.externalsecret
+  - external-secrets
+  - resources
 helmCharts:
   - name: argo-cd
     repo: oci://ghcr.io/argoproj/argo-helm
@@ -16,8 +16,12 @@ helmCharts:
       - values-override.yaml
     includeCRDs: true
 configMapGenerator:
-  - name: env-vars
+  - name: env-vars-argocd
     envs:
       - /tmp/env-vars.env
+    literals:
+      - AUTH_HOST=auth.${FQDN_01}
+      - OIDC_CLIENT_ID=argocd
+      - "OIDC_ISSUER_LINE=issuer: https://auth.${FQDN_01}/oauth2/openid/oidc-client-id"
 replacements:
   - path: replacements.yaml
