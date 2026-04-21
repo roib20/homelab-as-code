@@ -55,9 +55,23 @@ repoServer:
       enabled: true
       additionalLabels:
         release: kube-prometheus-stack
-# API Key for Homepage widget: https://gethomepage.dev/widgets/services/argocd/
 configs:
   cm:
+    url: "https://argocd.${FQDN_02}"
+    # Existing OIDC Provider:
+    # https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#existing-oidc-provider
+    oidc.config: |
+      name: Kanidm
+      issuer: https://auth.${FQDN_01}/oauth2/openid/argocd
+      clientID: $oidc.kanidm.clientID
+      clientSecret: $oidc.kanidm.clientSecret
+      requestedScopes: ["openid", "profile", "email", "groups"]
+      requestedIDTokenClaims: {"groups": {"essential": true}}
+      enablePKCEAuthentication: true
+    # API Key for Homepage widget: https://gethomepage.dev/widgets/services/argocd/
     accounts.readonly: apiKey
   rbac:
-    policy.csv: "g, readonly, role:readonly"
+    policy.csv: |
+      g, readonly, role:readonly
+      g, argocd-users, role:readonly
+      g, argocd-admins, role:admin

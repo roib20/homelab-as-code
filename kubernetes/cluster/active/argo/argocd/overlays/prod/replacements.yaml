@@ -53,10 +53,44 @@
     fieldPath: "data.FQDN_01"
   targets:
     - select:
+        kind: ConfigMap
+        name: env-vars
+      fieldPaths:
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+    - select:
         kind: HTTPRoute
         name: argocd-server-webhook
       fieldPaths:
         - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: argocd-cm
+      fieldPaths:
+        - data.[oidc.config]
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_02"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: argocd-cm
+      fieldPaths:
+        - data.url
       options:
         delimiter: "."
         index: 1
