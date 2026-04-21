@@ -1,4 +1,6 @@
 ---
+dex:
+  enabled: false
 # HA mode
 redis-ha:
   enabled: true
