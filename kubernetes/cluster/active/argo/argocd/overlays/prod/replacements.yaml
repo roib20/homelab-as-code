@@ -11,7 +11,7 @@
         - spec.rules.0.host
 - source:
     kind: ConfigMap
-    name: env-vars
+    name: env-vars-argocd
     fieldPath: "data.FQDN_02"
   targets:
     - select:
@@ -35,7 +35,7 @@
         - spec.rules.0.host
 - source:
     kind: ConfigMap
-    name: env-vars
+    name: env-vars-argocd
     fieldPath: "data.FQDN_02"
   targets:
     - select:
@@ -49,12 +49,12 @@
         index: 1
 - source:
     kind: ConfigMap
-    name: env-vars
+    name: env-vars-argocd
     fieldPath: "data.FQDN_01"
   targets:
     - select:
         kind: ConfigMap
-        name: env-vars
+        name: env-vars-argocd
       fieldPaths:
         - data.AUTH_HOST
       options:
@@ -70,7 +70,7 @@
         index: 1
 - source:
     kind: ConfigMap
-    name: env-vars
+    name: env-vars-argocd
     fieldPath: "data.AUTH_HOST"
   targets:
     - select:
@@ -83,7 +83,7 @@
         index: 2
 - source:
     kind: ConfigMap
-    name: env-vars
+    name: env-vars-argocd
     fieldPath: "data.FQDN_02"
   targets:
     - select:

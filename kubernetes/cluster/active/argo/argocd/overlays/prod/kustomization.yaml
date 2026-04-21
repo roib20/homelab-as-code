@@ -16,7 +16,7 @@ helmCharts:
       - values-override.yaml
     includeCRDs: true
 configMapGenerator:
-  - name: env-vars
+  - name: env-vars-argocd
     envs:
       - /tmp/env-vars.env
     literals:
