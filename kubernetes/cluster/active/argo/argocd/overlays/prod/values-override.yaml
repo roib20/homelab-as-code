@@ -65,12 +65,16 @@ configs:
       issuer: https://auth.${FQDN_01}/oauth2/openid/argocd
       clientID: $oidc.kanidm.clientID
       clientSecret: $oidc.kanidm.clientSecret
-      requestedScopes: ["openid", "profile", "email", "groups"]
-      requestedIDTokenClaims: {"groups": {"essential": true}}
+      requestedScopes: ["openid", "profile", "email", "groups_name"]
+      requestedIDTokenClaims: {"groups_name": {"essential": true}}
+      enableUserInfoGroups: true
+      userInfoPath: /userinfo
+      userInfoCacheExpiration: "5m"
       enablePKCEAuthentication: true
     # API Key for Homepage widget: https://gethomepage.dev/widgets/services/argocd/
     accounts.readonly: apiKey
   rbac:
+    scopes: "[groups]"
     policy.csv: |
       g, readonly, role:readonly
       g, argocd-users, role:readonly
