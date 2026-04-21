@@ -40,7 +40,8 @@ server:
         rules:
           - apiGroups: [""]
             resources: ["secrets"]
-            verbs: ["get", "list", "watch"]
+            resourceNames: ["immich-kanidm-oauth2-credentials", "env-vars"]
+            verbs: ["get"]
           - apiGroups: ["authorization.k8s.io"]
             resources: ["selfsubjectrulesreviews"]
             verbs: ["create"]
