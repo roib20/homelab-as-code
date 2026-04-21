@@ -21,5 +21,7 @@ configMapGenerator:
       - /tmp/env-vars.env
     literals:
       - AUTH_HOST=auth.${FQDN_01}
+      - OIDC_CLIENT_ID=argocd
+      - "OIDC_ISSUER_LINE=issuer: https://auth.${FQDN_01}/oauth2/openid/oidc-client-id"
 replacements:
   - path: replacements.yaml

@@ -71,7 +71,20 @@
 - source:
     kind: ConfigMap
     name: env-vars-argocd
-    fieldPath: "data.AUTH_HOST"
+    fieldPath: "data.OIDC_CLIENT_ID"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: env-vars-argocd
+      fieldPaths:
+        - data.OIDC_ISSUER_LINE
+      options:
+        delimiter: "/"
+        index: 5
+- source:
+    kind: ConfigMap
+    name: env-vars-argocd
+    fieldPath: "data.OIDC_ISSUER_LINE"
   targets:
     - select:
         kind: ConfigMap
@@ -79,8 +92,8 @@
       fieldPaths:
         - data.[oidc.config]
       options:
-        delimiter: "/"
-        index: 2
+        delimiter: "\n"
+        index: 1
 - source:
     kind: ConfigMap
     name: env-vars-argocd
