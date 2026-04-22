@@ -1,0 +1,32 @@
+---
+secrets:
+  karakeep:
+    enabled: false
+  meilesearch:
+    enabled: false
+applicationProtocol: https
+applicationHost: "karakeep.${FQDN_01}"
+controllers:
+  karakeep:
+    containers:
+      karakeep:
+        env:
+          DISABLE_SIGNUPS: true
+          DISABLE_PASSWORD_AUTH: true
+          OAUTH_AUTO_REDIRECT: true
+          OAUTH_PROVIDER_NAME: "Kanidm"
+          OAUTH_CLIENT_ID:
+            secretKeyRef:
+              name: karakeep-kanidm-oauth2-credentials
+              key: CLIENT_ID
+          OAUTH_CLIENT_SECRET:
+            secretKeyRef:
+              name: karakeep-kanidm-oauth2-credentials
+              key: CLIENT_SECRET
+          OAUTH_WELLKNOWN_URL: "https://auth.${FQDN_01}/oauth2/openid/$(OAUTH_CLIENT_ID)/.well-known/openid-configuration"
+    pod:
+      annotations:
+        secret.reloader.stakater.com/reload: "karakeep,karakeep-kanidm-oauth2-credentials"
+meilisearch:
+  podAnnotations:
+    secret.reloader.stakater.com/reload: "karakeep-meilesearch"

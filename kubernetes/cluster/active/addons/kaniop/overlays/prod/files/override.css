@@ -6,10 +6,11 @@
   main .col-md-3:has(img#immich) { order: 4; }
   main .col-md-3:has(img#it-tools) { order: 5; }
   main .col-md-3:has(img#jellyfin) { order: 6; }
-  main .col-md-3:has(img#mealie) { order: 7; }
-  main .col-md-3:has(img#metube) { order: 8; }
-  main .col-md-3:has(img#outline) { order: 9; }
-  main .col-md-3:has(img#pve) { order: 10; }
-  main .col-md-3:has(img#renovate-operator) { order: 11; }
-  main .col-md-3:has(img#seerr) { order: 12; }
+  main .col-md-3:has(img#karakeep) { order: 7; }
+  main .col-md-3:has(img#mealie) { order: 8; }
+  main .col-md-3:has(img#metube) { order: 9; }
+  main .col-md-3:has(img#outline) { order: 10; }
+  main .col-md-3:has(img#pve) { order: 11; }
+  main .col-md-3:has(img#renovate-operator) { order: 12; }
+  main .col-md-3:has(img#seerr) { order: 13; }
 }

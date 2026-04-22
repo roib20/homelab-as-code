@@ -1,0 +1,43 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        kind: HTTPRoute
+        name: karakeep
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: StatefulSet
+        name: karakeep
+      fieldPaths:
+        - spec.template.spec.containers.[name=karakeep].env.[name=NEXTAUTH_URL].value
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: ConfigMap
+        name: karakeep-oauth
+      fieldPaths:
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: karakeep-oauth
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    - select:
+        kind: StatefulSet
+        name: karakeep
+      fieldPaths:
+        - spec.template.spec.containers.[name=karakeep].env.[name=OAUTH_WELLKNOWN_URL].value
+      options:
+        delimiter: "/"
+        index: 2

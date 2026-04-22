@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "karakeep",
+  "destName": "in-cluster",
+  "destNamespace": "karakeep",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "karakeep"
+}

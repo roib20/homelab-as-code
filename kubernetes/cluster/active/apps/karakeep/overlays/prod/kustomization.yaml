@@ -1,0 +1,28 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - external-secrets
+  - resources/httproute.yaml
+helmCharts:
+  - name: karakeep
+    repo: https://karakeep-app.github.io/helm-charts
+    version: 0.31.0
+    releaseName: karakeep
+    namespace: karakeep
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+  - name: karakeep-oauth
+    literals:
+      - AUTH_HOST=auth.${FQDN_01}
+    options:
+      disableNameSuffixHash: true
+replacements:
+  - path: replacements.yaml
