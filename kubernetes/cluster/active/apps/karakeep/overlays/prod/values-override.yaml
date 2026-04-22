@@ -16,13 +16,15 @@ controllers:
           OAUTH_AUTO_REDIRECT: false
           OAUTH_PROVIDER_NAME: "Kanidm"
           OAUTH_CLIENT_ID:
-            secretKeyRef:
-              name: karakeep-kanidm-oauth2-credentials
-              key: CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: karakeep-kanidm-oauth2-credentials
+                key: CLIENT_ID
           OAUTH_CLIENT_SECRET:
-            secretKeyRef:
-              name: karakeep-kanidm-oauth2-credentials
-              key: CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: karakeep-kanidm-oauth2-credentials
+                key: CLIENT_SECRET
           OAUTH_WELLKNOWN_URL: "https://auth.${FQDN_01}/oauth2/openid/$(OAUTH_CLIENT_ID)/.well-known/openid-configuration"
     pod:
       annotations:
