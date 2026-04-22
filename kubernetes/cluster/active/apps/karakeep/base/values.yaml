@@ -21,6 +21,26 @@ controllers:
           runAsNonRoot: true
           runAsUser: 1000
           runAsGroup: 1000
+  karakeep:
+    containers:
+      karakeep:
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              initialDelaySeconds: 10
+              httpGet:
+                path: /api/health
+                port: 3000
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              initialDelaySeconds: 10
+              httpGet:
+                path: /api/health
+                port: 3000
 ingress:
   karakeep:
     enabled: false
