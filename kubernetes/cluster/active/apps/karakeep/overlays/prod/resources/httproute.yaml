@@ -19,7 +19,7 @@ spec:
       name: http-gateway-api
       namespace: envoy-gateway-ingress
   hostnames:
-    - "karakeep.${FQDN_01}"
+    - "links.${FQDN_01}"
   rules:
     - backendRefs:
         - group: ""

@@ -5,7 +5,7 @@ secrets:
   meilesearch:
     enabled: false
 applicationProtocol: https
-applicationHost: "karakeep.${FQDN_01}"
+applicationHost: "links.${FQDN_01}"
 controllers:
   karakeep:
     containers:
