@@ -26,3 +26,5 @@ configMapGenerator:
       disableNameSuffixHash: true
 replacements:
   - path: replacements.yaml
+patches:
+  - path: patches/karakeep-sts.yaml
