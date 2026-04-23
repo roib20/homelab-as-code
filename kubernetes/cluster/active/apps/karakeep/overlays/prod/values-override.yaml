@@ -33,7 +33,7 @@ controllers:
               name: "karakeep-meilisearch"
     pod:
       annotations:
-        secret.reloader.stakater.com/reload: "karakeep,karakeep-kanidm-oauth2-credentials"
+        secret.reloader.stakater.com/reload: "karakeep,karakeep-kanidm-oauth2-credentials,karakeep-meilisearch"
 meilisearch:
   auth:
     existingMasterKeySecret: "karakeep-meilisearch"
