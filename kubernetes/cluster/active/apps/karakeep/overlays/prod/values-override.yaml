@@ -11,8 +11,8 @@ controllers:
     containers:
       karakeep:
         env:
-          DISABLE_SIGNUPS: true
           DISABLE_PASSWORD_AUTH: true
+          DISABLE_SIGNUPS: false
           OAUTH_AUTO_REDIRECT: true
           OAUTH_PROVIDER_NAME: "Kanidm"
           OAUTH_CLIENT_ID:
