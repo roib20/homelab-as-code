@@ -9,8 +9,9 @@
   main .col-md-3:has(img#karakeep) { order: 7; }
   main .col-md-3:has(img#mealie) { order: 8; }
   main .col-md-3:has(img#metube) { order: 9; }
-  main .col-md-3:has(img#outline) { order: 10; }
-  main .col-md-3:has(img#pve) { order: 11; }
-  main .col-md-3:has(img#renovate-operator) { order: 12; }
-  main .col-md-3:has(img#seerr) { order: 13; }
+  main .col-md-3:has(img#miniflux) { order: 10; }
+  main .col-md-3:has(img#outline) { order: 11; }
+  main .col-md-3:has(img#pve) { order: 12; }
+  main .col-md-3:has(img#renovate-operator) { order: 13; }
+  main .col-md-3:has(img#seerr) { order: 14; }
 }

@@ -1,0 +1,51 @@
+---
+cnpg:
+  main:
+    enabled: false
+global:
+  fallbackDefaults:
+    pvcRetain: false
+    pvcSize: 1Gi
+    storageClass: longhorn
+workload:
+  main:
+    podSpec:
+      annotations:
+        secret.reloader.stakater.com/reload: "miniflux-kanidm-oauth2-credentials,miniflux-postgres-app"
+      containers:
+        main:
+          # Configuration Parameters: https://miniflux.app/docs/configuration.html
+          env:
+            ADMIN_PASSWORD: ""
+            ADMIN_USERNAME: ""
+            BASE_URL: "https://miniflux.${FQDN_01}"
+            CREATE_ADMIN: 0
+            DATABASE_URL:
+              secretKeyRef:
+                expandObjectName: false
+                key: uri
+                name: miniflux-postgres-app
+            DISABLE_LOCAL_AUTH: 1
+            FETCH_BILIBILI_WATCH_TIME: 1
+            FETCH_NEBULA_WATCH_TIME: 1
+            FETCH_ODYSEE_WATCH_TIME: 1
+            FETCH_YOUTUBE_WATCH_TIME: 1
+            FORCE_REFRESH_INTERVAL: 30
+            HTTPS: 1
+            POLLING_FREQUENCY: 60
+            OAUTH2_CLIENT_ID:
+              secretKeyRef:
+                expandObjectName: false
+                key: CLIENT_ID
+                name: miniflux-kanidm-oauth2-credentials
+            OAUTH2_CLIENT_SECRET:
+              secretKeyRef:
+                expandObjectName: false
+                key: CLIENT_SECRET
+                name: miniflux-kanidm-oauth2-credentials
+            OAUTH2_OIDC_DISCOVERY_ENDPOINT: "https://auth.${FQDN_01}/oauth2/openid/$(OAUTH2_CLIENT_ID)"
+            OAUTH2_OIDC_PROVIDER_NAME: "Kanidm"
+            OAUTH2_PROVIDER: oidc
+            OAUTH2_REDIRECT_URL: "https://miniflux.${FQDN_01}/oauth2/oidc/callback"
+            OAUTH2_USER_CREATION: 1
+            RUN_MIGRATIONS: 1

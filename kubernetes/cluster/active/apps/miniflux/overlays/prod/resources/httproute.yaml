@@ -1,0 +1,35 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: miniflux
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Minimalist RSS and feed reader.
+    gethomepage.dev/group: Productivity
+    gethomepage.dev/icon: miniflux.svg
+    gethomepage.dev/name: Miniflux
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=miniflux"
+    gethomepage.dev/widget.type: "miniflux"
+    gethomepage.dev/widget.url: "http://miniflux.miniflux.svc.cluster.local:10091"
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_MINIFLUX_KEY}}"
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: envoy-gateway-ingress
+  hostnames:
+    - "miniflux.${FQDN_01}"
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: miniflux
+          namespace: miniflux
+          port: 10091
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
