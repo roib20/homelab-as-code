@@ -14,6 +14,7 @@ workload:
         secret.reloader.stakater.com/reload: "miniflux-kanidm-oauth2-credentials,miniflux-postgres-app"
       containers:
         main:
+          # Configuration Parameters: https://miniflux.app/docs/configuration.html
           env:
             ADMIN_PASSWORD: ""
             ADMIN_USERNAME: ""
@@ -25,6 +26,13 @@ workload:
                 key: uri
                 name: miniflux-postgres-app
             DISABLE_LOCAL_AUTH: 1
+            FETCH_BILIBILI_WATCH_TIME: 1
+            FETCH_NEBULA_WATCH_TIME: 1
+            FETCH_ODYSEE_WATCH_TIME: 1
+            FETCH_YOUTUBE_WATCH_TIME: 1
+            FORCE_REFRESH_INTERVAL: 30
+            HTTPS: 1
+            POLLING_FREQUENCY: 60
             OAUTH2_CLIENT_ID:
               secretKeyRef:
                 expandObjectName: false
