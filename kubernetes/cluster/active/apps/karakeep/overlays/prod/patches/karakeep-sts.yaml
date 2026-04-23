@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: karakeep
+  namespace: karakeep
+spec:
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
+        volumeMode: Filesystem

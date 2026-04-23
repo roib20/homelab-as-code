@@ -1,0 +1,34 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: karakeep
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Bookmark manager and web archiver.
+    gethomepage.dev/group: Productivity
+    gethomepage.dev/icon: karakeep.svg
+    gethomepage.dev/name: Karakeep
+    gethomepage.dev/widget.type: "karakeep"
+    gethomepage.dev/widget.url: "http://karakeep.karakeep.svc.cluster.local:3000"
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_KARAKEEP_KEY}}"
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: envoy-gateway-ingress
+  hostnames:
+    - "links.${FQDN_01}"
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: karakeep
+          namespace: karakeep
+          port: 3000
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
