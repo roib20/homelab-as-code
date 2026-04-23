@@ -6,7 +6,7 @@ apt_packages:
   - postfix
   - open-iscsi
   - chrony
-  - proxmox-kernel-6.17  # https://forum.proxmox.com/tags/opt-in-kernel/
+  - proxmox-kernel-7.0 # https://forum.proxmox.com/tags/opt-in-kernel/
   # Hardware packages
   - eject
   - firmware-sof-signed
