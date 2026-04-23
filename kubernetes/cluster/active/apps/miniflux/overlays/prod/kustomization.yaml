@@ -21,11 +21,11 @@ configMapGenerator:
       - /tmp/env-vars.env
   - name: miniflux-config
     literals:
-      - APP_HOST=miniflux.${FQDN_01}
+      - APP_HOST=feed.${FQDN_01}
       - AUTH_HOST=auth.${FQDN_01}
-      - BASE_URL=https://miniflux.${FQDN_01}
+      - BASE_URL=https://feed.${FQDN_01}
       - OIDC_DISCOVERY_ENDPOINT=https://auth.${FQDN_01}/oauth2/openid/$(OAUTH2_CLIENT_ID)
-      - OIDC_REDIRECT_URL=https://miniflux.${FQDN_01}/oauth2/oidc/callback
+      - OIDC_REDIRECT_URL=https://feed.${FQDN_01}/oauth2/oidc/callback
     options:
       disableNameSuffixHash: true
 replacements:
