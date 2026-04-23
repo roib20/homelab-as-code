@@ -1,0 +1,11 @@
+workload:
+  main:
+    podSpec:
+      containers:
+        main:
+          env:
+            ADMIN_PASSWORD: ""
+            ADMIN_USERNAME: ""
+            CREATE_ADMIN: 0
+            DISABLE_LOCAL_AUTH: 1
+            RUN_MIGRATIONS: 1

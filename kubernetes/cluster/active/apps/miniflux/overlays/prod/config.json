@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "miniflux",
+  "destName": "in-cluster",
+  "destNamespace": "miniflux",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "miniflux"
+}

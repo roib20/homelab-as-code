@@ -1,0 +1,80 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: HTTPRoute
+        name: miniflux
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: ConfigMap
+        name: miniflux-config
+      fieldPaths:
+        - data.APP_HOST
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: miniflux-config
+    fieldPath: data.APP_HOST
+  targets:
+    - select:
+        kind: ConfigMap
+        name: miniflux-config
+      fieldPaths:
+        - data.BASE_URL
+        - data.OIDC_REDIRECT_URL
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: miniflux-config
+    fieldPath: data.AUTH_HOST
+  targets:
+    - select:
+        kind: ConfigMap
+        name: miniflux-config
+      fieldPaths:
+        - data.OIDC_DISCOVERY_ENDPOINT
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: miniflux-config
+    fieldPath: data.BASE_URL
+  targets:
+    - select:
+        kind: Deployment
+        name: miniflux
+      fieldPaths:
+        - spec.template.spec.containers.[name=miniflux].env.[name=BASE_URL].value
+- source:
+    kind: ConfigMap
+    name: miniflux-config
+    fieldPath: data.OIDC_DISCOVERY_ENDPOINT
+  targets:
+    - select:
+        kind: Deployment
+        name: miniflux
+      fieldPaths:
+        - spec.template.spec.containers.[name=miniflux].env.[name=OAUTH2_OIDC_DISCOVERY_ENDPOINT].value
+- source:
+    kind: ConfigMap
+    name: miniflux-config
+    fieldPath: data.OIDC_REDIRECT_URL
+  targets:
+    - select:
+        kind: Deployment
+        name: miniflux
+      fieldPaths:
+        - spec.template.spec.containers.[name=miniflux].env.[name=OAUTH2_REDIRECT_URL].value

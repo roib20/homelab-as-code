@@ -1,0 +1,32 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - resources/cnpg-cluster.yaml
+  - resources/httproute.yaml
+helmCharts:
+  - name: miniflux
+    repo: oci://oci.trueforge.org/truecharts
+    version: 18.1.1
+    releaseName: miniflux
+    namespace: miniflux
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+  - name: miniflux-config
+    literals:
+      - APP_HOST=miniflux.${FQDN_01}
+      - AUTH_HOST=auth.${FQDN_01}
+      - BASE_URL=https://miniflux.${FQDN_01}
+      - OIDC_DISCOVERY_ENDPOINT=https://auth.${FQDN_01}/oauth2/openid/$(OAUTH2_CLIENT_ID)
+      - OIDC_REDIRECT_URL=https://miniflux.${FQDN_01}/oauth2/oidc/callback
+    options:
+      disableNameSuffixHash: true
+replacements:
+  - path: replacements.yaml
