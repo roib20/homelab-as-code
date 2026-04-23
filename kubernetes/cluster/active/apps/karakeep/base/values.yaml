@@ -52,7 +52,7 @@ controllers:
                 path: /api/health
                 port: 3000
 defaultPodOptions:
-  hostUsers: false
+  hostUsers: true
   securityContext:
     runAsGroup: 1000
     runAsUser: 1000
