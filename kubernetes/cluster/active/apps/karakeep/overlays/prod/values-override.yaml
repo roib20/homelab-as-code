@@ -26,11 +26,16 @@ controllers:
                 name: karakeep-kanidm-oauth2-credentials
                 key: CLIENT_SECRET
           OAUTH_WELLKNOWN_URL: "https://auth.${FQDN_01}/oauth2/openid/$(OAUTH_CLIENT_ID)/.well-known/openid-configuration"
+        envFrom:
+          - secretRef:
+              name: "karakeep"
+          - secretRef:
+              name: "karakeep-meilisearch"
     pod:
       annotations:
         secret.reloader.stakater.com/reload: "karakeep,karakeep-kanidm-oauth2-credentials"
 meilisearch:
   auth:
-    existingMasterKeySecret: "{{ .Release.Name }}-meilisearch"
+    existingMasterKeySecret: "karakeep-meilisearch"
   podAnnotations:
     secret.reloader.stakater.com/reload: "karakeep-meilisearch"
