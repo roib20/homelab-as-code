@@ -3,7 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
-  - external-secrets
+  - external-secrets/karakeep-secrets.yaml.externalsecret
   - resources/httproute.yaml
 helmCharts:
   - name: karakeep
