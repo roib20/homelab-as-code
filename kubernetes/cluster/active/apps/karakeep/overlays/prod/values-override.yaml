@@ -13,7 +13,7 @@ controllers:
         env:
           DISABLE_SIGNUPS: true
           DISABLE_PASSWORD_AUTH: true
-          OAUTH_AUTO_REDIRECT: false
+          OAUTH_AUTO_REDIRECT: true
           OAUTH_PROVIDER_NAME: "Kanidm"
           OAUTH_CLIENT_ID:
             valueFrom:
