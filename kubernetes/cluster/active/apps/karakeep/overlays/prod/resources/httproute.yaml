@@ -9,6 +9,7 @@ metadata:
     gethomepage.dev/group: Productivity
     gethomepage.dev/icon: karakeep.svg
     gethomepage.dev/name: Karakeep
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=karakeep"
     gethomepage.dev/widget.type: "karakeep"
     gethomepage.dev/widget.url: "http://karakeep.karakeep.svc.cluster.local:3000"
     gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_KARAKEEP_KEY}}"
