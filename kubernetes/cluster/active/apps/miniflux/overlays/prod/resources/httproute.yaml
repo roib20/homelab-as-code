@@ -20,7 +20,7 @@ spec:
       name: http-gateway-api
       namespace: envoy-gateway-ingress
   hostnames:
-    - "miniflux.${FQDN_01}"
+    - "feed.${FQDN_01}"
   rules:
     - backendRefs:
         - group: ""
