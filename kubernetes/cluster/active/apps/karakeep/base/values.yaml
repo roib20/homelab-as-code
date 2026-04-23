@@ -24,6 +24,15 @@ controllers:
   karakeep:
     containers:
       karakeep:
+        env:
+          S6_READ_ONLY_ROOT: 1
+          S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          readOnlyRootFilesystem: true
         probes:
           liveness:
             enabled: true
@@ -41,6 +50,23 @@ controllers:
               httpGet:
                 path: /api/health
                 port: 3000
+defaultPodOptions:
+  hostUsers: false
+  securityContext:
+    runAsGroup: 1000
+    runAsUser: 1000
+    runAsNonRoot: true
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile:
+      type: RuntimeDefault
 ingress:
   karakeep:
     enabled: false
+persistence:
+  run:
+    type: emptyDir
+    advancedMounts:
+      karakeep:
+        karakeep:
+          - path: /run
