@@ -1,17 +1,18 @@
 /* custom styles */
 @supports selector(.col-md-3:has(img)) {
   main .col-md-3:has(img#argocd) { order: 1; }
-  main .col-md-3:has(img#cyberchef) { order: 2; }
-  main .col-md-3:has(img#forgejo) { order: 3; }
-  main .col-md-3:has(img#immich) { order: 4; }
-  main .col-md-3:has(img#it-tools) { order: 5; }
-  main .col-md-3:has(img#jellyfin) { order: 6; }
-  main .col-md-3:has(img#karakeep) { order: 7; }
-  main .col-md-3:has(img#mealie) { order: 8; }
-  main .col-md-3:has(img#metube) { order: 9; }
-  main .col-md-3:has(img#miniflux) { order: 10; }
-  main .col-md-3:has(img#outline) { order: 11; }
-  main .col-md-3:has(img#pve) { order: 12; }
-  main .col-md-3:has(img#renovate-operator) { order: 13; }
-  main .col-md-3:has(img#seerr) { order: 14; }
+  main .col-md-3:has(img#bentopdf) { order: 2; }
+  main .col-md-3:has(img#cyberchef) { order: 3; }
+  main .col-md-3:has(img#forgejo) { order: 4; }
+  main .col-md-3:has(img#immich) { order: 5; }
+  main .col-md-3:has(img#it-tools) { order: 6; }
+  main .col-md-3:has(img#jellyfin) { order: 7; }
+  main .col-md-3:has(img#karakeep) { order: 8; }
+  main .col-md-3:has(img#mealie) { order: 9; }
+  main .col-md-3:has(img#metube) { order: 10; }
+  main .col-md-3:has(img#miniflux) { order: 11; }
+  main .col-md-3:has(img#outline) { order: 12; }
+  main .col-md-3:has(img#pve) { order: 13; }
+  main .col-md-3:has(img#renovate-operator) { order: 14; }
+  main .col-md-3:has(img#seerr) { order: 15; }
 }
