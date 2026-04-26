@@ -43,7 +43,7 @@ rawResources:
   #           name: http-gateway-api
   #           namespace: envoy-gateway-ingress
   #       hostnames:
-  #         - "audiobookshelf.${FQDN_01}"
+  #         - "abs.${FQDN_01}"
   #       rules:
   #         - backendRefs:
   #             - group: ""
