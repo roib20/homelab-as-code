@@ -35,6 +35,9 @@ rawResources:
       gethomepage.dev/icon: audiobookshelf.svg
       gethomepage.dev/name: audiobookshelf
       gethomepage.dev/pod-selector: "app.kubernetes.io/instance=audiobookshelf"
+      gethomepage.dev/widget.type: "audiobookshelf"
+      gethomepage.dev/widget.url: "http://audiobookshelf.audiobookshelf.svc.cluster.local:80"
+      gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_AUDIOBOOKSHELF_KEY}}`}}"
     spec:
       spec:
         parentRefs:
