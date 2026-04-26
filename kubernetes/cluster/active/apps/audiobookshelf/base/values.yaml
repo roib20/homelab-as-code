@@ -2,6 +2,8 @@
 controllers:
   audiobookshelf:
     pod:
+      annotations:
+        secret.reloader.stakater.com/reload: "audiobookshelf-kanidm-oauth2-credentials"
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
