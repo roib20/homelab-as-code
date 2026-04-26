@@ -30,7 +30,7 @@ rawResources:
     forceRename: audiobookshelf
     annotations:
       gethomepage.dev/enabled: "true"
-      gethomepage.dev/description: Audiobooks, Books and Podcasts
+      gethomepage.dev/description: Self-hosted audiobook, eBooks and podcast server.
       gethomepage.dev/group: Media
       gethomepage.dev/icon: audiobookshelf.svg
       gethomepage.dev/name: audiobookshelf
