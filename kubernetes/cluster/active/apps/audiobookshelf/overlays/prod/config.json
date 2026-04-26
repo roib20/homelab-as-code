@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "audiobookshelf",
+  "destName": "in-cluster",
+  "destNamespace": "audiobookshelf",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "audiobookshelf"
+}

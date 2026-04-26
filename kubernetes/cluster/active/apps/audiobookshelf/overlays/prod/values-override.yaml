@@ -1,0 +1,85 @@
+---
+persistence:
+  media:
+    existingClaim: smb-mediadata-rwx
+    advancedMounts:
+      audiobookshelf:
+        app:
+          - path: /books
+            subPath: Media/Books
+            readOnly: false
+          - path: /podcasts
+            subPath: Media/Audio/Podcasts
+            readOnly: false
+rawResources:
+  smb-mediadata-rwx:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    forceRename: smb-mediadata-rwx
+    spec:
+      spec:
+        accessModes:
+          - ReadWriteMany
+        storageClassName: smb-mediadata
+        resources:
+          requests:
+            storage: 100Ti
+  httproute:
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    forceRename: audiobookshelf
+    annotations:
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/description: Self-hosted audiobook, eBooks and podcast server.
+      gethomepage.dev/group: Media
+      gethomepage.dev/icon: audiobookshelf.svg
+      gethomepage.dev/name: audiobookshelf
+      gethomepage.dev/pod-selector: "app.kubernetes.io/instance=audiobookshelf"
+      gethomepage.dev/widget.type: "audiobookshelf"
+      gethomepage.dev/widget.url: "http://audiobookshelf.audiobookshelf.svc.cluster.local:80"
+      gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_AUDIOBOOKSHELF_KEY}}`}}"
+    spec:
+      spec:
+        parentRefs:
+          - group: gateway.networking.k8s.io
+            kind: Gateway
+            name: http-gateway-api
+            namespace: envoy-gateway-ingress
+        hostnames:
+          - "abs.${FQDN_01}"
+        rules:
+          - backendRefs:
+              - group: ""
+                kind: Service
+                name: audiobookshelf
+                namespace: audiobookshelf
+                port: &port 80
+                weight: 1
+            matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+  httproute-redirect:
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    forceRename: audiobookshelf-redirect
+    spec:
+      spec:
+        parentRefs:
+          - group: gateway.networking.k8s.io
+            kind: Gateway
+            name: http-gateway-api
+            namespace: envoy-gateway-ingress
+        hostnames:
+          - "audiobookshelf.${FQDN_01}"
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            filters:
+              - type: RequestRedirect
+                requestRedirect:
+                  hostname: "abs.${FQDN_01}"
+                  scheme: https
+                  statusCode: 301

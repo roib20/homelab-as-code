@@ -1,0 +1,95 @@
+---
+controllers:
+  audiobookshelf:
+    pod:
+      annotations:
+        secret.reloader.stakater.com/reload: "audiobookshelf-kanidm-oauth2-credentials"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+        seccompProfile: {type: RuntimeDefault}
+    containers:
+      app:
+        image:
+          repository: ghcr.io/advplyr/audiobookshelf
+          tag: 2.33.2@sha256:a44ed89b3e845faa1f7d353f2cc89b2fcd8011737dd14075fa963cf9468da3a5
+        env:
+          AUDIOBOOKSHELF_UID: 1000
+          AUDIOBOOKSHELF_GID: 1000
+          CONFIG_PATH: /config
+          METADATA_PATH: /metadata
+          BACKUP_PATH: /backups
+          PORT: &port 80
+        probes:
+          liveness:
+            enabled: true
+            spec:
+              periodSeconds: 30
+              timeoutSeconds: 5
+              failureThreshold: 5
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /healthcheck
+                port: *port
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 5
+          startup:
+            enabled: true
+            spec:
+              failureThreshold: 30
+              periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 50m
+          limits:
+            memory: 1.5Gi
+persistence:
+  config:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: longhorn
+    advancedMounts:
+      audiobookshelf:
+        app:
+          - path: /config
+  metadata:
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn
+    advancedMounts:
+      audiobookshelf:
+        app:
+          - path: /metadata
+  backup:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: longhorn
+    advancedMounts:
+      audiobookshelf:
+        app:
+          - path: /backups
+  cache:
+    type: emptyDir
+    advancedMounts:
+      audiobookshelf:
+        app:
+          - path: /.npm
+            subPath: cache
+service:
+  app:
+    ports:
+      http:
+        port: *port
