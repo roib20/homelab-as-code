@@ -59,3 +59,27 @@ rawResources:
               - path:
                   type: PathPrefix
                   value: /
+  httproute-redirect:
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    forceRename: audiobookshelf-redirect
+    spec:
+      spec:
+        parentRefs:
+          - group: gateway.networking.k8s.io
+            kind: Gateway
+            name: http-gateway-api
+            namespace: envoy-gateway-ingress
+        hostnames:
+          - "audiobookshelf.${FQDN_01}"
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            filters:
+              - type: RequestRedirect
+                requestRedirect:
+                  hostname: "abs.${FQDN_01}"
+                  scheme: https
+                  statusCode: 301
