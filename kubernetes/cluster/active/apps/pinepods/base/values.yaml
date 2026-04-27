@@ -77,7 +77,7 @@ controllers:
           OIDC_BUTTON_TEXT: "Login with Kanidm"
           OIDC_BUTTON_COLOR: "#000000"
           OIDC_BUTTON_TEXT_COLOR: "#FFFFFF"
-          OIDC_DISABLE_STANDARD_LOGIN: "false"
+          OIDC_DISABLE_STANDARD_LOGIN: "true"
         envFrom:
           - secretRef:
               name: pinepods-env
