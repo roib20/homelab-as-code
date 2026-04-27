@@ -6,15 +6,6 @@ defaultPodOptions:
     seccompProfile:
       type: RuntimeDefault
 
-defaultContainerOptions:
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-        - ALL
-    seccompProfile:
-      type: RuntimeDefault
-
 controllers:
   pinepods:
     pod:
@@ -158,6 +149,15 @@ controllers:
   #           memory: 256Mi
 
   valkey:
+    defaultContainerOptionsStrategy: merge
+    defaultContainerOptions:
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
     pod:
       securityContext:
         runAsUser: 999
