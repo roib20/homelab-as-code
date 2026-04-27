@@ -17,6 +17,15 @@ controllers:
         fsGroup: 1000
     containers:
       app:
+        securityContext:
+          capabilities:
+            drop:
+              - ALL
+            add:
+              - CHOWN
+              - DAC_OVERRIDE
+              - SETGID
+              - SETUID
         image:
           repository: madeofpendletonwool/pinepods
           tag: 0.8.2@sha256:ee412e52e59b6c49f4f852c41db82e9a258563ddc2e31d7c6e7ef824b8abcb70
