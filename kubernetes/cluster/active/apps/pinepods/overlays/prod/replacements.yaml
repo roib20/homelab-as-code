@@ -1,0 +1,49 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    # HTTPRoute hostname
+    - select:
+        kind: HTTPRoute
+        name: pinepods
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: HTTPRoute
+        name: pinepods-redirect
+      fieldPaths:
+        - spec.hostnames.0
+        - spec.rules.0.filters.0.requestRedirect.hostname
+      options:
+        delimiter: "."
+        index: 1
+    # Build auth host used by OIDC URLs
+    - select:
+        kind: ConfigMap
+        name: pinepods-oidc
+      fieldPaths:
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: pinepods-oidc
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    # Inject auth hostname into OIDC endpoint URLs
+    - select:
+        kind: Deployment
+        name: pinepods
+      fieldPaths:
+        - spec.template.spec.containers.[name=app].env.[name=OIDC_AUTHORIZATION_URL].value
+        - spec.template.spec.containers.[name=app].env.[name=OIDC_TOKEN_URL].value
+        - spec.template.spec.containers.[name=app].env.[name=OIDC_USER_INFO_URL].value
+      options:
+        delimiter: "/"
+        index: 2

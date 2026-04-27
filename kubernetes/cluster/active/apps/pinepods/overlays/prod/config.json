@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "pinepods",
+  "destName": "in-cluster",
+  "destNamespace": "pinepods",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "pinepods"
+}

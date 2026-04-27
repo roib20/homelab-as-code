@@ -13,7 +13,8 @@
   main .col-md-3:has(img#metube) { order: 11; }
   main .col-md-3:has(img#miniflux) { order: 12; }
   main .col-md-3:has(img#outline) { order: 13; }
-  main .col-md-3:has(img#pve) { order: 14; }
-  main .col-md-3:has(img#renovate-operator) { order: 15; }
-  main .col-md-3:has(img#seerr) { order: 16; }
+  main .col-md-3:has(img#pinepods) { order: 14; }
+  main .col-md-3:has(img#pve) { order: 15; }
+  main .col-md-3:has(img#renovate-operator) { order: 16; }
+  main .col-md-3:has(img#seerr) { order: 17; }
 }
