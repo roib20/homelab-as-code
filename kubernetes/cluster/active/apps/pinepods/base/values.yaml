@@ -50,6 +50,9 @@ controllers:
           DB_NAME: pinepods_database
           VALKEY_HOST: pinepods-valkey
           VALKEY_PORT: "6379"
+          SEARCH_API_URL: "https://search.pinepods.online/api/search"
+          PEOPLE_API_URL: "https://people.pinepods.online"
+          DEBUG_MODE: "false"
           OIDC_PROVIDER_NAME: "Kanidm"
           OIDC_CLIENT_ID:
             valueFrom:
@@ -284,9 +287,6 @@ rawResources:
             engineVersion: v2
             type: Opaque
             data:
-              SEARCH_API_URL: "https://search.pinepods.online/api/search"
-              PEOPLE_API_URL: "https://people.pinepods.online"
-              DEBUG_MODE: "false"
               USERNAME: '{{ "{{" }} .pinepods_admin_username {{ "}}" }}'
               PASSWORD: '{{ "{{" }} .pinepods_admin_password {{ "}}" }}'
               FULLNAME: '{{ "{{" }} .pinepods_admin_fullname {{ "}}" }}'
