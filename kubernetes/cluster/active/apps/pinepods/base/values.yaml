@@ -1,0 +1,327 @@
+---
+defaultPodOptionsStrategy: merge
+defaultPodOptions:
+  securityContext:
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile:
+      type: RuntimeDefault
+
+defaultContainerOptions:
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
+
+controllers:
+  pinepods:
+    pod:
+      annotations:
+        secret.reloader.stakater.com/reload: "pinepods-env,pinepods-postgres-app"
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 1000
+        fsGroup: 1000
+    containers:
+      app:
+        image:
+          repository: madeofpendletonwool/pinepods
+          tag: 0.8.2@sha256:ee412e52e59b6c49f4f852c41db82e9a258563ddc2e31d7c6e7ef824b8abcb70
+        env:
+          DB_TYPE: postgresql
+          DB_USER:
+            valueFrom:
+              secretKeyRef:
+                name: pinepods-postgres-app
+                key: user
+          DB_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: pinepods-postgres-app
+                key: password
+          DB_HOST:
+            valueFrom:
+              secretKeyRef:
+                name: pinepods-postgres-app
+                key: host
+          DB_PORT: "5432"
+          DB_NAME: pinepods_database
+          VALKEY_HOST: pinepods-valkey
+          VALKEY_PORT: "6379"
+        envFrom:
+          - secretRef:
+              name: pinepods-env
+        probes:
+          liveness:
+            enabled: true
+            spec:
+              periodSeconds: 30
+              timeoutSeconds: 5
+              failureThreshold: 5
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /healthcheck
+                port: 8040
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 5
+          startup:
+            enabled: true
+            spec:
+              failureThreshold: 30
+              periodSeconds: 10
+        resources:
+          requests:
+            cpu: 50m
+          limits:
+            memory: 1.5Gi
+
+  # backend:
+  #   pod:
+  #     annotations:
+  #       secret.reloader.stakater.com/reload: "pinepods-backend"
+  #     securityContext:
+  #       runAsUser: 1000
+  #       runAsGroup: 1000
+  #       runAsNonRoot: true
+  #       fsGroup: 1000
+  #   containers:
+  #     app:
+  #       image:
+  #         repository: madeofpendletonwool/pinepods_backend
+  #         tag: latest
+  #       envFrom:
+  #         - secretRef:
+  #             name: pinepods-backend
+  #       resources:
+  #         requests:
+  #           cpu: 10m
+  #         limits:
+  #           memory: 512Mi
+
+  # podpeople:
+  #   pod:
+  #     annotations:
+  #       secret.reloader.stakater.com/reload: "pinepods-podpeople"
+  #     securityContext:
+  #       runAsUser: 1000
+  #       runAsGroup: 1000
+  #       runAsNonRoot: true
+  #       fsGroup: 1000
+  #   containers:
+  #     app:
+  #       image:
+  #         repository: madeofpendletonwool/podpeople_db
+  #         tag: latest
+  #       env:
+  #         SEARCH_API_URL: "https://search.pinepods.online/api/search"
+  #       envFrom:
+  #         - secretRef:
+  #             name: pinepods-podpeople
+  #       resources:
+  #         requests:
+  #           cpu: 10m
+  #         limits:
+  #           memory: 256Mi
+
+  valkey:
+    pod:
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 999
+        runAsNonRoot: true
+        fsGroup: 999
+    containers:
+      app:
+        image:
+          repository: ghcr.io/valkey-io/valkey
+          tag: 9.0.3
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            memory: 128Mi
+
+service:
+  app:
+    controller: pinepods
+    ports:
+      http:
+        port: 8040
+  # backend:
+  #   controller: backend
+  #   ports:
+  #     http:
+  #       port: 5000
+  # podpeople:
+  #   controller: podpeople
+  #   ports:
+  #     http:
+  #       port: 8085
+  valkey:
+    controller: valkey
+    ports:
+      valkey:
+        port: 6379
+
+persistence:
+  config:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: longhorn
+    advancedMounts:
+      pinepods:
+        app:
+          - path: /opt/pinepods
+  backup:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: longhorn
+    advancedMounts:
+      pinepods:
+        app:
+          - path: /opt/pinepods/backups
+  tmpfs:
+    type: emptyDir
+    advancedMounts:
+      pinepods:
+        app:
+          - path: /pinepods/cache
+            subPath: cache
+          - path: /tmp
+            subPath: tmp
+          - path: /var/log/pinepods
+            subPath: log
+          - path: /etc/horust/services
+            subPath: horust-services
+  # podpeople-data:
+  #   accessMode: ReadWriteOnce
+  #   size: 1Gi
+  #   storageClass: longhorn
+  #   advancedMounts:
+  #     podpeople:
+  #       app:
+  #         - path: /app/podpeople-data
+  valkey-data:
+    type: emptyDir
+    advancedMounts:
+      valkey:
+        app:
+          - path: /data
+
+rawResources:
+  database:
+    apiVersion: postgresql.cnpg.io/v1
+    kind: Cluster
+    forceRename: pinepods-postgres
+    spec:
+      spec:
+        instances: 1
+        bootstrap:
+          initdb:
+            database: pinepods_database
+            owner: pinepods
+        managed:
+          services:
+            disabledDefaultServices:
+              - ro
+              - r
+        storage:
+          size: 3Gi
+          storageClass: longhorn-cnpg
+        resources:
+          requests:
+            cpu: 75m
+            memory: 200Mi
+          limits:
+            cpu: 1500m
+            memory: 2400Mi
+
+  external-secret-pinepods:
+    apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    forceRename: pinepods-env
+    spec:
+      spec:
+        refreshInterval: 1h
+        secretStoreRef:
+          name: bitwarden-secretsmanager
+          kind: ClusterSecretStore
+        target:
+          name: pinepods-env
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            type: Opaque
+            data:
+              SEARCH_API_URL: "https://search.pinepods.online/api/search"
+              PEOPLE_API_URL: "https://people.pinepods.online"
+              DEBUG_MODE: "false"
+              USERNAME: '{{ "{{" }} .pinepods_admin_username {{ "}}" }}'
+              PASSWORD: '{{ "{{" }} .pinepods_admin_password {{ "}}" }}'
+              FULLNAME: '{{ "{{" }} .pinepods_admin_fullname {{ "}}" }}'
+              EMAIL: '{{ "{{" }} .pinepods_admin_email {{ "}}" }}'
+        dataFrom:
+          - extract:
+              key: pinepods-secrets
+              conversionStrategy: Default
+              decodingStrategy: None
+              metadataPolicy: None
+
+  # external-secret-backend:
+  #   apiVersion: external-secrets.io/v1
+  #   kind: ExternalSecret
+  #   forceRename: pinepods-backend
+  #   spec:
+  #     spec:
+  #       refreshInterval: 1h
+  #       secretStoreRef:
+  #         name: bitwarden-secretsmanager
+  #         kind: ClusterSecretStore
+  #       target:
+  #         name: pinepods-backend
+  #         creationPolicy: Owner
+  #         template:
+  #           engineVersion: v2
+  #           type: Opaque
+  #           data:
+  #             API_KEY: '{{ "{{" }} .backend_api_key {{ "}}" }}'
+  #             API_SECRET: '{{ "{{" }} .backend_api_secret {{ "}}" }}'
+  #             YOUTUBE_API_KEY: '{{ "{{" }} .backend_youtube_api_key {{ "}}" }}'
+  #       dataFrom:
+  #         - extract:
+  #             key: pinepods-secrets
+  #             conversionStrategy: Default
+  #             decodingStrategy: None
+  #             metadataPolicy: None
+
+  # external-secret-podpeople:
+  #   apiVersion: external-secrets.io/v1
+  #   kind: ExternalSecret
+  #   forceRename: pinepods-podpeople
+  #   spec:
+  #     spec:
+  #       refreshInterval: 1h
+  #       secretStoreRef:
+  #         name: bitwarden-secretsmanager
+  #         kind: ClusterSecretStore
+  #       target:
+  #         name: pinepods-podpeople
+  #         creationPolicy: Owner
+  #         template:
+  #           engineVersion: v2
+  #           type: Opaque
+  #           data:
+  #             ADMIN_USERNAME: '{{ "{{" }} .podpeople_admin_username {{ "}}" }}'
+  #             ADMIN_PASSWORD: '{{ "{{" }} .podpeople_admin_password {{ "}}" }}'
+  #       dataFrom:
+  #         - extract:
+  #             key: pinepods-secrets
+  #             conversionStrategy: Default
+  #             decodingStrategy: None
+  #             metadataPolicy: None

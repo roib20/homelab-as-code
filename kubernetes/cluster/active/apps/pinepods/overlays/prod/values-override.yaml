@@ -1,0 +1,82 @@
+---
+persistence:
+  downloads:
+    existingClaim: smb-mediadata-rwx
+    advancedMounts:
+      pinepods:
+        app:
+          - path: /opt/pinepods/downloads
+            subPath: Media/Audio/Podcasts
+            readOnly: false
+
+rawResources:
+  smb-mediadata-rwx:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    forceRename: smb-mediadata-rwx
+    spec:
+      spec:
+        accessModes:
+          - ReadWriteMany
+        storageClassName: smb-mediadata
+        resources:
+          requests:
+            storage: 100Ti
+
+  # httproute:
+  #   apiVersion: gateway.networking.k8s.io/v1
+  #   kind: HTTPRoute
+  #   forceRename: pinepods
+  #   annotations:
+  #     gethomepage.dev/enabled: "true"
+  #     gethomepage.dev/description: Self-hosted podcasts server.
+  #     gethomepage.dev/group: Media
+  #     gethomepage.dev/icon: pinepods.svg
+  #     gethomepage.dev/name: pinepods
+  #     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=pinepods"
+  #   spec:
+  #     spec:
+  #       parentRefs:
+  #         - group: gateway.networking.k8s.io
+  #           kind: Gateway
+  #           name: http-gateway-api
+  #           namespace: envoy-gateway-ingress
+  #       hostnames:
+  #         - "podcasts.${FQDN_01}"
+  #       rules:
+  #         - backendRefs:
+  #             - group: ""
+  #               kind: Service
+  #               name: pinepods-app
+  #               namespace: pinepods
+  #               port: 8040
+  #               weight: 1
+  #           matches:
+  #             - path:
+  #                 type: PathPrefix
+  #                 value: /
+
+  # httproute-redirect:
+  #   apiVersion: gateway.networking.k8s.io/v1
+  #   kind: HTTPRoute
+  #   forceRename: pinepods-redirect
+  #   spec:
+  #     spec:
+  #       parentRefs:
+  #         - group: gateway.networking.k8s.io
+  #           kind: Gateway
+  #           name: http-gateway-api
+  #           namespace: envoy-gateway-ingress
+  #       hostnames:
+  #         - "pinepods.${FQDN_01}"
+  #       rules:
+  #         - matches:
+  #             - path:
+  #                 type: PathPrefix
+  #                 value: /
+  #           filters:
+  #             - type: RequestRedirect
+  #               requestRedirect:
+  #                 hostname: "podcasts.${FQDN_01}"
+  #                 scheme: https
+  #                 statusCode: 301
