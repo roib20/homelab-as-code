@@ -187,6 +187,39 @@ controllers:
         image:
           repository: ghcr.io/valkey-io/valkey
           tag: 9.0.3
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command:
+                  - valkey-cli
+                  - ping
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command:
+                  - valkey-cli
+                  - ping
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command:
+                  - valkey-cli
+                  - ping
+              failureThreshold: 10
+              periodSeconds: 5
         resources:
           requests:
             cpu: 10m
