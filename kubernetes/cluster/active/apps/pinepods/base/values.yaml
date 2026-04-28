@@ -15,6 +15,15 @@ controllers:
         runAsUser: 0
         runAsGroup: 1000
         fsGroup: 1000
+    initContainers:
+      wait-for-valkey:
+        image:
+          repository: madeofpendletonwool/pinepods
+          tag: 0.8.2@sha256:ee412e52e59b6c49f4f852c41db82e9a258563ddc2e31d7c6e7ef824b8abcb70
+        command:
+          - sh
+          - -c
+          - until nc -z pinepods-valkey 6379; do sleep 2; done
     containers:
       app:
         securityContext:
