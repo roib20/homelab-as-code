@@ -40,10 +40,6 @@ variable "machines" {
     sbc                 = optional(string, "")
   }))
 
-  validation {
-    condition     = length(var.machines) > 0
-    error_message = "At least one machine must be provided."
-  }
 }
 
 variable "cluster_vip" {

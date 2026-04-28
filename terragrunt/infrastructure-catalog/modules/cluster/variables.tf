@@ -175,6 +175,7 @@ variable "machines" {
     }))
     primary_ip = optional(string, "")
   }))
+  default = {}
 }
 
 variable "ts_authkey" {
