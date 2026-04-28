@@ -6,7 +6,7 @@ persistence:
       pinepods:
         app:
           - path: /opt/pinepods/downloads
-            subPath: Media/Audio/Podcasts
+            subPath: Media/Audio/Podcasts/pinepods
             readOnly: false
 
 rawResources:

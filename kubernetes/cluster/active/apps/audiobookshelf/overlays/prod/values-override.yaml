@@ -9,7 +9,7 @@ persistence:
             subPath: Media/Books
             readOnly: false
           - path: /podcasts
-            subPath: Media/Audio/Podcasts
+            subPath: Media/Audio/Podcasts/audiobookshelf
             readOnly: false
 rawResources:
   smb-mediadata-rwx:
