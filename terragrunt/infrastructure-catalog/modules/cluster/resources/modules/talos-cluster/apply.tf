@@ -5,7 +5,6 @@ resource "talos_machine_configuration_apply" "machines" {
   machine_configuration_input = data.talos_machine_configuration.this[each.key].machine_configuration
   node                        = each.key
   endpoint                    = split("/", each.value.primary_ip)[0]
-
 }
 
 resource "talos_machine_bootstrap" "this" {
