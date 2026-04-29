@@ -6,11 +6,6 @@ resource "talos_machine_configuration_apply" "machines" {
   node                        = each.key
   endpoint                    = split("/", each.value.primary_ip)[0]
 
-  on_destroy = {
-    graceful = var.on_destroy.graceful
-    reboot   = var.on_destroy.reboot
-    reset    = var.on_destroy.reset
-  }
 }
 
 resource "talos_machine_bootstrap" "this" {
