@@ -346,13 +346,6 @@ unit "talos-cluster" {
     swap_disk_min = local.swap_disk_min_gb
     swap_disk_max = local.swap_disk_max_gb
 
-    # Fix for UEFI + GPU passthrough destroy timeouts - skip all cleanup
-    cluster_on_destroy = {
-      graceful = false # Skip graceful shutdown attempts
-      reboot   = false # Don't reboot
-      reset    = false # Don't reset - just disconnect
-    }
-
     # Tailscale configuration
     ts_authkey = local.account_vars.locals.tailscale.ts_authkey
   }

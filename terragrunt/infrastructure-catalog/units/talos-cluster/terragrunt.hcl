@@ -58,13 +58,6 @@ inputs = {
   # machines map
   machines = jsonencode(values.machines)
 
-  # destroy behavior
-  cluster_on_destroy = try(values.cluster_on_destroy, {
-    graceful = false
-    reboot   = true
-    reset    = true
-  })
-
   # Tailscale configuration
   ts_authkey = try(values.ts_authkey)
 }

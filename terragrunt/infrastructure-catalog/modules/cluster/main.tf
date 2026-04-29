@@ -69,7 +69,6 @@ module "talos_cluster" {
   machines               = local.machines
   cluster_vip            = var.cluster_vip
   bootstrap_charts       = local.bootstrap_charts
-  on_destroy             = var.cluster_on_destroy
   zswap                  = var.zswap
   swap_disk_min          = var.swap_disk_min
   swap_disk_max          = var.swap_disk_max

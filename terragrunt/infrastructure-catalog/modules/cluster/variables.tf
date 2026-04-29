@@ -30,20 +30,6 @@ variable "cluster_service_subnet" {
   default     = "10.96.0.0/12"
 }
 
-variable "cluster_on_destroy" {
-  description = "How to perform node destruction"
-  type = object({
-    graceful = bool
-    reboot   = bool
-    reset    = bool
-  })
-  default = {
-    graceful = false
-    reboot   = true
-    reset    = true
-  }
-}
-
 variable "zswap" {
   description = "Zswap configuration for Talos nodes."
   type = object({

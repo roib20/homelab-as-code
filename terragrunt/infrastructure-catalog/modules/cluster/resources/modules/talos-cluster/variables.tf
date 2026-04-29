@@ -64,20 +64,6 @@ variable "bootstrap_charts" {
   default = []
 }
 
-variable "on_destroy" {
-  description = "How to perform node destruction"
-  type = object({
-    graceful = bool
-    reboot   = bool
-    reset    = bool
-  })
-  default = {
-    graceful = false
-    reboot   = true
-    reset    = true
-  }
-}
-
 variable "zswap" {
   description = "Zswap configuration for Talos nodes"
   type = object({
