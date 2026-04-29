@@ -1,4 +1,6 @@
 ---
+defaultPodOptions:
+  automountServiceAccountToken: false
 controllers:
   transmute:
     pod:
