@@ -1,0 +1,48 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: HTTPRoute
+        name: transmute
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: ConfigMap
+        name: transmute-urls
+      fieldPaths:
+        - data.APP_URL
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+
+- source:
+    kind: ConfigMap
+    name: transmute-urls
+    fieldPath: data.APP_URL
+  targets:
+    - select:
+        kind: Deployment
+        name: transmute
+      fieldPaths:
+        - spec.template.spec.containers.[name=main].env.[name=APP_URL].value
+
+- source:
+    kind: ConfigMap
+    name: transmute-urls
+    fieldPath: data.AUTH_HOST
+  targets:
+    - select:
+        kind: Deployment
+        name: transmute
+      fieldPaths:
+        - spec.template.spec.containers.[name=main].env.[name=OIDC_ISSUER_URL].value
+      options:
+        delimiter: "/"
+        index: 2

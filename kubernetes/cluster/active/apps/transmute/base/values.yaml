@@ -1,0 +1,98 @@
+---
+controllers:
+  transmute:
+    pod:
+      hostUsers: true
+      annotations:
+        secret.reloader.stakater.com/reload: "transmute-kanidm-oauth2-credentials"
+      securityContext:
+        runAsNonRoot: true
+        runAsGroup: 1000
+        runAsUser: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+    containers:
+      main:
+        image:
+          repository: ghcr.io/transmute-app/transmute
+          tag: 0.12.2@sha256:6c329b133973281bc27f15aef19ef96c68b4210515fa172ddfe3fd51991d1afa
+        env:
+          APP_URL: "https://transmute.${FQDN_01}"
+          DATA_DIR: /app/data
+          HOME: /tmp
+          OIDC_ISSUER_URL: "https://auth.${FQDN_01}/oauth2/openid/$(OIDC_CLIENT_ID)"
+          OIDC_CLIENT_ID:
+            valueFrom:
+              secretKeyRef:
+                name: transmute-kanidm-oauth2-credentials
+                key: CLIENT_ID
+          OIDC_CLIENT_SECRET:
+            valueFrom:
+              secretKeyRef:
+                name: transmute-kanidm-oauth2-credentials
+                key: CLIENT_SECRET
+          OIDC_DISPLAY_NAME: Kanidm
+          OIDC_AUTO_CREATE_USERS: "true"
+          OIDC_AUTO_LAUNCH: "true"
+          ALLOW_UNAUTHENTICATED: "false"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            memory: 2Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/health/live
+                port: &port 3313
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 3
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/health/ready
+                port: *port
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 3
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/health/ready
+                port: *port
+              periodSeconds: 10
+              timeoutSeconds: 10
+              failureThreshold: 30
+service:
+  main:
+    controller: transmute
+    ports:
+      http:
+        port: *port
+persistence:
+  data:
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    storageClass: longhorn
+    globalMounts:
+      - path: /app/data
+  tmpfs:
+    type: emptyDir
+    globalMounts:
+      - path: /tmp
