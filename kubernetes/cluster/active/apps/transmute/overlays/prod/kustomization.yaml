@@ -20,7 +20,7 @@ configMapGenerator:
       - /tmp/env-vars.env
   - name: transmute-urls
     literals:
-      - APP_URL=https://transmute.${FQDN_01}
+      - APP_URL=https://convert.${FQDN_01}
       - AUTH_HOST=auth.${FQDN_01}
     options:
       disableNameSuffixHash: true

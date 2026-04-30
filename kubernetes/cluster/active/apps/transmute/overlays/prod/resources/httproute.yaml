@@ -17,7 +17,7 @@ spec:
       name: http-gateway-api
       namespace: envoy-gateway-ingress
   hostnames:
-    - "transmute.${FQDN_01}"
+    - "convert.${FQDN_01}"
   rules:
     - backendRefs:
         - group: ""
