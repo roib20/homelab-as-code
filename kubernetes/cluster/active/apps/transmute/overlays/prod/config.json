@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "transmute",
+  "destName": "in-cluster",
+  "destNamespace": "transmute",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "transmute"
+}
