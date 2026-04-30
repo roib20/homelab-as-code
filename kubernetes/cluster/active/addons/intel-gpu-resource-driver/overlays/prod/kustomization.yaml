@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: intel-gpu-resource-driver-chart
     repo: oci://ghcr.io/intel/intel-resource-drivers-for-kubernetes
-    version: 0.10.0
+    version: 0.10.1
     releaseName: intel-gpu-resource-driver
     namespace: intel-gpu
     valuesFile: ../../base/values.yaml
