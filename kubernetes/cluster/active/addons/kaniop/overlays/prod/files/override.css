@@ -18,4 +18,5 @@
   main .col-md-3:has(img#pve) { order: 16; }
   main .col-md-3:has(img#renovate-operator) { order: 17; }
   main .col-md-3:has(img#seerr) { order: 18; }
+  main .col-md-3:has(img#transmute) { order: 19; }
 }
