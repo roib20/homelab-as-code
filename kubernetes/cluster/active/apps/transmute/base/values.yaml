@@ -19,7 +19,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/transmute-app/transmute
-          tag: 0.12.2@sha256:6c329b133973281bc27f15aef19ef96c68b4210515fa172ddfe3fd51991d1afa
+          tag: 1.0.0@sha256:b08b3cc70ccdca94e3f6aea3d2792509f4647bc407f8a7450fa771aeede62882
         env:
           APP_URL: "https://convert.${FQDN_01}"
           DATA_DIR: /app/data
