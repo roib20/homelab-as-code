@@ -7,7 +7,7 @@ resources:
 helmCharts:
   - name: cyberchef
     repo: oci://oci.trueforge.org/truecharts
-    version: 13.3.0
+    version: 13.4.0
     releaseName: cyberchef
     namespace: cyberchef
     valuesFile: ../../base/values.yaml
