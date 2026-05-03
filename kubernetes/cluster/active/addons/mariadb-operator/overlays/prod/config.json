@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "mariadb-operator",
+  "destName": "in-cluster",
+  "destNamespace": "mariadb-system",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "mariadb-operator"
+}
