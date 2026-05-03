@@ -22,7 +22,7 @@ spec:
           containers:
             - name: external-dns-target-ddns
               # renovate: datasource=docker depName=alpine/k8s
-              image: alpine/k8s:1.35.4
+              image: alpine/k8s:1.36.0
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
