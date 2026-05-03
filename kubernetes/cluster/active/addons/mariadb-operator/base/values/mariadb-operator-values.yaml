@@ -1,0 +1,4 @@
+---
+# https://github.com/mariadb-operator/mariadb-operator/tree/main/deploy/charts/mariadb-operator
+crds:
+  enabled: true
