@@ -8,7 +8,7 @@ resources:
 helmCharts:
   - name: miniflux
     repo: oci://oci.trueforge.org/truecharts
-    version: 18.1.1
+    version: 18.2.0
     releaseName: miniflux
     namespace: miniflux
     valuesFile: ../../base/values.yaml
