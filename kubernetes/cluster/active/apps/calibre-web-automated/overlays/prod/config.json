@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "calibre-web-automated",
+  "destName": "in-cluster",
+  "destNamespace": "calibre",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "calibre-web-automated"
+}

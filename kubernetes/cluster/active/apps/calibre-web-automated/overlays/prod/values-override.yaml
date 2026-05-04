@@ -1,0 +1,75 @@
+---
+persistence:
+  config:
+    accessMode: ReadWriteOnce
+    size: 2Gi
+    storageClass: longhorn
+    advancedMounts:
+      calibre-web-automated:
+        app:
+          - path: /config
+  tmpfs:
+    type: emptyDir
+    advancedMounts:
+      calibre-web-automated:
+        app:
+          - path: /cache
+            subPath: cache
+          - path: /run
+            subPath: run
+          - path: /tmp
+            subPath: tmp
+  media:
+    existingClaim: smb-mediadata-rwx
+    advancedMounts:
+      calibre-web-automated:
+        app:
+          - path: "/calibre-library"
+            subPath: "Media/Books/Calibre Library"
+          - path: "/cwa-book-ingest"
+            subPath: "Media/Books/.bookdrop/cwa"
+rawResources:
+  smb-mediadata-rwx:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    forceRename: smb-mediadata-rwx
+    spec:
+      spec:
+        accessModes:
+          - ReadWriteMany
+        storageClassName: smb-mediadata
+        resources:
+          requests:
+            storage: 100Ti
+  # httproute:
+  #   apiVersion: gateway.networking.k8s.io/v1
+  #   kind: HTTPRoute
+  #   forceRename: calibre-web-automated
+  #   annotations:
+  #     gethomepage.dev/description: Calibre-Web with automated book management.
+  #     gethomepage.dev/enabled: "true"
+  #     gethomepage.dev/group: Media
+  #     gethomepage.dev/icon: calibre-web.svg
+  #     gethomepage.dev/name: Calibre-Web Automated
+  #     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=calibre-web-automated"
+  #   spec:
+  #     spec:
+  #       parentRefs:
+  #         - group: gateway.networking.k8s.io
+  #           kind: Gateway
+  #           name: http-gateway-api
+  #           namespace: envoy-gateway-ingress
+  #       hostnames:
+  #         - "calibre.${FQDN_01}"
+  #       rules:
+  #         - backendRefs:
+  #             - group: ""
+  #               kind: Service
+  #               name: calibre-web-automated
+  #               namespace: calibre
+  #               port: 8083
+  #               weight: 1
+  #           matches:
+  #             - path:
+  #                 type: PathPrefix
+  #                 value: /
