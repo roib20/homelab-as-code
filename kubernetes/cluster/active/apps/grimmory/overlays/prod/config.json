@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "grimmory",
+  "destName": "in-cluster",
+  "destNamespace": "grimmory",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "grimmory"
+}

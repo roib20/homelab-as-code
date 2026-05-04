@@ -1,0 +1,24 @@
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: MariaDB
+metadata:
+  name: grimmory-mariadb
+spec:
+  database: grimmory
+  username: grimmory
+  passwordSecretKeyRef:
+    name: grimmory-mariadb-user-password
+    key: password
+    generate: true
+  myCnf: |
+    [mysqld]
+    character_set_server = utf8mb4
+    collation_server = utf8mb4_uca1400_ai_ci
+    default_authentication_plugin = parsec
+    default_time_zone = '+00:00'
+  tls:
+    enabled: true
+    required: true
+  storage:
+    size: 4Gi
+    storageClassName: longhorn

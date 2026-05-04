@@ -1,0 +1,46 @@
+---
+persistence:
+  data:
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn
+    advancedMounts:
+      grimmory:
+        app:
+          - path: /app/data
+  tmpfs:
+    type: emptyDir
+    advancedMounts:
+      grimmory:
+        app:
+          - path: /tmp
+  tls:
+    type: secret
+    name: grimmory-mariadb-ca-bundle
+    advancedMounts:
+      grimmory:
+        app:
+          - path: /tls
+            readOnly: true
+  media:
+    existingClaim: smb-mediadata-rwx
+    advancedMounts:
+      grimmory:
+        app:
+          - path: "/books"
+            subPath: "Media/Books/Grimmory Library"
+          - path: "/bookdrop"
+            subPath: "Media/Books/.bookdrop/grimmory"
+rawResources:
+  smb-mediadata-rwx:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    forceRename: smb-mediadata-rwx
+    spec:
+      spec:
+        accessModes:
+          - ReadWriteMany
+        storageClassName: smb-mediadata
+        resources:
+          requests:
+            storage: 100Ti
