@@ -28,6 +28,7 @@ locals {
       })
       hostname            = name
       primary_ip          = coalesce(try(machine.primary_ip, ""), try(machine.interfaces[0].addresses[0], ""))
+      endpoint            = try(machine.endpoint, "")
       machine_interfaces  = machine.interfaces
       machine_nameservers = var.nameservers
       extensions          = machine.install.extensions
