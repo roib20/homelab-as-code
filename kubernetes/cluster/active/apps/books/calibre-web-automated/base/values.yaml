@@ -1,0 +1,100 @@
+defaultPodOptions:
+  securityContext:
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+    runAsGroup: 1000
+    runAsNonRoot: false
+    runAsUser: 0
+    seccompProfile:
+      type: RuntimeDefault
+controllers:
+  calibre-web-automated:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/crocodilestick/calibre-web-automated
+          tag: v4.0.6@sha256:c31a738b6d5ec6982c050063dd3f063b6943eb1051fc81144789f840d9093a8d
+        env:
+          CACHE_DIR: /cache
+          CWA_WATCH_MODE: poll
+          NETWORK_SHARE_MODE: "true"
+          PGID: 1000
+          PUID: 1000
+          S6_READ_ONLY_ROOT: "1"
+          S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: "1"
+          TZ: Asia/Jerusalem
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            add:
+              - CHOWN
+              - DAC_OVERRIDE
+              - FOWNER
+              - SETGID
+              - SETUID
+            drop:
+              - ALL
+          readOnlyRootFilesystem: false
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /login
+                port: &port 8083
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 5
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /login
+                port: *port
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 5
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: *port
+              failureThreshold: 90
+              periodSeconds: 5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            memory: 2Gi
+service:
+  app:
+    controller: calibre-web-automated
+    ports:
+      http:
+        port: *port
+persistence:
+  config:
+    accessMode: ReadWriteOnce
+    size: 2Gi
+    storageClass: longhorn
+    retain: true
+    advancedMounts:
+      calibre-web-automated:
+        app:
+          - path: /config
+  tmpfs:
+    type: emptyDir
+    advancedMounts:
+      calibre-web-automated:
+        app:
+          - path: /cache
+            subPath: cache
+          - path: /run
+            subPath: run
+          - path: /tmp
+            subPath: tmp

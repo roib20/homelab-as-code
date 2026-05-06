@@ -1,0 +1,32 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: grimmory
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Self-hosted book library manager.
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: grimmory.svg
+    gethomepage.dev/name: Grimmory
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=grimmory"
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: envoy-gateway-ingress
+  hostnames:
+    - "grimmory.${FQDN_01}"
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: grimmory
+          namespace: grimmory
+          port: &port 6060
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
