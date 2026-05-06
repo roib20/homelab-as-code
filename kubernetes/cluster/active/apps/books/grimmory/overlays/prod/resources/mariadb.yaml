@@ -14,7 +14,6 @@ spec:
     [mysqld]
     character_set_server = utf8mb4
     collation_server = utf8mb4_uca1400_ai_ci
-    default_authentication_plugin = parsec
     default_time_zone = '+00:00'
   tls:
     enabled: true
