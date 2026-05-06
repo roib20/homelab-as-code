@@ -42,7 +42,7 @@ controllers:
             spec:
               httpGet:
                 path: /login
-                port: 8083
+                port: &port 8083
               periodSeconds: 30
               timeoutSeconds: 10
               failureThreshold: 5
@@ -52,7 +52,7 @@ controllers:
             spec:
               httpGet:
                 path: /login
-                port: 8083
+                port: *port
               periodSeconds: 10
               timeoutSeconds: 5
               failureThreshold: 5
@@ -62,7 +62,7 @@ controllers:
             spec:
               httpGet:
                 path: /
-                port: 8083
+                port: *port
               failureThreshold: 90
               periodSeconds: 5
         resources:
@@ -76,7 +76,7 @@ service:
     controller: calibre-web-automated
     ports:
       http:
-        port: 8083
+        port: *port
 persistence:
   config:
     accessMode: ReadWriteOnce

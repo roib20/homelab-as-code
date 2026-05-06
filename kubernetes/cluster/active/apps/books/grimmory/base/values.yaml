@@ -53,7 +53,7 @@ controllers:
           - -jar
           - /app/app.jar
         env:
-          BOOKLORE_PORT: 6060
+          BOOKLORE_PORT: &port 6060
           DISK_TYPE: NETWORK
           DATABASE_URL: "jdbc:mariadb://grimmory-mariadb.grimmory.svc.cluster.local:3306/grimmory\
             ?sslMode=verify-full&serverSslCert=/tls/ca.crt\
@@ -73,7 +73,7 @@ controllers:
             spec:
               httpGet:
                 path: /api/v1/healthcheck
-                port: 6060
+                port: *port
               periodSeconds: 10
               timeoutSeconds: 5
               failureThreshold: 5
@@ -83,7 +83,7 @@ controllers:
             spec:
               httpGet:
                 path: /api/v1/healthcheck
-                port: 6060
+                port: *port
               periodSeconds: 10
               timeoutSeconds: 5
               failureThreshold: 5
@@ -93,7 +93,7 @@ controllers:
             spec:
               httpGet:
                 path: /api/v1/healthcheck
-                port: 6060
+                port: *port
               failureThreshold: 30
               periodSeconds: 10
         securityContext:
@@ -112,7 +112,7 @@ service:
   app:
     ports:
       http:
-        port: 6060
+        port: *port
 persistence:
   data:
     accessMode: ReadWriteOnce

@@ -24,7 +24,7 @@ spec:
           kind: Service
           name: grimmory
           namespace: grimmory
-          port: 6060
+          port: &port 6060
           weight: 1
       matches:
         - path:
