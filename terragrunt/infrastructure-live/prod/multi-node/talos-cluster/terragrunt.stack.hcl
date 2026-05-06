@@ -36,6 +36,7 @@ locals {
     {
       name        = "control-plane-01"
       ip          = "192.168.1.51"
+      endpoint    = "192.168.1.51"
       vm_id       = 1001
       cpu_cores   = 4
       memory      = 14336
@@ -47,6 +48,7 @@ locals {
     {
       name        = "control-plane-02"
       ip          = "192.168.1.52"
+      endpoint    = "192.168.1.52"
       vm_id       = 1002
       cpu_cores   = 4
       memory      = 12288
@@ -58,6 +60,7 @@ locals {
     {
       name        = "control-plane-03"
       ip          = "192.168.1.53"
+      endpoint    = "192.168.1.53"
       vm_id       = 1003
       cpu_cores   = 4
       memory      = 12288
@@ -102,6 +105,7 @@ locals {
         gateway   = "192.168.1.1"
       }]
       primary_ip = node.ip
+      endpoint   = try(node.endpoint, "")
       hostname   = node.name
       vm_id      = node.vm_id
       region     = "${local.cluster_name}"
