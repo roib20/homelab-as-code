@@ -1,0 +1,53 @@
+---
+env:
+  TZ: UTC
+
+service:
+  main:
+    ports:
+      http:
+        port: 80
+  dns-tcp:
+    enabled: true
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    annotations:
+      io.cilium/lb-ipam-ips: "192.168.1.53"
+      metallb.universe.tf/allow-shared-ip: null
+    ports:
+      dns-tcp:
+        enabled: true
+        port: 53
+      dns-over-tls:
+        enabled: true
+        port: 853
+  dns-udp:
+    enabled: true
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    annotations:
+      io.cilium/lb-ipam-ips: "192.168.1.53"
+      metallb.universe.tf/allow-shared-ip: null
+    ports:
+      dns-udp:
+        enabled: true
+        protocol: UDP
+        port: 53
+      dns-over-quic:
+        enabled: true
+        protocol: UDP
+        port: 784
+
+persistence:
+  config:
+    enabled: true
+    retain: true
+    mountPath: /opt/adguardhome/conf
+    accessMode: ReadWriteOnce
+    size: 1Gi
+  data:
+    enabled: true
+    retain: true
+    mountPath: /opt/adguardhome/work
+    accessMode: ReadWriteOnce
+    size: 5Gi

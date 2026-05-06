@@ -1,0 +1,24 @@
+---
+ingress:
+  main:
+    enabled: true
+    ingressClassName: tailscale
+    annotations:
+      tailscale.com/proxy-group: ingress-proxies
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/description: Network-wide ad and tracker blocking DNS server.
+      gethomepage.dev/group: Infrastructure
+      gethomepage.dev/icon: adguard-home.svg
+      gethomepage.dev/name: AdGuard Home
+      gethomepage.dev/pod-selector: "app.kubernetes.io/instance=adguard-home"
+      gethomepage.dev/widget.password: "{{HOMEPAGE_VAR_ADGUARD_PASSWORD}}"
+      gethomepage.dev/widget.type: "adguard"
+      gethomepage.dev/widget.url: "http://adguard-home.adguard-home.svc.cluster.local:80"
+      gethomepage.dev/widget.username: "admin"
+    hosts:
+      - host: "adguard.${FQDN_02}"
+        paths:
+          - path: /
+    tls:
+      - hosts:
+          - "adguard.${FQDN_02}"

@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "adguard-home",
+  "destName": "in-cluster",
+  "destNamespace": "adguard-home",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "adguard-home"
+}
