@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "blocky",
+  "destName": "in-cluster",
+  "destNamespace": "blocky",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "blocky"
+}
