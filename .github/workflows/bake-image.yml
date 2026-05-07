@@ -92,7 +92,7 @@ jobs:
             *.tags=${{ steps.meta.outputs.tags }}
       # 5) Install cosign for keyless signing
       - name: Install cosign
-        uses: sigstore/cosign-installer@v4.1.1
+        uses: sigstore/cosign-installer@v4.1.2
       # 6) Sign every pushed digest returned by Bake metadata
       - name: Sign pushed images
         shell: sh
