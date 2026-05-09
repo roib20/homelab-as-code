@@ -40,7 +40,7 @@ inputs = {
 
   # Memory
   memory = {
-    dedicated = try(values.memory_dedicated, 24576)
+    dedicated = try(values.memory_dedicated, 16384)
   }
 
   # Disk block

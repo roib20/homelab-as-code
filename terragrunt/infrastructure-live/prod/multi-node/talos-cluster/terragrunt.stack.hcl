@@ -38,7 +38,7 @@ locals {
       ip          = "192.168.1.51"
       vm_id       = 1001
       cpu_cores   = 4
-      memory      = 14336
+      memory      = 24576
       system_disk = 100
       data_disk   = 300
       swap_disk   = local.default_swap_disk
