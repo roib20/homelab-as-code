@@ -29,6 +29,7 @@ controllers:
           OPENAI_BASE_URL: "https://generativelanguage.googleapis.com/v1beta/openai/"
           INFERENCE_TEXT_MODEL: "gemini-2.5-flash-lite"
           INFERENCE_IMAGE_MODEL: "gemini-2.5-flash-lite"
+          INFERENCE_NUM_WORKERS: 1
         envFrom:
           - secretRef:
               name: "karakeep"
