@@ -26,14 +26,20 @@ controllers:
                 name: karakeep-kanidm-oauth2-credentials
                 key: CLIENT_SECRET
           OAUTH_WELLKNOWN_URL: "https://auth.${FQDN_01}/oauth2/openid/$(OAUTH_CLIENT_ID)/.well-known/openid-configuration"
+          # https://docs.karakeep.app/configuration/different-ai-providers/#gemini
+          OPENAI_BASE_URL: "https://generativelanguage.googleapis.com/v1beta"
+          INFERENCE_TEXT_MODEL: "gemini-2.5-flash-lite"
+          INFERENCE_IMAGE_MODEL: "gemini-2.5-flash-lite"
         envFrom:
           - secretRef:
               name: "karakeep"
           - secretRef:
               name: "karakeep-meilisearch"
+          - secretRef:
+              name: "karakeep-openai-api-key"
     pod:
       annotations:
-        secret.reloader.stakater.com/reload: "karakeep,karakeep-kanidm-oauth2-credentials,karakeep-meilisearch"
+        secret.reloader.stakater.com/reload: "karakeep,karakeep-kanidm-oauth2-credentials,karakeep-meilisearch,karakeep-openai-api-key"
 meilisearch:
   auth:
     existingMasterKeySecret: "karakeep-meilisearch"

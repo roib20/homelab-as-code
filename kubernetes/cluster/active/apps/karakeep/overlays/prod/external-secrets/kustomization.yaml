@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - karakeep.yaml.externalsecret
   - karakeep-meilisearch.yaml.externalsecret
+  - karakeep-openai_api_key.yaml.externalsecret
