@@ -16,6 +16,7 @@ variable "machines" {
     talos_config = string # https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/#Config.machine
     hostname     = string
     primary_ip   = string
+    endpoint     = optional(string, "")
     machine_interfaces = list(object({
       addresses        = list(string)
       gateway          = optional(string, "")

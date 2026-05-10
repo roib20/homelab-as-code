@@ -160,6 +160,7 @@ variable "machines" {
       })), [])
     }))
     primary_ip = optional(string, "")
+    endpoint   = optional(string, "")
   }))
 }
 

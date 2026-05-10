@@ -5,8 +5,8 @@ metadata:
   name: ingress-lb-pool
 spec:
   blocks:
-    - start: 192.168.1.60
-      stop: 192.168.1.60
+    - start: 192.168.1.51
+      stop: 192.168.1.51
   serviceSelector:
     matchLabels:
       io.kubernetes.service.namespace: envoy-gateway-ingress

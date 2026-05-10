@@ -35,7 +35,8 @@ locals {
   controlplane_nodes = [
     {
       name        = "control-plane-01"
-      ip          = "192.168.1.51"
+      ip          = "192.168.1.61"
+      endpoint    = "192.168.1.61"
       vm_id       = 1001
       cpu_cores   = 4
       memory      = 24576
@@ -46,7 +47,8 @@ locals {
     },
     {
       name        = "control-plane-02"
-      ip          = "192.168.1.52"
+      ip          = "192.168.1.62"
+      endpoint    = "192.168.1.62"
       vm_id       = 1002
       cpu_cores   = 4
       memory      = 12288
@@ -57,7 +59,8 @@ locals {
     },
     {
       name        = "control-plane-03"
-      ip          = "192.168.1.53"
+      ip          = "192.168.1.63"
+      endpoint    = "192.168.1.63"
       vm_id       = 1003
       cpu_cores   = 4
       memory      = 12288
@@ -102,6 +105,7 @@ locals {
         gateway   = "192.168.1.1"
       }]
       primary_ip = node.ip
+      endpoint   = try(node.endpoint, "")
       hostname   = node.name
       vm_id      = node.vm_id
       region     = "${local.cluster_name}"
@@ -113,7 +117,7 @@ locals {
 
   cluster_name           = "talos"
   cluster_endpoint       = local.cluster_vip
-  cluster_vip            = "192.168.1.50"
+  cluster_vip            = "192.168.1.60"
   cluster_node_subnet    = "192.168.1.0/24"
   cluster_pod_subnet     = "10.244.0.0/16"
   cluster_service_subnet = "10.96.0.0/12"
