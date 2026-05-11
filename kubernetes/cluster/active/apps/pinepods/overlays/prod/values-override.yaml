@@ -31,7 +31,7 @@ rawResources:
       gethomepage.dev/enabled: "true"
       gethomepage.dev/description: Self-hosted podcasts server.
       gethomepage.dev/group: Media
-      gethomepage.dev/icon: pinepods.svg
+      gethomepage.dev/icon: sh-pinepods.svg
       gethomepage.dev/name: pinepods
       gethomepage.dev/pod-selector: "app.kubernetes.io/instance=pinepods"
     spec:

@@ -7,7 +7,7 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Self-hosted file converter.
     gethomepage.dev/group: Productivity
-    gethomepage.dev/icon: transmute.svg
+    gethomepage.dev/icon: sh-transmute.svg
     gethomepage.dev/name: Transmute
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=transmute"
 spec:
