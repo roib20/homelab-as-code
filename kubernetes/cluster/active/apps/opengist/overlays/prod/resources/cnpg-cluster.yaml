@@ -1,0 +1,47 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: opengist-postgres
+  namespace: opengist
+spec:
+  instances: 1
+  postgresql:
+    pg_hba:
+      - hostssl opengist opengist all scram-sha-256
+      - host opengist opengist all reject
+  bootstrap:
+    initdb:
+      database: opengist
+      owner: opengist
+      postInitApplicationSQL:
+        - |
+          CREATE OR REPLACE FUNCTION seed_admin_settings()
+          RETURNS event_trigger LANGUAGE plpgsql AS $BODY$
+          DECLARE obj record;
+          BEGIN
+            FOR obj IN SELECT * FROM pg_event_trigger_ddl_commands() LOOP
+              IF obj.object_type = 'table' AND obj.object_identity = 'public.admin_settings' THEN
+                INSERT INTO admin_settings (key, value) VALUES
+                  ('disable-signup', '0'),
+                  ('require-login', '1'),
+                  ('allow-gists-without-login', '0'),
+                  ('disable-login-form', '1'),
+                  ('disable-gravatar', '0');
+              END IF;
+            END LOOP;
+          END;
+          $BODY$;
+        - |
+          CREATE EVENT TRIGGER seed_admin_settings_trigger
+            ON ddl_command_end
+            WHEN TAG IN ('CREATE TABLE')
+            EXECUTE FUNCTION seed_admin_settings();
+  managed:
+    services:
+      disabledDefaultServices:
+        - ro
+        - r
+  storage:
+    size: 2Gi
+    storageClass: longhorn-cnpg
