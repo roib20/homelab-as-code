@@ -16,6 +16,7 @@ helmCharts:
       - values-override.yaml
     includeCRDs: true
 patches:
+  - path: patches/service-http-targetport.yaml
   - path: patches/statefulset-command.yaml
 configMapGenerator:
   - name: env-vars
