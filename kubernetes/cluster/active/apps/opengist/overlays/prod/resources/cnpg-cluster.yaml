@@ -22,7 +22,7 @@ spec:
           BEGIN
             FOR obj IN SELECT * FROM pg_event_trigger_ddl_commands() LOOP
               IF obj.object_type = 'table' AND obj.object_identity = 'public.admin_settings' THEN
-                INSERT INTO admin_settings (key, value) VALUES
+                INSERT INTO public.admin_settings (key, value) VALUES
                   ('disable-signup', '0'),
                   ('require-login', '1'),
                   ('allow-gists-without-login', '0'),
