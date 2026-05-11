@@ -5,9 +5,9 @@ resources:
   - ../../base
   - resources/httproute.yaml
 helmCharts:
-  - name: app-template
-    repo: oci://ghcr.io/bjw-s-labs/helm
-    version: 5.0.0
+  - name: opengist
+    repo: https://helm.opengist.io
+    version: 0.7.0
     releaseName: opengist
     namespace: opengist
     valuesFile: ../../base/values.yaml

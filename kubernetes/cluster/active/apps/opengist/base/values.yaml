@@ -1,48 +1,93 @@
 ---
-defaultPodOptions:
-  securityContext:
-    runAsUser: 0
-    runAsGroup: 1000
-    runAsNonRoot: false
-    fsGroup: 1000
-    fsGroupChangePolicy: OnRootMismatch
-    seccompProfile:
-      type: RuntimeDefault
-controllers:
-  opengist:
-    strategy: Recreate
-    containers:
-      app:
-        image:
-          repository: ghcr.io/thomiceli/opengist
-          tag: 1.12.2@sha256:5cdaaeaf2d73a9c87100fed850416bc258e5ef1fe5208cfa9153f992a6285be5
-        command:
-          - ./opengist
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-            add:
-              - DAC_OVERRIDE
-        resources:
-          requests:
-            cpu: 100m
-            memory: 52M
-          limits:
-            memory: 256M
-service:
-  app:
-    controller: opengist
-    ports:
-      http:
-        port: &port 6157
-      ssh:
-        port: 2222
+image:
+  repository: ghcr.io/thomiceli/opengist
+  tag: "1.12.2"
+  digest: "sha256:5cdaaeaf2d73a9c87100fed850416bc258e5ef1fe5208cfa9153f992a6285be5"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+config:
+  log-level: warn
+  log-output: stdout
+  metrics.enabled: false
+  index: meilisearch
+
+statefulSet:
+  enabled: true
+
+podSecurityContext:
+  runAsUser: 0
+  runAsGroup: 1000
+  runAsNonRoot: false
+  fsGroup: 1000
+  fsGroupChangePolicy: OnRootMismatch
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+    add:
+      - DAC_OVERRIDE
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 52M
+  limits:
+    memory: 256M
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 0
+  timeoutSeconds: 1
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 0
+  timeoutSeconds: 1
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+
 persistence:
-  data:
-    accessMode: ReadWriteOnce
-    size: 1Gi
+  enabled: true
+  mode: shared
+  existingClaim: ""
+  create:
+    enabled: true
+    nameSuffix: shared
     storageClass: longhorn
-    globalMounts:
-      - path: /opengist
+    size: 2Gi
+    accessModes:
+      - ReadWriteMany
+    annotations:
+      helm.sh/resource-policy: keep
+
+deployment:
+  env:
+    - name: UID
+      value: "1000"
+    - name: GID
+      value: "1000"
+
+ingress:
+  enabled: false
+
+service:
+  ssh:
+    enabled: true
+
+meilisearch:
+  enabled: true
+  environment:
+    MEILI_ENV: development
+
+postgresql:
+  enabled: false

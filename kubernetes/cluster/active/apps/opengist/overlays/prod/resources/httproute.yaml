@@ -22,7 +22,7 @@ spec:
     - backendRefs:
         - group: ""
           kind: Service
-          name: opengist
+          name: opengist-http
           namespace: opengist
           port: 6157
           weight: 1

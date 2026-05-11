@@ -1,54 +1,30 @@
 ---
-controllers:
-  opengist:
-    annotations:
-      secret.reloader.stakater.com/reload: "opengist-kanidm-oauth2-credentials"
-    containers:
-      app:
-        env:
-          GID: 1000
-          UID: 1000
-          HOME: /opengist
-          OG_EXTERNAL_URL: "https://gist.${FQDN_01}"
-          OG_OIDC_CLIENT_KEY:
-            valueFrom:
-              secretKeyRef:
-                name: opengist-kanidm-oauth2-credentials
-                key: CLIENT_ID
-          OG_OIDC_SECRET:
-            valueFrom:
-              secretKeyRef:
-                name: opengist-kanidm-oauth2-credentials
-                key: CLIENT_SECRET
-          OG_OIDC_DISCOVERY_URL: "https://auth.${FQDN_01}/oauth2/openid/$(OG_OIDC_CLIENT_KEY)/.well-known/openid-configuration"
-          OG_OIDC_PROVIDER_NAME: "Kanidm"
-          OG_OIDC_GROUP_CLAIM_NAME: "groups"
-          OG_OIDC_ADMIN_GROUP: "opengist-admins"
-          OG_SSH_GIT_ENABLED: "true"
-          OG_SSH_EXTERNAL_DOMAIN: "gist.${FQDN_01}"
-          OG_LOG_LEVEL: warn
-          OG_METRICS_ENABLED: "false"
-          OG_OPENGIST_HOME: /opengist
-        probes:
-          liveness:
-            enabled: true
-            custom: true
-            spec:
-              httpGet:
-                path: /healthcheck
-                port: &port 6157
-              initialDelaySeconds: 0
-              periodSeconds: 10
-              timeoutSeconds: 1
-              failureThreshold: 3
-          readiness:
-            enabled: true
-            custom: true
-            spec:
-              httpGet:
-                path: /healthcheck
-                port: *port
-              initialDelaySeconds: 0
-              periodSeconds: 10
-              timeoutSeconds: 1
-              failureThreshold: 3
+deployment:
+  annotations:
+    secret.reloader.stakater.com/reload: "opengist-kanidm-oauth2-credentials"
+  env:
+    - name: OG_OIDC_CLIENT_KEY
+      valueFrom:
+        secretKeyRef:
+          name: opengist-kanidm-oauth2-credentials
+          key: CLIENT_ID
+    - name: OG_OIDC_DISCOVERY_URL
+      value: "https://auth.${FQDN_01}/oauth2/openid/$(OG_OIDC_CLIENT_KEY)/.well-known/openid-configuration"
+    - name: OG_OIDC_PROVIDER_NAME
+      value: "Kanidm"
+    - name: OG_OIDC_GROUP_CLAIM_NAME
+      value: "groups"
+    - name: OG_OIDC_ADMIN_GROUP
+      value: "opengist-admins"
+    - name: OG_EXTERNAL_URL
+      value: "https://gist.${FQDN_01}"
+    - name: OG_SSH_EXTERNAL_DOMAIN
+      value: "gist.${FQDN_01}"
+    - name: OG_SSH_GIT_ENABLED
+      value: "true"
+    - name: OG_OPENGIST_HOME
+      value: /opengist
+  envFromSecrets:
+    - name: OG_OIDC_SECRET
+      secretName: opengist-kanidm-oauth2-credentials
+      secretKey: CLIENT_SECRET
