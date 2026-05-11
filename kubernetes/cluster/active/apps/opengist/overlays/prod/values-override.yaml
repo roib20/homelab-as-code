@@ -1,4 +1,9 @@
 ---
+replicaCount: 2
+
+config:
+  db-uri: "postgres://placeholder"  # satisfies chart fail-fast validation; OG_DB_URI env var overrides at runtime
+
 deployment:
   annotations:
     secret.reloader.stakater.com/reload: "opengist-kanidm-oauth2-credentials,opengist-meilisearch,opengist-postgres-app,opengist-postgres-ca"

@@ -5,7 +5,8 @@ config:
   log-level: warn
   log-output: stdout
   metrics.enabled: false
-  index: meilisearch
+  index:
+    type: meilisearch
 
 statefulSet:
   enabled: true
