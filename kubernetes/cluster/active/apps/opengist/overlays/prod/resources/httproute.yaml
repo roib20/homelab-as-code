@@ -1,0 +1,32 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: opengist
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Self-hosted Gist service with Git-backed snippets.
+    gethomepage.dev/group: Development
+    gethomepage.dev/icon: opengist.svg
+    gethomepage.dev/name: Opengist
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=opengist"
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: envoy-gateway-ingress
+  hostnames:
+    - "gist.${FQDN_01}"
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: opengist
+          namespace: opengist
+          port: 6157
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /

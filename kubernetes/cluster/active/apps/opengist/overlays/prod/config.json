@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "opengist",
+  "destName": "in-cluster",
+  "destNamespace": "opengist",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "opengist"
+}
