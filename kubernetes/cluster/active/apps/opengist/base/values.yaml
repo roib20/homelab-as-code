@@ -1,10 +1,4 @@
 ---
-image:
-  repository: ghcr.io/thomiceli/opengist
-  tag: "1.12.2"
-  digest: "sha256:5cdaaeaf2d73a9c87100fed850416bc258e5ef1fe5208cfa9153f992a6285be5"
-  pullPolicy: IfNotPresent
-
 replicaCount: 1
 
 config:
