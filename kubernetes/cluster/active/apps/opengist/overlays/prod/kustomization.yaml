@@ -1,0 +1,32 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - external-secrets
+  - resources/cnpg-cluster.yaml
+  - resources/httproute.yaml
+helmCharts:
+  - name: opengist
+    repo: https://helm.opengist.io
+    version: 0.7.0
+    releaseName: opengist
+    namespace: opengist
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+patches:
+  - path: patches/service-http-targetport.yaml
+  - path: patches/statefulset-command.yaml
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+  - name: opengist-oidc
+    literals:
+      - AUTH_HOST=auth.${FQDN_01}
+    options:
+      disableNameSuffixHash: true
+replacements:
+  - path: replacements.yaml

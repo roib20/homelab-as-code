@@ -1,0 +1,44 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        kind: HTTPRoute
+        name: opengist
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: ConfigMap
+        name: opengist-oidc
+      fieldPaths:
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: StatefulSet
+        name: opengist
+      fieldPaths:
+        - spec.template.spec.containers.[name=opengist].env.[name=OG_EXTERNAL_URL].value
+        - spec.template.spec.containers.[name=opengist].env.[name=OG_SSH_EXTERNAL_DOMAIN].value
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: opengist-oidc
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    - select:
+        kind: StatefulSet
+        name: opengist
+      fieldPaths:
+        - spec.template.spec.containers.[name=opengist].env.[name=OG_OIDC_DISCOVERY_URL].value
+      options:
+        delimiter: "/"
+        index: 2

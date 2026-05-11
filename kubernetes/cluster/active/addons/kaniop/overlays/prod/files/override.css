@@ -13,10 +13,11 @@
   main .col-md-3:has(img#metube) { order: 11; }
   main .col-md-3:has(img#miniflux) { order: 12; }
   main .col-md-3:has(img#omnitools) { order: 13; }
-  main .col-md-3:has(img#outline) { order: 14; }
-  main .col-md-3:has(img#pinepods) { order: 15; }
-  main .col-md-3:has(img#pve) { order: 16; }
-  main .col-md-3:has(img#renovate-operator) { order: 17; }
-  main .col-md-3:has(img#seerr) { order: 18; }
-  main .col-md-3:has(img#transmute) { order: 19; }
+  main .col-md-3:has(img#opengist) { order: 14; }
+  main .col-md-3:has(img#outline) { order: 15; }
+  main .col-md-3:has(img#pinepods) { order: 16; }
+  main .col-md-3:has(img#pve) { order: 17; }
+  main .col-md-3:has(img#renovate-operator) { order: 18; }
+  main .col-md-3:has(img#seerr) { order: 19; }
+  main .col-md-3:has(img#transmute) { order: 20; }
 }
