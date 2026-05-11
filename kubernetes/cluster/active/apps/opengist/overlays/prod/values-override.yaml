@@ -1,7 +1,7 @@
 ---
 deployment:
   annotations:
-    secret.reloader.stakater.com/reload: "opengist-kanidm-oauth2-credentials"
+    secret.reloader.stakater.com/reload: "opengist-kanidm-oauth2-credentials,opengist-meilisearch"
   env:
     - name: OG_OIDC_CLIENT_KEY
       valueFrom:
@@ -28,3 +28,15 @@ deployment:
     - name: OG_OIDC_SECRET
       secretName: opengist-kanidm-oauth2-credentials
       secretKey: CLIENT_SECRET
+    - name: OG_MEILI_API_KEY
+      secretName: opengist-meilisearch
+      secretKey: MEILI_MASTER_KEY
+
+meilisearch:
+  enabled: true
+  environment:
+    MEILI_ENV: production
+  auth:
+    existingMasterKeySecret: opengist-meilisearch
+  podAnnotations:
+    secret.reloader.stakater.com/reload: "opengist-meilisearch"
