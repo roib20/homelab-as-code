@@ -3,7 +3,7 @@ controllers:
   grimmory:
     pod:
       annotations:
-        secret.reloader.stakater.com/reload: "grimmory-kanidm-oauth2-credentials,grimmory-mariadb-ca-bundle,grimmory-mariadb-user-password"
+        secret.reloader.stakater.com/reload: "grimmory-mariadb-ca-bundle,grimmory-mariadb-user-password"
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
