@@ -12,6 +12,10 @@ workload:
             readiness:
               spec:
                 timeoutSeconds: 15
+persistence:
+  config:
+    enabled: true
+    type: emptyDir
 configmap:
   config:
     data:
