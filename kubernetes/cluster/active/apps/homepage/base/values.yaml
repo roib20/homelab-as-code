@@ -22,11 +22,32 @@ workload:
         main:
           probes:
             liveness:
-              path: /api/healthcheck
-              timeoutSeconds: 15
+              custom: true
+              spec:
+                httpGet:
+                  path: /api/healthcheck
+                  port: 3000
+                  httpHeaders:
+                    - name: Host
+                      value: localhost
+                timeoutSeconds: 15
+                periodSeconds: 15
+                failureThreshold: 5
+                initialDelaySeconds: 12
             readiness:
-              path: /api/healthcheck
-              timeoutSeconds: 15
+              custom: true
+              spec:
+                httpGet:
+                  path: /api/healthcheck
+                  port: 3000
+                  httpHeaders:
+                    - name: Host
+                      value: localhost
+                timeoutSeconds: 15
+                periodSeconds: 12
+                failureThreshold: 4
+                successThreshold: 2
+                initialDelaySeconds: 10
 persistence:
   config:
     enabled: true
