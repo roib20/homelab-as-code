@@ -1,5 +1,36 @@
 ---
 forceConfigFromValues: true
+workload:
+  main:
+    replicas: 2
+    strategy: RollingUpdate
+    podSpec:
+      hostUsers: true
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - homepage
+                topologyKey: kubernetes.io/hostname
+      containers:
+        main:
+          probes:
+            liveness:
+              path: /api/healthcheck
+              timeoutSeconds: 15
+            readiness:
+              path: /api/healthcheck
+              timeoutSeconds: 15
+persistence:
+  config:
+    enabled: true
+    type: emptyDir
 configmap:
   config:
     data:
