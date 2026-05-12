@@ -2,7 +2,10 @@
 forceConfigFromValues: true
 workload:
   main:
+    replicas: 2
+    strategy: RollingUpdate
     podSpec:
+      affinity: {}
       containers:
         main:
           probes:
