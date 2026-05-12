@@ -17,6 +17,7 @@ persistence:
     accessMode: ReadWriteOnce
     size: 2Gi
     storageClass: longhorn
+    retain: true
     advancedMounts:
       calibre-web-automated:
         app:

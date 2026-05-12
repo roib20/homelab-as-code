@@ -4,6 +4,7 @@ persistence:
     accessMode: ReadWriteOnce
     size: 5Gi
     storageClass: longhorn
+    retain: true
     advancedMounts:
       grimmory:
         app:
