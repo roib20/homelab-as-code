@@ -7,7 +7,7 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Self-hosted book library manager.
     gethomepage.dev/group: Media
-    gethomepage.dev/icon: grimmory.svg
+    gethomepage.dev/icon: sh-grimmory.svg
     gethomepage.dev/name: Grimmory
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=grimmory"
 spec:
