@@ -1,4 +1,17 @@
 ---
+controllers:
+  calibre-web-automated:
+    pod:
+      annotations:
+        secret.reloader.stakater.com/reload: "cwa-secrets"
+    containers:
+      app:
+        env:
+          HARDCOVER_TOKEN:
+            valueFrom:
+              secretKeyRef:
+                name: cwa-secrets
+                key: HARDCOVER_TOKEN
 persistence:
   config:
     accessMode: ReadWriteOnce
