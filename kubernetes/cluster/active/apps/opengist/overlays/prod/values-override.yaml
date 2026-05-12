@@ -12,6 +12,8 @@ deployment:
       value: "1000"
     - name: GID
       value: "1000"
+    - name: OG_GIT_DEFAULT_BRANCH
+      value: "main"
     - name: OG_OIDC_CLIENT_KEY
       valueFrom:
         secretKeyRef:
