@@ -23,7 +23,17 @@ spec:
   hostnames:
     - "grimmory.${FQDN_01}"
   rules:
-    - backendRefs:
+    - filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-Host
+                value: grimmory.${FQDN_01}
+              - name: X-Forwarded-Proto
+                value: https
+              - name: X-Forwarded-Port
+                value: "443"
+      backendRefs:
         - group: ""
           kind: Service
           name: grimmory
