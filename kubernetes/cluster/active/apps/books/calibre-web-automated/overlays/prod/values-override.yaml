@@ -3,7 +3,7 @@ controllers:
   calibre-web-automated:
     pod:
       annotations:
-        secret.reloader.stakater.com/reload: "cwa-secrets"
+        secret.reloader.stakater.com/reload: "calibre-web-automated-kanidm-oauth2-credentials,cwa-secrets"
     containers:
       app:
         env:
