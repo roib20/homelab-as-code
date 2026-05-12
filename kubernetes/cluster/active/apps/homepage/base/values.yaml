@@ -11,11 +11,11 @@ workload:
         main:
           probes:
             liveness:
-              spec:
-                timeoutSeconds: 15
+              path: /api/healthcheck
+              timeoutSeconds: 15
             readiness:
-              spec:
-                timeoutSeconds: 15
+              path: /api/healthcheck
+              timeoutSeconds: 15
 persistence:
   config:
     enabled: true
