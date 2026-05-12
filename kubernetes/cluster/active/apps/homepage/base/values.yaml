@@ -6,7 +6,18 @@ workload:
     strategy: RollingUpdate
     podSpec:
       hostUsers: true
-      affinity: {}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - homepage
+                topologyKey: kubernetes.io/hostname
       containers:
         main:
           probes:
