@@ -5,6 +5,7 @@ workload:
     replicas: 2
     strategy: RollingUpdate
     podSpec:
+      hostUsers: true
       affinity: {}
       containers:
         main:
