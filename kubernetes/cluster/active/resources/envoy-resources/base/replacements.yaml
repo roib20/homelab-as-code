@@ -37,7 +37,6 @@
     - select:
         apiVersion: gateway.networking.k8s.io/v1
         kind: BackendTLSPolicy
-        name: idm-backend-tls
       fieldPaths:
         - spec.validation.hostname
       options:

@@ -4,6 +4,9 @@ kind: EnvoyProxy
 metadata:
   name: http-gateway-api
 spec:
+  backendTLS:
+    minVersion: "1.3"
+    maxVersion: "1.3"
   provider:
     type: Kubernetes
     kubernetes:
