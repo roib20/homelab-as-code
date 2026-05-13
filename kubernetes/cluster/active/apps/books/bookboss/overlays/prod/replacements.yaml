@@ -1,0 +1,47 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    # HTTPRoute hostname
+    - select:
+        kind: HTTPRoute
+        name: bookboss
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    # Public frontend base URL
+    - select:
+        kind: Deployment
+        name: bookboss
+      fieldPaths:
+        - spec.template.spec.containers.[name=app].env.[name=BOOKBOSS__FRONTEND__BASE_URL].value
+      options:
+        delimiter: "."
+        index: 1
+    # Build auth host used by OIDC discovery URL
+    - select:
+        kind: ConfigMap
+        name: bookboss-oidc
+      fieldPaths:
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: bookboss-oidc
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    # OIDC discovery URL auth host (uses $(BOOKBOSS__OIDC__CLIENT_ID) for the client ID at runtime)
+    - select:
+        kind: Deployment
+        name: bookboss
+      fieldPaths:
+        - spec.template.spec.containers.[name=app].env.[name=BOOKBOSS__OIDC__DISCOVERY_URL].value
+      options:
+        delimiter: "/"
+        index: 2

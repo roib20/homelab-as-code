@@ -1,0 +1,30 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - external-secrets
+  - resources/httproute.yaml
+  - resources/mariadb.yaml
+  - resources/smb-mediadata-rwx.yaml
+helmCharts:
+  - name: app-template
+    repo: oci://ghcr.io/bjw-s-labs/helm
+    version: 4.6.2
+    releaseName: bookboss
+    namespace: bookboss
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+  - name: bookboss-oidc
+    literals:
+      - AUTH_HOST=auth.placeholder
+    options:
+      disableNameSuffixHash: true
+replacements:
+  - path: replacements.yaml
