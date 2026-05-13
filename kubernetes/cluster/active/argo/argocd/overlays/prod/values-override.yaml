@@ -8,9 +8,6 @@ controller:
         release: kube-prometheus-stack
 
 server:
-  podAnnotations:
-    configmap.reloader.stakater.com/reload: "argocd-cm,argocd-cmd-params-cm,argocd-rbac-cm"
-    secret.reloader.stakater.com/reload: "argocd-secret"
   metrics:
     enabled: true
     serviceMonitor:

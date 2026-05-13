@@ -6,15 +6,29 @@ redis-ha:
   enabled: true
 controller:
   replicas: 1
+  podAnnotations:
+    configmap.reloader.stakater.com/reload: "argocd-cm,argocd-cmd-params-cm,argocd-rbac-cm,argocd-tls-certs-cm"
+    secret.reloader.stakater.com/reload: "argocd-secret"
 server:
   replicas: 2
+  podAnnotations:
+    configmap.reloader.stakater.com/reload: "argocd-cm,argocd-cmd-params-cm,argocd-rbac-cm,argocd-tls-certs-cm"
+    secret.reloader.stakater.com/reload: "argocd-secret,argocd-server-tls"
 applicationSet:
   replicas: 2
+  podAnnotations:
+    configmap.reloader.stakater.com/reload: "argocd-cm,argocd-cmd-params-cm"
+    secret.reloader.stakater.com/reload: "argocd-secret"
+notifications:
+  podAnnotations:
+    configmap.reloader.stakater.com/reload: "argocd-cm,argocd-cmd-params-cm,argocd-notifications-cm"
+    secret.reloader.stakater.com/reload: "argocd-notifications-secret,argocd-secret"
 repoServer:
   replicas: 2
   # Restart on secrets change
   podAnnotations:
-    secret.reloader.stakater.com/reload: "argocd-secret-merge,env-vars,git-credentials"
+    configmap.reloader.stakater.com/reload: "argocd-cm,argocd-cmd-params-cm,argocd-gpg-keys-cm,argocd-ssh-known-hosts-cm,argocd-tls-certs-cm"
+    secret.reloader.stakater.com/reload: "argocd-secret,argocd-secret-merge,env-vars,git-credentials"
   # Mount env-vars
   envFrom:
     - secretRef:
