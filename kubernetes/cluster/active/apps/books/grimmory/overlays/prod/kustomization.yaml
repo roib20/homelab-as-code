@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
   - resources/mariadb.yaml
-  # - resources/httproute.yaml
+  - resources/httproute.yaml
 helmCharts:
   - name: app-template
     repo: oci://ghcr.io/bjw-s-labs/helm

@@ -9,6 +9,7 @@
         name: grimmory
       fieldPaths:
         - spec.hostnames.0
+        - spec.rules.0.filters.0.requestHeaderModifier.set.0.value
       options:
         delimiter: "."
         index: 1

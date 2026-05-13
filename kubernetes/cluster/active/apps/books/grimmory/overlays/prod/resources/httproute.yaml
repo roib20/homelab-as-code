@@ -7,9 +7,13 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Self-hosted book library manager.
     gethomepage.dev/group: Media
-    gethomepage.dev/icon: grimmory.svg
+    gethomepage.dev/icon: sh-grimmory.svg
     gethomepage.dev/name: Grimmory
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=grimmory"
+    gethomepage.dev/widget.type: "booklore"
+    gethomepage.dev/widget.url: "http://grimmory.grimmory.svc.cluster.local:6060"
+    gethomepage.dev/widget.username: "{{HOMEPAGE_VAR_GRIMMORY_USERNAME}}"
+    gethomepage.dev/widget.password: "{{HOMEPAGE_VAR_GRIMMORY_PASSWORD}}"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
@@ -19,7 +23,17 @@ spec:
   hostnames:
     - "grimmory.${FQDN_01}"
   rules:
-    - backendRefs:
+    - filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-Host
+                value: grimmory.${FQDN_01}
+              - name: X-Forwarded-Proto
+                value: https
+              - name: X-Forwarded-Port
+                value: "443"
+      backendRefs:
         - group: ""
           kind: Service
           name: grimmory
