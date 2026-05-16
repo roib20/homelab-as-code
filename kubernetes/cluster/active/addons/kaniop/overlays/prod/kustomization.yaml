@@ -8,7 +8,7 @@ resources:
 helmCharts:
   - name: kaniop
     repo: oci://ghcr.io/pando85/helm-charts
-    version: 0.5.9
+    version: 0.7.2
     releaseName: kaniop
     namespace: kaniop
     valuesFile: ../../base/values.yaml
