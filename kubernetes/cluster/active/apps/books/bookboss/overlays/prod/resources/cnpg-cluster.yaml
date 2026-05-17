@@ -1,0 +1,24 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: bookboss-postgres
+  namespace: bookboss
+spec:
+  instances: 1
+  postgresql:
+    pg_hba:
+      - hostssl bookboss bookboss all scram-sha-256
+      - host bookboss bookboss all reject
+  bootstrap:
+    initdb:
+      database: bookboss
+      owner: bookboss
+  managed:
+    services:
+      disabledDefaultServices:
+        - ro
+        - r
+  storage:
+    size: 4Gi
+    storageClass: longhorn-cnpg

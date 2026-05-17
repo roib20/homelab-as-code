@@ -4,8 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
   - external-secrets
+  - resources/cnpg-cluster.yaml
   - resources/httproute.yaml
-  - resources/mariadb.yaml
   - resources/smb-mediadata-rwx.yaml
 helmCharts:
   - name: app-template
