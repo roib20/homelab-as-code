@@ -10,15 +10,17 @@ immich:
 server:
   rawResources:
     immich-kubernetes-secretstore-serviceaccount:
-      apiVersion: v1
-      kind: ServiceAccount
       forceRename: immich-kubernetes-secretstore
+      manifest:
+        apiVersion: v1
+        kind: ServiceAccount
+        automountServiceAccountToken: false
 
     immich-kubernetes-secretstore:
-      apiVersion: external-secrets.io/v1
-      kind: SecretStore
       forceRename: immich-kubernetes-secretstore
-      spec:
+      manifest:
+        apiVersion: external-secrets.io/v1
+        kind: SecretStore
         spec:
           provider:
             kubernetes:
@@ -33,10 +35,10 @@ server:
                   name: immich-kubernetes-secretstore
 
     immich-kubernetes-secretstore-role:
-      apiVersion: rbac.authorization.k8s.io/v1
-      kind: Role
       forceRename: immich-kubernetes-secretstore
-      spec:
+      manifest:
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: Role
         rules:
           - apiGroups: [""]
             resources: ["secrets"]
@@ -47,10 +49,10 @@ server:
             verbs: ["create"]
 
     immich-kubernetes-secretstore-rolebinding:
-      apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
       forceRename: immich-kubernetes-secretstore
-      spec:
+      manifest:
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: RoleBinding
         roleRef:
           apiGroup: rbac.authorization.k8s.io
           kind: Role
@@ -61,18 +63,18 @@ server:
             namespace: immich
 
     env-vars:
-      apiVersion: v1
-      kind: Secret
       forceRename: env-vars
-      spec:
+      manifest:
+        apiVersion: v1
+        kind: Secret
         stringData:
           FQDN_01: "${FQDN_01}"
 
     immich-config:
-      apiVersion: external-secrets.io/v1
-      kind: ExternalSecret
       forceRename: immich-config
-      spec:
+      manifest:
+        apiVersion: external-secrets.io/v1
+        kind: ExternalSecret
         spec:
           refreshInterval: 1h
           secretStoreRef:
