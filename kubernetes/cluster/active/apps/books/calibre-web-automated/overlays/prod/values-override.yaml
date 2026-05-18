@@ -44,10 +44,10 @@ persistence:
             subPath: "Media/Books/.bookdrop/cwa"
 rawResources:
   smb-mediadata-rwx:
-    apiVersion: v1
-    kind: PersistentVolumeClaim
     forceRename: smb-mediadata-rwx
-    spec:
+    manifest:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
       spec:
         accessModes:
           - ReadWriteMany
@@ -56,21 +56,22 @@ rawResources:
           requests:
             storage: 100Ti
   httproute:
-    apiVersion: gateway.networking.k8s.io/v1
-    kind: HTTPRoute
     forceRename: calibre-web-automated
-    annotations:
-      gethomepage.dev/description: Calibre-Web with automated book management.
-      gethomepage.dev/enabled: "true"
-      gethomepage.dev/group: Media
-      gethomepage.dev/icon: calibre-web.svg
-      gethomepage.dev/name: Calibre-Web Automated
-      gethomepage.dev/pod-selector: "app.kubernetes.io/instance=calibre-web-automated"
-      gethomepage.dev/widget.type: "calibreweb"
-      gethomepage.dev/widget.url: "http://calibre-web-automated.calibre.svc.cluster.local:8083"
-      gethomepage.dev/widget.username: "{{`{{HOMEPAGE_VAR_CWA_USERNAME}}`}}"
-      gethomepage.dev/widget.password: "{{`{{HOMEPAGE_VAR_CWA_PASSWORD}}`}}"
-    spec:
+    manifest:
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        annotations:
+          gethomepage.dev/description: Calibre-Web with automated book management.
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Media
+          gethomepage.dev/icon: calibre-web.svg
+          gethomepage.dev/name: Calibre-Web Automated
+          gethomepage.dev/pod-selector: "app.kubernetes.io/instance=calibre-web-automated"
+          gethomepage.dev/widget.type: "calibreweb"
+          gethomepage.dev/widget.url: "http://calibre-web-automated.calibre.svc.cluster.local:8083"
+          gethomepage.dev/widget.username: "{{`{{HOMEPAGE_VAR_CWA_USERNAME}}`}}"
+          gethomepage.dev/widget.password: "{{`{{HOMEPAGE_VAR_CWA_PASSWORD}}`}}"
       spec:
         parentRefs:
           - group: gateway.networking.k8s.io

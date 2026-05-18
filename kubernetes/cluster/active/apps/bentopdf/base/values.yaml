@@ -1,4 +1,6 @@
 ---
+global:
+  createDefaultServiceAccount: true
 controllers:
   main:
     strategy: RollingUpdate

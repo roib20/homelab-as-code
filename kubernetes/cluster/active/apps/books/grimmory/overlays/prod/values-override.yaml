@@ -34,10 +34,10 @@ persistence:
             subPath: "Media/Books/.bookdrop/grimmory"
 rawResources:
   smb-mediadata-rwx:
-    apiVersion: v1
-    kind: PersistentVolumeClaim
     forceRename: smb-mediadata-rwx
-    spec:
+    manifest:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
       spec:
         accessModes:
           - ReadWriteMany

@@ -11,10 +11,10 @@ persistence:
 
 rawResources:
   smb-mediadata-rwx:
-    apiVersion: v1
-    kind: PersistentVolumeClaim
     forceRename: smb-mediadata-rwx
-    spec:
+    manifest:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
       spec:
         accessModes:
           - ReadWriteMany
@@ -24,17 +24,18 @@ rawResources:
             storage: 100Ti
 
   httproute:
-    apiVersion: gateway.networking.k8s.io/v1
-    kind: HTTPRoute
     forceRename: pinepods
-    annotations:
-      gethomepage.dev/enabled: "true"
-      gethomepage.dev/description: Self-hosted podcasts server.
-      gethomepage.dev/group: Media
-      gethomepage.dev/icon: sh-pinepods.svg
-      gethomepage.dev/name: pinepods
-      gethomepage.dev/pod-selector: "app.kubernetes.io/instance=pinepods"
-    spec:
+    manifest:
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/description: Self-hosted podcasts server.
+          gethomepage.dev/group: Media
+          gethomepage.dev/icon: sh-pinepods.svg
+          gethomepage.dev/name: pinepods
+          gethomepage.dev/pod-selector: "app.kubernetes.io/instance=pinepods"
       spec:
         parentRefs:
           - group: gateway.networking.k8s.io
@@ -57,10 +58,10 @@ rawResources:
                   value: /
 
   httproute-redirect:
-    apiVersion: gateway.networking.k8s.io/v1
-    kind: HTTPRoute
     forceRename: pinepods-redirect
-    spec:
+    manifest:
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
       spec:
         parentRefs:
           - group: gateway.networking.k8s.io

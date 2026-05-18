@@ -1,4 +1,8 @@
 ---
+global:
+  createDefaultServiceAccount: true
+defaultPodOptions:
+  automountServiceAccountToken: false
 controllers:
   omnitools:
     strategy: RollingUpdate

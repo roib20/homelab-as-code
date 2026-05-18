@@ -13,10 +13,10 @@ persistence:
             readOnly: false
 rawResources:
   smb-mediadata-rwx:
-    apiVersion: v1
-    kind: PersistentVolumeClaim
     forceRename: smb-mediadata-rwx
-    spec:
+    manifest:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
       spec:
         accessModes:
           - ReadWriteMany
@@ -25,20 +25,21 @@ rawResources:
           requests:
             storage: 100Ti
   httproute:
-    apiVersion: gateway.networking.k8s.io/v1
-    kind: HTTPRoute
     forceRename: audiobookshelf
-    annotations:
-      gethomepage.dev/enabled: "true"
-      gethomepage.dev/description: Self-hosted audiobook, eBooks and podcast server.
-      gethomepage.dev/group: Media
-      gethomepage.dev/icon: audiobookshelf.svg
-      gethomepage.dev/name: audiobookshelf
-      gethomepage.dev/pod-selector: "app.kubernetes.io/instance=audiobookshelf"
-      gethomepage.dev/widget.type: "audiobookshelf"
-      gethomepage.dev/widget.url: "http://audiobookshelf.audiobookshelf.svc.cluster.local:80"
-      gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_AUDIOBOOKSHELF_KEY}}`}}"
-    spec:
+    manifest:
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/description: Self-hosted audiobook, eBooks and podcast server.
+          gethomepage.dev/group: Media
+          gethomepage.dev/icon: audiobookshelf.svg
+          gethomepage.dev/name: audiobookshelf
+          gethomepage.dev/pod-selector: "app.kubernetes.io/instance=audiobookshelf"
+          gethomepage.dev/widget.type: "audiobookshelf"
+          gethomepage.dev/widget.url: "http://audiobookshelf.audiobookshelf.svc.cluster.local:80"
+          gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_AUDIOBOOKSHELF_KEY}}`}}"
       spec:
         parentRefs:
           - group: gateway.networking.k8s.io
@@ -60,10 +61,10 @@ rawResources:
                   type: PathPrefix
                   value: /
   httproute-redirect:
-    apiVersion: gateway.networking.k8s.io/v1
-    kind: HTTPRoute
     forceRename: audiobookshelf-redirect
-    spec:
+    manifest:
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
       spec:
         parentRefs:
           - group: gateway.networking.k8s.io
