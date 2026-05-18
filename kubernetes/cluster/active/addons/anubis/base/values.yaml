@@ -1,4 +1,6 @@
 ---
+global:
+  createDefaultServiceAccount: false
 controllers:
   anubis:
     type: deployment
@@ -76,6 +78,7 @@ service:
       metrics:
         port: 9090
 defaultPodOptions:
+  automountServiceAccountToken: false
   annotations:
     secret.reloader.stakater.com/reload: anubis-key
 anubisPodOptions:

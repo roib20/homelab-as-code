@@ -1,6 +1,9 @@
 ---
+global:
+  createDefaultServiceAccount: false
 defaultPodOptionsStrategy: merge
 defaultPodOptions:
+  automountServiceAccountToken: false
   securityContext:
     fsGroupChangePolicy: OnRootMismatch
     seccompProfile:

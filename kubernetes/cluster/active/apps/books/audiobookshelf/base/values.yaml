@@ -1,4 +1,8 @@
 ---
+global:
+  createDefaultServiceAccount: false
+defaultPodOptions:
+  automountServiceAccountToken: false
 controllers:
   audiobookshelf:
     pod:
