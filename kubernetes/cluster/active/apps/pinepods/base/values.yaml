@@ -1,6 +1,6 @@
 ---
 global:
-  createDefaultServiceAccount: false
+  createDefaultServiceAccount: true
 defaultPodOptionsStrategy: merge
 defaultPodOptions:
   automountServiceAccountToken: false

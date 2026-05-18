@@ -1,5 +1,5 @@
 global:
-  createDefaultServiceAccount: false
+  createDefaultServiceAccount: true
 defaultPodOptions:
   automountServiceAccountToken: false
   securityContext:
