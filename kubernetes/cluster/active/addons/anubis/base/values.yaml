@@ -10,21 +10,14 @@ controllers:
           tag: v1.25.0
         # https://anubis.techaro.lol/docs/admin/installation/#environment-variables
         env:
-          - name: BIND
-            value: ":8923"
-          - name: DIFFICULTY
-            value: "4"
-          - name: METRICS_BIND
-            value: ":9090"
-          - name: SERVE_ROBOTS_TXT
-            value: "true"
-          - name: TARGET
-            value: "http://http-gateway-api.envoy-gateway-ingress.svc.cluster.local:80"
-          - name: OG_PASSTHROUGH
-            value: "false"
-          - name: USE_REMOTE_ADDRESS
-            value: "false"
-          - name: ED25519_PRIVATE_KEY_HEX
+          BIND: ":8923"
+          DIFFICULTY: "4"
+          METRICS_BIND: ":9090"
+          SERVE_ROBOTS_TXT: "true"
+          TARGET: "http://http-gateway-api.envoy-gateway-ingress.svc.cluster.local:80"
+          OG_PASSTHROUGH: "false"
+          USE_REMOTE_ADDRESS: "false"
+          ED25519_PRIVATE_KEY_HEX:
             valueFrom:
               secretKeyRef:
                 name: anubis-key

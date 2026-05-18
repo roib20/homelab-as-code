@@ -295,10 +295,10 @@ persistence:
 
 rawResources:
   database:
-    apiVersion: postgresql.cnpg.io/v1
-    kind: Cluster
     forceRename: pinepods-postgres
-    spec:
+    manifest:
+      apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
       spec:
         instances: 1
         bootstrap:
@@ -322,10 +322,10 @@ rawResources:
             memory: 2400Mi
 
   external-secret-pinepods:
-    apiVersion: external-secrets.io/v1
-    kind: ExternalSecret
     forceRename: pinepods-env
-    spec:
+    manifest:
+      apiVersion: external-secrets.io/v1
+      kind: ExternalSecret
       spec:
         refreshInterval: 1h
         secretStoreRef:
