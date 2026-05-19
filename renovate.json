@@ -105,9 +105,9 @@
       "groupName": "Envoy Gateway",
       "groupSlug": "envoy-gateway",
       "matchPackageNames": [
-        "gateway-helm",
-        "gateway-crds-helm",
-        "gateway-addons-helm"
+        "/gateway-helm$/",
+        "/gateway-crds-helm$/",
+        "/gateway-addons-helm$/"
       ],
       "minimumGroupSize": 2
     },
