@@ -7,6 +7,7 @@ locals {
   nodes            = [for k, v in local.machines : k]
   node_ips         = [for k, v in local.machines : split("/", v.primary_ip)[0]]
   controlplane_ips = [for k, v in local.machines : split("/", v.primary_ip)[0] if yamldecode(v.talos_config).type == "controlplane"]
+  worker_ips       = [for k, v in local.machines : split("/", v.primary_ip)[0] if yamldecode(v.talos_config).type == "worker"]
 
   cluster_name     = try(yamldecode(var.talos_cluster_config).clusterName, "talos.local")
   cluster_endpoint = yamldecode(var.talos_cluster_config).controlPlane.endpoint
