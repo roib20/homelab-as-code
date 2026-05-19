@@ -50,6 +50,20 @@
   ],
   "packageRules": [
     {
+      "commitMessageExtra": "( {{currentVersion}} \u2794 {{newVersion}} )",
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ]
+    },
+    {
+      "commitMessageExtra": "( {{currentDigestShort}} \u2794 {{newDigestShort}} )",
+      "matchUpdateTypes": [
+        "digest"
+      ]
+    },
+    {
       "description": "Alpine Linux Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
