@@ -30,6 +30,12 @@ variable "cluster_service_subnet" {
   default     = "10.96.0.0/12"
 }
 
+variable "enable_usernamespaces" {
+  description = "Enable User Namespaces support in Talos (apiServer feature gate, sysctl, and kubelet featureGate)"
+  type        = bool
+  default     = true
+}
+
 variable "zswap" {
   description = "Zswap configuration for Talos nodes."
   type = object({

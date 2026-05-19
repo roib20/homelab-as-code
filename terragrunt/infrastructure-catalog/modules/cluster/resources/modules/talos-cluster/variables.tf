@@ -124,6 +124,12 @@ variable "timeout" {
   default     = "10m"
 }
 
+variable "enable_usernamespaces" {
+  description = "Enable User Namespaces support in Talos (apiServer feature gate, sysctl, and kubelet featureGate)"
+  type        = bool
+  default     = true
+}
+
 variable "ts_authkey" {
   description = "Tailscale auth key for connecting nodes to Tailscale network"
   type        = string
