@@ -5,7 +5,7 @@ workload:
     replicas: 2
     strategy: RollingUpdate
     podSpec:
-      hostUsers: true
+      hostUsers: false
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

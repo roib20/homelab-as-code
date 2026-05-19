@@ -1,6 +1,6 @@
 ---
 podOptions:
-  hostUsers: true
+  hostUsers: false
 workload:
   main:
     podSpec:
