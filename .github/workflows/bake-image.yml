@@ -91,6 +91,8 @@ jobs:
             *.cache-to=type=gha,mode=max
             *.tags=${{ steps.meta.outputs.tags }}
       # 5) Install cosign for keyless signing
+      - name: Install gettext (provides envsubst, required by cosign-installer v4)
+        run: sudo apt-get update -qq && sudo apt-get install --assume-yes --no-install-recommends gettext-base
       - name: Install cosign
         uses: sigstore/cosign-installer@v4.1.2
       # 6) Sign every pushed digest returned by Bake metadata
