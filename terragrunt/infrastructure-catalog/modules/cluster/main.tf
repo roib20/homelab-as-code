@@ -73,6 +73,5 @@ module "talos_cluster" {
   zswap                  = var.zswap
   swap_disk_min          = var.swap_disk_min
   swap_disk_max          = var.swap_disk_max
-  enable_usernamespaces  = var.enable_usernamespaces
   ts_authkey             = var.ts_authkey
 }

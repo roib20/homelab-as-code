@@ -1,15 +1,5 @@
 # https://docs.siderolabs.com/kubernetes-guides/security/usernamespace
 ---
-%{ if type == "controlplane" ~}
-cluster:
-  apiServer:
-    extraArgs:
-      feature-gates: UserNamespacesSupport=true
-%{ endif ~}
 machine:
   sysctls:
     user.max_user_namespaces: "11255"
-  kubelet:
-    extraConfig:
-      featureGates:
-        UserNamespacesSupport: true
