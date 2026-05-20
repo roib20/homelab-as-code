@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "bookboss",
+  "destName": "in-cluster",
+  "destNamespace": "bookboss",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "bookboss"
+}
