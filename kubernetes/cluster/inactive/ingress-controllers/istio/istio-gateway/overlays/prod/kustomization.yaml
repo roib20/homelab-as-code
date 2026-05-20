@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: gateway
     repo: oci://gcr.io/istio-release/charts
-    version: 1.29.2
+    version: 1.30.0
     releaseName: istio-ingressgateway
     namespace: istio-ingress
     valuesFile: ../../base/values.yaml
