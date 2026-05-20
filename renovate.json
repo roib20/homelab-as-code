@@ -50,6 +50,20 @@
   ],
   "packageRules": [
     {
+      "commitMessageExtra": "( {{currentVersion}} \u2794 {{newVersion}} )",
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ]
+    },
+    {
+      "commitMessageExtra": "( {{currentDigestShort}} \u2794 {{newDigestShort}} )",
+      "matchUpdateTypes": [
+        "digest"
+      ]
+    },
+    {
       "description": "Alpine Linux Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
@@ -105,9 +119,9 @@
       "groupName": "Envoy Gateway",
       "groupSlug": "envoy-gateway",
       "matchPackageNames": [
-        "gateway-helm",
-        "gateway-crds-helm",
-        "gateway-addons-helm"
+        "/gateway-helm$/",
+        "/gateway-crds-helm$/",
+        "/gateway-addons-helm$/"
       ],
       "minimumGroupSize": 2
     },
