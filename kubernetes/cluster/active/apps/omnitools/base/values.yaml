@@ -7,7 +7,7 @@ controllers:
   omnitools:
     strategy: RollingUpdate
     pod:
-      hostUsers: true
+      hostUsers: false
       securityContext:
         runAsNonRoot: true
         runAsGroup: 1000

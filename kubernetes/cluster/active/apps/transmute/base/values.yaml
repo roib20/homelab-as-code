@@ -6,7 +6,7 @@ defaultPodOptions:
 controllers:
   transmute:
     pod:
-      hostUsers: true
+      hostUsers: false
       annotations:
         secret.reloader.stakater.com/reload: "transmute-kanidm-oauth2-credentials"
       securityContext:
