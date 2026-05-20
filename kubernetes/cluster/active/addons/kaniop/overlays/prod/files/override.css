@@ -3,23 +3,24 @@
   main .col-md-3:has(img#argocd) { order: 1; }
   main .col-md-3:has(img#audiobookshelf) { order: 2; }
   main .col-md-3:has(img#bentopdf) { order: 3; }
-  main .col-md-3:has(img#calibre-web-automated) { order: 4; }
-  main .col-md-3:has(img#cyberchef) { order: 5; }
-  main .col-md-3:has(img#forgejo) { order: 6; }
-  main .col-md-3:has(img#grimmory) { order: 7; }
-  main .col-md-3:has(img#immich) { order: 8; }
-  main .col-md-3:has(img#it-tools) { order: 9; }
-  main .col-md-3:has(img#jellyfin) { order: 10; }
-  main .col-md-3:has(img#karakeep) { order: 11; }
-  main .col-md-3:has(img#mealie) { order: 12; }
-  main .col-md-3:has(img#metube) { order: 13; }
-  main .col-md-3:has(img#miniflux) { order: 14; }
-  main .col-md-3:has(img#omnitools) { order: 15; }
-  main .col-md-3:has(img#opengist) { order: 16; }
-  main .col-md-3:has(img#outline) { order: 17; }
-  main .col-md-3:has(img#pinepods) { order: 18; }
-  main .col-md-3:has(img#pve) { order: 19; }
-  main .col-md-3:has(img#renovate-operator) { order: 20; }
-  main .col-md-3:has(img#seerr) { order: 21; }
-  main .col-md-3:has(img#transmute) { order: 22; }
+  main .col-md-3:has(img#bookboss) { order: 4; }
+  main .col-md-3:has(img#calibre-web-automated) { order: 5; }
+  main .col-md-3:has(img#cyberchef) { order: 6; }
+  main .col-md-3:has(img#forgejo) { order: 7; }
+  main .col-md-3:has(img#grimmory) { order: 8; }
+  main .col-md-3:has(img#immich) { order: 9; }
+  main .col-md-3:has(img#it-tools) { order: 10; }
+  main .col-md-3:has(img#jellyfin) { order: 11; }
+  main .col-md-3:has(img#karakeep) { order: 12; }
+  main .col-md-3:has(img#mealie) { order: 13; }
+  main .col-md-3:has(img#metube) { order: 14; }
+  main .col-md-3:has(img#miniflux) { order: 15; }
+  main .col-md-3:has(img#omnitools) { order: 16; }
+  main .col-md-3:has(img#opengist) { order: 17; }
+  main .col-md-3:has(img#outline) { order: 18; }
+  main .col-md-3:has(img#pinepods) { order: 19; }
+  main .col-md-3:has(img#pve) { order: 20; }
+  main .col-md-3:has(img#renovate-operator) { order: 21; }
+  main .col-md-3:has(img#seerr) { order: 22; }
+  main .col-md-3:has(img#transmute) { order: 23; }
 }
