@@ -8,11 +8,11 @@ resource "terraform_data" "talos_cluster_health" {
   }
 
   provisioner "local-exec" {
-    command = length(local.worker_ips) > 0 ? (
-      "talosctl --talosconfig \"$${TALOSCONFIG}\" health --nodes \"$${NODE}\" --control-plane-nodes \"$${CONTROL_PLANE_NODES}\" --worker-nodes \"$${WORKER_NODES}\" --endpoints \"$${NODE}\" --server=false --wait-timeout \"$${TIMEOUT}\""
-      ) : (
-      "talosctl --talosconfig \"$${TALOSCONFIG}\" health --nodes \"$${NODE}\" --control-plane-nodes \"$${CONTROL_PLANE_NODES}\" --endpoints \"$${NODE}\" --server=false --wait-timeout \"$${TIMEOUT}\""
-    )
+    command = join("", [
+      "talosctl --talosconfig \"$${TALOSCONFIG}\" health --nodes \"$${NODE}\" --control-plane-nodes \"$${CONTROL_PLANE_NODES}\"",
+      (length(local.worker_ips) > 0 ? " --worker-nodes \"$${WORKER_NODES}\"" : ""),
+      " --endpoints \"$${NODE}\" --server=false --wait-timeout \"$${TIMEOUT}\"",
+    ])
 
     environment = {
       TALOSCONFIG         = pathexpand("${var.talos_config_path}/config")
