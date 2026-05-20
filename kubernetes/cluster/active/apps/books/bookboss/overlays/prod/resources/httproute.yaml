@@ -30,3 +30,20 @@ spec:
         - path:
             type: PathPrefix
             value: /
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /opds
+      filters:
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            add:
+              - name: WWW-Authenticate
+                value: 'Basic realm="BookBoss"'
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: bookboss
+          namespace: bookboss
+          port: 8080
+          weight: 1
