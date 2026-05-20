@@ -65,9 +65,7 @@ data "talos_machine_configuration" "this" {
         dynamicPath = "/var/cdi/dynamic"
       }
     }),
-    templatefile("${path.module}/resources/talos-patches/usernamespaces.yaml.tftpl", {
-      type = yamldecode(each.value.talos_config).type
-    }),
+    templatefile("${path.module}/resources/talos-patches/usernamespaces.yaml.tftpl", {}),
     templatefile("${path.module}/resources/talos-patches/user-volume.yaml.tftpl", {
       user_volumes = [
         {
