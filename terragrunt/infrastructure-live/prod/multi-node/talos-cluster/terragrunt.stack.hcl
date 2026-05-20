@@ -18,7 +18,7 @@ locals {
   # ─── Versions ────────────────────────────────────────────────────────────────
   versions = {
     # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-    kubernetes_version    = "1.36.0",
+    kubernetes_version    = "1.36.1",
     initial_talos_version = "1.12.5", # Do not change this value after initial deployment
     # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
     talos_version = "1.13.0", # Change this value to safely upgrade the Talos version
