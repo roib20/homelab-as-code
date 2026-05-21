@@ -47,7 +47,7 @@ controllers:
       app:
         image:
           repository: ghcr.io/szinn/bookboss
-          tag: v0.8.26
+          tag: v0.8.28
         env:
           # Declared before DATABASE_URL so $(BOOKBOSS__DATABASE__DATABASE_CONN_URI) expands correctly
           BOOKBOSS__DATABASE__DATABASE_CONN_URI:
