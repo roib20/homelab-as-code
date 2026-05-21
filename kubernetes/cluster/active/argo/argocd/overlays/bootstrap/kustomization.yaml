@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: argo-cd
     repo: oci://ghcr.io/argoproj/argo-helm
-    version: 9.5.14
+    version: 9.5.15
     releaseName: argocd
     namespace: argocd
     valuesFile: ../../base/values.yaml
