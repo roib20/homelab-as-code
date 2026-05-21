@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: valkey-operator
     repo: oci://ghcr.io/sap/valkey-operator-helm
-    version: 0.1.16
+    version: 0.1.17
     releaseName: valkey-operator
     namespace: valkey-operator
     valuesFile: ../../base/values.yaml
