@@ -236,10 +236,18 @@ server:
           storage:
             size: 10Gi
             storageClass: longhorn-cnpg
-          imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.0-0.5.3
+          imageName: ghcr.io/cloudnative-pg/postgresql:18
           postgresql:
             shared_preload_libraries:
               - "vchord.so"
+            extensions:
+              - name: vchord
+                image:
+                  reference: ghcr.io/tensorchord/vchord-scratch:pg18-v0.5.3
+                dynamic_library_path:
+                  - /usr/lib/postgresql/18/lib
+                extension_control_path:
+                  - /usr/share/postgresql/18/
           bootstrap:
             initdb:
               database: immich
