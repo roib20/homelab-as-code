@@ -83,7 +83,7 @@ rawResources:
                 requestRedirect:
                   hostname: "abs.${FQDN_01}"
                   scheme: https
-                  statusCode: 301
+                  statusCode: 308
   httproute-audiobooks-redirect:
     forceRename: audiobookshelf-audiobooks-redirect
     manifest:
@@ -106,4 +106,5 @@ rawResources:
               - type: RequestRedirect
                 requestRedirect:
                   hostname: "abs.${FQDN_01}"
+                  scheme: https
                   statusCode: 308

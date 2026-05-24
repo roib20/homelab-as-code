@@ -62,6 +62,7 @@ spec:
         - type: RequestRedirect
           requestRedirect:
             hostname: "grimmory.${FQDN_01}"
+            scheme: https
             statusCode: 308
       matches:
         - path:
