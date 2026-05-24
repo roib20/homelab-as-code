@@ -89,7 +89,7 @@ controllers:
               secretKeyRef:
                 name: bookboss-kanidm-oauth2-credentials
                 key: CLIENT_SECRET
-          BOOKBOSS__OIDC__DISCOVERY_URL: "https://auth.placeholder/oauth2/openid/$(BOOKBOSS__OIDC__CLIENT_ID)/.well-known/openid-configuration"
+          BOOKBOSS__OIDC__DISCOVERY_URL: "https://auth.${FQDN_01}/oauth2/openid/$(BOOKBOSS__OIDC__CLIENT_ID)/.well-known/openid-configuration"
         probes:
           liveness:
             enabled: true

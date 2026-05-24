@@ -23,7 +23,7 @@ configMapGenerator:
       - /tmp/env-vars.env
   - name: bookboss-oidc
     literals:
-      - AUTH_HOST=auth.placeholder
+      - AUTH_HOST=auth.${FQDN_01}
     options:
       disableNameSuffixHash: true
 replacements:
