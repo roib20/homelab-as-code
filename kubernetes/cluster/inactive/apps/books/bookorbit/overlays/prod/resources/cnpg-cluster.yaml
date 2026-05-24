@@ -9,7 +9,7 @@ spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:18
   postgresql:
     pg_hba:
-      - host bookorbit bookorbit all scram-sha-256
+      - hostssl bookorbit bookorbit all scram-sha-256
       - host bookorbit bookorbit all reject
     extensions:
       - name: pgvector
