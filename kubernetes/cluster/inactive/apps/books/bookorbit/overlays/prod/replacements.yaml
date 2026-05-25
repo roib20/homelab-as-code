@@ -4,21 +4,21 @@
     name: env-vars
     fieldPath: "data.FQDN_01"
   targets:
+    # HTTPRoute hostname
     - select:
         kind: HTTPRoute
-        name: grimmory
+        name: bookorbit
       fieldPaths:
         - spec.hostnames.0
-        - spec.rules.0.filters.0.requestHeaderModifier.set.0.value
       options:
         delimiter: "."
         index: 1
+    # Public app URL
     - select:
-        kind: HTTPRoute
-        name: grimmory-redirect
+        kind: Deployment
+        name: bookorbit
       fieldPaths:
-        - spec.hostnames.0
-        - spec.rules.0.filters.0.requestRedirect.hostname
+        - spec.template.spec.containers.[name=app].env.[name=CLIENT_URL].value
       options:
         delimiter: "."
         index: 1

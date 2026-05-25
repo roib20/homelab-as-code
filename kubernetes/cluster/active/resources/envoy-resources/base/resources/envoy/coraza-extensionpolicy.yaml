@@ -39,6 +39,15 @@ spec:
             # Transmute uploads arbitrary user files; do not buffer/inspect upload bodies.
             - SecRule REQUEST_METHOD "@streq POST" "id:100006,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@streq /api/files" "ctl:requestBodyAccess=Off"
+            # Grimmory reading progress false positive (941130: XSS attr vector - EPUB CFI paths contain .xhtml)
+            - SecRule REQUEST_METHOD "@streq POST" "id:100007,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@streq /api/v1/books/progress" "ctl:ruleRemoveById=941130"
+            # Grimmory reading sessions false positive (932130: RCE unix shell expr - EPUB CFI bracket notation in endLocation)
+            - SecRule REQUEST_METHOD "@streq POST" "id:100009,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@streq /api/v1/reading-sessions" "ctl:ruleRemoveById=932130"
+            # ArgoCD webhook false positive (941130: XSS attr vector - commit messages may contain .xhtml paths)
+            - SecRule REQUEST_METHOD "@streq POST" "id:100010,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@streq /api/webhook" "ctl:ruleRemoveById=941130"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---
