@@ -12,9 +12,9 @@ pve_gpu_path: "0000:00:02.0"  # Explicit GPU PCI path for Comet Lake nodes; adju
 pve_gpu_iommugroup: 0  # Explicit IOMMU group ID for Comet Lake nodes; adjust per host
 pve_gpu_mdev: 0
 
-# LSI SAS controller configuration
+# Storage HBA configuration
 pve_lsi_id: "1000:0087"
-pve_lsi_subsystem_id: "1000:3020"
+pve_lsi_subsystem_id: "1d49:0201"
 pve_lsi_path: "0000:01:00.0"
 pve_lsi_iommugroup: 2
 pve_lsi_mdev: 0
