@@ -352,55 +352,55 @@ rawResources:
               decodingStrategy: None
               metadataPolicy: None
 
-  # external-secret-backend:
-  #   apiVersion: external-secrets.io/v1
-  #   kind: ExternalSecret
-  #   forceRename: pinepods-backend
-  #   spec:
-  #     spec:
-  #       refreshInterval: 1h
-  #       secretStoreRef:
-  #         name: bitwarden-secretsmanager
-  #         kind: ClusterSecretStore
-  #       target:
-  #         name: pinepods-backend
-  #         creationPolicy: Owner
-  #         template:
-  #           engineVersion: v2
-  #           type: Opaque
-  #           data:
-  #             API_KEY: '{{ "{{" }} .backend_api_key {{ "}}" }}'
-  #             API_SECRET: '{{ "{{" }} .backend_api_secret {{ "}}" }}'
-  #             YOUTUBE_API_KEY: '{{ "{{" }} .backend_youtube_api_key {{ "}}" }}'
-  #       dataFrom:
-  #         - extract:
-  #             key: pinepods-secrets
-  #             conversionStrategy: Default
-  #             decodingStrategy: None
-  #             metadataPolicy: None
+# external-secret-backend:
+#   apiVersion: external-secrets.io/v1
+#   kind: ExternalSecret
+#   forceRename: pinepods-backend
+#   spec:
+#     spec:
+#       refreshInterval: 1h
+#       secretStoreRef:
+#         name: bitwarden-secretsmanager
+#         kind: ClusterSecretStore
+#       target:
+#         name: pinepods-backend
+#         creationPolicy: Owner
+#         template:
+#           engineVersion: v2
+#           type: Opaque
+#           data:
+#             API_KEY: '{{ "{{" }} .backend_api_key {{ "}}" }}'
+#             API_SECRET: '{{ "{{" }} .backend_api_secret {{ "}}" }}'
+#             YOUTUBE_API_KEY: '{{ "{{" }} .backend_youtube_api_key {{ "}}" }}'
+#       dataFrom:
+#         - extract:
+#             key: pinepods-secrets
+#             conversionStrategy: Default
+#             decodingStrategy: None
+#             metadataPolicy: None
 
-  # external-secret-podpeople:
-  #   apiVersion: external-secrets.io/v1
-  #   kind: ExternalSecret
-  #   forceRename: pinepods-podpeople
-  #   spec:
-  #     spec:
-  #       refreshInterval: 1h
-  #       secretStoreRef:
-  #         name: bitwarden-secretsmanager
-  #         kind: ClusterSecretStore
-  #       target:
-  #         name: pinepods-podpeople
-  #         creationPolicy: Owner
-  #         template:
-  #           engineVersion: v2
-  #           type: Opaque
-  #           data:
-  #             ADMIN_USERNAME: '{{ "{{" }} .podpeople_admin_username {{ "}}" }}'
-  #             ADMIN_PASSWORD: '{{ "{{" }} .podpeople_admin_password {{ "}}" }}'
-  #       dataFrom:
-  #         - extract:
-  #             key: pinepods-secrets
-  #             conversionStrategy: Default
-  #             decodingStrategy: None
-  #             metadataPolicy: None
+# external-secret-podpeople:
+#   apiVersion: external-secrets.io/v1
+#   kind: ExternalSecret
+#   forceRename: pinepods-podpeople
+#   spec:
+#     spec:
+#       refreshInterval: 1h
+#       secretStoreRef:
+#         name: bitwarden-secretsmanager
+#         kind: ClusterSecretStore
+#       target:
+#         name: pinepods-podpeople
+#         creationPolicy: Owner
+#         template:
+#           engineVersion: v2
+#           type: Opaque
+#           data:
+#             ADMIN_USERNAME: '{{ "{{" }} .podpeople_admin_username {{ "}}" }}'
+#             ADMIN_PASSWORD: '{{ "{{" }} .podpeople_admin_password {{ "}}" }}'
+#       dataFrom:
+#         - extract:
+#             key: pinepods-secrets
+#             conversionStrategy: Default
+#             decodingStrategy: None
+#             metadataPolicy: None

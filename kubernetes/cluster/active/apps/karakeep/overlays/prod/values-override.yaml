@@ -2,7 +2,7 @@
 secrets:
   karakeep:
     enabled: false
-  meilesearch: # Typo in upstream chart, keep this misspelling because this is the correct key for the chart
+  meilesearch:  # Typo in upstream chart, keep this misspelling because this is the correct key for the chart
     enabled: false
 applicationProtocol: https
 applicationHost: "links.${FQDN_01}"

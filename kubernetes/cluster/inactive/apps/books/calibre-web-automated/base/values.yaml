@@ -1,3 +1,4 @@
+---
 global:
   createDefaultServiceAccount: true
 defaultPodOptions:
