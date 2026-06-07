@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: external-secrets
     repo: oci://ghcr.io/external-secrets/charts
-    version: 2.5.0
+    version: 2.6.0
     releaseName: external-secrets
     namespace: external-secrets
     valuesFile: ../../base/values.yaml
