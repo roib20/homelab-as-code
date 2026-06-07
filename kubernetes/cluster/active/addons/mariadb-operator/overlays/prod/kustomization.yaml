@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: mariadb-operator
     repo: https://mariadb-operator.github.io/mariadb-operator
-    version: 26.3.0
+    version: 26.6.0
     releaseName: mariadb-operator
     namespace: mariadb-system
     valuesFile: ../../base/values/mariadb-operator-values.yaml
