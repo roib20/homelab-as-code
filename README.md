@@ -1,8 +1,7 @@
-<!-- markdownlint-disable MD033 MD041 -->
+<!-- markdownlint-disable-next-line MD033 MD041 -->
 <div align="center">
 
 # 🏠 Homelab as Code 👨‍💻
-<!-- markdownlint-enable MD033 MD041 -->
 
 **Bare-metal to a self-healing Kubernetes cluster, every layer as code. This is my homelab.**
 
@@ -87,3 +86,6 @@ Every service picks one of two Ingress paths. Public services come in through th
 ## 📖 Read More
 
 Tutorials, guides, reference material, and explanations are in the [docs](https://homelab.towerofkubes.com). Deep dives can be found at my [blog](https://www.towerofkubes.com/).
+
+<!-- markdownlint-disable-next-line MD033 -->
+</div>
