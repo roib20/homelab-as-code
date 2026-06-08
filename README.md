@@ -76,13 +76,13 @@ Every service picks one of two Ingress paths. Public services come in through th
 
 | Path | Contents |
 | --- | --- |
-| `ansible/` | Proxmox VE setup and Kubernetes bootstrap playbooks |
-| `debian/` | Unattended Debian install (preseed) |
-| `Dockerfile` | The all-in-one runner image |
-| `kubernetes/` | GitOps source of truth |
-| `.taskfiles/` | Task runner workflows |
-| `terragrunt/` | Talos VM provisioning, with remote state in Cloudflare R2 |
-| `tofu/` | OpenTofu bootstrap for the R2 state bucket |
+| [`ansible/`](ansible) | Proxmox VE setup and Kubernetes bootstrap playbooks |
+| [`debian/`](debian) | Unattended Debian install (preseed) |
+| [`Dockerfile`](Dockerfile) | The all-in-one runner image |
+| [`kubernetes/`](kubernetes) | GitOps source of truth |
+| [`.taskfiles/`](.taskfiles) | Task runner workflows |
+| [`terragrunt/`](terragrunt) | Talos VM provisioning, with remote state in Cloudflare R2 |
+| [`tofu/`](tofu) | OpenTofu bootstrap for the R2 state bucket |
 
 ## 📖 Read More
 
