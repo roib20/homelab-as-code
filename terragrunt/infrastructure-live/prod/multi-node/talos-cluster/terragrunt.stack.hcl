@@ -155,7 +155,7 @@ locals {
       name      = "coredns"
       namespace = "kube-system"
       # renovate: datasource=docker depName=ghcr.io/coredns/charts/coredns
-      chart_version   = "1.45.2"
+      chart_version   = "1.46.0"
       helm_repository = "oci://ghcr.io/coredns/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/coredns/base/values.yaml")
     }
