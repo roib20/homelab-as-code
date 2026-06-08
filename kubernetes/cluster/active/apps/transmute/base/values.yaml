@@ -21,7 +21,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/transmute-app/transmute
-          tag: 1.1.0@sha256:b81d9b4c667bb03a5e29b69525a4b99786d9f1ab3109c43e55dc336f6e1f2a20
+          tag: 1.3.0@sha256:5f010b86d9511055f3c63e923a5f20f4e7a4e18915d3de53f4aecb4361108fad
         env:
           APP_URL: "https://convert.${FQDN_01}"
           DATA_DIR: /app/data
