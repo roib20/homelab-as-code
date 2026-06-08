@@ -43,7 +43,7 @@ controllers:
       app:
         image:
           repository: ghcr.io/bookorbit/bookorbit
-          tag: 1.4.0
+          tag: 1.9.0
         env:
           NODE_ENV: production
           PORT: &port 3000
