@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: cloudnative-pg
     repo: oci://ghcr.io/cloudnative-pg/charts
-    version: 0.28.2
+    version: 0.28.3
     releaseName: cloudnative-pg
     namespace: cnpg-system
     valuesFile: ../../base/values.yaml
