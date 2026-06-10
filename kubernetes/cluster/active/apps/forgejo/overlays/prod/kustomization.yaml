@@ -7,7 +7,7 @@ resources:
 helmCharts:
   - name: forgejo
     repo: oci://code.forgejo.org/forgejo-helm
-    version: 17.1.0
+    version: 17.1.1
     releaseName: forgejo
     namespace: forgejo
     valuesFile: ../../base/values.yaml
