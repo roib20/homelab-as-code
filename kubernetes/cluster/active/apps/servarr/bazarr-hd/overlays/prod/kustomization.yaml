@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: bazarr
     repo: oci://oci.trueforge.org/truecharts
-    version: 24.3.0
+    version: 24.4.0
     releaseName: bazarr-hd
     namespace: servarr
     valuesFile: ../../base/values.yaml
