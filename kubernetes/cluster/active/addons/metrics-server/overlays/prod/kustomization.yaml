@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: metrics-server
     repo: oci://ghcr.io/home-operations/charts-mirror
-    version: 3.13.0
+    version: 3.13.1
     releaseName: metrics-server
     namespace: kube-system
     valuesFile: ../../base/values.yaml
