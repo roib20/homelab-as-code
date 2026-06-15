@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: victoria-metrics-k8s-stack
     repo: oci://ghcr.io/victoriametrics/helm-charts
-    version: 0.83.0
+    version: 0.84.0
     releaseName: victoria-metrics-k8s-stack
     namespace: monitoring
     valuesFile: ../../base/values.yaml
