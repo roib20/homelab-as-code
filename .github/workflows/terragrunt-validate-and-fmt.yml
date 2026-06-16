@@ -14,7 +14,7 @@ name: Terragrunt Validate & Format
   workflow_dispatch:
 jobs:
   validate-and-fmt:
-    runs-on: arc-runner-set
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
