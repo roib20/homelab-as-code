@@ -7,7 +7,7 @@ name: pre-commit
   workflow_dispatch:
 jobs:
   pre-commit:
-    runs-on: arc-runner-set
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6

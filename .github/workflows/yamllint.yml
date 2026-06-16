@@ -15,7 +15,7 @@ name: yamllint
   workflow_dispatch:
 jobs:
   yamllint:
-    runs-on: arc-runner-set
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
