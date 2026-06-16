@@ -12,6 +12,12 @@ spec:
     kubernetes:
       envoyDeployment:
         replicas: 2
+        patch:
+          type: StrategicMerge
+          value:
+            metadata:
+              annotations:
+                secret.reloader.stakater.com/reload: "tls-wildcard"
       envoyPDB:
         minAvailable: 1
       envoyService:
