@@ -6,7 +6,7 @@ ARG ALPINE_VERSION=3.23
 # renovate: datasource=github-releases depName=opentofu/opentofu extractVersion=^v(?<version>.*)$
 ARG TOFU_VERSION=1.12.1
 # renovate: datasource=github-releases depName=gruntwork-io/terragrunt extractVersion=^v(?<version>.*)$
-ARG TERRAGRUNT_VERSION=1.0.7
+ARG TERRAGRUNT_VERSION=1.0.8
 # renovate: datasource=github-releases depName=go-task/task
 ARG TASK_VERSION=3.51.1
 # renovate: datasource=github-releases depName=siderolabs/talos
