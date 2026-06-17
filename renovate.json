@@ -64,18 +64,6 @@
       ]
     },
     {
-      "description": "Alpine Linux Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "Alpine Linux",
-      "groupSlug": "alpine",
-      "matchPackageNames": [
-        "/alpine/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
       "description": "Cilium Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
