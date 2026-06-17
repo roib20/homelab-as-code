@@ -173,7 +173,6 @@
       "groupName": "Kubernetes",
       "groupSlug": "kubernetes",
       "matchPackageNames": [
-        "kubernetes",
         "kubernetes/kubernetes",
         "/kube-apiserver/",
         "/kube-controller-manager/",
@@ -182,7 +181,7 @@
         "/kubelet/",
         "alpine/k8s"
       ],
-      "minimumGroupSize": 2
+      "minimumGroupSize": 3
     },
     {
       "branchTopic": "opentofu",
