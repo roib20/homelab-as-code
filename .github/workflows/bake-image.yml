@@ -32,7 +32,7 @@ permissions:
   id-token: write  # OIDC & cosign
 jobs:
   build-and-sign:
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-24.04
     steps:
       # 0) Checkout repo for local build context
       - uses: actions/checkout@v6
