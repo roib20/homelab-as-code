@@ -4,6 +4,7 @@ kind: Cluster
 metadata:
   name: outline-postgres
 spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.3-minimal-trixie
   instances: 2
   primaryUpdateMethod: switchover
   affinity:
