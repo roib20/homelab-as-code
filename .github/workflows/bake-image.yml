@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       # 0) Checkout repo for local build context
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       # 1) Generate tags, labels and annotations
       - name: Docker metadata
         id: meta
