@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-26.04
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install wget
         shell: sh
         run: sudo apt-get update -qq && sudo apt-get install --assume-yes -qq wget

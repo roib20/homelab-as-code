@@ -18,7 +18,7 @@ jobs:
     name: ShellCheck
     runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install xz-utils
         run: sudo apt-get update -qq && sudo apt-get install --assume-yes -qq xz-utils
       - name: Run ShellCheck

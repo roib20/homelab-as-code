@@ -17,7 +17,7 @@ jobs:
       ENV_FILE: "/tmp/env-vars.env"
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Create test env file
         env:
           FQDN_01: "example1.com"
