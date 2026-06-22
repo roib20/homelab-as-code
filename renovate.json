@@ -64,18 +64,6 @@
       ]
     },
     {
-      "description": "Alpine Linux Group",
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "groupName": "Alpine Linux",
-      "groupSlug": "alpine",
-      "matchPackageNames": [
-        "/alpine/"
-      ],
-      "minimumGroupSize": 2
-    },
-    {
       "description": "Cilium Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
@@ -173,7 +161,6 @@
       "groupName": "Kubernetes",
       "groupSlug": "kubernetes",
       "matchPackageNames": [
-        "kubernetes",
         "kubernetes/kubernetes",
         "/kube-apiserver/",
         "/kube-controller-manager/",
@@ -182,7 +169,7 @@
         "/kubelet/",
         "alpine/k8s"
       ],
-      "minimumGroupSize": 2
+      "minimumGroupSize": 3
     },
     {
       "branchTopic": "opentofu",
