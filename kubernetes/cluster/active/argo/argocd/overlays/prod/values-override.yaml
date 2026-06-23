@@ -63,8 +63,8 @@ configs:
     oidc.config: |
       name: Kanidm
       issuer: https://auth.${FQDN_01}/oauth2/openid/argocd
-      clientID: $oidc.kanidm.clientID
-      clientSecret: $oidc.kanidm.clientSecret
+      clientID: $argocd-kanidm-oauth2-credentials:CLIENT_ID
+      clientSecret: $argocd-kanidm-oauth2-credentials:CLIENT_SECRET
       requestedScopes: ["openid", "profile", "email", "groups_name"]
       requestedIDTokenClaims: {"groups_name": {"essential": true}}
       enableUserInfoGroups: true
