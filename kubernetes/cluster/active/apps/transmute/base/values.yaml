@@ -5,6 +5,7 @@ defaultPodOptions:
   automountServiceAccountToken: false
 controllers:
   transmute:
+    strategy: Recreate
     pod:
       hostUsers: false
       annotations:
