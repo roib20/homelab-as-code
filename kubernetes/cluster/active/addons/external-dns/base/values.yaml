@@ -13,3 +13,5 @@ serviceMonitor:
 sources:
   - crd
   - service
+triggerLoopOnEvent: true
+txtPrefix: "dns-%{record_type}."
