@@ -52,6 +52,15 @@ server:
       type: deployment
       pod:
         securityContext: *immichPodSecurityContext
+        affinity: &gpuNodeAffinity
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: kubernetes.io/hostname
+                      operator: NotIn
+                      values:
+                        - control-plane-01
         resourceClaims: &gpuPodClaims
           - name: gpu
             resourceClaimTemplateName: immich-gpu-claim
@@ -319,6 +328,7 @@ machine-learning:
     main:
       pod:
         securityContext: *immichPodSecurityContext
+        affinity: *gpuNodeAffinity
         resourceClaims: *gpuPodClaims
       containers:
         main:
