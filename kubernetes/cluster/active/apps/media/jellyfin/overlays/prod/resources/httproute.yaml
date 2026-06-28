@@ -21,6 +21,17 @@ spec:
   hostnames:
     - "media.${FQDN_01}"
   rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /startup/logger
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            statusCode: 302
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /
     - backendRefs:
         - group: ""
           kind: Service
