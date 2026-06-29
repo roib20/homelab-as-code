@@ -10,6 +10,11 @@ controllers:
         secret.reloader.stakater.com/reload: "bookorbit-postgres-app,bookorbit-postgres-ca,bookorbit-secrets"
       terminationGracePeriodSeconds: 30
       securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
         seccompProfile:
           type: RuntimeDefault
     initContainers:
@@ -43,7 +48,7 @@ controllers:
       app:
         image:
           repository: ghcr.io/bookorbit/bookorbit
-          tag: 2.0.1
+          tag: 2.0.1@sha256:70bef7bef8b0d0fa938c980b5a128f86bbde656cde04f4ab0549b9b91ebb2e14
         env:
           NODE_ENV: production
           PORT: &port 3000
@@ -64,6 +69,16 @@ controllers:
               secretKeyRef:
                 name: bookorbit-secrets
                 key: SETUP_BOOTSTRAP_TOKEN
+          EMAIL_ENCRYPTION_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: bookorbit-secrets
+                key: EMAIL_ENCRYPTION_KEY
+          MIGRATION_ENCRYPTION_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: bookorbit-secrets
+                key: MIGRATION_ENCRYPTION_KEY
           APP_URL: "http://bookorbit.bookorbit.svc.cluster.local:3000"
           CLIENT_URL: "https://bookorbit.${FQDN_01}"
           PUID: "1000"
@@ -106,12 +121,6 @@ controllers:
           capabilities:
             drop:
               - ALL
-            add:
-              - CHOWN
-              - DAC_OVERRIDE
-              - FOWNER
-              - SETGID
-              - SETUID
         resources:
           requests:
             cpu: 50m
