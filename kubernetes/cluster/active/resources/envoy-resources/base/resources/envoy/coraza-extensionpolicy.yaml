@@ -48,6 +48,9 @@ spec:
             # ArgoCD webhook false positive (941130: XSS attr vector - commit messages may contain .xhtml paths)
             - SecRule REQUEST_METHOD "@streq POST" "id:100010,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@streq /api/webhook" "ctl:ruleRemoveById=941130"
+            # Intro Skipper config save false positive (933160: PHP function call - ChapterAnalyzerRecapPattern regex contains "Prev(ious(ly)?)?")
+            - SecRule REQUEST_METHOD "@streq POST" "id:100011,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@streq /Plugins/c83d86bb-a1e0-4c35-a113-e2101cf4ee6b/Configuration" "ctl:ruleRemoveById=933160"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---
