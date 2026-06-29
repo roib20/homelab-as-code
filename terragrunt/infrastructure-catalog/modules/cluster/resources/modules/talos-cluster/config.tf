@@ -88,6 +88,9 @@ data "talos_machine_configuration" "this" {
       max_pool_percent = var.zswap.max_pool_percent
       shrinker_enabled = var.zswap.shrinker_enabled
     }) : "",
+    templatefile("${path.module}/resources/talos-patches/kubelet-max-pods.yaml.tftpl", {
+      max_pods = 200
+    }),
     local.zswap_patches_enabled ? templatefile("${path.module}/resources/talos-patches/kubelet-memory-swap.yaml.tftpl", {}) : "",
     templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
       extramounts = local.extramounts
