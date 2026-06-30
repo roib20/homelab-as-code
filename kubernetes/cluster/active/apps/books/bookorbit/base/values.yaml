@@ -79,7 +79,10 @@ controllers:
               secretKeyRef:
                 name: bookorbit-secrets
                 key: MIGRATION_ENCRYPTION_KEY
-          APP_URL: "http://bookorbit.bookorbit.svc.cluster.local:3000"
+          # Public/external URL — used for OIDC redirect-URI validation
+          # (${APP_URL}/oauth2-callback), password-reset links, and Kobo endpoints.
+          # Must be the browser-facing origin, not the in-cluster Service URL.
+          APP_URL: "https://bookorbit.${FQDN_01}"
           CLIENT_URL: "https://bookorbit.${FQDN_01}"
           PUID: "1000"
           PGID: "1000"

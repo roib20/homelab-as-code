@@ -13,12 +13,21 @@
       options:
         delimiter: "."
         index: 1
-    # Public app URL
+    # Public app URL (CORS origin)
     - select:
         kind: Deployment
         name: bookorbit
       fieldPaths:
         - spec.template.spec.containers.[name=app].env.[name=CLIENT_URL].value
+      options:
+        delimiter: "."
+        index: 1
+    # Public/external app URL (OIDC redirect-URI validation, email links)
+    - select:
+        kind: Deployment
+        name: bookorbit
+      fieldPaths:
+        - spec.template.spec.containers.[name=app].env.[name=APP_URL].value
       options:
         delimiter: "."
         index: 1
