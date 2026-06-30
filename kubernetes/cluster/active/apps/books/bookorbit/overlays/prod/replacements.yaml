@@ -31,3 +31,9 @@
       options:
         delimiter: "."
         index: 1
+    # OIDC bootstrap sidecar: full FQDN for building the Kanidm issuer URL
+    - select:
+        kind: Deployment
+        name: bookorbit
+      fieldPaths:
+        - spec.template.spec.initContainers.[name=bootstrap-oidc].env.[name=FQDN_01].value

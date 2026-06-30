@@ -1,0 +1,83 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bookorbit-oidc
+  namespace: bookorbit
+data:
+  # Idempotent bootstrap for BookOrbit's DB-stored OIDC provider config.
+  # BookOrbit keeps OIDC settings in the `oidc_providers` / `oidc_group_mappings`
+  # tables (created by the app's own migrations on first boot), with no env/file
+  # bootstrap. The bootstrap-oidc native sidecar applies this after
+  # migrations run.
+  #
+  # Source of truth is git: connection fields, `claim_mapping`, and
+  # `auto_provision` are re-applied on every rollout (DO UPDATE), and the
+  # group→permission mappings are fully reconciled to the set below.
+  # `client_id`, `client_secret`, and `issuer` are injected as psql variables from
+  # the kaniop-generated secret and FQDN at runtime.
+  #
+  # Permissions: rather than one Kanidm group per BookOrbit permission, the Kanidm
+  # client (kaniop KanidmOAuth2Client) emits a user's permissions as values of a
+  # single custom claim (`bookorbit_permissions`) based on Kanidm group membership
+  # (bookorbit-admins and bookorbit-users, merged for members of both). BookOrbit
+  # reads that claim (claim_mapping.groups) and grants each value that matches a
+  # mapping below. The mappings cover every Permission enum value, so the claim map
+  # alone decides what each user actually receives.
+  oidc.sql: |
+    INSERT INTO oidc_providers
+      (slug, display_name, enabled, issuer_uri, client_id, client_secret,
+       scopes, icon_url, claim_mapping, auto_provision, display_order)
+    VALUES (
+      'kanidm', 'Kanidm', true,
+      :'issuer', :'client_id', :'client_secret',
+      'openid email profile',
+      'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/kanidm.svg',
+      '{"username":"preferred_username","name":"name","email":"email","groups":"bookorbit_permissions"}'::jsonb,
+      '{"enabled":true,"allowLocalLinking":false,"defaultPermissionNames":[]}'::jsonb,
+      0)
+    ON CONFLICT (slug) DO UPDATE SET
+      display_name   = EXCLUDED.display_name,
+      enabled        = EXCLUDED.enabled,
+      issuer_uri     = EXCLUDED.issuer_uri,
+      client_id      = EXCLUDED.client_id,
+      client_secret  = EXCLUDED.client_secret,
+      scopes         = EXCLUDED.scopes,
+      icon_url       = EXCLUDED.icon_url,
+      claim_mapping  = EXCLUDED.claim_mapping,
+      auto_provision = EXCLUDED.auto_provision,
+      updated_at     = now();
+
+    -- Reconcile the OIDC group→permission mappings to cover every Permission enum
+    -- value below (identity: claim value = permission name). What a user actually
+    -- receives is driven solely by the Kanidm claim map; a value emitted to no one
+    -- (e.g. demo_restricted) grants nothing.
+    BEGIN;
+    DELETE FROM oidc_group_mappings
+    WHERE provider_id = (SELECT id FROM oidc_providers WHERE slug = 'kanidm');
+    INSERT INTO oidc_group_mappings (provider_id, oidc_group_claim, permission_name)
+    SELECT p.id, m.perm, m.perm
+    FROM oidc_providers p
+    CROSS JOIN (VALUES
+      ('library_download'),
+      ('library_upload'),
+      ('library_edit_metadata'),
+      ('library_delete_books'),
+      ('demo_restricted'),
+      ('kobo_sync'),
+      ('koreader_sync'),
+      ('hardcover_sync'),
+      ('opds_access'),
+      ('book_dock_access'),
+      ('email_send'),
+      ('manage_email'),
+      ('manage_libraries'),
+      ('manage_metadata_config'),
+      ('manage_icons'),
+      ('manage_app_settings'),
+      ('manage_users'),
+      ('view_audit_log'),
+      ('notification_access')
+    ) AS m(perm)
+    WHERE p.slug = 'kanidm';
+    COMMIT;

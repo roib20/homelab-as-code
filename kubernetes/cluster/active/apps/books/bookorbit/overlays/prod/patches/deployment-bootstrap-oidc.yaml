@@ -1,0 +1,98 @@
+---
+# Native sidecar that bootstraps BookOrbit's DB-stored OIDC provider config.
+# Runs as an init container with restartPolicy: Always so it starts concurrently
+# with the app container instead of blocking it: the `oidc_providers` table only
+# exists after the app's migrate.js runs, so it retries until the schema is
+# present, applies the idempotent bootstrap SQL, then idles.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookorbit
+  namespace: bookorbit
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: bootstrap-oidc
+          restartPolicy: Always
+          image: ghcr.io/cloudnative-pg/postgresql:18
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu
+              ISSUER="https://auth.${FQDN_01}/oauth2/openid/bookorbit"
+              # connect_timeout: bound each connection attempt.
+              CONN="${POSTGRES_URI}?sslmode=verify-full&sslrootcert=/postgres-ca/ca.crt&connect_timeout=10"
+              # Wait until the app's migrate.js has created the table.
+              echo "bootstrap-oidc: waiting for oidc_providers schema..."
+              until psql "$CONN" -tAc "SELECT to_regclass('public.oidc_providers')" 2>/dev/null | grep -q oidc_providers
+              do
+                sleep 5
+              done
+              echo "bootstrap-oidc: schema present; applying config..."
+              until psql "$CONN" \
+                  -v ON_ERROR_STOP=1 \
+                  -v issuer="$ISSUER" \
+                  -v client_id="$OIDC_CLIENT_ID" \
+                  -v client_secret="$OIDC_CLIENT_SECRET" \
+                  -f /oidc/oidc.sql
+              do
+                echo "bootstrap-oidc: apply failed, retrying in 10s..."
+                sleep 10
+              done
+              echo "bootstrap-oidc: provider configured; idling."
+              exec sleep infinity
+          env:
+            - name: HOME
+              value: /tmp
+            # Injected by the overlay replacements.yaml (kustomize), the same way
+            # CLIENT_URL / APP_URL are masked. The sidecar builds the issuer at runtime.
+            - name: FQDN_01
+              value: "${FQDN_01}"
+            - name: POSTGRES_URI
+              valueFrom:
+                secretKeyRef:
+                  name: bookorbit-postgres-app
+                  key: uri
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: bookorbit-kanidm-oauth2-credentials
+                  key: CLIENT_ID
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: bookorbit-kanidm-oauth2-credentials
+                  key: CLIENT_SECRET
+          volumeMounts:
+            - name: postgres-ca
+              mountPath: /postgres-ca
+              readOnly: true
+            - name: oidc-config
+              mountPath: /oidc
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            requests:
+              cpu: 5m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+      volumes:
+        - name: oidc-config
+          configMap:
+            name: bookorbit-oidc

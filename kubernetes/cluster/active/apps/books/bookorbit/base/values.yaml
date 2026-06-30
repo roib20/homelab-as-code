@@ -7,7 +7,8 @@ controllers:
   bookorbit:
     pod:
       annotations:
-        secret.reloader.stakater.com/reload: "bookorbit-postgres-app,bookorbit-postgres-ca,bookorbit-secrets"
+        secret.reloader.stakater.com/reload: "bookorbit-postgres-app,bookorbit-postgres-ca,bookorbit-secrets,bookorbit-kanidm-oauth2-credentials"
+        configmap.reloader.stakater.com/reload: "bookorbit-oidc"
       terminationGracePeriodSeconds: 30
       securityContext:
         runAsNonRoot: true
@@ -84,6 +85,11 @@ controllers:
           # Must be the browser-facing origin, not the in-cluster Service URL.
           APP_URL: "https://bookorbit.${FQDN_01}"
           CLIENT_URL: "https://bookorbit.${FQDN_01}"
+          # Kanidm (auth.${FQDN_01}) resolves to a private LAN address. In
+          # production BookOrbit's SSRF guard blocks OIDC discovery to private
+          # issuers, failing both the Test button and the real login flow with
+          # PrivateAddressException. We trust the internal network, so allow it.
+          OIDC_ALLOW_LOCAL_ISSUERS: "true"
           PUID: "1000"
           PGID: "1000"
           NODE_MAX_OLD_SPACE_SIZE: "2048"
