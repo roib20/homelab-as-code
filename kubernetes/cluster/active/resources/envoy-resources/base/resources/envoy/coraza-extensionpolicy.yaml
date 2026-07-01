@@ -39,6 +39,9 @@ spec:
             # Transmute uploads arbitrary user files; do not buffer/inspect upload bodies.
             - SecRule REQUEST_METHOD "@streq POST" "id:100006,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@streq /api/files" "ctl:requestBodyAccess=Off"
+            # BookOrbit uploads large book files; do not buffer/inspect upload bodies.
+            - SecRule REQUEST_METHOD "@streq POST" "id:100012,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@rx ^/api/v1/libraries/[0-9]+/upload$" "ctl:requestBodyAccess=Off"
             # Grimmory reading progress false positive (941130: XSS attr vector - EPUB CFI paths contain .xhtml)
             - SecRule REQUEST_METHOD "@streq POST" "id:100007,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@streq /api/v1/books/progress" "ctl:ruleRemoveById=941130"
