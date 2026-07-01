@@ -83,8 +83,8 @@ controllers:
           # Public/external URL — used for OIDC redirect-URI validation
           # (${APP_URL}/oauth2-callback), password-reset links, and Kobo endpoints.
           # Must be the browser-facing origin, not the in-cluster Service URL.
-          APP_URL: "https://bookorbit.${FQDN_01}"
-          CLIENT_URL: "https://bookorbit.${FQDN_01}"
+          APP_URL: "https://books.${FQDN_01}"
+          CLIENT_URL: "https://books.${FQDN_01}"
           # Kanidm (auth.${FQDN_01}) resolves to a private LAN address. In
           # production BookOrbit's SSRF guard blocks OIDC discovery to private
           # issuers, failing both the Test button and the real login flow with
