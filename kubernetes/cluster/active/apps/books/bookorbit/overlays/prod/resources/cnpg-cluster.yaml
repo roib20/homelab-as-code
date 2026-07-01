@@ -5,7 +5,7 @@ metadata:
   name: bookorbit-postgres
   namespace: bookorbit
 spec:
-  instances: 1
+  instances: 2
   imageName: ghcr.io/cloudnative-pg/postgresql:18
   postgresql:
     pg_hba:
