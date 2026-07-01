@@ -32,6 +32,10 @@ spec:
             # Jellyfin image fetch false positive (920420: request content type policy)
             - SecRule REQUEST_METHOD "@streq GET" "id:100004,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@rx ^/Items/[A-Za-z0-9]+/Images/Primary$" "ctl:ruleRemoveById=920420"
+            # Jellyfin client log upload posts free-form log text that trips RCE/injection rules; do not buffer/inspect the body.
+            - SecRule REQUEST_METHOD "@streq POST" "id:100013,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^media\." "chain"
+            - SecRule REQUEST_FILENAME "@streq /ClientLog/Document" "ctl:requestBodyAccess=Off"
             # MeTube socket.io polling false positive (920420: request content type policy)
             - SecRule REQUEST_METHOD "@streq POST" "id:100005,phase:1,pass,nolog,chain"
             - SecRule REQUEST_HEADERS:Host "@rx ^metube\." "chain"
@@ -45,15 +49,15 @@ spec:
             # Grimmory reading progress false positive (941130: XSS attr vector - EPUB CFI paths contain .xhtml)
             - SecRule REQUEST_METHOD "@streq POST" "id:100007,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@streq /api/v1/books/progress" "ctl:ruleRemoveById=941130"
-            # BookOrbit reading progress false positive (932130: RCE unix shell expr - EPUB CFI bracket notation e.g. /2[introduction])
+            # BookOrbit reading progress: EPUB CFI in the body trips 932130 (RCE unix shell expr) and 941130 (XSS attr vector)
             - SecRule REQUEST_METHOD "@streq POST" "id:100008,phase:1,pass,nolog,chain"
-            - SecRule REQUEST_FILENAME "@beginsWith /api/v1/books/files/" "ctl:ruleRemoveById=932130"
+            - SecRule REQUEST_FILENAME "@beginsWith /api/v1/books/files/" "ctl:ruleRemoveById=932130,ctl:ruleRemoveById=941130"
             # Grimmory reading sessions false positive (932130: RCE unix shell expr - EPUB CFI bracket notation in endLocation)
             - SecRule REQUEST_METHOD "@streq POST" "id:100009,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@streq /api/v1/reading-sessions" "ctl:ruleRemoveById=932130"
-            # ArgoCD webhook false positive (941130: XSS attr vector - commit messages may contain .xhtml paths)
+            # ArgoCD webhook: git payloads trip 941130 (XSS attr vector) and 932260 (RCE direct unix command)
             - SecRule REQUEST_METHOD "@streq POST" "id:100010,phase:1,pass,nolog,chain"
-            - SecRule REQUEST_FILENAME "@streq /api/webhook" "ctl:ruleRemoveById=941130"
+            - SecRule REQUEST_FILENAME "@streq /api/webhook" "ctl:ruleRemoveById=941130,ctl:ruleRemoveById=932260"
             # Intro Skipper config save false positive (933160: PHP function call - ChapterAnalyzerRecapPattern regex contains "Prev(ious(ly)?)?")
             - SecRule REQUEST_METHOD "@streq POST" "id:100011,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@streq /Plugins/c83d86bb-a1e0-4c35-a113-e2101cf4ee6b/Configuration" "ctl:ruleRemoveById=933160"
