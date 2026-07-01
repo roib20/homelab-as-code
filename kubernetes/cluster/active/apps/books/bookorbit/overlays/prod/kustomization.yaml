@@ -6,6 +6,7 @@ resources:
   - external-secrets
   - resources/cnpg-cluster.yaml
   - resources/httproute.yaml
+  - resources/oidc.yaml
   - resources/smb-mediadata-rwx.yaml
 helmCharts:
   - name: app-template
@@ -23,3 +24,5 @@ configMapGenerator:
       - /tmp/env-vars.env
 replacements:
   - path: replacements.yaml
+patches:
+  - path: patches/deployment-bootstrap-oidc.yaml

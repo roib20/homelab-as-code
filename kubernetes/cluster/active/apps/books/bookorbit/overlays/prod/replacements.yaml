@@ -1,0 +1,39 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    # HTTPRoute hostname
+    - select:
+        kind: HTTPRoute
+        name: bookorbit
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    # Public app URL (CORS origin)
+    - select:
+        kind: Deployment
+        name: bookorbit
+      fieldPaths:
+        - spec.template.spec.containers.[name=app].env.[name=CLIENT_URL].value
+      options:
+        delimiter: "."
+        index: 1
+    # Public/external app URL (OIDC redirect-URI validation, email links)
+    - select:
+        kind: Deployment
+        name: bookorbit
+      fieldPaths:
+        - spec.template.spec.containers.[name=app].env.[name=APP_URL].value
+      options:
+        delimiter: "."
+        index: 1
+    # OIDC bootstrap sidecar: full FQDN for building the Kanidm issuer URL
+    - select:
+        kind: Deployment
+        name: bookorbit
+      fieldPaths:
+        - spec.template.spec.initContainers.[name=bootstrap-oidc].env.[name=FQDN_01].value
