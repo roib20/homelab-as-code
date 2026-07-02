@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: gateway-helm
     repo: oci://mirror.gcr.io/envoyproxy
-    version: v1.8.1
+    version: v1.8.2
     releaseName: envoy-gateway
     namespace: envoy-gateway-system
     valuesFile: ../../base/values/gateway-helm-values.yaml
@@ -15,7 +15,7 @@ helmCharts:
     includeCRDs: false
   - name: gateway-crds-helm
     repo: oci://mirror.gcr.io/envoyproxy
-    version: v1.8.1
+    version: v1.8.2
     releaseName: envoy-gateway
     namespace: envoy-gateway-system
     valuesFile: ../../base/values/gateway-crds-helm-values.yaml
