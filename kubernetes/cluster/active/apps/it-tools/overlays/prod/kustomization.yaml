@@ -7,7 +7,7 @@ resources:
 helmCharts:
   - name: it-tools
     repo: oci://oci.trueforge.org/truecharts
-    version: 9.5.0
+    version: 9.6.0
     releaseName: it-tools
     namespace: it-tools
     valuesFile: ../../base/values.yaml
