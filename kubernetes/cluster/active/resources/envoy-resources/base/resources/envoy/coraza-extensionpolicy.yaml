@@ -52,6 +52,18 @@ spec:
             # BookOrbit reading progress: EPUB CFI in the body trips 932130 (RCE unix shell expr) and 941130 (XSS attr vector)
             - SecRule REQUEST_METHOD "@streq POST" "id:100008,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@beginsWith /api/v1/books/files/" "ctl:ruleRemoveById=932130,ctl:ruleRemoveById=941130"
+            # BookOrbit Kobo device sync: EPUB CFI paths in the sync/analytics bodies (.xhtml, bracket notation) trip 941130 (XSS attr) and 932130 (RCE unix shell) across the kobo API
+            - SecRule REQUEST_METHOD "@rx ^(POST|PUT|PATCH)$" "id:100014,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@beginsWith /api/v1/kobo/" "ctl:ruleRemoveById=941130,ctl:ruleRemoveById=932130"
+            # BookOrbit File Naming settings: upload path/folder templates contain <>{}|() metacharacters that trip RCE/XSS rules; do not inspect the body
+            - SecRule REQUEST_METHOD "@rx ^(POST|PUT|PATCH)$" "id:100015,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@rx ^/api/v1/app-settings/upload-pattern(-folder)?$" "ctl:requestBodyAccess=Off"
+            # BookOrbit book metadata match/apply: free-text description/metadata trips SQLi/RCE/XSS rules; do not inspect the body
+            - SecRule REQUEST_METHOD "@rx ^(POST|PUT|PATCH)$" "id:100016,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@rx ^/api/v1/book-dock/files/[0-9]+$" "ctl:requestBodyAccess=Off"
+            # BookOrbit metadata/locks update: free-text metadata trips 941310 (US-ASCII malformed XSS) and related; do not inspect the body
+            - SecRule REQUEST_METHOD "@rx ^(POST|PUT|PATCH)$" "id:100017,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@rx ^/api/v1/books/[0-9]+/metadata-and-locks$" "ctl:requestBodyAccess=Off"
             # Grimmory reading sessions false positive (932130: RCE unix shell expr - EPUB CFI bracket notation in endLocation)
             - SecRule REQUEST_METHOD "@streq POST" "id:100009,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@streq /api/v1/reading-sessions" "ctl:ruleRemoveById=932130"
