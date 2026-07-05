@@ -19,5 +19,5 @@ spec:
         - ro
         - r
   storage:
-    size: 10Gi
+    size: 15Gi
     storageClass: longhorn-cnpg
