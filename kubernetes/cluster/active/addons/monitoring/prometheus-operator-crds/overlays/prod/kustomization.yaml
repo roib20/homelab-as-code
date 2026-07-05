@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: prometheus-operator-crds
     repo: oci://ghcr.io/prometheus-community/charts
-    version: 30.0.0
+    version: 30.0.1
     releaseName: prometheus-operator-crds
     namespace: monitoring
     valuesFile: ../../base/values.yaml
