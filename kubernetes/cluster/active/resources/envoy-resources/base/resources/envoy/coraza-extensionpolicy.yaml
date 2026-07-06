@@ -64,6 +64,11 @@ spec:
             # BookOrbit metadata/locks update: free-text metadata trips 941310 (US-ASCII malformed XSS) and related; do not inspect the body
             - SecRule REQUEST_METHOD "@rx ^(POST|PUT|PATCH)$" "id:100017,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@rx ^/api/v1/books/[0-9]+/metadata-and-locks$" "ctl:requestBodyAccess=Off"
+            # BookOrbit search: free-text queries (e.g. unix command names like "fd") trip RCE/SQLi rules; do not inspect the body
+            - SecRule REQUEST_METHOD "@streq POST" "id:100018,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@streq /api/v1/books/query" "ctl:requestBodyAccess=Off"
+            # Immich Android app sends Content-Type: text/plain, which trips 920420 (content-type policy); allow it for the Immich host
+            - SecRule REQUEST_HEADERS:Host "@rx ^photos\." "id:100019,phase:1,pass,nolog,ctl:ruleRemoveById=920420"
             # Grimmory reading sessions false positive (932130: RCE unix shell expr - EPUB CFI bracket notation in endLocation)
             - SecRule REQUEST_METHOD "@streq POST" "id:100009,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@streq /api/v1/reading-sessions" "ctl:ruleRemoveById=932130"
@@ -90,7 +95,7 @@ spec:
             - SecRuleRemoveById 930120
             # 941160: XSS - matches legitimate HTML in forms
             - SecRuleRemoveById 941160
-            # Renovate webhook false positives (scoped by path + query args)
+            # Renovate webhook (scoped by path + query args): GitHub PR bodies carry arbitrary code/markdown that trips many RCE/SQLi/XSS/PHP rules; do not inspect the body
             - SecRule REQUEST_FILENAME "@streq /webhook/v1/github" "id:100001,phase:1,pass,nolog,chain"
             - SecRule ARGS:namespace "@streq renovate" "chain"
-            - SecRule ARGS:job "@streq renovate-github" "ctl:ruleRemoveById=932230,ctl:ruleRemoveById=932235,ctl:ruleRemoveById=932250,ctl:ruleRemoveById=932260,ctl:ruleRemoveById=932370,ctl:ruleRemoveById=941180"
+            - SecRule ARGS:job "@streq renovate-github" "ctl:requestBodyAccess=Off"
