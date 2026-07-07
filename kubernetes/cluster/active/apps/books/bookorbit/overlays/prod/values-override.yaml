@@ -36,3 +36,9 @@ persistence:
         wait-for-postgres:
           - path: "/postgres-ca"
             readOnly: true
+  tmp:
+    type: emptyDir
+    advancedMounts:
+      bookorbit:
+        app:
+          - path: "/tmp"
