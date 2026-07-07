@@ -96,7 +96,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /healthz
+                path: "/healthz"
                 port: 8080
               periodSeconds: 10
               timeoutSeconds: 1
@@ -106,7 +106,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /readyz
+                path: "/readyz"
                 port: 8080
               periodSeconds: 10
               timeoutSeconds: 1
@@ -116,7 +116,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /healthz
+                path: "/healthz"
                 port: 8080
               failureThreshold: 30
               periodSeconds: 10
@@ -146,18 +146,20 @@ persistence:
         app:
           - path: "/library/books"
             subPath: "Media/Books/BookBoss Library"
+            readOnly: false
           - path: "/library/bookdrop"
             subPath: "Media/Books/.bookdrop/bookboss"
+            readOnly: false
   postgres-ca:
     type: secret
     name: bookboss-postgres-ca
     advancedMounts:
       bookboss:
         app:
-          - path: /postgres-ca
+          - path: "/postgres-ca"
             readOnly: true
         wait-for-postgres:
-          - path: /postgres-ca
+          - path: "/postgres-ca"
             readOnly: true
   tmp:
     type: emptyDir

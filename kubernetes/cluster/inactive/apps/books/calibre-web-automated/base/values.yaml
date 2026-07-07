@@ -45,7 +45,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /login
+                path: "/login"
                 port: &port 8083
               periodSeconds: 30
               timeoutSeconds: 10
@@ -55,7 +55,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /login
+                path: "/login"
                 port: *port
               periodSeconds: 10
               timeoutSeconds: 5
@@ -65,7 +65,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /
+                path: "/"
                 port: *port
               failureThreshold: 90
               periodSeconds: 5
@@ -90,15 +90,15 @@ persistence:
     advancedMounts:
       calibre-web-automated:
         app:
-          - path: /config
+          - path: "/config"
   tmpfs:
     type: emptyDir
     advancedMounts:
       calibre-web-automated:
         app:
-          - path: /cache
-            subPath: cache
-          - path: /run
-            subPath: run
-          - path: /tmp
-            subPath: tmp
+          - path: "/cache"
+            subPath: "cache"
+          - path: "/run"
+            subPath: "run"
+          - path: "/tmp"
+            subPath: "tmp"

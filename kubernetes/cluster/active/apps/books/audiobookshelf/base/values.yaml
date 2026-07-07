@@ -23,9 +23,9 @@ controllers:
         env:
           AUDIOBOOKSHELF_UID: 1000
           AUDIOBOOKSHELF_GID: 1000
-          CONFIG_PATH: /config
-          METADATA_PATH: /metadata
-          BACKUP_PATH: /backups
+          CONFIG_PATH: "/config"
+          METADATA_PATH: "/metadata"
+          BACKUP_PATH: "/backups"
           PORT: &port 80
         probes:
           liveness:
@@ -68,7 +68,7 @@ persistence:
     advancedMounts:
       audiobookshelf:
         app:
-          - path: /config
+          - path: "/config"
   metadata:
     accessMode: ReadWriteOnce
     size: 5Gi
@@ -76,7 +76,7 @@ persistence:
     advancedMounts:
       audiobookshelf:
         app:
-          - path: /metadata
+          - path: "/metadata"
   backup:
     accessMode: ReadWriteOnce
     size: 1Gi
@@ -84,14 +84,14 @@ persistence:
     advancedMounts:
       audiobookshelf:
         app:
-          - path: /backups
+          - path: "/backups"
   cache:
     type: emptyDir
     advancedMounts:
       audiobookshelf:
         app:
-          - path: /.npm
-            subPath: cache
+          - path: "/.npm"
+            subPath: "cache"
 service:
   app:
     ports:

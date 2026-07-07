@@ -21,18 +21,18 @@ persistence:
     advancedMounts:
       calibre-web-automated:
         app:
-          - path: /config
+          - path: "/config"
   tmpfs:
     type: emptyDir
     advancedMounts:
       calibre-web-automated:
         app:
-          - path: /cache
-            subPath: cache
-          - path: /run
-            subPath: run
-          - path: /tmp
-            subPath: tmp
+          - path: "/cache"
+            subPath: "cache"
+          - path: "/run"
+            subPath: "run"
+          - path: "/tmp"
+            subPath: "tmp"
   media:
     existingClaim: smb-mediadata-rwx
     advancedMounts:
@@ -40,8 +40,10 @@ persistence:
         app:
           - path: "/calibre-library"
             subPath: "Media/Books/Calibre Library"
+            readOnly: false
           - path: "/cwa-book-ingest"
             subPath: "Media/Books/.bookdrop/cwa"
+            readOnly: false
 rawResources:
   smb-mediadata-rwx:
     forceRename: smb-mediadata-rwx
@@ -91,4 +93,4 @@ rawResources:
             matches:
               - path:
                   type: PathPrefix
-                  value: /
+                  value: "/"
