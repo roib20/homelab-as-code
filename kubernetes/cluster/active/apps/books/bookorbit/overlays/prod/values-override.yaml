@@ -1,0 +1,38 @@
+---
+persistence:
+  books:
+    type: persistentVolumeClaim
+    existingClaim: smb-mediadata-rwx
+    advancedMounts:
+      bookorbit:
+        app:
+          - path: "/audiobooks"
+            subPath: "Media/Books/BookOrbit/Audiobooks"
+            readOnly: false
+          - path: "/books"
+            subPath: "Media/Books/BookOrbit/eBooks"
+          - path: "/comics"
+            subPath: "Media/Books/BookOrbit/Comics"
+            readOnly: false
+          - path: "/data/book-dock"
+            subPath: "Media/Books/.bookdrop/bookorbit"
+            readOnly: false
+  data:
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn
+    advancedMounts:
+      bookorbit:
+        app:
+          - path: "/data"
+  postgres-ca:
+    type: secret
+    name: bookorbit-postgres-ca
+    advancedMounts:
+      bookorbit:
+        app:
+          - path: "/postgres-ca"
+            readOnly: true
+        wait-for-postgres:
+          - path: "/postgres-ca"
+            readOnly: true

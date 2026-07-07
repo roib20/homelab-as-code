@@ -8,20 +8,20 @@ persistence:
     advancedMounts:
       grimmory:
         app:
-          - path: /app/data
+          - path: "/app/data"
   tmpfs:
     type: emptyDir
     advancedMounts:
       grimmory:
         app:
-          - path: /tmp
+          - path: "/tmp"
   tls:
     type: secret
     name: grimmory-mariadb-ca-bundle
     advancedMounts:
       grimmory:
         app:
-          - path: /tls
+          - path: "/tls"
             readOnly: true
   media:
     existingClaim: smb-mediadata-rwx
@@ -30,8 +30,10 @@ persistence:
         app:
           - path: "/books"
             subPath: "Media/Books/Grimmory Library"
+            readOnly: false
           - path: "/bookdrop"
             subPath: "Media/Books/.bookdrop/grimmory"
+            readOnly: false
 rawResources:
   smb-mediadata-rwx:
     forceRename: smb-mediadata-rwx

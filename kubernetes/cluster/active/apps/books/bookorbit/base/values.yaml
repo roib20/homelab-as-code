@@ -99,7 +99,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /api/v1/health
+                path: "/api/v1/health"
                 port: *port
               periodSeconds: 30
               timeoutSeconds: 5
@@ -109,7 +109,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /api/v1/health
+                path: "/api/v1/health"
                 port: *port
               initialDelaySeconds: 20
               periodSeconds: 10
@@ -141,39 +141,3 @@ service:
     ports:
       http:
         port: *port
-persistence:
-  books:
-    type: persistentVolumeClaim
-    existingClaim: smb-mediadata-rwx
-    advancedMounts:
-      bookorbit:
-        app:
-          - path: "/books"
-            subPath: "Media/Books/BookOrbit"
-          - path: "/data/book-dock"
-            subPath: "Media/Books/.bookdrop/bookorbit"
-  data:
-    accessMode: ReadWriteOnce
-    size: 5Gi
-    storageClass: longhorn
-    advancedMounts:
-      bookorbit:
-        app:
-          - path: /data
-  postgres-ca:
-    type: secret
-    name: bookorbit-postgres-ca
-    advancedMounts:
-      bookorbit:
-        app:
-          - path: /postgres-ca
-            readOnly: true
-        wait-for-postgres:
-          - path: /postgres-ca
-            readOnly: true
-  tmp:
-    type: emptyDir
-    advancedMounts:
-      bookorbit:
-        app:
-          - path: /tmp
