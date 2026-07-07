@@ -26,6 +26,8 @@ spec:
           namespace: bookorbit
           port: 3000
           weight: 1
+      timeouts:
+        request: 5m
       matches:
         - path:
             type: PathPrefix
