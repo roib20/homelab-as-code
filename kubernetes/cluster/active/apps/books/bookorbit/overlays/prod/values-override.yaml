@@ -9,10 +9,10 @@ persistence:
           - path: "/audiobooks"
             subPath: "Media/Books/BookOrbit/Audiobooks"
             readOnly: false
-          - path: "/comics"
-            subPath: "Media/Books/BookOrbit/Comics"
           - path: "/books"
             subPath: "Media/Books/BookOrbit/eBooks"
+          - path: "/comics"
+            subPath: "Media/Books/BookOrbit/Comics"
             readOnly: false
           - path: "/data/book-dock"
             subPath: "Media/Books/.bookdrop/bookorbit"
