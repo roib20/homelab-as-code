@@ -1,0 +1,25 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: tandoor
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: envoy-gateway-ingress
+  hostnames:
+    - "food.${FQDN_01}"
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: tandoor-recipes
+          namespace: tandoor
+          port: 10029
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /

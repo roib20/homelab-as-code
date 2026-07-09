@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "tandoor",
+  "destName": "in-cluster",
+  "destNamespace": "tandoor",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "tandoor"
+}
