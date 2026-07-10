@@ -12,7 +12,7 @@ metadata:
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=tandoor-recipes"
     gethomepage.dev/widget.type: "tandoor"
     gethomepage.dev/widget.url: "http://tandoor-recipes.tandoor.svc.cluster.local:10029"
-    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_TANDOOR_KEY}}"
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_TANDOOR_TOKEN}}"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

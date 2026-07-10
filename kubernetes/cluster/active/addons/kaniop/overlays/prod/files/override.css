@@ -23,5 +23,6 @@
   main .col-md-3:has(img#pve) { order: 21; }
   main .col-md-3:has(img#renovate-operator) { order: 22; }
   main .col-md-3:has(img#seerr) { order: 23; }
-  main .col-md-3:has(img#transmute) { order: 24; }
+  main .col-md-3:has(img#tandoor) { order: 24; }
+  main .col-md-3:has(img#transmute) { order: 25; }
 }
