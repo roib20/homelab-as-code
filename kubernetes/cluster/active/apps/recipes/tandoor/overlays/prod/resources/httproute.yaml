@@ -3,6 +3,16 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: tandoor
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Recipe manager, meal planner and shopping list.
+    gethomepage.dev/group: Productivity
+    gethomepage.dev/icon: tandoor-recipes.svg
+    gethomepage.dev/name: Tandoor
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=tandoor-recipes"
+    gethomepage.dev/widget.type: "tandoor"
+    gethomepage.dev/widget.url: "http://tandoor-recipes.tandoor.svc.cluster.local:10029"
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_TANDOOR_KEY}}"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
