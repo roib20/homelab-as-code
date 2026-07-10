@@ -10,6 +10,10 @@ spec:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname
     podAntiAffinityType: required
+  postgresql:
+    pg_hba:
+      - hostssl tandoor tandoor all scram-sha-256
+      - host tandoor tandoor all reject
   bootstrap:
     initdb:
       database: tandoor

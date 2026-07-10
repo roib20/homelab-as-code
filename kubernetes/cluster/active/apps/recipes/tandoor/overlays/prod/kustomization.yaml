@@ -29,3 +29,4 @@ replacements:
   - path: replacements.yaml
 patches:
   - path: patches/chart-secret-cleanup.yaml
+  - path: patches/postgres-ca-mount.yaml

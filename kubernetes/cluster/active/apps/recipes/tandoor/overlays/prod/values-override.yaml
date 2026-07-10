@@ -11,7 +11,7 @@ workload:
   main:
     podSpec:
       annotations:
-        secret.reloader.stakater.com/reload: "tandoor-secret-key,tandoor-fdc-api-key,tandoor-kanidm-oauth2-credentials,tandoor-postgres-app"
+        secret.reloader.stakater.com/reload: "tandoor-secret-key,tandoor-fdc-api-key,tandoor-kanidm-oauth2-credentials,tandoor-postgres-app,tandoor-postgres-ca"
       containers:
         main:
           # Configuration - Tandoor Recipes: https://docs.tandoor.dev/system/configuration/
@@ -57,6 +57,8 @@ workload:
             SOCIAL_DEFAULT_GROUP: user
             # Wire Django to the repo-managed CNPG cluster (tandoor-postgres-app).
             DB_ENGINE: django.db.backends.postgresql
+            # verify the CNPG server cert against its CA mounted at `/postgres-ca`
+            DB_OPTIONS: "{'sslmode': 'verify-full', 'sslrootcert': '/postgres-ca/ca.crt'}"
             POSTGRES_HOST:
               secretKeyRef:
                 name: tandoor-postgres-app
