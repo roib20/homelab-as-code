@@ -33,7 +33,7 @@ jobs:
         uses: azure/setup-helm@v5
         with:
           # renovate: datasource=github-releases depName=helm/helm
-          version: v4.2.2
+          version: v4.2.3
       - name: Install Kustomize
         env:
           # renovate: datasource=github-releases depName=kubernetes-sigs/kustomize extractVersion=^kustomize/v(?<version>.+)$
