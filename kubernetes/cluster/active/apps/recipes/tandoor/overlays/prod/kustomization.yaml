@@ -5,7 +5,7 @@ resources:
   - ../../base
   - external-secrets
   - resources/cnpg-cluster.yaml
-  # - resources/httproute.yaml
+  - resources/httproute.yaml
 helmCharts:
   - name: tandoor-recipes
     repo: oci://oci.trueforge.org/truecharts
