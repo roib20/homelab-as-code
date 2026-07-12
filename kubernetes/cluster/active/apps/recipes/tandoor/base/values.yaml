@@ -1,0 +1,30 @@
+---
+securityContext:
+  container:
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsGroup: 568
+    runAsUser: 568
+workload:
+  main:
+    podSpec:
+      initContainers:
+        # chart's `mkdir /run/nginx` init is unneeded; v2 nginx writes under `/tmp`
+        init-mkdir:
+          enabled: false
+persistence:
+  media:
+    enabled: true
+    mountPath: /opt/recipes/mediafiles
+    size: 1Gi
+    retain: true
+  static:
+    enabled: true
+    type: emptyDir
+    mountPath: /opt/recipes/staticfiles
+# repo-managed CNPG, not the chart's bundled DB
+cnpg:
+  main:
+    enabled: false
+    user: tandoor
+    database: tandoor

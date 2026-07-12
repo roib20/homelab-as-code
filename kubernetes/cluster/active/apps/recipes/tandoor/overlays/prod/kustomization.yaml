@@ -1,0 +1,32 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - external-secrets
+  - resources/cnpg-cluster.yaml
+  # - resources/httproute.yaml
+helmCharts:
+  - name: tandoor-recipes
+    repo: oci://oci.trueforge.org/truecharts
+    version: 21.7.1
+    releaseName: tandoor-recipes
+    namespace: tandoor
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+  - name: tandoor-oidc
+    literals:
+      - AUTH_HOST=auth.${FQDN_01}
+    options:
+      disableNameSuffixHash: true
+replacements:
+  - path: replacements.yaml
+patches:
+  - path: patches/chart-secret-cleanup.yaml
+  - path: patches/postgres-ca-mount.yaml

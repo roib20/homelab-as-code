@@ -1,0 +1,86 @@
+---
+global:
+  fallbackDefaults:
+    storageClass: longhorn
+    pvcRetain: false
+    pvcSize: 1Gi
+cnpg:
+  main:
+    enabled: false
+workload:
+  main:
+    podSpec:
+      annotations:
+        secret.reloader.stakater.com/reload: "tandoor-secret-key,tandoor-fdc-api-key,tandoor-kanidm-oauth2-credentials,tandoor-postgres-app,tandoor-postgres-ca"
+      containers:
+        main:
+          # Configuration - Tandoor Recipes: https://docs.tandoor.dev/system/configuration/
+          env:
+            DEBUG: 0
+            ALLOWED_HOSTS: "*"
+            CSRF_TRUSTED_ORIGINS: "https://food.${FQDN_01}"
+            SECRET_KEY:
+              secretKeyRef:
+                name: tandoor-secret-key
+                key: SECRET_KEY
+                expandObjectName: false
+            FDC_API_KEY:
+              secretKeyRef:
+                name: tandoor-fdc-api-key
+                key: FDC_API_KEY
+                expandObjectName: false
+            # Kanidm-issued client credentials (kaniop KanidmOAuth2Client secret).
+            OIDC_CLIENT_ID:
+              secretKeyRef:
+                name: tandoor-kanidm-oauth2-credentials
+                key: CLIENT_ID
+                expandObjectName: false
+            OIDC_CLIENT_SECRET:
+              secretKeyRef:
+                name: tandoor-kanidm-oauth2-credentials
+                key: CLIENT_SECRET
+                expandObjectName: false
+            # Kanidm OIDC issuer; allauth appends /.well-known/openid-configuration.
+            # $(OIDC_CLIENT_ID) is expanded by kubelet at runtime.
+            OIDC_ISSUER: "https://auth.${FQDN_01}/oauth2/openid/$(OIDC_CLIENT_ID)"
+            SOCIAL_PROVIDERS: "allauth.socialaccount.providers.openid_connect"
+            # Credentials/issuer injected via kubelet $(VAR) expansion of the
+            # OIDC_* vars above (they sort before this key alphabetically).
+            SOCIALACCOUNT_PROVIDERS: >-
+              { 'openid_connect': { 'OAUTH_PKCE_ENABLED': True, 'APPS': [ { 'provider_id':
+              'kanidm', 'name': 'Kanidm', 'client_id': '$(OIDC_CLIENT_ID)', 'secret':
+              '$(OIDC_CLIENT_SECRET)', 'settings': { 'server_url': '$(OIDC_ISSUER)' } } ] } }
+            SOCIALACCOUNT_LOGIN_ON_GET: 1
+            SOCIALACCOUNT_ONLY: 0
+            HIDE_LOGIN_FORM: 1
+            SOCIAL_DEFAULT_ACCESS: 1
+            SOCIAL_DEFAULT_GROUP: user
+            # Wire Django to the repo-managed CNPG cluster (tandoor-postgres-app).
+            DB_ENGINE: django.db.backends.postgresql
+            # verify the CNPG server cert against its CA mounted at `/postgres-ca`
+            DB_OPTIONS: "{'sslmode': 'verify-full', 'sslrootcert': '/postgres-ca/ca.crt'}"
+            POSTGRES_HOST:
+              secretKeyRef:
+                name: tandoor-postgres-app
+                key: host
+                expandObjectName: false
+            POSTGRES_PORT:
+              secretKeyRef:
+                name: tandoor-postgres-app
+                key: port
+                expandObjectName: false
+            POSTGRES_DB:
+              secretKeyRef:
+                name: tandoor-postgres-app
+                key: dbname
+                expandObjectName: false
+            POSTGRES_USER:
+              secretKeyRef:
+                name: tandoor-postgres-app
+                key: user
+                expandObjectName: false
+            POSTGRES_PASSWORD:
+              secretKeyRef:
+                name: tandoor-postgres-app
+                key: password
+                expandObjectName: false

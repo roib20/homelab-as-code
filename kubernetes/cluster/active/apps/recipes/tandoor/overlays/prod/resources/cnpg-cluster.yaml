@@ -1,0 +1,35 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: tandoor-postgres
+spec:
+  instances: 2
+  primaryUpdateMethod: switchover
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
+  postgresql:
+    pg_hba:
+      - hostssl tandoor tandoor all scram-sha-256
+      - host tandoor tandoor all reject
+  bootstrap:
+    initdb:
+      database: tandoor
+      owner: tandoor
+  managed:
+    services:
+      disabledDefaultServices:
+        - ro
+        - r
+  storage:
+    size: 1Gi
+    storageClass: longhorn-cnpg
+  resources:
+    requests:
+      cpu: 75m
+      memory: 200Mi
+    limits:
+      cpu: 1500m
+      memory: 2400Mi

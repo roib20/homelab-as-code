@@ -1,0 +1,20 @@
+---
+# Mount the CNPG CA so the app can `sslmode=verify-full` the server cert
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tandoor-recipes
+  namespace: tandoor
+spec:
+  template:
+    spec:
+      volumes:
+        - name: postgres-ca
+          secret:
+            secretName: tandoor-postgres-ca
+      containers:
+        - name: tandoor-recipes
+          volumeMounts:
+            - name: postgres-ca
+              mountPath: /postgres-ca
+              readOnly: true

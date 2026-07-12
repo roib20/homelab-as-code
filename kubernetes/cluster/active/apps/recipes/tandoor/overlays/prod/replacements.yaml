@@ -1,0 +1,47 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    # HTTPRoute hostname
+    - select:
+        kind: HTTPRoute
+        name: tandoor
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    # Build the auth host used by the OIDC issuer URL
+    - select:
+        kind: ConfigMap
+        name: tandoor-oidc
+      fieldPaths:
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+    # Public CSRF trusted origin env var
+    - select:
+        kind: Deployment
+        name: tandoor-recipes
+      fieldPaths:
+        - spec.template.spec.containers.[name=tandoor-recipes].env.[name=CSRF_TRUSTED_ORIGINS].value
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: tandoor-oidc
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    # OIDC issuer URL (uses $(OIDC_CLIENT_ID) expanded by kubelet at runtime)
+    - select:
+        kind: Deployment
+        name: tandoor-recipes
+      fieldPaths:
+        - spec.template.spec.containers.[name=tandoor-recipes].env.[name=OIDC_ISSUER].value
+      options:
+        delimiter: "/"
+        index: 2
