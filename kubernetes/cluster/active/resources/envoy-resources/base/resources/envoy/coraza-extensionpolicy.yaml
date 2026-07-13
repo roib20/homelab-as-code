@@ -82,6 +82,10 @@ spec:
             - SecRule REQUEST_METHOD "@streq POST" "id:100020,phase:1,pass,nolog,chain"
             - SecRule REQUEST_HEADERS:Host "@rx ^food\." "chain"
             - SecRule REQUEST_FILENAME "@streq /api/import/" "ctl:requestBodyAccess=Off"
+            # Tandoor recipe create/edit: free-text ingredients/steps trip SQLi/RCE/XSS rules (e.g. 942151 on "extract (" in an ingredient); do not inspect the body
+            - SecRule REQUEST_METHOD "@rx ^(POST|PUT|PATCH)$" "id:100021,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^food\." "chain"
+            - SecRule REQUEST_FILENAME "@rx ^/api/recipe/([0-9]+/)?$" "ctl:requestBodyAccess=Off"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---
