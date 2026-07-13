@@ -86,6 +86,10 @@ spec:
             - SecRule REQUEST_METHOD "@rx ^(POST|PUT|PATCH)$" "id:100021,phase:1,pass,nolog,chain"
             - SecRule REQUEST_HEADERS:Host "@rx ^food\." "chain"
             - SecRule REQUEST_FILENAME "@rx ^/api/recipe/([0-9]+/)?$" "ctl:requestBodyAccess=Off"
+            # Tandoor recipe image upload: images exceed Envoy's body buffer while Coraza inspects them (413); do not buffer/inspect the body
+            - SecRule REQUEST_METHOD "@streq PUT" "id:100022,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^food\." "chain"
+            - SecRule REQUEST_FILENAME "@rx ^/api/recipe/[0-9]+/image/$" "ctl:requestBodyAccess=Off"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---
