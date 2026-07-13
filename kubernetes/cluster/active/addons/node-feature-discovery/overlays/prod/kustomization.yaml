@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: node-feature-discovery
     repo: oci://registry.k8s.io/nfd/charts
-    version: 0.18.3
+    version: 0.19.0
     releaseName: node-feature-discovery
     namespace: node-feature-discovery
     valuesFile: ../../base/values.yaml
