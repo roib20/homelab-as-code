@@ -134,6 +134,7 @@ server:
               regex: '{{ printf "%s-server-microservices" .Release.Name }}'
   persistence:
     data:
+      existingClaim: smb-imagedata-rwx
       # Create directories in advance on the mounted SMB share:
       # `mkdir -p "immich/data" "immich/external-libraries"`
       globalMounts:
