@@ -300,6 +300,7 @@ server:
               name: cube
             - ensure: present
               name: vchord
+              version: 1.1.1
             - ensure: present
               name: earthdistance
 
