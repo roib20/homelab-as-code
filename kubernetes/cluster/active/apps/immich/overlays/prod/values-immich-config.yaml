@@ -114,11 +114,13 @@ server:
                     preferredHwDevice: "auto"
                     preset: "medium"
                     realtime:
-                      enabled: false
+                      enabled: true
                       resolutions:
                         - 480
                         - 720
                         - 1080
+                        - 1440
+                        - 2160
                       videoCodecs:
                         - "h264"
                         - "hevc"
