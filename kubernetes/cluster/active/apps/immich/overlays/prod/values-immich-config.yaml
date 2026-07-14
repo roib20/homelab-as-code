@@ -1,7 +1,7 @@
 ---
 defaultPodOptions:
   annotations:
-    secret.reloader.stakater.com/reload: "immich-cnpg-app,immich-config,immich-kanidm-oauth2-credentials"
+    secret.reloader.stakater.com/reload: "immich-cnpg-app,,immich-cnpg-ca,immich-config,immich-kanidm-oauth2-credentials"
 
 immich:
   configurationKind: Secret
@@ -113,6 +113,17 @@ server:
                     maxBitrate: "0"
                     preferredHwDevice: "auto"
                     preset: "medium"
+                    realtime:
+                      enabled: true
+                      resolutions:
+                        - 480
+                        - 720
+                        - 1080
+                        - 1440
+                        - 2160
+                      videoCodecs:
+                        - "h264"
+                        - "hevc"
                     refs: 0
                     targetAudioCodec: "opus"
                     targetResolution: "1080"
@@ -120,28 +131,47 @@ server:
                     temporalAQ: false
                     threads: 0
                     tonemap: "hable"
-                    transcode: "required"
+                    transcode: "disabled"
                     twoPass: false
+                  integrityChecks:
+                    checksumFiles:
+                      cronExpression: "0 03 * * *"
+                      enabled: true
+                      percentageLimit: 1
+                      timeLimit: 3600000
+                    missingFiles:
+                      cronExpression: "0 03 * * *"
+                      enabled: true
+                    untrackedFiles:
+                      cronExpression: "0 03 * * *"
+                      enabled: true
                   image:
                     colorspace: "p3"
                     extractEmbedded: false
                     fullsize:
                       enabled: false
                       format: "jpeg"
+                      progressive: false
                       quality: 80
                     preview:
                       format: "jpeg"
+                      progressive: false
                       quality: 80
                       size: 1440
                     thumbnail:
                       format: "webp"
+                      progressive: false
                       quality: 80
                       size: 250
                   job:
                     backgroundTask:
                       concurrency: 5
+                    editor:
+                      concurrency: 2
                     faceDetection:
                       concurrency: 2
+                    integrityCheck:
+                      concurrency: 1
                     library:
                       concurrency: 5
                     metadataExtraction:
@@ -161,6 +191,8 @@ server:
                     thumbnailGeneration:
                       concurrency: 3
                     videoConversion:
+                      concurrency: 1
+                    workflow:
                       concurrency: 1
                   library:
                     scan:
@@ -205,6 +237,7 @@ server:
                     faces:
                       import: false
                   newVersionCheck:
+                    channel: "stable"
                     enabled: true
                   nightlyTasks:
                     clusterNewFaces: true
@@ -226,6 +259,7 @@ server:
                         secure: false
                         username: ""
                   oauth:
+                    allowInsecureRequests: false
                     autoLaunch: true
                     autoRegister: true
                     buttonText: "Login with Kanidm"
@@ -233,10 +267,12 @@ server:
                     clientSecret: '{{ printf "{{ .CLIENT_SECRET }}" }}'
                     defaultStorageQuota: null
                     enabled: true
+                    endSessionEndpoint: ""
                     issuerUrl: 'https://auth.{{ printf "{{ .FQDN_01 }}" }}/oauth2/openid/{{ printf "{{ .CLIENT_ID }}" }}/.well-known/openid-configuration'
                     mobileOverrideEnabled: false
                     mobileRedirectUri: 'https://photos.{{ printf "{{ .FQDN_01 }}" }}/api/oauth/mobile-redirect'
                     profileSigningAlgorithm: "ES256"
+                    prompt: ""
                     roleClaim: "immich_role"
                     scope: "openid email profile"
                     signingAlgorithm: "ES256"
