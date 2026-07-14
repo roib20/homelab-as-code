@@ -192,7 +192,7 @@ server:
               name: http-gateway-api
               namespace: envoy-gateway-ingress
           hostnames:
-            - "photos.${FQDN_01}"
+            - "gallery.${FQDN_01}"
           rules:
             - matches:
                 - path:

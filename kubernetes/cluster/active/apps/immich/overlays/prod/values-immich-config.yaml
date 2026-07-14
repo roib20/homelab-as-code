@@ -270,7 +270,7 @@ server:
                     endSessionEndpoint: ""
                     issuerUrl: 'https://auth.{{ printf "{{ .FQDN_01 }}" }}/oauth2/openid/{{ printf "{{ .CLIENT_ID }}" }}/.well-known/openid-configuration'
                     mobileOverrideEnabled: false
-                    mobileRedirectUri: 'https://photos.{{ printf "{{ .FQDN_01 }}" }}/api/oauth/mobile-redirect'
+                    mobileRedirectUri: 'https://gallery.{{ printf "{{ .FQDN_01 }}" }}/api/oauth/mobile-redirect'
                     profileSigningAlgorithm: "ES256"
                     prompt: ""
                     roleClaim: "immich_role"
