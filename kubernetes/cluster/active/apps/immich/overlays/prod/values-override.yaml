@@ -245,7 +245,7 @@ server:
           storage:
             size: 10Gi
             storageClass: longhorn-cnpg
-          imageName: ghcr.io/cloudnative-pg/postgresql:18
+          imageName: ghcr.io/cloudnative-pg/postgresql:18.4-standard-trixie
           postgresql:
             shared_preload_libraries:
               - "vchord.so"
