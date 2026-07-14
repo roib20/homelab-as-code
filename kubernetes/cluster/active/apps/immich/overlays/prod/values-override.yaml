@@ -1,7 +1,7 @@
 ---
 defaultPodOptions:
   annotations:
-    secret.reloader.stakater.com/reload: immich-cnpg-app,immich-cnpg-ca
+    secret.reloader.stakater.com/reload: "immich-cnpg-app,immich-cnpg-ca"
 
 controllers:
   main:
