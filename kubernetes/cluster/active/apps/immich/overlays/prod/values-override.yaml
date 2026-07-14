@@ -254,7 +254,7 @@ server:
           instances: 2
           storage:
             size: 10Gi
-            storageClass: longhorn-cnpg-cluster
+            storageClass: longhorn-cnpg
           imageName: ghcr.io/cloudnative-pg/postgresql:18.4-standard-trixie
           postgresql:
             pg_hba:
@@ -284,7 +284,7 @@ server:
             topologyKey: kubernetes.io/hostname
             podAntiAffinityType: required
     cnpg-database:
-      forceRename: immich-cnpg-database
+      forceRename: immich-database
       manifest:
         apiVersion: postgresql.cnpg.io/v1
         kind: Database
