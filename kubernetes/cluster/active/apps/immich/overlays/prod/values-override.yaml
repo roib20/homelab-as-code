@@ -1,7 +1,7 @@
 ---
 defaultPodOptions:
   annotations:
-    secret.reloader.stakater.com/reload: immich-cnpg-app
+    secret.reloader.stakater.com/reload: immich-cnpg-app,immich-cnpg-ca
 
 controllers:
   main:
@@ -23,11 +23,12 @@ controllers:
         env: &immichCommonEnv
           REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
           IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
-          DB_URL:
+          DATABASE_CONN_URI:
             valueFrom:
               secretKeyRef:
                 name: immich-cnpg-app
                 key: uri
+          DB_URL: "$(DATABASE_CONN_URI)?sslmode=verify-full&sslrootcert=/postgres-ca/ca.crt"
           DB_VECTOR_EXTENSION: vectorchord
           IMMICH_ALLOW_SETUP: false
           UPLOAD_LOCATION: /data
@@ -159,6 +160,12 @@ server:
       size: 1Gi
       globalMounts:
         - path: /data/profile
+    postgres-ca:
+      type: secret
+      name: immich-cnpg-ca
+      globalMounts:
+        - path: /postgres-ca
+          readOnly: true
   rawResources:
     http-route:
       forceRename: immich
@@ -248,6 +255,9 @@ server:
             storageClass: longhorn-cnpg
           imageName: ghcr.io/cloudnative-pg/postgresql:18.4-standard-trixie
           postgresql:
+            pg_hba:
+              - hostssl immich immich all scram-sha-256
+              - host immich immich all reject
             shared_preload_libraries:
               - "vchord.so"
             extensions:
