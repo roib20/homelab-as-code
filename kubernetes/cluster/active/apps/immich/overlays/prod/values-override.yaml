@@ -1,7 +1,7 @@
 ---
 defaultPodOptions:
   annotations:
-    secret.reloader.stakater.com/reload: immich-cnpg-app
+    secret.reloader.stakater.com/reload: "immich-cnpg-app,immich-cnpg-ca"
 
 controllers:
   main:
@@ -23,11 +23,12 @@ controllers:
         env: &immichCommonEnv
           REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
           IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
-          DB_URL:
+          DATABASE_CONN_URI:
             valueFrom:
               secretKeyRef:
                 name: immich-cnpg-app
                 key: uri
+          DB_URL: "$(DATABASE_CONN_URI)?sslmode=verify-full&sslrootcert=/postgres-ca/ca.crt"
           DB_VECTOR_EXTENSION: vectorchord
           IMMICH_ALLOW_SETUP: false
           UPLOAD_LOCATION: /data
@@ -134,6 +135,7 @@ server:
               regex: '{{ printf "%s-server-microservices" .Release.Name }}'
   persistence:
     data:
+      existingClaim: smb-imagedata-rwx
       # Create directories in advance on the mounted SMB share:
       # `mkdir -p "immich/data" "immich/external-libraries"`
       globalMounts:
@@ -158,6 +160,12 @@ server:
       size: 1Gi
       globalMounts:
         - path: /data/profile
+    postgres-ca:
+      type: secret
+      name: immich-cnpg-ca
+      globalMounts:
+        - path: /postgres-ca
+          readOnly: true
   rawResources:
     http-route:
       forceRename: immich
@@ -234,6 +242,8 @@ server:
               requests:
                 - name: gpu
                   exactly:
+                    allocationMode: ExactCount
+                    count: 1
                     deviceClassName: gpu.intel.com
     cnpg-cluster:
       forceRename: immich-cnpg
@@ -244,15 +254,18 @@ server:
           instances: 2
           storage:
             size: 10Gi
-            storageClass: longhorn-cnpg
-          imageName: ghcr.io/cloudnative-pg/postgresql:18
+            storageClass: longhorn-cnpg-cluster
+          imageName: ghcr.io/cloudnative-pg/postgresql:18.4-standard-trixie
           postgresql:
+            pg_hba:
+              - hostssl immich immich all scram-sha-256
+              - host immich immich all reject
             shared_preload_libraries:
               - "vchord.so"
             extensions:
               - name: vchord
                 image:
-                  reference: ghcr.io/tensorchord/vchord-scratch:pg18-v0.5.3
+                  reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1
                 dynamic_library_path:
                   - /usr/lib/postgresql/18/lib
                 extension_control_path:
@@ -271,7 +284,7 @@ server:
             topologyKey: kubernetes.io/hostname
             podAntiAffinityType: required
     cnpg-database:
-      forceRename: immich-database
+      forceRename: immich-cnpg-database
       manifest:
         apiVersion: postgresql.cnpg.io/v1
         kind: Database
@@ -281,10 +294,15 @@ server:
           cluster:
             name: immich-cnpg
           extensions:
-            - name: vector
-            - name: cube
-            - name: vchord
-            - name: earthdistance
+            - ensure: present
+              name: vector
+            - ensure: present
+              name: cube
+            - ensure: present
+              name: vchord
+              version: 1.1.1
+            - ensure: present
+              name: earthdistance
 
 immich:
   persistence:
