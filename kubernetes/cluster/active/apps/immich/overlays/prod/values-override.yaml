@@ -48,6 +48,7 @@ server:
       containers:
         main:
           env:
+            IMMICH_HOST: 0.0.0.0
             IMMICH_WORKERS_INCLUDE: api
     microservices:
       type: deployment
