@@ -7,15 +7,22 @@ controllers:
     containers:
       main:
         image:
+          repository: &immichServerRepository ghcr.io/immich-app/immich-server
           tag: '{{ .Values.immichVersion }}'
 
 server:
   controllers:
+    main:
+      containers:
+        main:
+          image:
+            repository: *immichServerRepository
+            tag: '{{ .Values.immichVersion }}'
     microservices:
       containers:
         main:
           image:
-            repository: ghcr.io/immich-app/immich-server
+            repository: *immichServerRepository
             tag: '{{ .Values.immichVersion }}'
 
 machine-learning:
@@ -25,6 +32,7 @@ machine-learning:
       containers:
         main:
           image:
+            repository: ghcr.io/immich-app/immich-machine-learning
             tag: '{{ .Values.immichVersion }}-openvino'
 
 valkey:
