@@ -271,13 +271,22 @@ server:
           data:
             - secretKey: CLIENT_ID
               remoteRef:
+                conversionStrategy: Default
+                decodingStrategy: None
                 key: immich-kanidm-oauth2-credentials
+                metadataPolicy: None
                 property: CLIENT_ID
             - secretKey: CLIENT_SECRET
               remoteRef:
+                conversionStrategy: Default
+                decodingStrategy: None
                 key: immich-kanidm-oauth2-credentials
+                metadataPolicy: None
                 property: CLIENT_SECRET
             - secretKey: FQDN_01
               remoteRef:
+                conversionStrategy: Default
+                decodingStrategy: None
                 key: env-vars
+                metadataPolicy: None
                 property: FQDN_01
