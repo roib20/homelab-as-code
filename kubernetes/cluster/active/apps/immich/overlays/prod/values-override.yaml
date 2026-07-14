@@ -242,6 +242,8 @@ server:
               requests:
                 - name: gpu
                   exactly:
+                    allocationMode: ExactCount
+                    count: 1
                     deviceClassName: gpu.intel.com
     cnpg-cluster:
       forceRename: immich-cnpg
@@ -292,10 +294,14 @@ server:
           cluster:
             name: immich-cnpg
           extensions:
-            - name: vector
-            - name: cube
-            - name: vchord
-            - name: earthdistance
+            - ensure: present
+              name: vector
+            - ensure: present
+              name: cube
+            - ensure: present
+              name: vchord
+            - ensure: present
+              name: earthdistance
 
 immich:
   persistence:
