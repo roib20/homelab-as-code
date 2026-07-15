@@ -1,0 +1,49 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars-hermes-agent
+    fieldPath: "data.FQDN_02"
+  targets:
+    - select:
+        kind: Ingress
+        name: hermes-dashboard
+      fieldPaths:
+        - spec.rules.0.host
+        - spec.tls.0.hosts.0
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: HermesInstance
+        name: hermes-agent
+      fieldPaths:
+        - spec.env.[name=HERMES_DASHBOARD_PUBLIC_URL].value
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars-hermes-agent
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        kind: HermesInstance
+        name: hermes-agent
+      fieldPaths:
+        - spec.env.[name=HERMES_DASHBOARD_OIDC_ISSUER].value
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars-hermes-agent
+    fieldPath: "data.OIDC_ISSUER_PATH"
+  targets:
+    - select:
+        kind: HermesInstance
+        name: hermes-agent
+      fieldPaths:
+        - spec.env.[name=HERMES_DASHBOARD_OIDC_ISSUER].value
+      options:
+        delimiter: "/"
+        index: 3

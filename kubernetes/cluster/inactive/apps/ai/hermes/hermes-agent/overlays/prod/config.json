@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "hermes-agent",
+  "destName": "in-cluster",
+  "destNamespace": "hermes-agent",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "hermes-agent"
+}

@@ -1,0 +1,73 @@
+---
+apiVersion: hermes.agent/v1
+kind: HermesInstance
+metadata:
+  name: hermes-agent
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  image:
+    repository: docker.io/nousresearch/hermes-agent
+    tag: main@sha256:b3c6f13e015d90590fda96198cadd77e5e5bc74135d98f96f47585f1f65c8b01
+  config:
+    raw:
+      model:
+        provider: openai-codex
+        default: gpt-5.6-luna
+  env:
+    # Hermes Dashboard, secured with OIDC
+    - name: HERMES_DASHBOARD
+      value: "true"
+    - name: HERMES_DASHBOARD_OIDC_ISSUER
+      value: "https://auth.${FQDN_01}/oauth2/openid/hermes"
+    - name: HERMES_DASHBOARD_OIDC_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: hermes-kanidm-oauth2-credentials
+          key: CLIENT_ID
+    - name: HERMES_DASHBOARD_OIDC_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: hermes-kanidm-oauth2-credentials
+          key: CLIENT_SECRET
+    # Tailscale Ingress
+    - name: HERMES_DASHBOARD_PUBLIC_URL
+      value: "https://hermes.${FQDN_02}"
+    # Bootstraps `/opt/data/auth.json` (Codex OAuth session) on first boot only
+    - name: HERMES_AUTH_JSON_BOOTSTRAP
+      valueFrom:
+        secretKeyRef:
+          name: hermes-auth-codex
+          key: auth.json
+  storage:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClassName: longhorn
+  networking:
+    service:
+      ports:
+        - name: gateway
+          port: 8443
+          targetPort: 8443
+        - name: dashboard
+          port: 9119
+          targetPort: 9119
+  observability:
+    metrics:
+      enabled: false
+  security:
+    networkPolicy:
+      allowedIngressNamespaces:
+        - tailscale
+      additionalEgress:
+        - to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: envoy-gateway-ingress
+              podSelector:
+                matchLabels:
+                  gateway.networking.k8s.io/gateway-name: http-gateway-api
+          ports:
+            - port: 10443
+              protocol: TCP
