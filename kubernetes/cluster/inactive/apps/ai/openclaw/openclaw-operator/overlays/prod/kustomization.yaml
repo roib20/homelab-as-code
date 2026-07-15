@@ -1,0 +1,16 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: openclaw-operator
+resources:
+  - ../../base
+helmCharts:
+  - name: openclaw-operator
+    repo: oci://ghcr.io/paperclipinc/charts
+    version: 0.36.5
+    releaseName: openclaw-operator
+    namespace: openclaw-operator
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true

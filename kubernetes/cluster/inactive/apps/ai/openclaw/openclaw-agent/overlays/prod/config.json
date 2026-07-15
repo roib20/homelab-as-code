@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "openclaw-agent",
+  "destName": "in-cluster",
+  "destNamespace": "openclaw-agent",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "openclaw-agent"
+}

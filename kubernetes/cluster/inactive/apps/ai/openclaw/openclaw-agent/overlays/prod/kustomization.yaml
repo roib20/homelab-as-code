@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: openclaw-agent
+resources:
+  - ../../base
+  - resources/openclaw-instance.yaml
+configMapGenerator:
+  - name: env-vars-openclaw-agent
+    envs:
+      - /tmp/env-vars.env
+replacements:
+  - path: replacements.yaml

@@ -1,0 +1,15 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars-openclaw-agent
+    fieldPath: "data.FQDN_02"
+  targets:
+    - select:
+        kind: OpenClawInstance
+        name: openclaw-agent
+      fieldPaths:
+        - spec.networking.ingress.hosts.0.host
+        - spec.networking.ingress.tls.0.hosts.0
+      options:
+        delimiter: "."
+        index: 1

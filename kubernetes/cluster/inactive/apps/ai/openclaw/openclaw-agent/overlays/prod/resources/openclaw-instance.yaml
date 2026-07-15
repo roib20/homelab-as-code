@@ -1,0 +1,67 @@
+---
+apiVersion: openclaw.rocks/v1alpha1
+kind: OpenClawInstance
+metadata:
+  name: openclaw-agent
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  image:
+    repository: ghcr.io/openclaw/openclaw
+    tag: 2026.7.1@sha256:6a31d44b2944e7adcd2b582bf6fb463111264ebca97a0201795b799135bd102c
+    pullPolicy: IfNotPresent
+  config:
+    raw:
+      plugins:
+        entries:
+          codex:
+            enabled: true
+          duckduckgo:
+            enabled: true
+      tools:
+        web:
+          fetch:
+            enabled: true
+          search:
+            enabled: true
+            provider: duckduckgo
+      agents:
+        list:
+          - id: openclaw-agent
+            name: OpenClaw Agent
+            default: true
+            model: openai/gpt-5.6-luna
+  storage:
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: 10Gi
+      accessModes:
+        - ReadWriteOnce
+      orphan: false
+  networking:
+    service:
+      type: ClusterIP
+    ingress:
+      enabled: true
+      className: tailscale
+      annotations:
+        tailscale.com/proxy-group: ingress-proxies
+      hosts:
+        - host: "openclaw.${FQDN_02}"
+          paths:
+            - path: /
+              pathType: Prefix
+              port: 18789
+      tls:
+        - hosts:
+            - "openclaw.${FQDN_02}"
+  observability:
+    metrics:
+      enabled: false
+  security:
+    networkPolicy:
+      enabled: true
+      allowDNS: true
+      allowedIngressNamespaces:
+        - tailscale
