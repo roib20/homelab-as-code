@@ -3,7 +3,7 @@ controllers:
   zeroclaw:
     annotations:
       configmap.reloader.stakater.com/reload: "zeroclaw-config,zeroclaw-mise"
-      secret.reloader.stakater.com/reload: "zeroclaw-secret-key"
+      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-secret-key"
     initContainers:
       bootstrap:
         image:
@@ -19,6 +19,11 @@ controllers:
             mise trust "${MISE_GLOBAL_CONFIG_FILE}"
             mise --yes install
             mise --yes prune --tools
+            if ! zeroclaw auth status |
+              grep -q '^[* ]*openai-codex:[^ ]* kind=OAuth'
+            then
+              zeroclaw auth login --model-provider openai-codex --import "${HOME}/.codex/auth.json"
+            fi
         env:
           - name: HOME
             value: "/zeroclaw-data"
@@ -43,6 +48,15 @@ controllers:
           limits:
             memory: 256Mi
 persistence:
+  codex-auth:
+    type: secret
+    name: zeroclaw-auth-codex
+    advancedMounts:
+      zeroclaw:
+        bootstrap:
+          - path: "/zeroclaw-data/.codex/auth.json"
+            subPath: "auth.json"
+            readOnly: true
   mise:
     type: configMap
     name: zeroclaw-mise
