@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "zeroclaw",
+  "destName": "in-cluster",
+  "destNamespace": "zeroclaw",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "zeroclaw"
+}

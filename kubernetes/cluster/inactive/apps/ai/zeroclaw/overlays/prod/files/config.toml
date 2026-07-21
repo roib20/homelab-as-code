@@ -1,0 +1,76 @@
+schema_version = 3
+
+# OpenAI Codex over a ChatGPT subscription:
+# https://docs.zeroclawlabs.ai/master/en/providers/openai-codex-subscription.html
+[providers.models.openai.codex]
+model = "gpt-5.6-terra"
+requires_openai_auth = true
+wire_api = "responses"
+
+[agents.assistant]
+model_provider = "openai.codex"
+risk_profile = "assistant"
+mcp_bundles = ["mcp"]
+
+[risk_profiles.assistant]
+level = "supervised"
+auto_approve = ["file_read", "file_write", "file_edit", "memory_recall", "memory_store", "web_search_tool", "web_fetch", "calculator", "glob_search", "content_search", "image_info", "weather", "git_operations", "tool_list"]
+allowed_commands = [
+  # Default allowed commands for Unix platforms:
+  # https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/crates/zeroclaw-config/src/policy.rs
+  "git",
+  "npm",
+  "cargo",
+  "ls",
+  "cat",
+  "grep",
+  "find",
+  "echo",
+  "pwd",
+  "wc",
+  "head",
+  "tail",
+  "date",
+  "df",
+  "du",
+  "uname",
+  "uptime",
+  "hostname",
+  "free",
+  "python",
+  "python3",
+  "pip",
+  "node",
+  # Additional allowed commands
+  "printf"
+]
+
+[gateway]
+port = 42617
+host = "[::]"
+allow_public_bind = true
+require_pairing = false
+web_dist_dir = "/usr/share/zeroclawlabs/web/dist"
+
+[conversational_ai]
+supported_languages = ["en", "he"]
+
+[mcp]
+enabled = true
+deferred_loading = true
+
+[[mcp.servers]]
+name = "gitmcp"
+transport = "http"
+url = "https://gitmcp.io/docs"
+
+[[mcp.servers]]
+name = "zeroclaw"
+transport = "http"
+url = "https://gitmcp.io/zeroclaw-labs/zeroclaw"
+
+[mcp_bundles.mcp]
+servers = ["gitmcp", "zeroclaw"]
+
+[opencode_cli]
+enabled = true
