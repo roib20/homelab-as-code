@@ -26,5 +26,10 @@ configMapGenerator:
       - config.toml=files/config.toml
     options:
       disableNameSuffixHash: true
+  - name: zeroclaw-mise
+    files:
+      - mise.toml=files/mise.toml
+    options:
+      disableNameSuffixHash: true
 replacements:
   - path: replacements.yaml

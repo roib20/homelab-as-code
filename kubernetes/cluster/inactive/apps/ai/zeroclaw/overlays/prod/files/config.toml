@@ -42,6 +42,7 @@ allowed_commands = [
   "pip",
   "node",
   # Additional allowed commands
+  "gh",
   "printf"
 ]
 
