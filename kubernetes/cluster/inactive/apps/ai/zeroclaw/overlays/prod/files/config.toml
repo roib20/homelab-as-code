@@ -7,6 +7,10 @@ model = "gpt-5.6-terra"
 requires_openai_auth = true
 wire_api = "responses"
 
+[providers.transcription.groq.default]
+api_key = ""
+model = "whisper-large-v3-turbo"
+
 [providers.tts.edge.en]
 binary_path = "edge-tts"
 language_code = "en-US"
@@ -22,6 +26,7 @@ model_provider = "openai.codex"
 risk_profile = "assistant"
 mcp_bundles = ["mcp"]
 channels = ["telegram.default"]
+transcription_provider = "groq.default"
 tts_provider = "edge.en"
 
 [channels]
@@ -37,6 +42,10 @@ stream_mode = "off"
 [peer_groups.telegram_default]
 channel = "telegram.default"
 agents = ["assistant"]
+
+[transcription]
+api_key = ""
+enabled = true
 
 [tts]
 default_format = "opus"

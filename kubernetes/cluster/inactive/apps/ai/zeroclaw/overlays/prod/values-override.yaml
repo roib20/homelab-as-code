@@ -3,7 +3,7 @@ controllers:
   zeroclaw:
     annotations:
       configmap.reloader.stakater.com/reload: "zeroclaw-config,zeroclaw-mise"
-      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-secret-key,zeroclaw-telegram-default-bot"
+      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-groq-api-key,zeroclaw-secret-key,zeroclaw-telegram-default-bot"
     initContainers:
       bootstrap:
         image:
@@ -50,6 +50,8 @@ controllers:
     containers:
       app:
         envFrom:
+          - secretRef:
+              name: zeroclaw-groq-api-key
           - secretRef:
               name: zeroclaw-telegram-default-bot
 persistence:
