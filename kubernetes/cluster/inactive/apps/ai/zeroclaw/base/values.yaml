@@ -31,6 +31,8 @@ controllers:
         env:
           - name: HOME
             value: &zeroclaw-data "/zeroclaw-data"
+          - name: SHELL
+            value: "/bin/sh"
           - name: ZEROCLAW_CONFIG_DIR
             value: "$(HOME)"
           - name: ZEROCLAW_DATA_DIR
