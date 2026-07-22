@@ -7,11 +7,22 @@ model = "gpt-5.6-terra"
 requires_openai_auth = true
 wire_api = "responses"
 
+[providers.tts.edge.en]
+binary_path = "edge-tts"
+language_code = "en-US"
+voice = "en-US-JennyNeural"
+
+[providers.tts.edge.he]
+binary_path = "edge-tts"
+language_code = "he-IL"
+voice = "he-IL-HilaNeural"
+
 [agents.assistant]
 model_provider = "openai.codex"
 risk_profile = "assistant"
 mcp_bundles = ["mcp"]
 channels = ["telegram.default"]
+tts_provider = "edge.en"
 
 [channels]
 ack_reactions = true
@@ -26,6 +37,10 @@ stream_mode = "off"
 [peer_groups.telegram_default]
 channel = "telegram.default"
 agents = ["assistant"]
+
+[tts]
+default_format = "opus"
+enabled = true
 
 [memory]
 search_mode = "bm25"
