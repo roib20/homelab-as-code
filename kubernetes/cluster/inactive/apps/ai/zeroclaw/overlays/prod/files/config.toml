@@ -45,6 +45,9 @@ enabled = true
 default_format = "opus"
 enabled = true
 
+[multimodal]
+allow_remote_fetch = true
+
 [memory]
 search_mode = "bm25"
 
