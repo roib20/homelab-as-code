@@ -83,7 +83,8 @@ allowed_commands = [
   # Additional allowed commands
   "gh",
   "printf",
-  "resvg"
+  "resvg",
+  "rg"
 ]
 
 [gateway]
