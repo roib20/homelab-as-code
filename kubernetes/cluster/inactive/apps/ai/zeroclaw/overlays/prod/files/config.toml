@@ -11,6 +11,21 @@ wire_api = "responses"
 model_provider = "openai.codex"
 risk_profile = "assistant"
 mcp_bundles = ["mcp"]
+channels = ["telegram.default"]
+
+[channels]
+ack_reactions = true
+show_tool_calls = true
+
+[channels.telegram.default]
+enabled = true
+bot_token = ""
+mention_only = true
+stream_mode = "off"
+
+[peer_groups.telegram_default]
+channel = "telegram.default"
+agents = ["assistant"]
 
 [memory]
 search_mode = "bm25"

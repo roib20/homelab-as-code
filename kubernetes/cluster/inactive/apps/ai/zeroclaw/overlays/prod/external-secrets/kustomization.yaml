@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - zeroclaw-auth-codex.yaml.externalsecret
   - zeroclaw-secret-key.yaml.externalsecret
+  - zeroclaw-telegram-default-bot.yaml.externalsecret

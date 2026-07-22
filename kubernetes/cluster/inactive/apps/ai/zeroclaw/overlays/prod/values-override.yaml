@@ -3,7 +3,7 @@ controllers:
   zeroclaw:
     annotations:
       configmap.reloader.stakater.com/reload: "zeroclaw-config,zeroclaw-mise"
-      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-secret-key"
+      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-secret-key,zeroclaw-telegram-default-bot"
     initContainers:
       bootstrap:
         image:
@@ -47,6 +47,11 @@ controllers:
             memory: 32Mi
           limits:
             memory: 256Mi
+    containers:
+      app:
+        envFrom:
+          - secretRef:
+              name: zeroclaw-telegram-default-bot
 persistence:
   codex-auth:
     type: secret
