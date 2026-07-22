@@ -11,15 +11,9 @@ wire_api = "responses"
 api_key = ""
 model = "whisper-large-v3-turbo"
 
-[providers.tts.edge.en]
+[providers.tts.edge.multilingual]
 binary_path = "edge-tts"
-language_code = "en-US"
-voice = "en-US-JennyNeural"
-
-[providers.tts.edge.he]
-binary_path = "edge-tts"
-language_code = "he-IL"
-voice = "he-IL-HilaNeural"
+voice = "en-US-AvaMultilingualNeural"
 
 [agents.assistant]
 model_provider = "openai.codex"
@@ -27,7 +21,7 @@ risk_profile = "assistant"
 mcp_bundles = ["mcp"]
 channels = ["telegram.default"]
 transcription_provider = "groq.default"
-tts_provider = "edge.en"
+tts_provider = "edge.multilingual"
 
 [channels]
 ack_reactions = true
