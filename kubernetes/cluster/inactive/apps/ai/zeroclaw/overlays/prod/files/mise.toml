@@ -1,7 +1,7 @@
 [tools]
+"gh" = "latest"
 "pipx:edge-tts" = "latest"
+"ripgrep" = "latest"
 "ubi:BtbN/FFmpeg-Builds" = { exe = "ffmpeg", matching = "lgpl.tar.xz", version = "latest" }
 "ubi:linebender/resvg" = { exe = "resvg", matching = "resvg-linux", version = "latest" }
-gh = "latest"
-ripgrep = "latest"
-uv = "latest"
+"uv" = "latest"
