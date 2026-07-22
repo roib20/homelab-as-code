@@ -12,6 +12,9 @@ model_provider = "openai.codex"
 risk_profile = "assistant"
 mcp_bundles = ["mcp"]
 
+[memory]
+search_mode = "bm25"
+
 [risk_profiles.assistant]
 level = "supervised"
 auto_approve = ["file_read", "file_write", "file_edit", "memory_recall", "memory_store", "web_search_tool", "web_fetch", "calculator", "glob_search", "content_search", "image_info", "weather", "git_operations", "tool_list"]
