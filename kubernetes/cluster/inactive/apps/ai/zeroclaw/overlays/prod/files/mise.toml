@@ -1,5 +1,6 @@
 [tools]
 "pipx:edge-tts" = "latest"
 "ubi:BtbN/FFmpeg-Builds" = { exe = "ffmpeg", matching = "lgpl.tar.xz", version = "latest" }
+"ubi:linebender/resvg" = { exe = "resvg", matching = "resvg-linux", version = "latest" }
 gh = "latest"
 uv = "latest"

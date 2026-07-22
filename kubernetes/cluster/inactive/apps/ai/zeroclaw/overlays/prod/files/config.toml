@@ -82,7 +82,8 @@ allowed_commands = [
   "node",
   # Additional allowed commands
   "gh",
-  "printf"
+  "printf",
+  "resvg"
 ]
 
 [gateway]
