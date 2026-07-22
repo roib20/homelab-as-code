@@ -50,7 +50,7 @@ search_mode = "bm25"
 
 [risk_profiles.assistant]
 level = "supervised"
-auto_approve = ["file_read", "file_write", "file_edit", "memory_recall", "memory_store", "web_search_tool", "web_fetch", "calculator", "glob_search", "content_search", "image_info", "weather", "git_operations", "tool_list", "tool_search"]
+auto_approve = ["file_read", "file_write", "file_edit", "memory_recall", "memory_store", "web_search_tool", "web_fetch", "calculator", "glob_search", "content_search", "image_info", "weather", "git_operations", "tool_list", "tool_search", "send_via"]
 allowed_commands = [
   # Default allowed commands for Unix platforms:
   # https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/crates/zeroclaw-config/src/policy.rs
