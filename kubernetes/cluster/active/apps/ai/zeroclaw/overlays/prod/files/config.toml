@@ -172,7 +172,7 @@ supported_languages = ["en", "he"]
 
 [mcp]
 enabled = true
-deferred_loading = true
+deferred_loading = false
 
 [[mcp.servers]]
 name = "gitmcp"
