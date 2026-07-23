@@ -11,7 +11,11 @@ wire_api = "responses"
 api_key = ""
 model = "whisper-large-v3-turbo"
 
-[providers.tts.edge.multilingual]
+[providers.tts.edge.andrew]
+binary_path = "edge-tts"
+voice = "en-US-AndrewMultilingualNeural"
+
+[providers.tts.edge.ava]
 binary_path = "edge-tts"
 voice = "en-US-AvaMultilingualNeural"
 
@@ -21,7 +25,15 @@ risk_profile = "assistant"
 mcp_bundles = ["mcp"]
 channels = ["telegram.default"]
 transcription_provider = "groq.default"
-tts_provider = "edge.multilingual"
+tts_provider = "edge.ava"
+
+[agents.smart-homer]
+model_provider = "openai.codex"
+risk_profile = "assistant"
+mcp_bundles = ["home-assistant"]
+channels = ["telegram.smart_homer"]
+transcription_provider = "groq.default"
+tts_provider = "edge.andrew"
 
 [channels]
 ack_reactions = true
@@ -33,9 +45,19 @@ bot_token = ""
 mention_only = true
 stream_mode = "off"
 
+[channels.telegram.smart_homer]
+enabled = true
+bot_token = ""
+mention_only = true
+stream_mode = "off"
+
 [peer_groups.telegram_default]
 channel = "telegram.default"
 agents = ["assistant"]
+
+[peer_groups.telegram_smart_homer]
+channel = "telegram.smart_homer"
+agents = ["smart-homer"]
 
 [transcription]
 api_key = ""
@@ -53,7 +75,58 @@ search_mode = "bm25"
 
 [risk_profiles.assistant]
 level = "supervised"
-auto_approve = ["file_read", "file_write", "file_edit", "memory_recall", "memory_store", "web_search_tool", "web_fetch", "calculator", "glob_search", "content_search", "image_info", "weather", "git_operations", "tool_list", "tool_search", "send_via"]
+auto_approve = [
+  "file_read",
+  "file_write",
+  "file_edit",
+  "memory_recall",
+  "memory_store",
+  "web_search_tool",
+  "web_fetch",
+  "calculator",
+  "glob_search",
+  "content_search",
+  "image_info",
+  "weather",
+  "git_operations",
+  "tool_list",
+  "tool_search",
+  "send_via",
+  "ha-mcp__ha_bulk_control",
+  "ha-mcp__ha_call_service",
+  "ha-mcp__ha_config_get_automation",
+  "ha-mcp__ha_config_get_calendar_events",
+  "ha-mcp__ha_config_get_category",
+  "ha-mcp__ha_config_get_label",
+  "ha-mcp__ha_config_get_scene",
+  "ha-mcp__ha_config_get_script",
+  "ha-mcp__ha_config_list_dashboard_resources",
+  "ha-mcp__ha_config_list_groups",
+  "ha-mcp__ha_config_list_helpers",
+  "ha-mcp__ha_eval_template",
+  "ha-mcp__ha_get_addon",
+  "ha-mcp__ha_get_automation_traces",
+  "ha-mcp__ha_get_blueprint",
+  "ha-mcp__ha_get_camera_image",
+  "ha-mcp__ha_get_device",
+  "ha-mcp__ha_get_entity",
+  "ha-mcp__ha_get_entity_exposure",
+  "ha-mcp__ha_get_hacs_info",
+  "ha-mcp__ha_get_history",
+  "ha-mcp__ha_get_integration",
+  "ha-mcp__ha_get_logs",
+  "ha-mcp__ha_get_operation_status",
+  "ha-mcp__ha_get_overview",
+  "ha-mcp__ha_get_skill_guide",
+  "ha-mcp__ha_get_state",
+  "ha-mcp__ha_get_system_health",
+  "ha-mcp__ha_get_todo",
+  "ha-mcp__ha_get_zone",
+  "ha-mcp__ha_list_floors_areas",
+  "ha-mcp__ha_list_services",
+  "ha-mcp__ha_report_issue",
+  "ha-mcp__ha_search"
+]
 allowed_commands = [
   # Default allowed commands for Unix platforms:
   # https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/crates/zeroclaw-config/src/policy.rs
@@ -111,8 +184,17 @@ name = "zeroclaw"
 transport = "http"
 url = "https://gitmcp.io/zeroclaw-labs/zeroclaw"
 
+[[mcp.servers]]
+name = "ha-mcp"
+transport = "http"
+url = "http://127.0.0.1:8086/mcp"
+tool_timeout_secs = 120
+
 [mcp_bundles.mcp]
 servers = ["gitmcp", "zeroclaw"]
+
+[mcp_bundles.home-assistant]
+servers = ["ha-mcp"]
 
 [opencode_cli]
 enabled = true
