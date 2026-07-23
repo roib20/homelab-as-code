@@ -1,6 +1,10 @@
 ---
 controllers:
   zeroclaw:
+    defaultContainerOptionsStrategy: merge
+    defaultContainerOptions:
+      env:
+        TZ: "Asia/Jerusalem"
     annotations:
       configmap.reloader.stakater.com/reload: "zeroclaw-config,zeroclaw-mise"
       secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-groq-api-key,zeroclaw-ha-mcp,zeroclaw-secret-key,zeroclaw-telegram-default-bot,zeroclaw-telegram-smart-homer-bot"
