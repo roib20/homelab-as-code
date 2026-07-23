@@ -25,16 +25,12 @@ controllers:
               zeroclaw auth login --model-provider openai-codex --import "${HOME}/.codex/auth.json"
             fi
         env:
-          - name: HOME
-            value: "/zeroclaw-data"
-          - name: MISE_GLOBAL_CONFIG_FILE
-            value: "$(HOME)/mise.toml"
-          - name: PATH
-            value: "$(HOME)/.local/bin:$(HOME)/.local/share/mise/shims\
-                    :\
-                    /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-          - name: ZEROCLAW_CONFIG_DIR
-            value: "$(HOME)"
+          HOME: "/zeroclaw-data"
+          MISE_GLOBAL_CONFIG_FILE: "$(HOME)/mise.toml"
+          PATH: "$(HOME)/.local/bin:$(HOME)/.local/share/mise/shims\
+                 :\
+                 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          ZEROCLAW_CONFIG_DIR: "$(HOME)"
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
@@ -55,38 +51,22 @@ controllers:
         args:
           - ha-mcp-web
         env:
-          - name: ENABLE_BETA_FEATURES
-            value: "true"
-          - name: ENABLE_CODE_MODE
-            value: "false"
-          - name: ENABLE_YAML_CONFIG_EDITING
-            value: "true"
-          - name: ENABLE_YAML_EDIT_CONFIRM
-            value: "true"
-          - name: ENABLE_YAML_PACKAGES_AUTOMATION
-            value: "true"
-          - name: ENABLE_YAML_PACKAGES_SCENE
-            value: "true"
-          - name: ENABLE_YAML_PACKAGES_SCRIPT
-            value: "true"
-          - name: ENVIRONMENT
-            value: "production"
-          - name: HA_MCP_CONFIG_DIR
-            value: "/home/mcpuser/.ha-mcp"
-          - name: HA_MCP_DISABLE_SETTINGS_UI
-            value: "true"
-          - name: HAMCP_BACKUP_DIR
-            value: "/home/mcpuser/.ha-mcp/backups"
-          - name: HAMCP_ENABLE_DEV_MODE
-            value: "false"
-          - name: HAMCP_ENABLE_FILESYSTEM_TOOLS
-            value: "true"
-          - name: MCP_HEALTHZ
-            value: "true"
-          - name: MCP_HOST
-            value: "127.0.0.1"
-          - name: MCP_PORT
-            value: "8086"
+          ENABLE_BETA_FEATURES: "true"
+          ENABLE_CODE_MODE: "false"
+          ENABLE_YAML_CONFIG_EDITING: "true"
+          ENABLE_YAML_EDIT_CONFIRM: "true"
+          ENABLE_YAML_PACKAGES_AUTOMATION: "true"
+          ENABLE_YAML_PACKAGES_SCENE: "true"
+          ENABLE_YAML_PACKAGES_SCRIPT: "true"
+          ENVIRONMENT: "production"
+          HAMCP_BACKUP_DIR: "/home/mcpuser/.ha-mcp/backups"
+          HAMCP_ENABLE_DEV_MODE: "false"
+          HAMCP_ENABLE_FILESYSTEM_TOOLS: "true"
+          HA_MCP_CONFIG_DIR: "/home/mcpuser/.ha-mcp"
+          HA_MCP_DISABLE_SETTINGS_UI: "true"
+          MCP_HEALTHZ: "true"
+          MCP_HOST: "127.0.0.1"
+          MCP_PORT: "8086"
         envFrom:
           - secretRef:
               name: zeroclaw-ha-mcp

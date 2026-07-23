@@ -29,18 +29,13 @@ controllers:
         args:
           - daemon
         env:
-          - name: HOME
-            value: &zeroclaw-data "/zeroclaw-data"
-          - name: SHELL
-            value: "/bin/sh"
-          - name: ZEROCLAW_CONFIG_DIR
-            value: "$(HOME)"
-          - name: ZEROCLAW_DATA_DIR
-            value: "$(ZEROCLAW_CONFIG_DIR)/data"
-          - name: PATH
-            value: "$(HOME)/.local/bin:$(HOME)/.local/share/mise/shims\
-                    :\
-                    /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          HOME: &zeroclaw-data "/zeroclaw-data"
+          PATH: "$(HOME)/.local/bin:$(HOME)/.local/share/mise/shims\
+                 :\
+                 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          SHELL: "/bin/sh"
+          ZEROCLAW_CONFIG_DIR: "$(HOME)"
+          ZEROCLAW_DATA_DIR: "$(ZEROCLAW_CONFIG_DIR)/data"
         probes:
           liveness:
             enabled: true
