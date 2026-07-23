@@ -1,0 +1,7 @@
+[tools]
+"gh" = "latest"
+"github:BtbN/FFmpeg-Builds" = { exe = "ffmpeg", matching = "lgpl.tar.xz", version = "latest" }
+"github:linebender/resvg" = { exe = "resvg", matching = "resvg-linux", version = "latest" }
+"pipx:edge-tts" = "latest"
+"ripgrep" = "latest"
+"uv" = "latest"

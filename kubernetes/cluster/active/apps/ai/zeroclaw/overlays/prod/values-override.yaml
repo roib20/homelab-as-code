@@ -1,0 +1,73 @@
+---
+controllers:
+  zeroclaw:
+    annotations:
+      configmap.reloader.stakater.com/reload: "zeroclaw-config,zeroclaw-mise"
+      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-groq-api-key,zeroclaw-secret-key,zeroclaw-telegram-default-bot"
+    initContainers:
+      bootstrap:
+        image:
+          repository: ghcr.io/zeroclaw-labs/zeroclaw
+          tag: v0.8.3-debian@sha256:287325c1446d14ee8e8ca9ed2f424c718652b811f91bfb6155eca07aba054466
+        command:
+          - /bin/sh
+          - -c
+        args:
+          - |
+            set -eu
+            curl --proto '=https' --tlsv1.3 -L https://mise.run | sh
+            mise trust "${MISE_GLOBAL_CONFIG_FILE}"
+            mise --yes install
+            mise --yes prune --tools
+            if ! zeroclaw auth status |
+              grep -q '^[* ]*openai-codex:[^ ]* kind=OAuth'
+            then
+              zeroclaw auth login --model-provider openai-codex --import "${HOME}/.codex/auth.json"
+            fi
+        env:
+          - name: HOME
+            value: "/zeroclaw-data"
+          - name: MISE_GLOBAL_CONFIG_FILE
+            value: "$(HOME)/mise.toml"
+          - name: PATH
+            value: "$(HOME)/.local/bin:$(HOME)/.local/share/mise/shims\
+                    :\
+                    /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          - name: ZEROCLAW_CONFIG_DIR
+            value: "$(HOME)"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 25m
+            memory: 32Mi
+          limits:
+            memory: 256Mi
+    containers:
+      app:
+        envFrom:
+          - secretRef:
+              name: zeroclaw-groq-api-key
+          - secretRef:
+              name: zeroclaw-telegram-default-bot
+persistence:
+  codex-auth:
+    type: secret
+    name: zeroclaw-auth-codex
+    advancedMounts:
+      zeroclaw:
+        bootstrap:
+          - path: "/zeroclaw-data/.codex/auth.json"
+            subPath: "auth.json"
+            readOnly: true
+  mise:
+    type: configMap
+    name: zeroclaw-mise
+    globalMounts:
+      - path: "/zeroclaw-data/mise.toml"
+        subPath: "mise.toml"
+        readOnly: true

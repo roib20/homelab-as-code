@@ -1,0 +1,113 @@
+---
+global:
+  createDefaultServiceAccount: true
+defaultPodOptions:
+  automountServiceAccountToken: false
+  enableServiceLinks: false
+  # Image runs as 65534:65534 with WORKDIR `/zeroclaw-data`; fsGroup lets the
+  # non-root user write to the PVC mounted there.
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    runAsGroup: 65534
+    fsGroup: 65534
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile:
+      type: RuntimeDefault
+controllers:
+  zeroclaw:
+    # Single RWO PVC, never run two pods at once.
+    strategy: Recreate
+    annotations:
+      configmap.reloader.stakater.com/reload: zeroclaw-config
+      secret.reloader.stakater.com/reload: zeroclaw-secret-key
+    containers:
+      app:
+        image:
+          repository: ghcr.io/zeroclaw-labs/zeroclaw
+          tag: v0.8.3-debian@sha256:287325c1446d14ee8e8ca9ed2f424c718652b811f91bfb6155eca07aba054466
+        args:
+          - daemon
+        env:
+          - name: HOME
+            value: &zeroclaw-data "/zeroclaw-data"
+          - name: SHELL
+            value: "/bin/sh"
+          - name: ZEROCLAW_CONFIG_DIR
+            value: "$(HOME)"
+          - name: ZEROCLAW_DATA_DIR
+            value: "$(ZEROCLAW_CONFIG_DIR)/data"
+          - name: PATH
+            value: "$(HOME)/.local/bin:$(HOME)/.local/share/mise/shims\
+                    :\
+                    /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health
+                port: &port 42617
+              initialDelaySeconds: 10
+              periodSeconds: 60
+              timeoutSeconds: 10
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health
+                port: *port
+              initialDelaySeconds: 5
+              periodSeconds: 10
+              timeoutSeconds: 5
+          startup:
+            enabled: false
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 250m
+            memory: 32Mi
+          limits:
+            memory: 512Mi
+service:
+  app:
+    controller: zeroclaw
+    ports:
+      gateway:
+        port: *port
+        targetPort: *port
+persistence:
+  # config-dir root
+  zeroclaw:
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    storageClass: longhorn
+    globalMounts:
+      - path: *zeroclaw-data
+  # config.toml from the kustomize-generated configMap (base = upstream, prod overrides)
+  config:
+    type: configMap
+    name: zeroclaw-config
+    globalMounts:
+      - path: "/zeroclaw-data/config.toml"
+        subPath: config.toml
+        readOnly: true
+  # Encrypts the token store at rest (`openssl rand -hex 32`)
+  secret-key:
+    type: secret
+    name: zeroclaw-secret-key
+    globalMounts:
+      - path: "/zeroclaw-data/.secret_key"
+        subPath: secret-key
+        readOnly: true
+  tmp:
+    type: emptyDir
+    globalMounts:
+      - path: /tmp

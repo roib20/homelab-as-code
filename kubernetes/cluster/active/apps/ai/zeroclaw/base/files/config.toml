@@ -1,0 +1,21 @@
+schema_version = 3
+
+[providers.models.openai.codex]
+model = "gpt-5.6-luna"
+requires_openai_auth = true
+wire_api = "responses"
+
+[agents.assistant]
+model_provider = "openai.codex"
+risk_profile = "assistant"
+
+[risk_profiles.assistant]
+level = "supervised"
+auto_approve = ["file_read", "file_write", "file_edit", "memory_recall", "memory_store", "web_search_tool", "web_fetch", "calculator", "glob_search", "content_search", "image_info", "weather", "git_operations"]
+
+[gateway]
+port = 42617
+host = "[::]"
+allow_public_bind = true
+require_pairing = true
+web_dist_dir = "/usr/share/zeroclawlabs/web/dist"
