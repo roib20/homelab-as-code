@@ -4,5 +4,7 @@ kind: Kustomization
 resources:
   - zeroclaw-auth-codex.yaml.externalsecret
   - zeroclaw-groq-api-key.yaml.externalsecret
+  - zeroclaw-ha-mcp.yaml.externalsecret
   - zeroclaw-secret-key.yaml.externalsecret
   - zeroclaw-telegram-default-bot.yaml.externalsecret
+  - zeroclaw-telegram-smart-homer-bot.yaml.externalsecret

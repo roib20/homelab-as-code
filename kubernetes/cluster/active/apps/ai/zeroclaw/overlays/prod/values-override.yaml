@@ -3,7 +3,7 @@ controllers:
   zeroclaw:
     annotations:
       configmap.reloader.stakater.com/reload: "zeroclaw-config,zeroclaw-mise"
-      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-groq-api-key,zeroclaw-secret-key,zeroclaw-telegram-default-bot"
+      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-groq-api-key,zeroclaw-ha-mcp,zeroclaw-secret-key,zeroclaw-telegram-default-bot,zeroclaw-telegram-smart-homer-bot"
     initContainers:
       bootstrap:
         image:
@@ -47,6 +47,73 @@ controllers:
             memory: 32Mi
           limits:
             memory: 256Mi
+      ha-mcp:
+        restartPolicy: Always
+        image:
+          repository: ghcr.io/homeassistant-ai/ha-mcp
+          tag: 7.14.2@sha256:7917b2d385e16e43f45f92fc72a757e5c0aec8d88b3cd69fe64f3b5106cbfe36
+        args:
+          - ha-mcp-web
+        env:
+          - name: ENABLE_BETA_FEATURES
+            value: "true"
+          - name: ENABLE_CODE_MODE
+            value: "false"
+          - name: ENABLE_YAML_CONFIG_EDITING
+            value: "true"
+          - name: ENABLE_YAML_EDIT_CONFIRM
+            value: "true"
+          - name: ENABLE_YAML_PACKAGES_AUTOMATION
+            value: "true"
+          - name: ENABLE_YAML_PACKAGES_SCENE
+            value: "true"
+          - name: ENABLE_YAML_PACKAGES_SCRIPT
+            value: "true"
+          - name: ENVIRONMENT
+            value: "production"
+          - name: HA_MCP_CONFIG_DIR
+            value: "/home/mcpuser/.ha-mcp"
+          - name: HA_MCP_DISABLE_SETTINGS_UI
+            value: "true"
+          - name: HAMCP_BACKUP_DIR
+            value: "/home/mcpuser/.ha-mcp/backups"
+          - name: HAMCP_ENABLE_DEV_MODE
+            value: "false"
+          - name: HAMCP_ENABLE_FILESYSTEM_TOOLS
+            value: "true"
+          - name: MCP_HEALTHZ
+            value: "true"
+          - name: MCP_HOST
+            value: "127.0.0.1"
+          - name: MCP_PORT
+            value: "8086"
+        envFrom:
+          - secretRef:
+              name: zeroclaw-ha-mcp
+        probes:
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command:
+                  - python
+                  - -c
+                  - import urllib.request; urllib.request.urlopen("http://127.0.0.1:8086/healthz", timeout=1).close()
+              failureThreshold: 60
+              periodSeconds: 1
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            memory: 256Mi
     containers:
       app:
         envFrom:
@@ -54,7 +121,50 @@ controllers:
               name: zeroclaw-groq-api-key
           - secretRef:
               name: zeroclaw-telegram-default-bot
+          - secretRef:
+              name: zeroclaw-telegram-smart-homer-bot
 persistence:
+  zeroclaw:
+    globalMounts: []
+    advancedMounts:
+      zeroclaw:
+        app:
+          - path: "/zeroclaw-data"
+        bootstrap:
+          - path: "/zeroclaw-data"
+  config:
+    globalMounts: []
+    advancedMounts:
+      zeroclaw:
+        app:
+          - path: "/zeroclaw-data/config.toml"
+            subPath: "config.toml"
+            readOnly: true
+        bootstrap:
+          - path: "/zeroclaw-data/config.toml"
+            subPath: "config.toml"
+            readOnly: true
+  secret-key:
+    globalMounts: []
+    defaultMode: 0400
+    advancedMounts:
+      zeroclaw:
+        app:
+          - path: "/zeroclaw-data/.secret_key"
+            subPath: "secret-key"
+            readOnly: true
+        bootstrap:
+          - path: "/zeroclaw-data/.secret_key"
+            subPath: "secret-key"
+            readOnly: true
+  tmp:
+    globalMounts: []
+    advancedMounts:
+      zeroclaw:
+        app:
+          - path: "/tmp"
+        bootstrap:
+          - path: "/tmp"
   codex-auth:
     type: secret
     name: zeroclaw-auth-codex
@@ -67,7 +177,25 @@ persistence:
   mise:
     type: configMap
     name: zeroclaw-mise
-    globalMounts:
-      - path: "/zeroclaw-data/mise.toml"
-        subPath: "mise.toml"
-        readOnly: true
+    advancedMounts:
+      zeroclaw:
+        app:
+          - path: "/zeroclaw-data/mise.toml"
+            subPath: "mise.toml"
+            readOnly: true
+        bootstrap:
+          - path: "/zeroclaw-data/mise.toml"
+            subPath: "mise.toml"
+            readOnly: true
+  ha-mcp-data:
+    type: emptyDir
+    advancedMounts:
+      zeroclaw:
+        ha-mcp:
+          - path: "/home/mcpuser/.ha-mcp"
+  ha-mcp-tmp:
+    type: emptyDir
+    advancedMounts:
+      zeroclaw:
+        ha-mcp:
+          - path: "/tmp"

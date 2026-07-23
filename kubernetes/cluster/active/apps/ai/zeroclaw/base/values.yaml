@@ -103,6 +103,7 @@ persistence:
   secret-key:
     type: secret
     name: zeroclaw-secret-key
+    defaultMode: 0400
     globalMounts:
       - path: "/zeroclaw-data/.secret_key"
         subPath: secret-key
