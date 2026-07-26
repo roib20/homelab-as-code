@@ -2,7 +2,7 @@
 forceConfigFromValues: true
 workload:
   main:
-    replicas: 2
+    replicas: 1
     strategy: RollingUpdate
     podSpec:
       hostUsers: false
@@ -22,32 +22,37 @@ workload:
         main:
           probes:
             liveness:
-              custom: true
+              enabled: true
+              type: http
+              port: 3000
+              path: /api/healthcheck
+              httpHeaders:
+                Host: localhost
               spec:
-                httpGet:
-                  path: /api/healthcheck
-                  port: 3000
-                  httpHeaders:
-                    - name: Host
-                      value: localhost
                 timeoutSeconds: 15
                 periodSeconds: 15
                 failureThreshold: 5
                 initialDelaySeconds: 12
             readiness:
-              custom: true
+              enabled: true
+              type: http
+              port: 3000
+              path: /api/healthcheck
+              httpHeaders:
+                Host: localhost
               spec:
-                httpGet:
-                  path: /api/healthcheck
-                  port: 3000
-                  httpHeaders:
-                    - name: Host
-                      value: localhost
                 timeoutSeconds: 15
                 periodSeconds: 12
                 failureThreshold: 4
                 successThreshold: 2
                 initialDelaySeconds: 10
+            startup:
+              enabled: true
+              type: http
+              port: 3000
+              path: /api/healthcheck
+              httpHeaders:
+                Host: localhost
 persistence:
   config:
     enabled: true
