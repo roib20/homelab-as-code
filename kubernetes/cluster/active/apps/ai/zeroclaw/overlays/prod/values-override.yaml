@@ -7,7 +7,9 @@ controllers:
         TZ: "Asia/Jerusalem"
     annotations:
       configmap.reloader.stakater.com/reload: "zeroclaw-config,zeroclaw-mise"
-      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-groq-api-key,zeroclaw-ha-mcp,zeroclaw-secret-key,zeroclaw-telegram-default-bot,zeroclaw-telegram-smart-homer-bot"
+      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-groq-api-key,zeroclaw-ha-mcp,\
+        zeroclaw-secret-key,zeroclaw-telegram-default-bot,zeroclaw-telegram-smart-homer-bot,\
+        zeroclaw-tandoor-mcp,zeroclaw-telegram-chef-bot"
     initContainers:
       bootstrap:
         image:
@@ -107,6 +109,10 @@ controllers:
               name: zeroclaw-telegram-default-bot
           - secretRef:
               name: zeroclaw-telegram-smart-homer-bot
+          - secretRef:
+              name: zeroclaw-telegram-chef-bot
+          - secretRef:
+              name: zeroclaw-tandoor-mcp
 persistence:
   zeroclaw:
     globalMounts: []
