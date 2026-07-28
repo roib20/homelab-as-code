@@ -90,6 +90,18 @@ spec:
             - SecRule REQUEST_METHOD "@streq PUT" "id:100022,phase:1,pass,nolog,chain"
             - SecRule REQUEST_HEADERS:Host "@rx ^food\." "chain"
             - SecRule REQUEST_FILENAME "@rx ^/api/recipe/[0-9]+/image/$" "ctl:requestBodyAccess=Off"
+            # Yuvomi document upload: files are sent as base64 data URLs in a JSON body, so any real file exceeds Envoy's body buffer while Coraza inspects it (413); do not buffer/inspect the body
+            - SecRule REQUEST_METHOD "@rx ^(POST|PUT)$" "id:100023,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^household\." "chain"
+            - SecRule REQUEST_FILENAME "@rx ^/api/v1/documents(/[0-9]+)?$" "ctl:requestBodyAccess=Off"
+            # Yuvomi avatar upload: avatars are base64 data URLs up to 768 KiB, exceeding Envoy's body buffer while Coraza inspects them (413); do not buffer/inspect the body
+            - SecRule REQUEST_METHOD "@rx ^(POST|PATCH)$" "id:100024,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^household\." "chain"
+            - SecRule REQUEST_FILENAME "@rx ^/api/v1/auth/(me/profile|users(/[0-9]+)?)$" "ctl:requestBodyAccess=Off"
+            # Yuvomi backup restore: uploads a whole SQLite database as application/octet-stream, exceeding Envoy's body buffer while Coraza inspects it (413); do not buffer/inspect the body
+            - SecRule REQUEST_METHOD "@streq POST" "id:100025,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^household\." "chain"
+            - SecRule REQUEST_FILENAME "@streq /api/v1/backup/restore" "ctl:requestBodyAccess=Off"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---
