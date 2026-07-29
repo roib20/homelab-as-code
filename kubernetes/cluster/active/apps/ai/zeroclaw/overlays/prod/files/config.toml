@@ -35,6 +35,22 @@ channels = ["telegram.smart_homer"]
 transcription_provider = "groq.default"
 tts_provider = "edge.andrew"
 
+[agents.chef]
+model_provider = "openai.codex"
+risk_profile = "chef"
+mcp_bundles = ["tandoor"]
+channels = ["telegram.chef"]
+transcription_provider = "groq.default"
+tts_provider = "edge.ava"
+
+[agents.arr-bot]
+model_provider = "openai.codex"
+risk_profile = "arr-bot"
+mcp_bundles = ["arr"]
+channels = ["telegram.arr_bot"]
+transcription_provider = "groq.default"
+tts_provider = "edge.andrew"
+
 [channels]
 ack_reactions = true
 show_tool_calls = true
@@ -51,6 +67,18 @@ bot_token = ""
 mention_only = true
 stream_mode = "off"
 
+[channels.telegram.chef]
+enabled = true
+bot_token = ""
+mention_only = true
+stream_mode = "off"
+
+[channels.telegram.arr_bot]
+enabled = true
+bot_token = ""
+mention_only = true
+stream_mode = "off"
+
 [peer_groups.telegram_default]
 channel = "telegram.default"
 agents = ["assistant"]
@@ -58,6 +86,14 @@ agents = ["assistant"]
 [peer_groups.telegram_smart_homer]
 channel = "telegram.smart_homer"
 agents = ["smart-homer"]
+
+[peer_groups.telegram_chef]
+channel = "telegram.chef"
+agents = ["chef"]
+
+[peer_groups.telegram_arr_bot]
+channel = "telegram.arr_bot"
+agents = ["arr-bot"]
 
 [transcription]
 api_key = ""
@@ -160,6 +196,182 @@ allowed_commands = [
   "rg"
 ]
 
+[risk_profiles.chef]
+level = "supervised"
+# Reads and low-risk writes (shopping, meal plans, cook logs) auto-approve;
+# recipe/food/unit edits, imports, deletes and merges fall through to confirmation.
+auto_approve = [
+  "file_read",
+  "file_write",
+  "file_edit",
+  "memory_recall",
+  "memory_store",
+  "web_search_tool",
+  "web_fetch",
+  "calculator",
+  "glob_search",
+  "content_search",
+  "image_info",
+  "tool_list",
+  "tool_search",
+  "send_via",
+  "tandoor-mcp__add_recipe_to_shopping_list",
+  "tandoor-mcp__auto_meal_plan",
+  "tandoor-mcp__bulk_check_shopping_entries",
+  "tandoor-mcp__bulk_create_meal_plans",
+  "tandoor-mcp__bulk_create_shopping_list_recipe_entries",
+  "tandoor-mcp__create_cook_log",
+  "tandoor-mcp__create_meal_plan",
+  "tandoor-mcp__create_shopping_entry",
+  "tandoor-mcp__create_shopping_list_recipe",
+  "tandoor-mcp__food_ai_properties",
+  "tandoor-mcp__food_fdc_lookup",
+  "tandoor-mcp__get_cook_log",
+  "tandoor-mcp__get_custom_filter",
+  "tandoor-mcp__get_food",
+  "tandoor-mcp__get_ingredient",
+  "tandoor-mcp__get_keyword",
+  "tandoor-mcp__get_meal_plan",
+  "tandoor-mcp__get_property",
+  "tandoor-mcp__get_property_type",
+  "tandoor-mcp__get_recipe",
+  "tandoor-mcp__get_recipe_book",
+  "tandoor-mcp__get_recipe_book_entry",
+  "tandoor-mcp__get_server_settings",
+  "tandoor-mcp__get_share_link",
+  "tandoor-mcp__get_shopping_entry",
+  "tandoor-mcp__get_shopping_list_recipe",
+  "tandoor-mcp__get_step",
+  "tandoor-mcp__get_unit",
+  "tandoor-mcp__get_unit_conversion",
+  "tandoor-mcp__get_user_preference",
+  "tandoor-mcp__get_version",
+  "tandoor-mcp__jq_query",
+  "tandoor-mcp__jq_stash_stats",
+  "tandoor-mcp__list_ai_logs",
+  "tandoor-mcp__list_ai_providers",
+  "tandoor-mcp__list_automations",
+  "tandoor-mcp__list_cook_logs",
+  "tandoor-mcp__list_custom_filters",
+  "tandoor-mcp__list_foods",
+  "tandoor-mcp__list_import_logs",
+  "tandoor-mcp__list_ingredients",
+  "tandoor-mcp__list_keywords",
+  "tandoor-mcp__list_meal_plans",
+  "tandoor-mcp__list_meal_types",
+  "tandoor-mcp__list_properties",
+  "tandoor-mcp__list_property_types",
+  "tandoor-mcp__list_recipe_book_entries",
+  "tandoor-mcp__list_recipe_books",
+  "tandoor-mcp__list_recipes",
+  "tandoor-mcp__list_shopping_entries",
+  "tandoor-mcp__list_shopping_list_recipes",
+  "tandoor-mcp__list_steps",
+  "tandoor-mcp__list_supermarket_categories",
+  "tandoor-mcp__list_unit_conversions",
+  "tandoor-mcp__list_units",
+  "tandoor-mcp__list_user_files",
+  "tandoor-mcp__list_user_preferences",
+  "tandoor-mcp__list_view_logs",
+  "tandoor-mcp__parse_ingredient",
+  "tandoor-mcp__recipe_ai_properties",
+  "tandoor-mcp__related_recipes",
+  "tandoor-mcp__search_recipes",
+  "tandoor-mcp__update_cook_log",
+  "tandoor-mcp__update_meal_plan",
+  "tandoor-mcp__update_shopping_entry",
+  "tandoor-mcp__update_shopping_list_recipe"
+]
+
+[risk_profiles.arr-bot]
+level = "supervised"
+# Library/queue/calendar reads and config review auto-approve; adds, edits,
+# queue deletes and download-triggering searches fall through to confirmation.
+auto_approve = [
+  "file_read",
+  "memory_recall",
+  "memory_store",
+  "web_search_tool",
+  "web_fetch",
+  "calculator",
+  "image_info",
+  "tool_list",
+  "tool_search",
+  "send_via",
+  "arr-mcp-hd__arr_search_all",
+  "arr-mcp-hd__arr_status",
+  "arr-mcp-hd__fetch",
+  "arr-mcp-hd__prowlarr_get_indexers",
+  "arr-mcp-hd__prowlarr_get_stats",
+  "arr-mcp-hd__prowlarr_search",
+  "arr-mcp-hd__prowlarr_test_indexers",
+  "arr-mcp-hd__radarr_get_calendar",
+  "arr-mcp-hd__radarr_get_download_clients",
+  "arr-mcp-hd__radarr_get_health",
+  "arr-mcp-hd__radarr_get_movies",
+  "arr-mcp-hd__radarr_get_naming",
+  "arr-mcp-hd__radarr_get_quality_profiles",
+  "arr-mcp-hd__radarr_get_queue",
+  "arr-mcp-hd__radarr_get_root_folders",
+  "arr-mcp-hd__radarr_get_tags",
+  "arr-mcp-hd__radarr_review_setup",
+  "arr-mcp-hd__radarr_search",
+  "arr-mcp-hd__search",
+  "arr-mcp-hd__sonarr_get_calendar",
+  "arr-mcp-hd__sonarr_get_download_clients",
+  "arr-mcp-hd__sonarr_get_episodes",
+  "arr-mcp-hd__sonarr_get_health",
+  "arr-mcp-hd__sonarr_get_naming",
+  "arr-mcp-hd__sonarr_get_quality_profiles",
+  "arr-mcp-hd__sonarr_get_queue",
+  "arr-mcp-hd__sonarr_get_root_folders",
+  "arr-mcp-hd__sonarr_get_series",
+  "arr-mcp-hd__sonarr_get_tags",
+  "arr-mcp-hd__sonarr_review_setup",
+  "arr-mcp-hd__sonarr_search",
+  "arr-mcp-hd__trash_compare_naming",
+  "arr-mcp-hd__trash_compare_profile",
+  "arr-mcp-hd__trash_get_naming",
+  "arr-mcp-hd__trash_get_profile",
+  "arr-mcp-hd__trash_get_quality_sizes",
+  "arr-mcp-hd__trash_list_custom_formats",
+  "arr-mcp-hd__trash_list_profiles",
+  "arr-mcp-uhd__arr_search_all",
+  "arr-mcp-uhd__arr_status",
+  "arr-mcp-uhd__fetch",
+  "arr-mcp-uhd__radarr_get_calendar",
+  "arr-mcp-uhd__radarr_get_download_clients",
+  "arr-mcp-uhd__radarr_get_health",
+  "arr-mcp-uhd__radarr_get_movies",
+  "arr-mcp-uhd__radarr_get_naming",
+  "arr-mcp-uhd__radarr_get_quality_profiles",
+  "arr-mcp-uhd__radarr_get_queue",
+  "arr-mcp-uhd__radarr_get_root_folders",
+  "arr-mcp-uhd__radarr_get_tags",
+  "arr-mcp-uhd__radarr_review_setup",
+  "arr-mcp-uhd__radarr_search",
+  "arr-mcp-uhd__search",
+  "arr-mcp-uhd__sonarr_get_calendar",
+  "arr-mcp-uhd__sonarr_get_download_clients",
+  "arr-mcp-uhd__sonarr_get_episodes",
+  "arr-mcp-uhd__sonarr_get_health",
+  "arr-mcp-uhd__sonarr_get_naming",
+  "arr-mcp-uhd__sonarr_get_quality_profiles",
+  "arr-mcp-uhd__sonarr_get_queue",
+  "arr-mcp-uhd__sonarr_get_root_folders",
+  "arr-mcp-uhd__sonarr_get_series",
+  "arr-mcp-uhd__sonarr_get_tags",
+  "arr-mcp-uhd__sonarr_review_setup",
+  "arr-mcp-uhd__sonarr_search",
+  "arr-mcp-uhd__trash_compare_naming",
+  "arr-mcp-uhd__trash_compare_profile",
+  "arr-mcp-uhd__trash_get_naming",
+  "arr-mcp-uhd__trash_get_profile",
+  "arr-mcp-uhd__trash_get_quality_sizes",
+  "arr-mcp-uhd__trash_list_custom_formats",
+  "arr-mcp-uhd__trash_list_profiles"
+]
+
 [gateway]
 port = 42617
 host = "[::]"
@@ -190,11 +402,35 @@ transport = "http"
 url = "http://127.0.0.1:8086/mcp"
 tool_timeout_secs = 120
 
+[[mcp.servers]]
+name = "tandoor-mcp"
+transport = "stdio"
+command = "tandoor-recipes-mcp"
+env = { TANDOOR_URL = "http://tandoor-recipes.tandoor.svc.cluster.local:10029", TANDOOR_MCP_PROFILE = "full" }
+
+[[mcp.servers]]
+name = "arr-mcp-hd"
+transport = "http"
+url = "http://127.0.0.1:3000/mcp"
+tool_timeout_secs = 120
+
+[[mcp.servers]]
+name = "arr-mcp-uhd"
+transport = "http"
+url = "http://127.0.0.1:43000/mcp"
+tool_timeout_secs = 120
+
 [mcp_bundles.mcp]
 servers = ["gitmcp", "zeroclaw"]
 
 [mcp_bundles.home-assistant]
 servers = ["ha-mcp"]
+
+[mcp_bundles.tandoor]
+servers = ["tandoor-mcp"]
+
+[mcp_bundles.arr]
+servers = ["arr-mcp-hd", "arr-mcp-uhd"]
 
 [opencode_cli]
 enabled = true

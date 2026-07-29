@@ -7,7 +7,10 @@ controllers:
         TZ: "Asia/Jerusalem"
     annotations:
       configmap.reloader.stakater.com/reload: "zeroclaw-config,zeroclaw-mise"
-      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-groq-api-key,zeroclaw-ha-mcp,zeroclaw-secret-key,zeroclaw-telegram-default-bot,zeroclaw-telegram-smart-homer-bot"
+      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-groq-api-key,zeroclaw-ha-mcp,\
+        zeroclaw-secret-key,zeroclaw-telegram-default-bot,zeroclaw-telegram-smart-homer-bot,\
+        zeroclaw-tandoor-mcp,zeroclaw-telegram-chef-bot,zeroclaw-servarr-secrets,\
+        zeroclaw-telegram-arr-bot"
     initContainers:
       bootstrap:
         image:
@@ -98,6 +101,86 @@ controllers:
             memory: 64Mi
           limits:
             memory: 256Mi
+      # mcp-arr takes one Sonarr/Radarr per instance, so HD and UHD each get a
+      # sidecar. Prowlarr is shared, so both get the same instance.
+      arr-mcp-hd:
+        restartPolicy: Always
+        image: &arr-mcp-image
+          repository: ghcr.io/aplaceforallmystuff/mcp-arr
+          tag: 1.7.2@sha256:46f2356c2161a8561b6f5680429594cf34aaad0712d1a030f8d662b99556c415
+        env:
+          MCP_TRANSPORT: "http"
+          PORT: "3000"
+          PROWLARR_URL: &prowlarr-url "http://prowlarr.servarr.svc.cluster.local:9696"
+          PROWLARR_API_KEY: &prowlarr-api-key
+            valueFrom:
+              secretKeyRef:
+                name: &arr-mcp-secret zeroclaw-servarr-secrets
+                key: prowlarr_api_key
+          RADARR_URL: "http://radarr-hd.servarr.svc.cluster.local:7878"
+          RADARR_API_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: *arr-mcp-secret
+                key: radarr_hd_api_key
+          SONARR_URL: "http://sonarr-hd.servarr.svc.cluster.local:8989"
+          SONARR_API_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: *arr-mcp-secret
+                key: sonarr_hd_api_key
+        probes:
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command: ["wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/health"]
+              failureThreshold: 30
+              periodSeconds: 1
+        securityContext: &arr-mcp-security
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources: &arr-mcp-resources
+          requests:
+            cpu: 10m
+            memory: 48Mi
+          limits:
+            memory: 192Mi
+      arr-mcp-uhd:
+        restartPolicy: Always
+        image: *arr-mcp-image
+        env:
+          MCP_TRANSPORT: "http"
+          PORT: "43000"
+          PROWLARR_URL: *prowlarr-url
+          PROWLARR_API_KEY: *prowlarr-api-key
+          RADARR_URL: "http://radarr-uhd.servarr.svc.cluster.local:7878"
+          RADARR_API_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: *arr-mcp-secret
+                key: radarr_uhd_api_key
+          SONARR_URL: "http://sonarr-uhd.servarr.svc.cluster.local:8989"
+          SONARR_API_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: *arr-mcp-secret
+                key: sonarr_uhd_api_key
+        probes:
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command: ["wget", "-q", "-O", "/dev/null", "http://127.0.0.1:43000/health"]
+              failureThreshold: 30
+              periodSeconds: 1
+        securityContext: *arr-mcp-security
+        resources: *arr-mcp-resources
     containers:
       app:
         envFrom:
@@ -107,6 +190,12 @@ controllers:
               name: zeroclaw-telegram-default-bot
           - secretRef:
               name: zeroclaw-telegram-smart-homer-bot
+          - secretRef:
+              name: zeroclaw-telegram-chef-bot
+          - secretRef:
+              name: zeroclaw-telegram-arr-bot
+          - secretRef:
+              name: zeroclaw-tandoor-mcp
 persistence:
   zeroclaw:
     globalMounts: []
