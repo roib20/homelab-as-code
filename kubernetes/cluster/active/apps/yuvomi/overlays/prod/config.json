@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "yuvomi",
+  "destName": "in-cluster",
+  "destNamespace": "yuvomi",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "yuvomi"
+}

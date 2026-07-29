@@ -1,0 +1,49 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: ConfigMap
+        name: yuvomi-urls
+      fieldPaths:
+        - data.APP_HOST
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+
+- source:
+    kind: ConfigMap
+    name: yuvomi-urls
+    fieldPath: data.APP_HOST
+  targets:
+    - select:
+        kind: HTTPRoute
+        name: yuvomi
+      fieldPaths:
+        - spec.hostnames.0
+    - select:
+        kind: Deployment
+        name: yuvomi
+      fieldPaths:
+        - spec.template.spec.containers.[name=main].env.[name=BASE_URL].value
+        - spec.template.spec.containers.[name=main].env.[name=OIDC_REDIRECT_URI].value
+      options:
+        delimiter: "/"
+        index: 2
+
+- source:
+    kind: ConfigMap
+    name: yuvomi-urls
+    fieldPath: data.AUTH_HOST
+  targets:
+    - select:
+        kind: Deployment
+        name: yuvomi
+      fieldPaths:
+        - spec.template.spec.containers.[name=main].env.[name=OIDC_ISSUER].value
+      options:
+        delimiter: "/"
+        index: 2
