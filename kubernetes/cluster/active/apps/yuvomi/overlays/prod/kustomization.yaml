@@ -1,0 +1,29 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - external-secrets
+  # - resources/httproute.yaml
+helmCharts:
+  - name: app-template
+    repo: oci://ghcr.io/bjw-s-labs/helm
+    version: 5.0.1
+    releaseName: yuvomi
+    namespace: yuvomi
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+  - name: yuvomi-urls
+    literals:
+      - APP_HOST=household.${FQDN_01}
+      - AUTH_HOST=auth.${FQDN_01}
+    options:
+      disableNameSuffixHash: true
+replacements:
+  - path: replacements.yaml

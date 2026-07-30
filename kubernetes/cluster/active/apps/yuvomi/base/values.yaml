@@ -1,0 +1,122 @@
+---
+global:
+  createDefaultServiceAccount: true
+defaultPodOptions:
+  automountServiceAccountToken: false
+  enableServiceLinks: false
+controllers:
+  yuvomi:
+    # SQLite: never let two pods hold the database open at once.
+    strategy: Recreate
+    replicas: 1
+    pod:
+      hostUsers: false
+      annotations:
+        secret.reloader.stakater.com/reload: "yuvomi,yuvomi-kanidm-oauth2-credentials"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+    containers:
+      main:
+        image:
+          repository: ghcr.io/ulsklyc/yuvomi
+          tag: 1.53.0@sha256:b5255b4a3c47f57fc959e7aff9b46de7d3b61918fb150d329be176b75104bde7
+        env:
+          PORT: &port 3000
+          NODE_ENV: production
+          TZ: Asia/Jerusalem
+          HOME: /tmp
+          DB_PATH: /data/yuvomi.db
+          BASE_URL: "https://household.${FQDN_01}"
+          SESSION_SECURE: "true"
+          TRUST_PROXY: "1"
+          OIDC_ISSUER: "https://auth.${FQDN_01}/oauth2/openid/$(OIDC_CLIENT_ID)"
+          OIDC_REDIRECT_URI: "https://household.${FQDN_01}/api/v1/auth/oidc/callback"
+          OIDC_CLIENT_ID:
+            valueFrom:
+              secretKeyRef:
+                name: yuvomi-kanidm-oauth2-credentials
+                key: CLIENT_ID
+          OIDC_CLIENT_SECRET:
+            valueFrom:
+              secretKeyRef:
+                name: yuvomi-kanidm-oauth2-credentials
+                key: CLIENT_SECRET
+        envFrom:
+          - secretRef:
+              name: yuvomi
+        resources:
+          requests:
+            cpu: 50m
+            memory: 256Mi
+          limits:
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health
+                port: *port
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 3
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health
+                port: *port
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 3
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health
+                port: *port
+              periodSeconds: 10
+              timeoutSeconds: 10
+              failureThreshold: 30
+service:
+  main:
+    controller: yuvomi
+    ports:
+      http:
+        port: *port
+persistence:
+  data:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: longhorn
+    advancedMounts:
+      yuvomi:
+        main:
+          - path: /data
+            subPath: data
+          - path: /backups
+            subPath: backups
+  # Drop-in module directory; empty, but the app expects it to be writable.
+  modules:
+    type: emptyDir
+    globalMounts:
+      - path: /app/modules
+  tmpfs:
+    type: emptyDir
+    globalMounts:
+      - path: /tmp
