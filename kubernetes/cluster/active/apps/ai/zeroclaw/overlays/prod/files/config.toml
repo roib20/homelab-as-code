@@ -43,6 +43,14 @@ channels = ["telegram.chef"]
 transcription_provider = "groq.default"
 tts_provider = "edge.ava"
 
+[agents.household]
+model_provider = "openai.codex"
+risk_profile = "household"
+mcp_bundles = ["yuvomi"]
+channels = ["telegram.household"]
+transcription_provider = "groq.default"
+tts_provider = "edge.andrew"
+
 [agents.arr-bot]
 model_provider = "openai.codex"
 risk_profile = "arr-bot"
@@ -73,6 +81,12 @@ bot_token = ""
 mention_only = true
 stream_mode = "off"
 
+[channels.telegram.household]
+enabled = true
+bot_token = ""
+mention_only = true
+stream_mode = "off"
+
 [channels.telegram.arr_bot]
 enabled = true
 bot_token = ""
@@ -90,6 +104,10 @@ agents = ["smart-homer"]
 [peer_groups.telegram_chef]
 channel = "telegram.chef"
 agents = ["chef"]
+
+[peer_groups.telegram_household]
+channel = "telegram.household"
+agents = ["household"]
 
 [peer_groups.telegram_arr_bot]
 channel = "telegram.arr_bot"
@@ -283,6 +301,29 @@ auto_approve = [
   "tandoor-mcp__update_shopping_list_recipe"
 ]
 
+[risk_profiles.household]
+level = "supervised"
+auto_approve = [
+  "file_read",
+  "memory_recall",
+  "memory_store",
+  "web_search_tool",
+  "web_fetch",
+  "calculator",
+  "image_info",
+  "tool_list",
+  "tool_search",
+  "send_via",
+  "yuvomi_mcp__add_shopping_item",
+  "yuvomi_mcp__create_event",
+  "yuvomi_mcp__create_task",
+  "yuvomi_mcp__get_api_operation",
+  "yuvomi_mcp__list_api_operations",
+  "yuvomi_mcp__list_shopping_items",
+  "yuvomi_mcp__list_tasks",
+  "yuvomi_mcp__list_upcoming_events"
+]
+
 [risk_profiles.arr-bot]
 level = "supervised"
 # Library/queue/calendar reads and config review auto-approve; adds, edits,
@@ -409,6 +450,12 @@ command = "tandoor-recipes-mcp"
 env = { TANDOOR_URL = "http://tandoor-recipes.tandoor.svc.cluster.local:10029", TANDOOR_MCP_PROFILE = "full" }
 
 [[mcp.servers]]
+name = "yuvomi_mcp"
+transport = "http"
+url = "http://yuvomi.yuvomi.svc.cluster.local:3000/mcp"
+tool_timeout_secs = 120
+
+[[mcp.servers]]
 name = "arr-mcp-hd"
 transport = "http"
 url = "http://127.0.0.1:3000/mcp"
@@ -428,6 +475,9 @@ servers = ["ha-mcp"]
 
 [mcp_bundles.tandoor]
 servers = ["tandoor-mcp"]
+
+[mcp_bundles.yuvomi]
+servers = ["yuvomi_mcp"]
 
 [mcp_bundles.arr]
 servers = ["arr-mcp-hd", "arr-mcp-uhd"]
