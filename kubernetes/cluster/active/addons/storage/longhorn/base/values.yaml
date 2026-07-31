@@ -5,6 +5,7 @@ defaultSettings:
   defaultReplicaCount: '{"v1":"2","v2":"2"}'
   nodeDrainPolicy: block-for-eviction-if-contains-last-replica
   detachManuallyAttachedVolumesWhenCordoned: true
+  orphanResourceAutoDeletion: instance;replica-data
   storageOverProvisioningPercentage: 1000
 persistence:
   defaultClassReplicaCount: 2
