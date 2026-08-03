@@ -225,7 +225,7 @@ dedup_on_write = true
 dedup_action = "reject"
 dedup_jaccard_threshold = 0.80
 
-# Improve which memories are injected into context.
+# Improve which memories are injected into context
 rerank_enabled = true
 
 [memory.types]
@@ -250,6 +250,8 @@ auto_approve = [
   "tool_list",
   "tool_search",
   "send_via",
+  "sessions_current",
+  "sessions_history",
   "ha-mcp__ha_bulk_control",
   "ha-mcp__ha_call_service",
   "ha-mcp__ha_config_get_automation",
@@ -337,6 +339,8 @@ auto_approve = [
   "tool_list",
   "tool_search",
   "send_via",
+  "sessions_current",
+  "sessions_history",
   "tandoor-mcp__add_recipe_to_shopping_list",
   "tandoor-mcp__auto_meal_plan",
   "tandoor-mcp__bulk_check_shopping_entries",
@@ -418,6 +422,8 @@ auto_approve = [
   "tool_list",
   "tool_search",
   "send_via",
+  "sessions_current",
+  "sessions_history",
   "yuvomi_mcp__add_shopping_item",
   "yuvomi_mcp__create_event",
   "yuvomi_mcp__create_task",
@@ -443,6 +449,8 @@ auto_approve = [
   "tool_list",
   "tool_search",
   "send_via",
+  "sessions_current",
+  "sessions_history",
   "mcp-arr-hd__arr_search_all",
   "mcp-arr-hd__arr_status",
   "mcp-arr-hd__fetch",
