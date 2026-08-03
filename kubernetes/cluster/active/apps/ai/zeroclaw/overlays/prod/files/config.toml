@@ -19,6 +19,14 @@ voice = "en-US-AndrewMultilingualNeural"
 binary_path = "edge-tts"
 voice = "en-US-AvaMultilingualNeural"
 
+[providers.tts.edge.brian]
+binary_path = "edge-tts"
+voice = "en-US-BrianMultilingualNeural"
+
+[providers.tts.edge.emma]
+binary_path = "edge-tts"
+voice = "en-US-EmmaMultilingualNeural"
+
 [agents.assistant]
 model_provider = "openai.codex"
 risk_profile = "assistant"
@@ -49,7 +57,7 @@ risk_profile = "household"
 mcp_bundles = ["yuvomi"]
 channels = ["telegram.household"]
 transcription_provider = "groq.default"
-tts_provider = "edge.andrew"
+tts_provider = "edge.emma"
 
 [agents.arr-bot]
 model_provider = "openai.codex"
