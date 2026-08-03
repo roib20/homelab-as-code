@@ -49,6 +49,25 @@ shell_timeout_secs = 30
 strict_tool_parsing = true
 tool_call_dedup_exempt = []
 
+[runtime_profiles.subscription]
+agentic = true
+agentic_timeout_secs = 600
+compact_context = true
+delegation_timeout_secs = 300
+keep_tool_context_turns = 4
+max_actions_per_hour = 100
+max_context_tokens = 32_000
+max_cost_per_day_cents = 4_294_967_295
+max_delegation_depth = 4
+max_history_messages = 100
+max_system_prompt_chars = 32_000
+max_tool_iterations = 20
+max_tool_result_chars = 32_000
+memory_recall_limit = 5
+parallel_tools = false
+shell_timeout_secs = 300
+tool_call_dedup_exempt = []
+
 [runtime_profiles.tight]
 agentic = false
 agentic_timeout_secs = 120
@@ -90,7 +109,7 @@ tool_call_dedup_exempt = []
 [agents.assistant]
 model_provider = "openai.codex"
 risk_profile = "assistant"
-runtime_profile = "balanced"
+runtime_profile = "subscription"
 mcp_bundles = ["mcp"]
 channels = ["telegram.default"]
 transcription_provider = "groq.default"
@@ -99,7 +118,7 @@ tts_provider = "edge.ava"
 [agents.smart-homer]
 model_provider = "openai.codex"
 risk_profile = "assistant"
-runtime_profile = "balanced"
+runtime_profile = "subscription"
 mcp_bundles = ["home-assistant"]
 channels = ["telegram.smart_homer"]
 transcription_provider = "groq.default"
@@ -108,7 +127,7 @@ tts_provider = "edge.andrew"
 [agents.chef]
 model_provider = "openai.codex"
 risk_profile = "chef"
-runtime_profile = "balanced"
+runtime_profile = "subscription"
 mcp_bundles = ["tandoor"]
 channels = ["telegram.chef"]
 transcription_provider = "groq.default"
@@ -117,7 +136,7 @@ tts_provider = "edge.ava"
 [agents.household]
 model_provider = "openai.codex"
 risk_profile = "household"
-runtime_profile = "balanced"
+runtime_profile = "subscription"
 mcp_bundles = ["yuvomi"]
 channels = ["telegram.household"]
 transcription_provider = "groq.default"
@@ -126,7 +145,7 @@ tts_provider = "edge.emma"
 [agents.arr-bot]
 model_provider = "openai.codex"
 risk_profile = "arr-bot"
-runtime_profile = "balanced"
+runtime_profile = "subscription"
 mcp_bundles = ["arr"]
 channels = ["telegram.arr_bot"]
 transcription_provider = "groq.default"
