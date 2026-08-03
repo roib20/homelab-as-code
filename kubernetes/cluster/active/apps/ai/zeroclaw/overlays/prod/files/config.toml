@@ -140,7 +140,11 @@ enabled = true
 allow_remote_fetch = true
 
 [memory]
+consolidation_extract_facts = true
 search_mode = "bm25"
+
+[memory.types]
+enabled = true
 
 [risk_profiles.assistant]
 level = "supervised"
