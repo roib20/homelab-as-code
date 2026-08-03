@@ -29,6 +29,64 @@ voice = "en-US-EmmaMultilingualNeural"
 
 [runtime_profiles.balanced]
 
+[runtime_profiles.local_small]
+agentic = true
+agentic_timeout_secs = 120
+compact_context = true
+delegation_timeout_secs = 60
+keep_tool_context_turns = 1
+max_actions_per_hour = 10
+max_context_tokens = 8_000
+max_cost_per_day_cents = 100
+max_delegation_depth = 1
+max_history_messages = 20
+max_system_prompt_chars = 4_000
+max_tool_iterations = 4
+max_tool_result_chars = 4_000
+memory_recall_limit = 3
+parallel_tools = false
+shell_timeout_secs = 30
+strict_tool_parsing = true
+tool_call_dedup_exempt = []
+
+[runtime_profiles.tight]
+agentic = false
+agentic_timeout_secs = 120
+compact_context = true
+delegation_timeout_secs = 60
+keep_tool_context_turns = 2
+max_actions_per_hour = 10
+max_context_tokens = 8_000
+max_cost_per_day_cents = 100
+max_delegation_depth = 1
+max_history_messages = 20
+max_system_prompt_chars = 4_000
+max_tool_iterations = 10
+max_tool_result_chars = 8_000
+memory_recall_limit = 3
+parallel_tools = false
+shell_timeout_secs = 30
+tool_call_dedup_exempt = []
+
+[runtime_profiles.unbounded]
+agentic = true
+agentic_timeout_secs = 1_800
+compact_context = false
+delegation_timeout_secs = 900
+keep_tool_context_turns = 8
+max_actions_per_hour = 4_294_967_295
+max_context_tokens = 128_000
+max_cost_per_day_cents = 4_294_967_295
+max_delegation_depth = 8
+max_history_messages = 200
+max_system_prompt_chars = 64_000
+max_tool_iterations = 100
+max_tool_result_chars = 64_000
+memory_recall_limit = 10
+parallel_tools = true
+shell_timeout_secs = 600
+tool_call_dedup_exempt = []
+
 [agents.assistant]
 model_provider = "openai.codex"
 risk_profile = "assistant"
