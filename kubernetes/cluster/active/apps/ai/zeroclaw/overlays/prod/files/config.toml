@@ -19,9 +19,97 @@ voice = "en-US-AndrewMultilingualNeural"
 binary_path = "edge-tts"
 voice = "en-US-AvaMultilingualNeural"
 
+[providers.tts.edge.brian]
+binary_path = "edge-tts"
+voice = "en-US-BrianMultilingualNeural"
+
+[providers.tts.edge.emma]
+binary_path = "edge-tts"
+voice = "en-US-EmmaMultilingualNeural"
+
+[runtime_profiles.balanced]
+
+[runtime_profiles.local_small]
+agentic = true
+agentic_timeout_secs = 120
+compact_context = true
+delegation_timeout_secs = 60
+keep_tool_context_turns = 1
+max_actions_per_hour = 10
+max_context_tokens = 8_000
+max_cost_per_day_cents = 100
+max_delegation_depth = 1
+max_history_messages = 20
+max_system_prompt_chars = 4_000
+max_tool_iterations = 4
+max_tool_result_chars = 4_000
+memory_recall_limit = 3
+parallel_tools = false
+shell_timeout_secs = 30
+strict_tool_parsing = true
+tool_call_dedup_exempt = []
+
+[runtime_profiles.subscription]
+agentic = true
+agentic_timeout_secs = 600
+compact_context = true
+delegation_timeout_secs = 300
+keep_tool_context_turns = 4
+max_actions_per_hour = 100
+max_context_tokens = 32_000
+max_cost_per_day_cents = 4_294_967_295
+max_delegation_depth = 4
+max_history_messages = 100
+max_system_prompt_chars = 32_000
+max_tool_iterations = 20
+max_tool_result_chars = 32_000
+memory_recall_limit = 5
+parallel_tools = false
+shell_timeout_secs = 300
+tool_call_dedup_exempt = []
+
+[runtime_profiles.tight]
+agentic = false
+agentic_timeout_secs = 120
+compact_context = true
+delegation_timeout_secs = 60
+keep_tool_context_turns = 2
+max_actions_per_hour = 10
+max_context_tokens = 8_000
+max_cost_per_day_cents = 100
+max_delegation_depth = 1
+max_history_messages = 20
+max_system_prompt_chars = 4_000
+max_tool_iterations = 10
+max_tool_result_chars = 8_000
+memory_recall_limit = 3
+parallel_tools = false
+shell_timeout_secs = 30
+tool_call_dedup_exempt = []
+
+[runtime_profiles.unbounded]
+agentic = true
+agentic_timeout_secs = 1_800
+compact_context = false
+delegation_timeout_secs = 900
+keep_tool_context_turns = 8
+max_actions_per_hour = 4_294_967_295
+max_context_tokens = 128_000
+max_cost_per_day_cents = 4_294_967_295
+max_delegation_depth = 8
+max_history_messages = 200
+max_system_prompt_chars = 64_000
+max_tool_iterations = 100
+max_tool_result_chars = 64_000
+memory_recall_limit = 10
+parallel_tools = true
+shell_timeout_secs = 600
+tool_call_dedup_exempt = []
+
 [agents.assistant]
 model_provider = "openai.codex"
 risk_profile = "assistant"
+runtime_profile = "subscription"
 mcp_bundles = ["mcp"]
 channels = ["telegram.default"]
 transcription_provider = "groq.default"
@@ -30,6 +118,7 @@ tts_provider = "edge.ava"
 [agents.smart-homer]
 model_provider = "openai.codex"
 risk_profile = "assistant"
+runtime_profile = "subscription"
 mcp_bundles = ["home-assistant"]
 channels = ["telegram.smart_homer"]
 transcription_provider = "groq.default"
@@ -38,6 +127,7 @@ tts_provider = "edge.andrew"
 [agents.chef]
 model_provider = "openai.codex"
 risk_profile = "chef"
+runtime_profile = "subscription"
 mcp_bundles = ["tandoor"]
 channels = ["telegram.chef"]
 transcription_provider = "groq.default"
@@ -46,14 +136,16 @@ tts_provider = "edge.ava"
 [agents.household]
 model_provider = "openai.codex"
 risk_profile = "household"
+runtime_profile = "subscription"
 mcp_bundles = ["yuvomi"]
 channels = ["telegram.household"]
 transcription_provider = "groq.default"
-tts_provider = "edge.andrew"
+tts_provider = "edge.emma"
 
 [agents.arr-bot]
 model_provider = "openai.codex"
 risk_profile = "arr-bot"
+runtime_profile = "subscription"
 mcp_bundles = ["arr"]
 channels = ["telegram.arr_bot"]
 transcription_provider = "groq.default"
@@ -125,7 +217,19 @@ enabled = true
 allow_remote_fetch = true
 
 [memory]
+consolidation_extract_facts = true
 search_mode = "bm25"
+
+# Prevent atomic extraction from filling Core with near-duplicates
+dedup_on_write = true
+dedup_action = "reject"
+dedup_jaccard_threshold = 0.80
+
+# Improve which memories are injected into context
+rerank_enabled = true
+
+[memory.types]
+enabled = true
 
 [risk_profiles.assistant]
 level = "supervised"
@@ -146,6 +250,8 @@ auto_approve = [
   "tool_list",
   "tool_search",
   "send_via",
+  "sessions_current",
+  "sessions_history",
   "ha-mcp__ha_bulk_control",
   "ha-mcp__ha_call_service",
   "ha-mcp__ha_config_get_automation",
@@ -233,6 +339,8 @@ auto_approve = [
   "tool_list",
   "tool_search",
   "send_via",
+  "sessions_current",
+  "sessions_history",
   "tandoor-mcp__add_recipe_to_shopping_list",
   "tandoor-mcp__auto_meal_plan",
   "tandoor-mcp__bulk_check_shopping_entries",
@@ -314,6 +422,8 @@ auto_approve = [
   "tool_list",
   "tool_search",
   "send_via",
+  "sessions_current",
+  "sessions_history",
   "yuvomi_mcp__add_shopping_item",
   "yuvomi_mcp__create_event",
   "yuvomi_mcp__create_task",
@@ -339,6 +449,8 @@ auto_approve = [
   "tool_list",
   "tool_search",
   "send_via",
+  "sessions_current",
+  "sessions_history",
   "mcp-arr-hd__arr_search_all",
   "mcp-arr-hd__arr_status",
   "mcp-arr-hd__fetch",
