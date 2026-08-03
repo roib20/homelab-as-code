@@ -7,6 +7,11 @@ defaultSettings:
   detachManuallyAttachedVolumesWhenCordoned: true
   orphanResourceAutoDeletion: instance;replica-data
   storageOverProvisioningPercentage: 1000
+longhornManager:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
 persistence:
   defaultClassReplicaCount: 2
   defaultDataLocality: best-effort
