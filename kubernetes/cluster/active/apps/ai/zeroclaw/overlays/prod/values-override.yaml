@@ -103,9 +103,9 @@ controllers:
             memory: 256Mi
       # mcp-arr takes one Sonarr/Radarr per instance, so HD and UHD each get a
       # sidecar. Prowlarr is shared, so both get the same instance.
-      arr-mcp-hd:
+      mcp-arr-hd:
         restartPolicy: Always
-        image: &arr-mcp-image
+        image: &mcp-arr-image
           repository: ghcr.io/aplaceforallmystuff/mcp-arr
           tag: 1.7.2@sha256:46f2356c2161a8561b6f5680429594cf34aaad0712d1a030f8d662b99556c415
         env:
@@ -115,19 +115,19 @@ controllers:
           PROWLARR_API_KEY: &prowlarr-api-key
             valueFrom:
               secretKeyRef:
-                name: &arr-mcp-secret zeroclaw-servarr-secrets
+                name: &mcp-arr-secret zeroclaw-servarr-secrets
                 key: prowlarr_api_key
           RADARR_URL: "http://radarr-hd.servarr.svc.cluster.local:7878"
           RADARR_API_KEY:
             valueFrom:
               secretKeyRef:
-                name: *arr-mcp-secret
+                name: *mcp-arr-secret
                 key: radarr_hd_api_key
           SONARR_URL: "http://sonarr-hd.servarr.svc.cluster.local:8989"
           SONARR_API_KEY:
             valueFrom:
               secretKeyRef:
-                name: *arr-mcp-secret
+                name: *mcp-arr-secret
                 key: sonarr_hd_api_key
         probes:
           startup:
@@ -138,21 +138,21 @@ controllers:
                 command: ["wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/health"]
               failureThreshold: 30
               periodSeconds: 1
-        securityContext: &arr-mcp-security
+        securityContext: &mcp-arr-security
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           capabilities:
             drop:
               - ALL
-        resources: &arr-mcp-resources
+        resources: &mcp-arr-resources
           requests:
             cpu: 10m
             memory: 48Mi
           limits:
             memory: 192Mi
-      arr-mcp-uhd:
+      mcp-arr-uhd:
         restartPolicy: Always
-        image: *arr-mcp-image
+        image: *mcp-arr-image
         env:
           MCP_TRANSPORT: "http"
           PORT: "43000"
@@ -162,13 +162,13 @@ controllers:
           RADARR_API_KEY:
             valueFrom:
               secretKeyRef:
-                name: *arr-mcp-secret
+                name: *mcp-arr-secret
                 key: radarr_uhd_api_key
           SONARR_URL: "http://sonarr-uhd.servarr.svc.cluster.local:8989"
           SONARR_API_KEY:
             valueFrom:
               secretKeyRef:
-                name: *arr-mcp-secret
+                name: *mcp-arr-secret
                 key: sonarr_uhd_api_key
         probes:
           startup:
@@ -179,8 +179,8 @@ controllers:
                 command: ["wget", "-q", "-O", "/dev/null", "http://127.0.0.1:43000/health"]
               failureThreshold: 30
               periodSeconds: 1
-        securityContext: *arr-mcp-security
-        resources: *arr-mcp-resources
+        securityContext: *mcp-arr-security
+        resources: *mcp-arr-resources
     containers:
       app:
         envFrom:
