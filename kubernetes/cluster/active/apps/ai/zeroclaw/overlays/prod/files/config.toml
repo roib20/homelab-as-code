@@ -27,9 +27,12 @@ voice = "en-US-BrianMultilingualNeural"
 binary_path = "edge-tts"
 voice = "en-US-EmmaMultilingualNeural"
 
+[runtime_profiles.balanced]
+
 [agents.assistant]
 model_provider = "openai.codex"
 risk_profile = "assistant"
+runtime_profile = "balanced"
 mcp_bundles = ["mcp"]
 channels = ["telegram.default"]
 transcription_provider = "groq.default"
@@ -38,6 +41,7 @@ tts_provider = "edge.ava"
 [agents.smart-homer]
 model_provider = "openai.codex"
 risk_profile = "assistant"
+runtime_profile = "balanced"
 mcp_bundles = ["home-assistant"]
 channels = ["telegram.smart_homer"]
 transcription_provider = "groq.default"
@@ -46,6 +50,7 @@ tts_provider = "edge.andrew"
 [agents.chef]
 model_provider = "openai.codex"
 risk_profile = "chef"
+runtime_profile = "balanced"
 mcp_bundles = ["tandoor"]
 channels = ["telegram.chef"]
 transcription_provider = "groq.default"
@@ -54,6 +59,7 @@ tts_provider = "edge.ava"
 [agents.household]
 model_provider = "openai.codex"
 risk_profile = "household"
+runtime_profile = "balanced"
 mcp_bundles = ["yuvomi"]
 channels = ["telegram.household"]
 transcription_provider = "groq.default"
@@ -62,6 +68,7 @@ tts_provider = "edge.emma"
 [agents.arr-bot]
 model_provider = "openai.codex"
 risk_profile = "arr-bot"
+runtime_profile = "balanced"
 mcp_bundles = ["arr"]
 channels = ["telegram.arr_bot"]
 transcription_provider = "groq.default"
