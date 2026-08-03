@@ -225,6 +225,9 @@ dedup_on_write = true
 dedup_action = "reject"
 dedup_jaccard_threshold = 0.80
 
+# Improve which memories are injected into context.
+rerank_enabled = true
+
 [memory.types]
 enabled = true
 
