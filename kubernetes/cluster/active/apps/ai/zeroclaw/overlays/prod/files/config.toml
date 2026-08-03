@@ -3,7 +3,7 @@ schema_version = 3
 # OpenAI Codex over a ChatGPT subscription:
 # https://docs.zeroclawlabs.ai/master/en/providers/openai-codex-subscription.html
 [providers.models.openai.codex]
-model = "gpt-5.6-terra"
+model = "gpt-5.6-luna"
 requires_openai_auth = true
 wire_api = "responses"
 
