@@ -143,6 +143,11 @@ allow_remote_fetch = true
 consolidation_extract_facts = true
 search_mode = "bm25"
 
+# Prevent atomic extraction from filling Core with near-duplicates
+dedup_on_write = true
+dedup_action = "reject"
+dedup_jaccard_threshold = 0.80
+
 [memory.types]
 enabled = true
 
