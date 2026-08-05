@@ -151,6 +151,15 @@ channels = ["telegram.arr_bot"]
 transcription_provider = "groq.default"
 tts_provider = "edge.andrew"
 
+[agents.coach]
+model_provider = "openai.codex"
+risk_profile = "coach"
+runtime_profile = "subscription"
+mcp_bundles = ["garmin"]
+channels = ["telegram.coach"]
+transcription_provider = "groq.default"
+tts_provider = "edge.andrew"
+
 [channels]
 ack_reactions = true
 show_tool_calls = true
@@ -185,6 +194,12 @@ bot_token = ""
 mention_only = true
 stream_mode = "off"
 
+[channels.telegram.coach]
+enabled = true
+bot_token = ""
+mention_only = true
+stream_mode = "off"
+
 [peer_groups.telegram_default]
 channel = "telegram.default"
 agents = ["assistant"]
@@ -204,6 +219,10 @@ agents = ["household"]
 [peer_groups.telegram_arr_bot]
 channel = "telegram.arr_bot"
 agents = ["arr-bot"]
+
+[peer_groups.telegram_coach]
+channel = "telegram.coach"
+agents = ["coach"]
 
 [transcription]
 api_key = ""
@@ -525,6 +544,118 @@ auto_approve = [
   "mcp-arr-uhd__trash_list_profiles"
 ]
 
+[risk_profiles.coach]
+level = "supervised"
+auto_approve = [
+  "memory_recall",
+  "memory_store",
+  "web_search_tool",
+  "web_fetch",
+  "calculator",
+  "image_info",
+  "tool_list",
+  "tool_search",
+  "send_via",
+  "sessions_current",
+  "sessions_history",
+  "garmin__count_activities",
+  "garmin__get_activities",
+  "garmin__get_activities_by_date",
+  "garmin__get_activities_fordate",
+  "garmin__get_activity",
+  "garmin__get_activity_exercise_sets",
+  "garmin__get_activity_fit_data",
+  "garmin__get_activity_gear",
+  "garmin__get_activity_hr_in_timezones",
+  "garmin__get_activity_power_in_timezones",
+  "garmin__get_activity_splits",
+  "garmin__get_activity_split_summaries",
+  "garmin__get_activity_typed_splits",
+  "garmin__get_activity_types",
+  "garmin__get_activity_weather",
+  "garmin__get_adhoc_challenges",
+  "garmin__get_all_day_events",
+  "garmin__get_all_day_stress",
+  "garmin__get_available_badge_challenges",
+  "garmin__get_badge_challenges",
+  "garmin__get_blood_pressure",
+  "garmin__get_body_battery",
+  "garmin__get_body_battery_events",
+  "garmin__get_body_composition",
+  "garmin__get_courses",
+  "garmin__get_custom_foods",
+  "garmin__get_custom_food_serving_units",
+  "garmin__get_cycling_ftp",
+  "garmin__get_daily_steps",
+  "garmin__get_daily_weigh_ins",
+  "garmin__get_device_alarms",
+  "garmin__get_device_last_used",
+  "garmin__get_devices",
+  "garmin__get_device_settings",
+  "garmin__get_device_solar_data",
+  "garmin__get_earned_badges",
+  "garmin__get_endurance_score",
+  "garmin__get_fitnessage_data",
+  "garmin__get_floors",
+  "garmin__get_full_name",
+  "garmin__get_garmin_coach_workouts",
+  "garmin__get_gear",
+  "garmin__get_goals",
+  "garmin__get_heart_rates",
+  "garmin__get_heart_rates_summary",
+  "garmin__get_hill_score",
+  "garmin__get_hrv_data",
+  "garmin__get_hrv_trend",
+  "garmin__get_hydration_data",
+  "garmin__get_inprogress_virtual_challenges",
+  "garmin__get_lactate_threshold",
+  "garmin__get_lifestyle_logging_data",
+  "garmin__get_menstrual_calendar_data",
+  "garmin__get_menstrual_data_for_date",
+  "garmin__get_morning_training_readiness",
+  "garmin__get_non_completed_badge_challenges",
+  "garmin__get_nutrition_daily_food_log",
+  "garmin__get_nutrition_daily_meals",
+  "garmin__get_nutrition_daily_settings",
+  "garmin__get_personal_record",
+  "garmin__get_power_duration_curve",
+  "garmin__get_pregnancy_summary",
+  "garmin__get_primary_training_device",
+  "garmin__get_progress_summary_between_dates",
+  "garmin__get_race_predictions",
+  "garmin__get_respiration_data",
+  "garmin__get_respiration_summary",
+  "garmin__get_respiration_trend",
+  "garmin__get_rhr_day",
+  "garmin__get_scheduled_workouts",
+  "garmin__get_sleep_data",
+  "garmin__get_sleep_summary",
+  "garmin__get_spo2_data",
+  "garmin__get_stats",
+  "garmin__get_stats_and_body",
+  "garmin__get_steps_data",
+  "garmin__get_stress_data",
+  "garmin__get_stress_summary",
+  "garmin__get_training_effect",
+  "garmin__get_training_load_balance",
+  "garmin__get_training_load_trend",
+  "garmin__get_training_plan_workouts",
+  "garmin__get_training_readiness",
+  "garmin__get_training_status",
+  "garmin__get_unit_system",
+  "garmin__get_user_profile",
+  "garmin__get_userprofile_settings",
+  "garmin__get_user_summary",
+  "garmin__get_vo2max_trend",
+  "garmin__get_weekly_intensity_minutes",
+  "garmin__get_weekly_steps",
+  "garmin__get_weekly_stress",
+  "garmin__get_weigh_ins",
+  "garmin__get_workout_by_id",
+  "garmin__get_workouts",
+  "garmin__search_foods"
+]
+
 [gateway]
 port = 42617
 host = "[::]"
@@ -579,6 +710,12 @@ transport = "http"
 url = "http://127.0.0.1:43000/mcp"
 tool_timeout_secs = 120
 
+[[mcp.servers]]
+name = "garmin"
+transport = "stdio"
+command = "garmin-mcp"
+tool_timeout_secs = 120
+
 [mcp_bundles.mcp]
 servers = ["gitmcp", "zeroclaw"]
 
@@ -593,6 +730,9 @@ servers = ["yuvomi_mcp"]
 
 [mcp_bundles.arr]
 servers = ["mcp-arr-hd", "mcp-arr-uhd"]
+
+[mcp_bundles.garmin]
+servers = ["garmin"]
 
 [opencode_cli]
 enabled = true
