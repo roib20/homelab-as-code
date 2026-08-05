@@ -10,7 +10,8 @@ controllers:
       secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-groq-api-key,zeroclaw-ha-mcp,\
         zeroclaw-secret-key,zeroclaw-telegram-default-bot,zeroclaw-telegram-smart-homer-bot,\
         zeroclaw-tandoor-mcp,zeroclaw-telegram-chef-bot,zeroclaw-servarr-secrets,\
-        zeroclaw-telegram-arr-bot,zeroclaw-yuvomi-mcp,zeroclaw-telegram-household-bot"
+        zeroclaw-telegram-arr-bot,zeroclaw-yuvomi-mcp,zeroclaw-telegram-household-bot,\
+        zeroclaw-garmin-mcp,zeroclaw-telegram-coach-bot"
     initContainers:
       bootstrap:
         image:
@@ -197,9 +198,13 @@ controllers:
           - secretRef:
               name: zeroclaw-telegram-household-bot
           - secretRef:
+              name: zeroclaw-telegram-coach-bot
+          - secretRef:
               name: zeroclaw-tandoor-mcp
           - secretRef:
               name: zeroclaw-yuvomi-mcp
+          - secretRef:
+              name: zeroclaw-garmin-mcp
 persistence:
   zeroclaw:
     globalMounts: []

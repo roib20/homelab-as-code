@@ -3,6 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - zeroclaw-auth-codex.yaml.externalsecret
+  - zeroclaw-garmin-mcp.yaml.externalsecret
   - zeroclaw-groq-api-key.yaml.externalsecret
   - zeroclaw-ha-mcp.yaml.externalsecret
   - zeroclaw-secret-key.yaml.externalsecret
@@ -10,6 +11,7 @@ resources:
   - zeroclaw-tandoor-mcp.yaml.externalsecret
   - zeroclaw-telegram-arr-bot.yaml.externalsecret
   - zeroclaw-telegram-chef-bot.yaml.externalsecret
+  - zeroclaw-telegram-coach-bot.yaml.externalsecret
   - zeroclaw-telegram-default-bot.yaml.externalsecret
   - zeroclaw-telegram-household-bot.yaml.externalsecret
   - zeroclaw-telegram-smart-homer-bot.yaml.externalsecret
