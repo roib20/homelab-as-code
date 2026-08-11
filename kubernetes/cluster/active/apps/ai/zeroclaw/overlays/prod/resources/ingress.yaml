@@ -7,7 +7,7 @@ metadata:
     gethomepage.dev/description: Personal AI assistant.
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: AI
-    gethomepage.dev/icon: https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/apps/tauri/icons/icon.png
+    gethomepage.dev/icon: https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/docs/book/theme/favicon.svg
     gethomepage.dev/name: ZeroClaw
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=zeroclaw"
     tailscale.com/proxy-group: ingress-proxies
