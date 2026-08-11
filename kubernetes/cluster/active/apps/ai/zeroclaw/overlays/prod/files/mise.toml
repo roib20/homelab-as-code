@@ -5,6 +5,6 @@
 "node" = "24"
 "npm:@cliftonz/tandoor-recipes-mcp" = { version = "1.4.0", allow_low_downloads = true }
 "pipx:edge-tts" = "latest"
-"pipx:taxuspt/garmin_mcp" = "latest"
+"pipx:git+https://github.com/Taxuspt/garmin_mcp.git" = "latest"
 "ripgrep" = "latest"
 "uv" = "latest"
