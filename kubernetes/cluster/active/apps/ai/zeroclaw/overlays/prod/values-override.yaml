@@ -7,10 +7,11 @@ controllers:
         TZ: "Asia/Jerusalem"
     annotations:
       configmap.reloader.stakater.com/reload: "zeroclaw-config,zeroclaw-mise"
-      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-groq-api-key,zeroclaw-ha-mcp,\
-        zeroclaw-secret-key,zeroclaw-telegram-default-bot,zeroclaw-telegram-smart-homer-bot,\
-        zeroclaw-tandoor-mcp,zeroclaw-telegram-chef-bot,zeroclaw-servarr-secrets,\
-        zeroclaw-telegram-arr-bot,zeroclaw-yuvomi-mcp,zeroclaw-telegram-household-bot"
+      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-garmin-mcp,zeroclaw-groq-api-key,\
+        zeroclaw-ha-mcp,zeroclaw-secret-key,zeroclaw-servarr-secrets,zeroclaw-tandoor-mcp,\
+        zeroclaw-telegram-arr-bot,zeroclaw-telegram-chef-bot,zeroclaw-telegram-coach-bot,\
+        zeroclaw-telegram-default-bot,zeroclaw-telegram-household-bot,\
+        zeroclaw-telegram-smart-homer-bot,zeroclaw-yuvomi-mcp"
     initContainers:
       bootstrap:
         image:
@@ -185,17 +186,21 @@ controllers:
       app:
         envFrom:
           - secretRef:
+              name: zeroclaw-garmin-mcp
+          - secretRef:
               name: zeroclaw-groq-api-key
-          - secretRef:
-              name: zeroclaw-telegram-default-bot
-          - secretRef:
-              name: zeroclaw-telegram-smart-homer-bot
-          - secretRef:
-              name: zeroclaw-telegram-chef-bot
           - secretRef:
               name: zeroclaw-telegram-arr-bot
           - secretRef:
+              name: zeroclaw-telegram-chef-bot
+          - secretRef:
+              name: zeroclaw-telegram-coach-bot
+          - secretRef:
+              name: zeroclaw-telegram-default-bot
+          - secretRef:
               name: zeroclaw-telegram-household-bot
+          - secretRef:
+              name: zeroclaw-telegram-smart-homer-bot
           - secretRef:
               name: zeroclaw-tandoor-mcp
           - secretRef:
