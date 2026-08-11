@@ -4,6 +4,12 @@ kind: Ingress
 metadata:
   name: zeroclaw
   annotations:
+    gethomepage.dev/description: Personal AI assistant.
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: AI
+    gethomepage.dev/icon: mdi-robot
+    gethomepage.dev/name: ZeroClaw
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=zeroclaw"
     tailscale.com/proxy-group: ingress-proxies
 spec:
   ingressClassName: tailscale
