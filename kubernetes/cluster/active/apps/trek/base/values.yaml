@@ -1,0 +1,118 @@
+---
+global:
+  createDefaultServiceAccount: true
+defaultPodOptions:
+  automountServiceAccountToken: false
+  enableServiceLinks: false
+controllers:
+  trek:
+    # Single-writer SQLite on a `ReadWriteOnce` volume: `RollingUpdate` would attach a
+    # second pod to the same `PVC` before the old one exits.
+    strategy: Recreate
+    pod:
+      annotations:
+        secret.reloader.stakater.com/reload: "trek-secrets,trek-kanidm-oauth2-credentials"
+      securityContext:
+        # The entrypoint starts as root, chowns `/app/data` and `/app/uploads`, then
+        # drops to `node` (1000) via `gosu`, so no `runAsNonRoot` here.
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+    containers:
+      app:
+        image:
+          repository: mauriceboe/trek
+          tag: 3.4.1@sha256:ce7fab639b89a6f62d484d1175a7d489a536a8c77291f56c03fec20608d4a3eb
+        env:
+          NODE_ENV: production
+          PORT: &port 3000
+          TZ: Asia/Jerusalem
+          TRUST_PROXY: "1"
+          FORCE_HTTPS: "true"
+          # Public base URL: OIDC redirect-URI construction, email links, calendar
+          # feed URLs, and the WebAuthn RP ID are all derived from it.
+          APP_URL: "https://trek.${FQDN_01}"
+          ALLOWED_ORIGINS: "https://trek.${FQDN_01}"
+          ENCRYPTION_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: trek-secrets
+                key: ENCRYPTION_KEY
+          # Declared before `OIDC_ISSUER` so both are resolved at runtime: the auth
+          # host carries the FQDN replacement, the client ID stays secret.
+          OIDC_AUTH_HOST: "auth.${FQDN_01}"
+          OIDC_CLIENT_ID:
+            valueFrom:
+              secretKeyRef:
+                name: trek-kanidm-oauth2-credentials
+                key: CLIENT_ID
+          OIDC_CLIENT_SECRET:
+            valueFrom:
+              secretKeyRef:
+                name: trek-kanidm-oauth2-credentials
+                key: CLIENT_SECRET
+          OIDC_ISSUER: "https://$(OIDC_AUTH_HOST)/oauth2/openid/$(OIDC_CLIENT_ID)"
+          OIDC_DISPLAY_NAME: Kanidm
+          # No local login at any point: this also suppresses the local admin
+          # seed (`seeds.ts`), so the users table starts empty and `resolveOidcRole`
+          # hands admin to the FIRST SSO login without reading `trek_role`. Log in
+          # yourself before anyone else; every login after that is claim-driven.
+          OIDC_ONLY: "true"
+          # Kanidm emits `trek_role=admin` for members of `trek-admins` (claim map on
+          # the `KanidmOAuth2Client`), avoiding the FQDN-suffixed group SPNs.
+          OIDC_ADMIN_CLAIM: trek_role
+          OIDC_ADMIN_VALUE: admin
+        probes:
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: &health /api/health
+                port: *port
+              periodSeconds: 5
+              timeoutSeconds: 5
+              failureThreshold: 30
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: *health
+                port: *port
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: *health
+                port: *port
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+            # `gosu` needs these to chown the volumes and step down to `node`.
+            add:
+              - CHOWN
+              - SETUID
+              - SETGID
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            memory: 1Gi
+service:
+  app:
+    ports:
+      http:
+        port: *port

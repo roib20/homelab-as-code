@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "trek",
+  "destName": "in-cluster",
+  "destNamespace": "trek",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "trek"
+}
