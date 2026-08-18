@@ -11,7 +11,8 @@ controllers:
         zeroclaw-ha-mcp,zeroclaw-secret-key,zeroclaw-servarr-secrets,zeroclaw-tandoor-mcp,\
         zeroclaw-telegram-arr-bot,zeroclaw-telegram-chef-bot,zeroclaw-telegram-coach-bot,\
         zeroclaw-telegram-default-bot,zeroclaw-telegram-household-bot,\
-        zeroclaw-telegram-smart-homer-bot,zeroclaw-yuvomi-mcp"
+        zeroclaw-telegram-smart-homer-bot,zeroclaw-telegram-travel-agent-bot,\
+        zeroclaw-trek-mcp,zeroclaw-yuvomi-mcp"
     initContainers:
       bootstrap:
         image:
@@ -190,6 +191,8 @@ controllers:
           - secretRef:
               name: zeroclaw-groq-api-key
           - secretRef:
+              name: zeroclaw-tandoor-mcp
+          - secretRef:
               name: zeroclaw-telegram-arr-bot
           - secretRef:
               name: zeroclaw-telegram-chef-bot
@@ -202,7 +205,9 @@ controllers:
           - secretRef:
               name: zeroclaw-telegram-smart-homer-bot
           - secretRef:
-              name: zeroclaw-tandoor-mcp
+              name: zeroclaw-telegram-travel-agent-bot
+          - secretRef:
+              name: zeroclaw-trek-mcp
           - secretRef:
               name: zeroclaw-yuvomi-mcp
 persistence:
