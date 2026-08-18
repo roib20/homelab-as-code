@@ -705,6 +705,7 @@ auto_approve = [
   "sessions_history",
   "mcp_prompts",
   "mcp_resources",
+  "weather",
   "trek_mcp__assign_place_to_day",
   "trek_mcp__bulk_update_places",
   "trek_mcp__copy_trip",
