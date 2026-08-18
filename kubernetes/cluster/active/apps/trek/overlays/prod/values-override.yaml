@@ -1,0 +1,26 @@
+---
+persistence:
+  data:
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: longhorn
+    advancedMounts:
+      trek:
+        app:
+          - path: "/app/data"
+  uploads:
+    accessMode: ReadWriteOnce
+    size: 20Gi
+    storageClass: longhorn
+    advancedMounts:
+      trek:
+        app:
+          - path: "/app/uploads"
+  tmp:
+    type: emptyDir
+    medium: Memory
+    sizeLimit: 128Mi
+    advancedMounts:
+      trek:
+        app:
+          - path: "/tmp"

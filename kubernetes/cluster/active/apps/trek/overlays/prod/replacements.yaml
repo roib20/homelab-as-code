@@ -1,0 +1,27 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    # HTTPRoute hostname
+    - select:
+        kind: HTTPRoute
+        name: trek
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    # Public base URL (OIDC redirect URI, email links, WebAuthn RP ID) and the
+    # Kanidm host that OIDC_ISSUER interpolates at runtime.
+    - select:
+        kind: Deployment
+        name: trek
+      fieldPaths:
+        - spec.template.spec.containers.[name=app].env.[name=APP_URL].value
+        - spec.template.spec.containers.[name=app].env.[name=ALLOWED_ORIGINS].value
+        - spec.template.spec.containers.[name=app].env.[name=OIDC_AUTH_HOST].value
+      options:
+        delimiter: "."
+        index: 1

@@ -160,6 +160,15 @@ channels = ["telegram.coach"]
 transcription_provider = "groq.default"
 tts_provider = "edge.andrew"
 
+[agents.travel-agent]
+model_provider = "openai.codex"
+risk_profile = "travel-agent"
+runtime_profile = "subscription"
+mcp_bundles = ["travel"]
+channels = ["telegram.travel_agent"]
+transcription_provider = "groq.default"
+tts_provider = "edge.brian"
+
 [channels]
 ack_reactions = true
 show_tool_calls = true
@@ -200,6 +209,12 @@ bot_token = ""
 mention_only = true
 stream_mode = "off"
 
+[channels.telegram.travel_agent]
+enabled = true
+bot_token = ""
+mention_only = true
+stream_mode = "off"
+
 [peer_groups.telegram_default]
 channel = "telegram.default"
 agents = ["assistant"]
@@ -223,6 +238,10 @@ agents = ["arr-bot"]
 [peer_groups.telegram_coach]
 channel = "telegram.coach"
 agents = ["coach"]
+
+[peer_groups.telegram_travel_agent]
+channel = "telegram.travel_agent"
+agents = ["travel-agent"]
 
 [transcription]
 api_key = ""
@@ -271,6 +290,8 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "mcp_prompts",
+  "mcp_resources",
   "ha-mcp__ha_bulk_control",
   "ha-mcp__ha_call_service",
   "ha-mcp__ha_config_get_automation",
@@ -360,6 +381,8 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "mcp_prompts",
+  "mcp_resources",
   "tandoor-mcp__add_recipe_to_shopping_list",
   "tandoor-mcp__auto_meal_plan",
   "tandoor-mcp__bulk_check_shopping_entries",
@@ -443,6 +466,8 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "mcp_prompts",
+  "mcp_resources",
   "yuvomi_mcp__add_shopping_item",
   "yuvomi_mcp__create_event",
   "yuvomi_mcp__create_task",
@@ -470,6 +495,8 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "mcp_prompts",
+  "mcp_resources",
   "mcp-arr-hd__arr_search_all",
   "mcp-arr-hd__arr_status",
   "mcp-arr-hd__fetch",
@@ -558,6 +585,8 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "mcp_prompts",
+  "mcp_resources",
   "garmin__count_activities",
   "garmin__get_activities",
   "garmin__get_activities_by_date",
@@ -656,6 +685,89 @@ auto_approve = [
   "garmin__search_foods"
 ]
 
+[risk_profiles.travel-agent]
+level = "supervised"
+# Reads and planning writes (create/update trips, days, places, reservations,
+# budgets) auto-approve; deletes, member changes and share-link creation fall
+# through to confirmation.
+auto_approve = [
+  "file_read",
+  "memory_recall",
+  "memory_store",
+  "web_search_tool",
+  "web_fetch",
+  "calculator",
+  "image_info",
+  "tool_list",
+  "tool_search",
+  "send_via",
+  "sessions_current",
+  "sessions_history",
+  "mcp_prompts",
+  "mcp_resources",
+  "weather",
+  "trek_mcp__assign_place_to_day",
+  "trek_mcp__bulk_update_places",
+  "trek_mcp__copy_trip",
+  "trek_mcp__create_accommodation",
+  "trek_mcp__create_and_assign_place",
+  "trek_mcp__create_budget_item",
+  "trek_mcp__create_budget_item_with_members",
+  "trek_mcp__create_day",
+  "trek_mcp__create_day_note",
+  "trek_mcp__create_place",
+  "trek_mcp__create_place_accommodation",
+  "trek_mcp__create_reservation",
+  "trek_mcp__create_tag",
+  "trek_mcp__create_transit_journey",
+  "trek_mcp__create_transport",
+  "trek_mcp__create_trip",
+  "trek_mcp__export_trip_ics",
+  "trek_mcp__get_airport",
+  "trek_mcp__get_assignment_participants",
+  "trek_mcp__get_detailed_weather",
+  "trek_mcp__get_place_details",
+  "trek_mcp__get_share_link",
+  "trek_mcp__get_trip_summary",
+  "trek_mcp__get_unread_notification_count",
+  "trek_mcp__get_weather",
+  "trek_mcp__import_places_from_url",
+  "trek_mcp__link_hotel_accommodation",
+  "trek_mcp__list_categories",
+  "trek_mcp__list_notifications",
+  "trek_mcp__list_places",
+  "trek_mcp__list_tags",
+  "trek_mcp__list_trip_members",
+  "trek_mcp__list_trips",
+  "trek_mcp__mark_all_notifications_read",
+  "trek_mcp__mark_notification_read",
+  "trek_mcp__mark_notification_unread",
+  "trek_mcp__move_assignment",
+  "trek_mcp__reorder_day_assignments",
+  "trek_mcp__reorder_reservations",
+  "trek_mcp__resolve_maps_url",
+  "trek_mcp__reverse_geocode",
+  "trek_mcp__search_airports",
+  "trek_mcp__search_place",
+  "trek_mcp__search_transit_routes",
+  "trek_mcp__search_transit_stops",
+  "trek_mcp__set_assignment_participants",
+  "trek_mcp__set_budget_item_members",
+  "trek_mcp__toggle_budget_member_paid",
+  "trek_mcp__unassign_place",
+  "trek_mcp__update_accommodation",
+  "trek_mcp__update_assignment_time",
+  "trek_mcp__update_budget_item",
+  "trek_mcp__update_day",
+  "trek_mcp__update_day_note",
+  "trek_mcp__update_place",
+  "trek_mcp__update_reservation",
+  "trek_mcp__update_tag",
+  "trek_mcp__update_transport",
+  "trek_mcp__update_trip",
+  "trvl__travel"
+]
+
 [gateway]
 port = 42617
 host = "[::]"
@@ -699,6 +811,17 @@ url = "http://yuvomi.yuvomi.svc.cluster.local:3000/mcp"
 tool_timeout_secs = 120
 
 [[mcp.servers]]
+name = "trek_mcp"
+transport = "http"
+url = "http://trek.trek.svc.cluster.local:3000/mcp"
+tool_timeout_secs = 120
+# TREK runs with FORCE_HTTPS: any request without x-forwarded-proto=https gets
+# 301'd to https on :3000, which serves plaintext (TLS ends at the gateway). The
+# in-cluster call is the trusted immediate hop (TRUST_PROXY=1), so mark it https.
+# The Bearer token is merged into this map from the zeroclaw-trek-mcp secret.
+headers = { "X-Forwarded-Proto" = "https" }
+
+[[mcp.servers]]
 name = "mcp-arr-hd"
 transport = "http"
 url = "http://127.0.0.1:3000/mcp"
@@ -714,6 +837,14 @@ tool_timeout_secs = 120
 name = "garmin"
 transport = "stdio"
 command = "garmin-mcp"
+tool_timeout_secs = 120
+
+[[mcp.servers]]
+name = "trvl"
+transport = "stdio"
+command = "trvl"
+args = ["mcp"]
+env = { TRVL_NO_TELEMETRY = "1" }
 tool_timeout_secs = 120
 
 [mcp_bundles.mcp]
@@ -733,6 +864,9 @@ servers = ["mcp-arr-hd", "mcp-arr-uhd"]
 
 [mcp_bundles.garmin]
 servers = ["garmin"]
+
+[mcp_bundles.travel]
+servers = ["trek_mcp", "trvl"]
 
 [opencode_cli]
 enabled = true

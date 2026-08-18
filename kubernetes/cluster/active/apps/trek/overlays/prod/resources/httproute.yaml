@@ -1,0 +1,44 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: trek
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Collaborative travel planner.
+    gethomepage.dev/group: Productivity
+    gethomepage.dev/icon: sh-trek.svg
+    gethomepage.dev/name: TREK
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=trek"
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: envoy-gateway-ingress
+  hostnames:
+    - "trek.${FQDN_01}"
+  rules:
+    # Keep the MCP endpoint off the public gateway; zeroclaw reaches it in-cluster.
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mcp
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            statusCode: 302
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: trek
+          namespace: trek
+          port: 3000
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
