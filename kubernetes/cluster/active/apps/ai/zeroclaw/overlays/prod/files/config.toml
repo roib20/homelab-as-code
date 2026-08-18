@@ -801,6 +801,11 @@ name = "trek_mcp"
 transport = "http"
 url = "http://trek.trek.svc.cluster.local:3000/mcp"
 tool_timeout_secs = 120
+# TREK runs with FORCE_HTTPS: any request without x-forwarded-proto=https gets
+# 301'd to https on :3000, which serves plaintext (TLS ends at the gateway). The
+# in-cluster call is the trusted immediate hop (TRUST_PROXY=1), so mark it https.
+# The Bearer token is merged into this map from the zeroclaw-trek-mcp secret.
+headers = { "X-Forwarded-Proto" = "https" }
 
 [[mcp.servers]]
 name = "mcp-arr-hd"
