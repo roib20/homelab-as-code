@@ -763,7 +763,8 @@ auto_approve = [
   "trek_mcp__update_reservation",
   "trek_mcp__update_tag",
   "trek_mcp__update_transport",
-  "trek_mcp__update_trip"
+  "trek_mcp__update_trip",
+  "trvl__travel"
 ]
 
 [gateway]
@@ -837,6 +838,14 @@ transport = "stdio"
 command = "garmin-mcp"
 tool_timeout_secs = 120
 
+[[mcp.servers]]
+name = "trvl"
+transport = "stdio"
+command = "trvl"
+args = ["mcp"]
+env = { TRVL_NO_TELEMETRY = "1" }
+tool_timeout_secs = 120
+
 [mcp_bundles.mcp]
 servers = ["gitmcp", "zeroclaw"]
 
@@ -856,7 +865,7 @@ servers = ["mcp-arr-hd", "mcp-arr-uhd"]
 servers = ["garmin"]
 
 [mcp_bundles.travel]
-servers = ["trek_mcp"]
+servers = ["trek_mcp", "trvl"]
 
 [opencode_cli]
 enabled = true
