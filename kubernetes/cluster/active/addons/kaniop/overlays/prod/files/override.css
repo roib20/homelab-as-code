@@ -25,5 +25,6 @@
   main .col-md-3:has(img#seerr) { order: 23; }
   main .col-md-3:has(img#tandoor) { order: 24; }
   main .col-md-3:has(img#transmute) { order: 25; }
-  main .col-md-3:has(img#yuvomi) { order: 26; }
+  main .col-md-3:has(img#trek) { order: 26; }
+  main .col-md-3:has(img#yuvomi) { order: 27; }
 }
