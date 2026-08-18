@@ -102,6 +102,9 @@ spec:
             - SecRule REQUEST_METHOD "@streq POST" "id:100025,phase:1,pass,nolog,chain"
             - SecRule REQUEST_HEADERS:Host "@rx ^household\." "chain"
             - SecRule REQUEST_FILENAME "@streq /api/v1/backup/restore" "ctl:requestBodyAccess=Off"
+            # TREK upload/import bodies (covers, booking imports, attachments) exceed Envoy's body buffer, causing 413; skip body inspection host-wide
+            - SecRule REQUEST_HEADERS:Host "@rx ^trek\." "id:100026,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_METHOD "@rx ^(POST|PUT|PATCH)$" "ctl:requestBodyAccess=Off"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---
