@@ -19,6 +19,18 @@ spec:
   hostnames:
     - "trek.${FQDN_01}"
   rules:
+    # Keep the MCP endpoint off the public gateway; zeroclaw reaches it in-cluster.
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mcp
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            statusCode: 302
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /
     - backendRefs:
         - group: ""
           kind: Service
