@@ -23,7 +23,7 @@ locals {
     # renovate: datasource=github-releases depName=siderolabs/talos extractVersion=^v(?<version>.+)$
     talos_version = "1.13.5", # Change this value to safely upgrade the Talos version
     # renovate: datasource=docker depName=ghcr.io/external-secrets/charts/external-secrets
-    external-secrets_version = "2.8.0",
+    external-secrets_version = "2.9.0",
     # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
     gateway-api_version = "1.6.1",
     gateway-api_channel = "standard",
