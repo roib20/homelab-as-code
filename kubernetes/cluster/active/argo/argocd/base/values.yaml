@@ -44,6 +44,8 @@ repoServer:
             # grab only env_ vars, strip the prefix, write key=value lines
             printenv | grep '^env_' | sed 's/^env_//' > /tmp/env-vars.env
 configs:
+  params:
+    controller.operation.processors: "2"
   # argocd-cm
   cm:
     # Kustomize build options
