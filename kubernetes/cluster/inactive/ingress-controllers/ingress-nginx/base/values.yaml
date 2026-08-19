@@ -1,6 +1,0 @@
----
-controller:
-  ingressClassResource:
-    default: true
-  metrics:
-    enabled: true
