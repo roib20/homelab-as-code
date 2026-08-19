@@ -257,8 +257,10 @@
       },
       "groupName": "Talos",
       "groupSlug": "talos",
+      "matchDatasources": [
+        "github-releases"
+      ],
       "matchPackageNames": [
-        "ghcr.io/siderolabs/installer",
         "siderolabs/talos"
       ],
       "minimumGroupSize": 2
