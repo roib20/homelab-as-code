@@ -258,10 +258,23 @@
       "groupName": "Talos",
       "groupSlug": "talos",
       "matchPackageNames": [
-        "/talos/",
-        "ghcr.io/siderolabs/installer"
+        "ghcr.io/siderolabs/installer",
+        "siderolabs/talos"
       ],
-      "minimumGroupSize": 3
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Talos Cloud Controller Manager Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Talos Cloud Controller Manager",
+      "groupSlug": "talos-cloud-controller-manager",
+      "matchPackageNames": [
+        "ghcr.io/siderolabs/charts/talos-cloud-controller-manager",
+        "talos-cloud-controller-manager"
+      ],
+      "minimumGroupSize": 2
     },
     {
       "branchTopic": "terragrunt",
