@@ -20,7 +20,7 @@ ARG KUSTOMIZE_VERSION=5.8.1
 # renovate: datasource=github-releases depName=jqlang/jq
 ARG JQ_VERSION=1.8.1
 # renovate: datasource=docker depName=python
-ARG PYTHON_VERSION=3.14.6
+ARG PYTHON_VERSION=3.14.7
 # renovate: datasource=docker depName=golang
 ARG GO_VERSION=1.26.6
 # renovate: datasource=github-releases depName=ovh/ovh-ttyrec
