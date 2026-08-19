@@ -2,7 +2,7 @@
 byparrImage:
   repository: ghcr.io/thephaseless/byparr
   # renovate: datasource=docker depName=ghcr.io/thephaseless/byparr
-  tag: 2.1.0
+  tag: 3.0.4
   pullPolicy: IfNotPresent
 
 workload:
