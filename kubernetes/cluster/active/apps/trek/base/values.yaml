@@ -54,11 +54,7 @@ controllers:
                 key: CLIENT_SECRET
           OIDC_ISSUER: "https://$(OIDC_AUTH_HOST)/oauth2/openid/$(OIDC_CLIENT_ID)"
           OIDC_DISPLAY_NAME: Kanidm
-          # No local login at any point: this also suppresses the local admin
-          # seed (`seeds.ts`), so the users table starts empty and `resolveOidcRole`
-          # hands admin to the FIRST SSO login without reading `trek_role`. Log in
-          # yourself before anyone else; every login after that is claim-driven.
-          OIDC_ONLY: "true"
+          OIDC_ONLY: "false"
           # Kanidm emits `trek_role=admin` for members of `trek-admins` (claim map on
           # the `KanidmOAuth2Client`), avoiding the FQDN-suffixed group SPNs.
           OIDC_ADMIN_CLAIM: trek_role
