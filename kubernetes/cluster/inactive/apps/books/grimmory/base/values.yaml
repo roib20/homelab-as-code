@@ -48,7 +48,7 @@ controllers:
       app:
         image:
           repository: ghcr.io/grimmory-tools/grimmory
-          tag: v3.2.4@sha256:dfa7afdfcf25d649fd664497a62385dd00cd9678c37546e182c172e41c8e80cb
+          tag: v3.3.2@sha256:8a3a046822dee460f3e67df5d548e3b9842057a54ed830026edb20ecc116c8ce
         command:
           - java
         args:
