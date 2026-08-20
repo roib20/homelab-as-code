@@ -4,6 +4,12 @@ dex:
 # HA mode
 redis-ha:
   enabled: true
+  haproxy:
+    deploymentStrategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 0
+        maxUnavailable: 1
 controller:
   replicas: 1
   podAnnotations:
