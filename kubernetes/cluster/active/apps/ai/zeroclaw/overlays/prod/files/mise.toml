@@ -4,7 +4,7 @@
 "github:MikkoParkkola/trvl" = { exe = "trvl", matching = "linux", version = "latest" }
 "github:linebender/resvg" = { exe = "resvg", matching = "resvg-linux", version = "latest" }
 "node" = "24"
-"npm:@cliftonz/tandoor-recipes-mcp" = { version = "1.4.0", allow_low_downloads = true }
+"npm:@cliftonz/tandoor-recipes-mcp" = { version = "1.5.2", allow_low_downloads = true }
 "pipx:edge-tts" = "latest"
 "pipx:git+https://github.com/Taxuspt/garmin_mcp.git" = "main"
 "ripgrep" = "latest"
