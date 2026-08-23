@@ -25,7 +25,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/ulsklyc/yuvomi
-          tag: 2.28.0@sha256:e3e5aea3f7ff3dbf9e7e9b070dae7c1788a56b92df779414d08df228ab07e6f0
+          tag: 2.35.0@sha256:c55abb62d0e96a47b8bc482aced0ebf406cca150f674a277d63f2df802e19534
         env:
           PORT: &port 3000
           NODE_ENV: production
