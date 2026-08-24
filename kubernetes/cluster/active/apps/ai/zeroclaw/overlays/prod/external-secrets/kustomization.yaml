@@ -3,6 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - zeroclaw-auth-codex.yaml.externalsecret
+  - zeroclaw-calendar-mcp.yaml.externalsecret
   - zeroclaw-garmin-mcp.yaml.externalsecret
   - zeroclaw-groq-api-key.yaml.externalsecret
   - zeroclaw-ha-mcp.yaml.externalsecret
