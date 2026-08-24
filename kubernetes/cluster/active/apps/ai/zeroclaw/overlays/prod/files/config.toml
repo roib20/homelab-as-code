@@ -489,8 +489,9 @@ auto_approve = [
 
 [risk_profiles.arr-bot]
 level = "supervised"
-# Library/queue/calendar reads and config review auto-approve; adds, edits,
-# queue deletes and download-triggering searches fall through to confirmation.
+# Library/queue/calendar reads, config review, and radarr/sonarr add, update
+# and search (including download-triggering) flows auto-approve; queue deletes
+# and remaining mutating operations fall through to confirmation.
 auto_approve = [
   "calculator",
   "content_search",
@@ -519,6 +520,7 @@ auto_approve = [
   "mcp-arr-hd__prowlarr_get_stats",
   "mcp-arr-hd__prowlarr_search",
   "mcp-arr-hd__prowlarr_test_indexers",
+  "mcp-arr-hd__radarr_add_movie",
   "mcp-arr-hd__radarr_get_calendar",
   "mcp-arr-hd__radarr_get_download_clients",
   "mcp-arr-hd__radarr_get_health",
@@ -530,7 +532,11 @@ auto_approve = [
   "mcp-arr-hd__radarr_get_tags",
   "mcp-arr-hd__radarr_review_setup",
   "mcp-arr-hd__radarr_search",
+  "mcp-arr-hd__radarr_search_movie",
+  "mcp-arr-hd__radarr_search_movies",
+  "mcp-arr-hd__radarr_update_movie",
   "mcp-arr-hd__search",
+  "mcp-arr-hd__sonarr_add_series",
   "mcp-arr-hd__sonarr_get_calendar",
   "mcp-arr-hd__sonarr_get_download_clients",
   "mcp-arr-hd__sonarr_get_episodes",
@@ -543,6 +549,8 @@ auto_approve = [
   "mcp-arr-hd__sonarr_get_tags",
   "mcp-arr-hd__sonarr_review_setup",
   "mcp-arr-hd__sonarr_search",
+  "mcp-arr-hd__sonarr_search_episode",
+  "mcp-arr-hd__sonarr_search_missing",
   "mcp-arr-hd__trash_compare_naming",
   "mcp-arr-hd__trash_compare_profile",
   "mcp-arr-hd__trash_get_naming",
@@ -553,6 +561,7 @@ auto_approve = [
   "mcp-arr-uhd__arr_search_all",
   "mcp-arr-uhd__arr_status",
   "mcp-arr-uhd__fetch",
+  "mcp-arr-uhd__radarr_add_movie",
   "mcp-arr-uhd__radarr_get_calendar",
   "mcp-arr-uhd__radarr_get_download_clients",
   "mcp-arr-uhd__radarr_get_health",
@@ -564,7 +573,11 @@ auto_approve = [
   "mcp-arr-uhd__radarr_get_tags",
   "mcp-arr-uhd__radarr_review_setup",
   "mcp-arr-uhd__radarr_search",
+  "mcp-arr-uhd__radarr_search_movie",
+  "mcp-arr-uhd__radarr_search_movies",
+  "mcp-arr-uhd__radarr_update_movie",
   "mcp-arr-uhd__search",
+  "mcp-arr-uhd__sonarr_add_series",
   "mcp-arr-uhd__sonarr_get_calendar",
   "mcp-arr-uhd__sonarr_get_download_clients",
   "mcp-arr-uhd__sonarr_get_episodes",
@@ -577,6 +590,8 @@ auto_approve = [
   "mcp-arr-uhd__sonarr_get_tags",
   "mcp-arr-uhd__sonarr_review_setup",
   "mcp-arr-uhd__sonarr_search",
+  "mcp-arr-uhd__sonarr_search_episode",
+  "mcp-arr-uhd__sonarr_search_missing",
   "mcp-arr-uhd__trash_compare_naming",
   "mcp-arr-uhd__trash_compare_profile",
   "mcp-arr-uhd__trash_get_naming",
