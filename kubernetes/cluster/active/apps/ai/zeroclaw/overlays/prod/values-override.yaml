@@ -7,7 +7,7 @@ controllers:
         TZ: "Asia/Jerusalem"
     annotations:
       configmap.reloader.stakater.com/reload: "zeroclaw-config,zeroclaw-mise"
-      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-garmin-mcp,zeroclaw-groq-api-key,\
+      secret.reloader.stakater.com/reload: "zeroclaw-auth-codex,zeroclaw-calendar-mcp,zeroclaw-garmin-mcp,zeroclaw-groq-api-key,\
         zeroclaw-ha-mcp,zeroclaw-secret-key,zeroclaw-servarr-secrets,zeroclaw-tandoor-mcp,\
         zeroclaw-telegram-arr-bot,zeroclaw-telegram-chef-bot,zeroclaw-telegram-coach-bot,\
         zeroclaw-telegram-default-bot,zeroclaw-telegram-household-bot,\
@@ -52,6 +52,41 @@ controllers:
             memory: 32Mi
           limits:
             memory: 256Mi
+      # Read-only ICS feed server (hromadkom/calendar-ics-mcp). Serves MCP
+      # Streamable HTTP on :8590; ICS_URL is injected from the secret below.
+      calendar-mcp:
+        restartPolicy: Always
+        image:
+          repository: docker.io/hromadkom/calendar-ics-mcp
+          tag: 0.2.0@sha256:f7908aca3fd1bfd28cab74ca7d689a0311ca77a275c0e553b93a8aeee41b3467
+        env:
+          HTTP_BIND: "0.0.0.0:8590"
+          TZ_DEFAULT: "Asia/Jerusalem"
+        envFrom:
+          - secretRef:
+              name: zeroclaw-calendar-mcp
+        probes:
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /healthz
+                port: 8590
+              failureThreshold: 30
+              periodSeconds: 1
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            memory: 64Mi
       ha-mcp:
         restartPolicy: Always
         image:

@@ -29,7 +29,7 @@ tts_provider = "edge.ava"
 
 [agents.coach]
 channels = ["telegram.coach"]
-mcp_bundles = ["garmin"]
+mcp_bundles = ["calendar", "garmin"]
 model_provider = "openai.codex"
 risk_profile = "coach"
 runtime_profile = "unbounded"
@@ -124,6 +124,12 @@ deferred_loading = false
 enabled = true
 
 [[mcp.servers]]
+name = "calendar"
+tool_timeout_secs = 120
+transport = "http"
+url = "http://127.0.0.1:8590/mcp"
+
+[[mcp.servers]]
 command = "garmin-mcp"
 name = "garmin"
 tool_timeout_secs = 120
@@ -190,6 +196,9 @@ url = "https://gitmcp.io/zeroclaw-labs/zeroclaw"
 
 [mcp_bundles.arr]
 servers = ["mcp-arr-hd", "mcp-arr-uhd"]
+
+[mcp_bundles.calendar]
+servers = ["calendar"]
 
 [mcp_bundles.garmin]
 servers = ["garmin"]
@@ -582,6 +591,8 @@ auto_approve = [
 level = "supervised"
 
 [risk_profiles.coach]
+# Read-only Garmin and calendar tools auto-approve; all other tools require
+# confirmation.
 auto_approve = [
   "calculator",
   "content_search",
@@ -603,6 +614,9 @@ auto_approve = [
   "weather",
   "web_fetch",
   "web_search_tool",
+  "calendar__feed_info",
+  "calendar__get_events",
+  "calendar__get_events_range",
   "garmin__count_activities",
   "garmin__get_activities",
   "garmin__get_activities_by_date",
