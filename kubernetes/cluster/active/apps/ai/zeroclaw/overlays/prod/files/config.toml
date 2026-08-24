@@ -5,7 +5,7 @@ channels = ["telegram.arr_bot"]
 mcp_bundles = ["arr"]
 model_provider = "openai.codex"
 risk_profile = "arr-bot"
-runtime_profile = "subscription"
+runtime_profile = "unbounded"
 transcription_provider = "groq.default"
 tts_provider = "edge.andrew"
 
@@ -14,7 +14,7 @@ channels = ["telegram.default"]
 mcp_bundles = ["mcp"]
 model_provider = "openai.codex"
 risk_profile = "assistant"
-runtime_profile = "subscription"
+runtime_profile = "unbounded"
 transcription_provider = "groq.default"
 tts_provider = "edge.ava"
 
@@ -23,7 +23,7 @@ channels = ["telegram.chef"]
 mcp_bundles = ["tandoor"]
 model_provider = "openai.codex"
 risk_profile = "chef"
-runtime_profile = "subscription"
+runtime_profile = "unbounded"
 transcription_provider = "groq.default"
 tts_provider = "edge.ava"
 
@@ -32,7 +32,7 @@ channels = ["telegram.coach"]
 mcp_bundles = ["garmin"]
 model_provider = "openai.codex"
 risk_profile = "coach"
-runtime_profile = "subscription"
+runtime_profile = "unbounded"
 transcription_provider = "groq.default"
 tts_provider = "edge.ava"
 
@@ -41,7 +41,7 @@ channels = ["telegram.household"]
 mcp_bundles = ["yuvomi"]
 model_provider = "openai.codex"
 risk_profile = "household"
-runtime_profile = "subscription"
+runtime_profile = "unbounded"
 transcription_provider = "groq.default"
 tts_provider = "edge.emma"
 
@@ -50,7 +50,7 @@ channels = ["telegram.smart_homer"]
 mcp_bundles = ["home-assistant"]
 model_provider = "openai.codex"
 risk_profile = "assistant"
-runtime_profile = "subscription"
+runtime_profile = "unbounded"
 transcription_provider = "groq.default"
 tts_provider = "edge.andrew"
 
@@ -59,7 +59,7 @@ channels = ["telegram.travel_agent"]
 mcp_bundles = ["travel"]
 model_provider = "openai.codex"
 risk_profile = "travel-agent"
-runtime_profile = "subscription"
+runtime_profile = "unbounded"
 transcription_provider = "groq.default"
 tts_provider = "edge.brian"
 
@@ -256,8 +256,8 @@ channel = "telegram.smart_homer"
 agents = ["travel-agent"]
 channel = "telegram.travel_agent"
 
-# OpenAI Codex over a ChatGPT subscription:
-# https://docs.zeroclawlabs.ai/master/en/providers/openai-codex-subscription.html
+# OpenAI Codex over a ChatGPT unbounded:
+# https://docs.zeroclawlabs.ai/master/en/providers/openai-codex-unbounded.html
 [providers.models.openai.codex]
 model = "gpt-5.6-luna"
 requires_openai_auth = true
