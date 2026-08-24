@@ -1,5 +1,261 @@
 schema_version = 3
 
+[agents.arr-bot]
+channels = ["telegram.arr_bot"]
+mcp_bundles = ["arr"]
+model_provider = "openai.codex"
+risk_profile = "arr-bot"
+runtime_profile = "subscription"
+transcription_provider = "groq.default"
+tts_provider = "edge.andrew"
+
+[agents.assistant]
+channels = ["telegram.default"]
+mcp_bundles = ["mcp"]
+model_provider = "openai.codex"
+risk_profile = "assistant"
+runtime_profile = "subscription"
+transcription_provider = "groq.default"
+tts_provider = "edge.ava"
+
+[agents.chef]
+channels = ["telegram.chef"]
+mcp_bundles = ["tandoor"]
+model_provider = "openai.codex"
+risk_profile = "chef"
+runtime_profile = "subscription"
+transcription_provider = "groq.default"
+tts_provider = "edge.ava"
+
+[agents.coach]
+channels = ["telegram.coach"]
+mcp_bundles = ["garmin"]
+model_provider = "openai.codex"
+risk_profile = "coach"
+runtime_profile = "subscription"
+transcription_provider = "groq.default"
+tts_provider = "edge.ava"
+
+[agents.household]
+channels = ["telegram.household"]
+mcp_bundles = ["yuvomi"]
+model_provider = "openai.codex"
+risk_profile = "household"
+runtime_profile = "subscription"
+transcription_provider = "groq.default"
+tts_provider = "edge.emma"
+
+[agents.smart-homer]
+channels = ["telegram.smart_homer"]
+mcp_bundles = ["home-assistant"]
+model_provider = "openai.codex"
+risk_profile = "assistant"
+runtime_profile = "subscription"
+transcription_provider = "groq.default"
+tts_provider = "edge.andrew"
+
+[agents.travel-agent]
+channels = ["telegram.travel_agent"]
+mcp_bundles = ["travel"]
+model_provider = "openai.codex"
+risk_profile = "travel-agent"
+runtime_profile = "subscription"
+transcription_provider = "groq.default"
+tts_provider = "edge.brian"
+
+[channels]
+ack_reactions = true
+show_tool_calls = true
+
+[channels.telegram.arr_bot]
+bot_token = ""
+enabled = true
+mention_only = true
+stream_mode = "off"
+
+[channels.telegram.chef]
+bot_token = ""
+enabled = true
+mention_only = true
+stream_mode = "off"
+
+[channels.telegram.coach]
+bot_token = ""
+enabled = true
+mention_only = true
+stream_mode = "off"
+
+[channels.telegram.default]
+bot_token = ""
+enabled = true
+mention_only = true
+stream_mode = "off"
+
+[channels.telegram.household]
+bot_token = ""
+enabled = true
+mention_only = true
+stream_mode = "off"
+
+[channels.telegram.smart_homer]
+bot_token = ""
+enabled = true
+mention_only = true
+stream_mode = "off"
+
+[channels.telegram.travel_agent]
+bot_token = ""
+enabled = true
+mention_only = true
+stream_mode = "off"
+
+[conversational_ai]
+supported_languages = ["en", "he"]
+
+[gateway]
+allow_public_bind = true
+host = "[::]"
+port = 42617
+require_pairing = false
+web_dist_dir = "/usr/share/zeroclawlabs/web/dist"
+
+[mcp]
+deferred_loading = false
+enabled = true
+
+[[mcp.servers]]
+command = "garmin-mcp"
+name = "garmin"
+tool_timeout_secs = 120
+transport = "stdio"
+
+[[mcp.servers]]
+name = "gitmcp"
+transport = "http"
+url = "https://gitmcp.io/docs"
+
+[[mcp.servers]]
+name = "ha-mcp"
+tool_timeout_secs = 120
+transport = "http"
+url = "http://127.0.0.1:8086/mcp"
+
+[[mcp.servers]]
+name = "mcp-arr-hd"
+tool_timeout_secs = 120
+transport = "http"
+url = "http://127.0.0.1:3000/mcp"
+
+[[mcp.servers]]
+name = "mcp-arr-uhd"
+tool_timeout_secs = 120
+transport = "http"
+url = "http://127.0.0.1:43000/mcp"
+
+[[mcp.servers]]
+command = "tandoor-recipes-mcp"
+env = { TANDOOR_URL = "http://tandoor-recipes.tandoor.svc.cluster.local:10029", TANDOOR_MCP_PROFILE = "full" }
+name = "tandoor-mcp"
+transport = "stdio"
+
+[[mcp.servers]]
+# TREK runs with FORCE_HTTPS: any request without x-forwarded-proto=https gets
+# 301'd to https on :3000, which serves plaintext (TLS ends at the gateway). The
+# in-cluster call is the trusted immediate hop (TRUST_PROXY=1), so mark it https.
+# The Bearer token is merged into this map from the zeroclaw-trek-mcp secret.
+headers = { "X-Forwarded-Proto" = "https" }
+name = "trek_mcp"
+tool_timeout_secs = 120
+transport = "http"
+url = "http://trek.trek.svc.cluster.local:3000/mcp"
+
+[[mcp.servers]]
+args = ["mcp"]
+command = "trvl"
+env = { TRVL_NO_TELEMETRY = "1" }
+name = "trvl"
+tool_timeout_secs = 120
+transport = "stdio"
+
+[[mcp.servers]]
+name = "yuvomi_mcp"
+tool_timeout_secs = 120
+transport = "http"
+url = "http://yuvomi.yuvomi.svc.cluster.local:3000/mcp"
+
+[[mcp.servers]]
+name = "zeroclaw"
+transport = "http"
+url = "https://gitmcp.io/zeroclaw-labs/zeroclaw"
+
+[mcp_bundles.arr]
+servers = ["mcp-arr-hd", "mcp-arr-uhd"]
+
+[mcp_bundles.garmin]
+servers = ["garmin"]
+
+[mcp_bundles.home-assistant]
+servers = ["ha-mcp"]
+
+[mcp_bundles.mcp]
+servers = ["gitmcp", "zeroclaw"]
+
+[mcp_bundles.tandoor]
+servers = ["tandoor-mcp"]
+
+[mcp_bundles.travel]
+servers = ["trek_mcp", "trvl"]
+
+[mcp_bundles.yuvomi]
+servers = ["yuvomi_mcp"]
+
+[memory]
+consolidation_extract_facts = true
+dedup_action = "reject"
+dedup_jaccard_threshold = 0.80
+# Prevent atomic extraction from filling Core with near-duplicates
+dedup_on_write = true
+# Improve which memories are injected into context
+rerank_enabled = true
+search_mode = "bm25"
+
+[memory.types]
+enabled = true
+
+[multimodal]
+allow_remote_fetch = true
+
+[opencode_cli]
+enabled = true
+
+[peer_groups.telegram_arr_bot]
+agents = ["arr-bot"]
+channel = "telegram.arr_bot"
+
+[peer_groups.telegram_chef]
+agents = ["chef"]
+channel = "telegram.chef"
+
+[peer_groups.telegram_coach]
+agents = ["coach"]
+channel = "telegram.coach"
+
+[peer_groups.telegram_default]
+agents = ["assistant"]
+channel = "telegram.default"
+
+[peer_groups.telegram_household]
+agents = ["household"]
+channel = "telegram.household"
+
+[peer_groups.telegram_smart_homer]
+agents = ["smart-homer"]
+channel = "telegram.smart_homer"
+
+[peer_groups.telegram_travel_agent]
+agents = ["travel-agent"]
+channel = "telegram.travel_agent"
+
 # OpenAI Codex over a ChatGPT subscription:
 # https://docs.zeroclawlabs.ai/master/en/providers/openai-codex-subscription.html
 [providers.models.openai.codex]
@@ -27,468 +283,7 @@ voice = "en-US-BrianMultilingualNeural"
 binary_path = "edge-tts"
 voice = "en-US-EmmaMultilingualNeural"
 
-[runtime_profiles.balanced]
-
-[runtime_profiles.local_small]
-agentic = true
-agentic_timeout_secs = 120
-compact_context = true
-delegation_timeout_secs = 60
-keep_tool_context_turns = 1
-max_actions_per_hour = 10
-max_context_tokens = 8_000
-max_cost_per_day_cents = 100
-max_delegation_depth = 1
-max_history_messages = 20
-max_system_prompt_chars = 4_000
-max_tool_iterations = 4
-max_tool_result_chars = 4_000
-memory_recall_limit = 3
-parallel_tools = false
-shell_timeout_secs = 30
-strict_tool_parsing = true
-tool_call_dedup_exempt = []
-
-[runtime_profiles.subscription]
-agentic = true
-agentic_timeout_secs = 600
-compact_context = true
-delegation_timeout_secs = 300
-keep_tool_context_turns = 4
-max_actions_per_hour = 100
-max_context_tokens = 32_000
-max_cost_per_day_cents = 4_294_967_295
-max_delegation_depth = 4
-max_history_messages = 100
-max_system_prompt_chars = 32_000
-max_tool_iterations = 20
-max_tool_result_chars = 32_000
-memory_recall_limit = 5
-parallel_tools = false
-shell_timeout_secs = 300
-tool_call_dedup_exempt = []
-
-[runtime_profiles.tight]
-agentic = false
-agentic_timeout_secs = 120
-compact_context = true
-delegation_timeout_secs = 60
-keep_tool_context_turns = 2
-max_actions_per_hour = 10
-max_context_tokens = 8_000
-max_cost_per_day_cents = 100
-max_delegation_depth = 1
-max_history_messages = 20
-max_system_prompt_chars = 4_000
-max_tool_iterations = 10
-max_tool_result_chars = 8_000
-memory_recall_limit = 3
-parallel_tools = false
-shell_timeout_secs = 30
-tool_call_dedup_exempt = []
-
-[runtime_profiles.unbounded]
-agentic = true
-agentic_timeout_secs = 1_800
-compact_context = false
-delegation_timeout_secs = 900
-keep_tool_context_turns = 8
-max_actions_per_hour = 4_294_967_295
-max_context_tokens = 128_000
-max_cost_per_day_cents = 4_294_967_295
-max_delegation_depth = 8
-max_history_messages = 200
-max_system_prompt_chars = 64_000
-max_tool_iterations = 100
-max_tool_result_chars = 64_000
-memory_recall_limit = 10
-parallel_tools = true
-shell_timeout_secs = 600
-tool_call_dedup_exempt = []
-
-[agents.assistant]
-model_provider = "openai.codex"
-risk_profile = "assistant"
-runtime_profile = "subscription"
-mcp_bundles = ["mcp"]
-channels = ["telegram.default"]
-transcription_provider = "groq.default"
-tts_provider = "edge.ava"
-
-[agents.smart-homer]
-model_provider = "openai.codex"
-risk_profile = "assistant"
-runtime_profile = "subscription"
-mcp_bundles = ["home-assistant"]
-channels = ["telegram.smart_homer"]
-transcription_provider = "groq.default"
-tts_provider = "edge.andrew"
-
-[agents.chef]
-model_provider = "openai.codex"
-risk_profile = "chef"
-runtime_profile = "subscription"
-mcp_bundles = ["tandoor"]
-channels = ["telegram.chef"]
-transcription_provider = "groq.default"
-tts_provider = "edge.ava"
-
-[agents.household]
-model_provider = "openai.codex"
-risk_profile = "household"
-runtime_profile = "subscription"
-mcp_bundles = ["yuvomi"]
-channels = ["telegram.household"]
-transcription_provider = "groq.default"
-tts_provider = "edge.emma"
-
-[agents.arr-bot]
-model_provider = "openai.codex"
-risk_profile = "arr-bot"
-runtime_profile = "subscription"
-mcp_bundles = ["arr"]
-channels = ["telegram.arr_bot"]
-transcription_provider = "groq.default"
-tts_provider = "edge.andrew"
-
-[agents.coach]
-model_provider = "openai.codex"
-risk_profile = "coach"
-runtime_profile = "subscription"
-mcp_bundles = ["garmin"]
-channels = ["telegram.coach"]
-transcription_provider = "groq.default"
-tts_provider = "edge.ava"
-
-[agents.travel-agent]
-model_provider = "openai.codex"
-risk_profile = "travel-agent"
-runtime_profile = "subscription"
-mcp_bundles = ["travel"]
-channels = ["telegram.travel_agent"]
-transcription_provider = "groq.default"
-tts_provider = "edge.brian"
-
-[channels]
-ack_reactions = true
-show_tool_calls = true
-
-[channels.telegram.default]
-enabled = true
-bot_token = ""
-mention_only = true
-stream_mode = "off"
-
-[channels.telegram.smart_homer]
-enabled = true
-bot_token = ""
-mention_only = true
-stream_mode = "off"
-
-[channels.telegram.chef]
-enabled = true
-bot_token = ""
-mention_only = true
-stream_mode = "off"
-
-[channels.telegram.household]
-enabled = true
-bot_token = ""
-mention_only = true
-stream_mode = "off"
-
-[channels.telegram.arr_bot]
-enabled = true
-bot_token = ""
-mention_only = true
-stream_mode = "off"
-
-[channels.telegram.coach]
-enabled = true
-bot_token = ""
-mention_only = true
-stream_mode = "off"
-
-[channels.telegram.travel_agent]
-enabled = true
-bot_token = ""
-mention_only = true
-stream_mode = "off"
-
-[peer_groups.telegram_default]
-channel = "telegram.default"
-agents = ["assistant"]
-
-[peer_groups.telegram_smart_homer]
-channel = "telegram.smart_homer"
-agents = ["smart-homer"]
-
-[peer_groups.telegram_chef]
-channel = "telegram.chef"
-agents = ["chef"]
-
-[peer_groups.telegram_household]
-channel = "telegram.household"
-agents = ["household"]
-
-[peer_groups.telegram_arr_bot]
-channel = "telegram.arr_bot"
-agents = ["arr-bot"]
-
-[peer_groups.telegram_coach]
-channel = "telegram.coach"
-agents = ["coach"]
-
-[peer_groups.telegram_travel_agent]
-channel = "telegram.travel_agent"
-agents = ["travel-agent"]
-
-[transcription]
-api_key = ""
-enabled = true
-
-[tts]
-default_format = "opus"
-enabled = true
-
-[multimodal]
-allow_remote_fetch = true
-
-[memory]
-consolidation_extract_facts = true
-search_mode = "bm25"
-
-# Prevent atomic extraction from filling Core with near-duplicates
-dedup_on_write = true
-dedup_action = "reject"
-dedup_jaccard_threshold = 0.80
-
-# Improve which memories are injected into context
-rerank_enabled = true
-
-[memory.types]
-enabled = true
-
-[risk_profiles.assistant]
-level = "supervised"
-auto_approve = [
-  "calculator",
-  "content_search",
-  "file_edit",
-  "file_read",
-  "file_write",
-  "git_operations",
-  "glob_search",
-  "image_info",
-  "mcp_prompts",
-  "mcp_resources",
-  "memory_recall",
-  "memory_store",
-  "send_via",
-  "sessions_current",
-  "sessions_history",
-  "tool_list",
-  "tool_search",
-  "weather",
-  "web_fetch",
-  "web_search_tool",
-  "ha-mcp__ha_bulk_control",
-  "ha-mcp__ha_call_service",
-  "ha-mcp__ha_config_get_automation",
-  "ha-mcp__ha_config_get_calendar_events",
-  "ha-mcp__ha_config_get_category",
-  "ha-mcp__ha_config_get_label",
-  "ha-mcp__ha_config_get_scene",
-  "ha-mcp__ha_config_get_script",
-  "ha-mcp__ha_config_list_dashboard_resources",
-  "ha-mcp__ha_config_list_groups",
-  "ha-mcp__ha_config_list_helpers",
-  "ha-mcp__ha_eval_template",
-  "ha-mcp__ha_get_addon",
-  "ha-mcp__ha_get_automation_traces",
-  "ha-mcp__ha_get_blueprint",
-  "ha-mcp__ha_get_camera_image",
-  "ha-mcp__ha_get_device",
-  "ha-mcp__ha_get_entity",
-  "ha-mcp__ha_get_entity_exposure",
-  "ha-mcp__ha_get_hacs_info",
-  "ha-mcp__ha_get_history",
-  "ha-mcp__ha_get_integration",
-  "ha-mcp__ha_get_logs",
-  "ha-mcp__ha_get_operation_status",
-  "ha-mcp__ha_get_overview",
-  "ha-mcp__ha_get_skill_guide",
-  "ha-mcp__ha_get_state",
-  "ha-mcp__ha_get_system_health",
-  "ha-mcp__ha_get_todo",
-  "ha-mcp__ha_get_zone",
-  "ha-mcp__ha_list_floors_areas",
-  "ha-mcp__ha_list_services",
-  "ha-mcp__ha_report_issue",
-  "ha-mcp__ha_search"
-]
-allowed_commands = [
-  # Default allowed commands for Unix platforms:
-  # https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/crates/zeroclaw-config/src/policy.rs
-  "git",
-  "npm",
-  "cargo",
-  "ls",
-  "cat",
-  "grep",
-  "find",
-  "echo",
-  "pwd",
-  "wc",
-  "head",
-  "tail",
-  "date",
-  "df",
-  "du",
-  "uname",
-  "uptime",
-  "hostname",
-  "free",
-  "python",
-  "python3",
-  "pip",
-  "node",
-  # Additional allowed commands
-  "gh",
-  "printf",
-  "resvg",
-  "rg"
-]
-
-[risk_profiles.chef]
-level = "supervised"
-# Reads and low-risk writes (shopping, meal plans, cook logs) auto-approve;
-# recipe/food/unit edits, imports, deletes and merges fall through to confirmation.
-auto_approve = [
-  "calculator",
-  "content_search",
-  "file_edit",
-  "file_read",
-  "file_write",
-  "git_operations",
-  "glob_search",
-  "image_info",
-  "mcp_prompts",
-  "mcp_resources",
-  "memory_recall",
-  "memory_store",
-  "send_via",
-  "sessions_current",
-  "sessions_history",
-  "tool_list",
-  "tool_search",
-  "weather",
-  "web_fetch",
-  "web_search_tool",
-  "tandoor-mcp__add_recipe_to_shopping_list",
-  "tandoor-mcp__auto_meal_plan",
-  "tandoor-mcp__bulk_check_shopping_entries",
-  "tandoor-mcp__bulk_create_meal_plans",
-  "tandoor-mcp__bulk_create_shopping_list_recipe_entries",
-  "tandoor-mcp__create_cook_log",
-  "tandoor-mcp__create_meal_plan",
-  "tandoor-mcp__create_shopping_entry",
-  "tandoor-mcp__create_shopping_list_recipe",
-  "tandoor-mcp__food_ai_properties",
-  "tandoor-mcp__food_fdc_lookup",
-  "tandoor-mcp__get_cook_log",
-  "tandoor-mcp__get_custom_filter",
-  "tandoor-mcp__get_food",
-  "tandoor-mcp__get_ingredient",
-  "tandoor-mcp__get_keyword",
-  "tandoor-mcp__get_meal_plan",
-  "tandoor-mcp__get_property",
-  "tandoor-mcp__get_property_type",
-  "tandoor-mcp__get_recipe",
-  "tandoor-mcp__get_recipe_book",
-  "tandoor-mcp__get_recipe_book_entry",
-  "tandoor-mcp__get_server_settings",
-  "tandoor-mcp__get_share_link",
-  "tandoor-mcp__get_shopping_entry",
-  "tandoor-mcp__get_shopping_list_recipe",
-  "tandoor-mcp__get_step",
-  "tandoor-mcp__get_unit",
-  "tandoor-mcp__get_unit_conversion",
-  "tandoor-mcp__get_user_preference",
-  "tandoor-mcp__get_version",
-  "tandoor-mcp__jq_query",
-  "tandoor-mcp__jq_stash_stats",
-  "tandoor-mcp__list_ai_logs",
-  "tandoor-mcp__list_ai_providers",
-  "tandoor-mcp__list_automations",
-  "tandoor-mcp__list_cook_logs",
-  "tandoor-mcp__list_custom_filters",
-  "tandoor-mcp__list_foods",
-  "tandoor-mcp__list_import_logs",
-  "tandoor-mcp__list_ingredients",
-  "tandoor-mcp__list_keywords",
-  "tandoor-mcp__list_meal_plans",
-  "tandoor-mcp__list_meal_types",
-  "tandoor-mcp__list_properties",
-  "tandoor-mcp__list_property_types",
-  "tandoor-mcp__list_recipe_book_entries",
-  "tandoor-mcp__list_recipe_books",
-  "tandoor-mcp__list_recipes",
-  "tandoor-mcp__list_shopping_entries",
-  "tandoor-mcp__list_shopping_list_recipes",
-  "tandoor-mcp__list_steps",
-  "tandoor-mcp__list_supermarket_categories",
-  "tandoor-mcp__list_unit_conversions",
-  "tandoor-mcp__list_units",
-  "tandoor-mcp__list_user_files",
-  "tandoor-mcp__list_user_preferences",
-  "tandoor-mcp__list_view_logs",
-  "tandoor-mcp__parse_ingredient",
-  "tandoor-mcp__recipe_ai_properties",
-  "tandoor-mcp__related_recipes",
-  "tandoor-mcp__search_recipes",
-  "tandoor-mcp__update_cook_log",
-  "tandoor-mcp__update_meal_plan",
-  "tandoor-mcp__update_shopping_entry",
-  "tandoor-mcp__update_shopping_list_recipe"
-]
-
-[risk_profiles.household]
-level = "supervised"
-auto_approve = [
-  "calculator",
-  "content_search",
-  "file_edit",
-  "file_read",
-  "file_write",
-  "git_operations",
-  "glob_search",
-  "image_info",
-  "mcp_prompts",
-  "mcp_resources",
-  "memory_recall",
-  "memory_store",
-  "send_via",
-  "sessions_current",
-  "sessions_history",
-  "tool_list",
-  "tool_search",
-  "weather",
-  "web_fetch",
-  "web_search_tool",
-  "yuvomi_mcp__add_shopping_item",
-  "yuvomi_mcp__call_api_operation",
-  "yuvomi_mcp__create_event",
-  "yuvomi_mcp__create_task",
-  "yuvomi_mcp__get_api_operation",
-  "yuvomi_mcp__list_api_operations",
-  "yuvomi_mcp__list_shopping_items",
-  "yuvomi_mcp__list_tasks",
-  "yuvomi_mcp__list_upcoming_events"
-]
-
 [risk_profiles.arr-bot]
-level = "supervised"
 # Library/queue/calendar reads, config review, and radarr/sonarr add, update
 # and search (including download-triggering) flows auto-approve; queue deletes
 # and remaining mutating operations fall through to confirmation.
@@ -600,9 +395,193 @@ auto_approve = [
   "mcp-arr-uhd__trash_list_custom_formats",
   "mcp-arr-uhd__trash_list_profiles"
 ]
+level = "supervised"
+
+[risk_profiles.assistant]
+allowed_commands = [
+  # Default allowed commands for Unix platforms:
+  # https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/crates/zeroclaw-config/src/policy.rs
+  "cargo",
+  "cat",
+  "date",
+  "df",
+  "du",
+  "echo",
+  "find",
+  "free",
+  "git",
+  "grep",
+  "head",
+  "hostname",
+  "ls",
+  "node",
+  "npm",
+  "pip",
+  "pwd",
+  "python",
+  "python3",
+  "tail",
+  "uname",
+  "uptime",
+  "wc",
+  # Additional allowed commands
+  "gh",
+  "printf",
+  "resvg",
+  "rg"
+]
+auto_approve = [
+  "calculator",
+  "content_search",
+  "file_edit",
+  "file_read",
+  "file_write",
+  "git_operations",
+  "glob_search",
+  "image_info",
+  "mcp_prompts",
+  "mcp_resources",
+  "memory_recall",
+  "memory_store",
+  "send_via",
+  "sessions_current",
+  "sessions_history",
+  "tool_list",
+  "tool_search",
+  "weather",
+  "web_fetch",
+  "web_search_tool",
+  "ha-mcp__ha_bulk_control",
+  "ha-mcp__ha_call_service",
+  "ha-mcp__ha_config_get_automation",
+  "ha-mcp__ha_config_get_calendar_events",
+  "ha-mcp__ha_config_get_category",
+  "ha-mcp__ha_config_get_label",
+  "ha-mcp__ha_config_get_scene",
+  "ha-mcp__ha_config_get_script",
+  "ha-mcp__ha_config_list_dashboard_resources",
+  "ha-mcp__ha_config_list_groups",
+  "ha-mcp__ha_config_list_helpers",
+  "ha-mcp__ha_eval_template",
+  "ha-mcp__ha_get_addon",
+  "ha-mcp__ha_get_automation_traces",
+  "ha-mcp__ha_get_blueprint",
+  "ha-mcp__ha_get_camera_image",
+  "ha-mcp__ha_get_device",
+  "ha-mcp__ha_get_entity",
+  "ha-mcp__ha_get_entity_exposure",
+  "ha-mcp__ha_get_hacs_info",
+  "ha-mcp__ha_get_history",
+  "ha-mcp__ha_get_integration",
+  "ha-mcp__ha_get_logs",
+  "ha-mcp__ha_get_operation_status",
+  "ha-mcp__ha_get_overview",
+  "ha-mcp__ha_get_skill_guide",
+  "ha-mcp__ha_get_state",
+  "ha-mcp__ha_get_system_health",
+  "ha-mcp__ha_get_todo",
+  "ha-mcp__ha_get_zone",
+  "ha-mcp__ha_list_floors_areas",
+  "ha-mcp__ha_list_services",
+  "ha-mcp__ha_report_issue",
+  "ha-mcp__ha_search"
+]
+level = "supervised"
+
+[risk_profiles.chef]
+# Reads and low-risk writes (shopping, meal plans, cook logs) auto-approve;
+# recipe/food/unit edits, imports, deletes and merges fall through to confirmation.
+auto_approve = [
+  "calculator",
+  "content_search",
+  "file_edit",
+  "file_read",
+  "file_write",
+  "git_operations",
+  "glob_search",
+  "image_info",
+  "mcp_prompts",
+  "mcp_resources",
+  "memory_recall",
+  "memory_store",
+  "send_via",
+  "sessions_current",
+  "sessions_history",
+  "tool_list",
+  "tool_search",
+  "weather",
+  "web_fetch",
+  "web_search_tool",
+  "tandoor-mcp__add_recipe_to_shopping_list",
+  "tandoor-mcp__auto_meal_plan",
+  "tandoor-mcp__bulk_check_shopping_entries",
+  "tandoor-mcp__bulk_create_meal_plans",
+  "tandoor-mcp__bulk_create_shopping_list_recipe_entries",
+  "tandoor-mcp__create_cook_log",
+  "tandoor-mcp__create_meal_plan",
+  "tandoor-mcp__create_shopping_entry",
+  "tandoor-mcp__create_shopping_list_recipe",
+  "tandoor-mcp__food_ai_properties",
+  "tandoor-mcp__food_fdc_lookup",
+  "tandoor-mcp__get_cook_log",
+  "tandoor-mcp__get_custom_filter",
+  "tandoor-mcp__get_food",
+  "tandoor-mcp__get_ingredient",
+  "tandoor-mcp__get_keyword",
+  "tandoor-mcp__get_meal_plan",
+  "tandoor-mcp__get_property",
+  "tandoor-mcp__get_property_type",
+  "tandoor-mcp__get_recipe",
+  "tandoor-mcp__get_recipe_book",
+  "tandoor-mcp__get_recipe_book_entry",
+  "tandoor-mcp__get_server_settings",
+  "tandoor-mcp__get_share_link",
+  "tandoor-mcp__get_shopping_entry",
+  "tandoor-mcp__get_shopping_list_recipe",
+  "tandoor-mcp__get_step",
+  "tandoor-mcp__get_unit",
+  "tandoor-mcp__get_unit_conversion",
+  "tandoor-mcp__get_user_preference",
+  "tandoor-mcp__get_version",
+  "tandoor-mcp__jq_query",
+  "tandoor-mcp__jq_stash_stats",
+  "tandoor-mcp__list_ai_logs",
+  "tandoor-mcp__list_ai_providers",
+  "tandoor-mcp__list_automations",
+  "tandoor-mcp__list_cook_logs",
+  "tandoor-mcp__list_custom_filters",
+  "tandoor-mcp__list_foods",
+  "tandoor-mcp__list_import_logs",
+  "tandoor-mcp__list_ingredients",
+  "tandoor-mcp__list_keywords",
+  "tandoor-mcp__list_meal_plans",
+  "tandoor-mcp__list_meal_types",
+  "tandoor-mcp__list_properties",
+  "tandoor-mcp__list_property_types",
+  "tandoor-mcp__list_recipe_book_entries",
+  "tandoor-mcp__list_recipe_books",
+  "tandoor-mcp__list_recipes",
+  "tandoor-mcp__list_shopping_entries",
+  "tandoor-mcp__list_shopping_list_recipes",
+  "tandoor-mcp__list_steps",
+  "tandoor-mcp__list_supermarket_categories",
+  "tandoor-mcp__list_unit_conversions",
+  "tandoor-mcp__list_units",
+  "tandoor-mcp__list_user_files",
+  "tandoor-mcp__list_user_preferences",
+  "tandoor-mcp__list_view_logs",
+  "tandoor-mcp__parse_ingredient",
+  "tandoor-mcp__recipe_ai_properties",
+  "tandoor-mcp__related_recipes",
+  "tandoor-mcp__search_recipes",
+  "tandoor-mcp__update_cook_log",
+  "tandoor-mcp__update_meal_plan",
+  "tandoor-mcp__update_shopping_entry",
+  "tandoor-mcp__update_shopping_list_recipe"
+]
+level = "supervised"
 
 [risk_profiles.coach]
-level = "supervised"
 auto_approve = [
   "calculator",
   "content_search",
@@ -721,9 +700,43 @@ auto_approve = [
   "garmin__get_workouts",
   "garmin__search_foods"
 ]
+level = "supervised"
+
+[risk_profiles.household]
+auto_approve = [
+  "calculator",
+  "content_search",
+  "file_edit",
+  "file_read",
+  "file_write",
+  "git_operations",
+  "glob_search",
+  "image_info",
+  "mcp_prompts",
+  "mcp_resources",
+  "memory_recall",
+  "memory_store",
+  "send_via",
+  "sessions_current",
+  "sessions_history",
+  "tool_list",
+  "tool_search",
+  "weather",
+  "web_fetch",
+  "web_search_tool",
+  "yuvomi_mcp__add_shopping_item",
+  "yuvomi_mcp__call_api_operation",
+  "yuvomi_mcp__create_event",
+  "yuvomi_mcp__create_task",
+  "yuvomi_mcp__get_api_operation",
+  "yuvomi_mcp__list_api_operations",
+  "yuvomi_mcp__list_shopping_items",
+  "yuvomi_mcp__list_tasks",
+  "yuvomi_mcp__list_upcoming_events"
+]
+level = "supervised"
 
 [risk_profiles.travel-agent]
-level = "supervised"
 # Reads and planning writes (create/update trips, days, places, reservations,
 # budgets) auto-approve; deletes, member changes and share-link creation fall
 # through to confirmation.
@@ -809,106 +822,91 @@ auto_approve = [
   "trek_mcp__update_trip",
   "trvl__travel"
 ]
+level = "supervised"
 
-[gateway]
-port = 42617
-host = "[::]"
-allow_public_bind = true
-require_pairing = false
-web_dist_dir = "/usr/share/zeroclawlabs/web/dist"
+[runtime_profiles.balanced]
 
-[conversational_ai]
-supported_languages = ["en", "he"]
+[runtime_profiles.local_small]
+agentic = true
+agentic_timeout_secs = 120
+compact_context = true
+delegation_timeout_secs = 60
+keep_tool_context_turns = 1
+max_actions_per_hour = 10
+max_context_tokens = 8_000
+max_cost_per_day_cents = 100
+max_delegation_depth = 1
+max_history_messages = 20
+max_system_prompt_chars = 4_000
+max_tool_iterations = 4
+max_tool_result_chars = 4_000
+memory_recall_limit = 3
+parallel_tools = false
+shell_timeout_secs = 30
+strict_tool_parsing = true
+tool_call_dedup_exempt = []
 
-[mcp]
+[runtime_profiles.subscription]
+agentic = true
+agentic_timeout_secs = 600
+compact_context = true
+delegation_timeout_secs = 300
+keep_tool_context_turns = 4
+max_actions_per_hour = 100
+max_context_tokens = 32_000
+max_cost_per_day_cents = 4_294_967_295
+max_delegation_depth = 4
+max_history_messages = 100
+max_system_prompt_chars = 32_000
+max_tool_iterations = 20
+max_tool_result_chars = 32_000
+memory_recall_limit = 5
+parallel_tools = false
+shell_timeout_secs = 300
+tool_call_dedup_exempt = []
+
+[runtime_profiles.tight]
+agentic = false
+agentic_timeout_secs = 120
+compact_context = true
+delegation_timeout_secs = 60
+keep_tool_context_turns = 2
+max_actions_per_hour = 10
+max_context_tokens = 8_000
+max_cost_per_day_cents = 100
+max_delegation_depth = 1
+max_history_messages = 20
+max_system_prompt_chars = 4_000
+max_tool_iterations = 10
+max_tool_result_chars = 8_000
+memory_recall_limit = 3
+parallel_tools = false
+shell_timeout_secs = 30
+tool_call_dedup_exempt = []
+
+[runtime_profiles.unbounded]
+agentic = true
+agentic_timeout_secs = 1_800
+compact_context = false
+delegation_timeout_secs = 900
+keep_tool_context_turns = 8
+max_actions_per_hour = 4_294_967_295
+max_context_tokens = 128_000
+max_cost_per_day_cents = 4_294_967_295
+max_delegation_depth = 8
+max_history_messages = 200
+max_system_prompt_chars = 64_000
+max_tool_iterations = 100
+max_tool_result_chars = 64_000
+memory_recall_limit = 10
+parallel_tools = true
+shell_timeout_secs = 600
+tool_call_dedup_exempt = []
+
+[transcription]
+api_key = ""
 enabled = true
-deferred_loading = false
 
-[[mcp.servers]]
-name = "gitmcp"
-transport = "http"
-url = "https://gitmcp.io/docs"
-
-[[mcp.servers]]
-name = "zeroclaw"
-transport = "http"
-url = "https://gitmcp.io/zeroclaw-labs/zeroclaw"
-
-[[mcp.servers]]
-name = "ha-mcp"
-transport = "http"
-url = "http://127.0.0.1:8086/mcp"
-tool_timeout_secs = 120
-
-[[mcp.servers]]
-name = "tandoor-mcp"
-transport = "stdio"
-command = "tandoor-recipes-mcp"
-env = { TANDOOR_URL = "http://tandoor-recipes.tandoor.svc.cluster.local:10029", TANDOOR_MCP_PROFILE = "full" }
-
-[[mcp.servers]]
-name = "yuvomi_mcp"
-transport = "http"
-url = "http://yuvomi.yuvomi.svc.cluster.local:3000/mcp"
-tool_timeout_secs = 120
-
-[[mcp.servers]]
-name = "trek_mcp"
-transport = "http"
-url = "http://trek.trek.svc.cluster.local:3000/mcp"
-tool_timeout_secs = 120
-# TREK runs with FORCE_HTTPS: any request without x-forwarded-proto=https gets
-# 301'd to https on :3000, which serves plaintext (TLS ends at the gateway). The
-# in-cluster call is the trusted immediate hop (TRUST_PROXY=1), so mark it https.
-# The Bearer token is merged into this map from the zeroclaw-trek-mcp secret.
-headers = { "X-Forwarded-Proto" = "https" }
-
-[[mcp.servers]]
-name = "mcp-arr-hd"
-transport = "http"
-url = "http://127.0.0.1:3000/mcp"
-tool_timeout_secs = 120
-
-[[mcp.servers]]
-name = "mcp-arr-uhd"
-transport = "http"
-url = "http://127.0.0.1:43000/mcp"
-tool_timeout_secs = 120
-
-[[mcp.servers]]
-name = "garmin"
-transport = "stdio"
-command = "garmin-mcp"
-tool_timeout_secs = 120
-
-[[mcp.servers]]
-name = "trvl"
-transport = "stdio"
-command = "trvl"
-args = ["mcp"]
-env = { TRVL_NO_TELEMETRY = "1" }
-tool_timeout_secs = 120
-
-[mcp_bundles.mcp]
-servers = ["gitmcp", "zeroclaw"]
-
-[mcp_bundles.home-assistant]
-servers = ["ha-mcp"]
-
-[mcp_bundles.tandoor]
-servers = ["tandoor-mcp"]
-
-[mcp_bundles.yuvomi]
-servers = ["yuvomi_mcp"]
-
-[mcp_bundles.arr]
-servers = ["mcp-arr-hd", "mcp-arr-uhd"]
-
-[mcp_bundles.garmin]
-servers = ["garmin"]
-
-[mcp_bundles.travel]
-servers = ["trek_mcp", "trvl"]
-
-[opencode_cli]
+[tts]
+default_format = "opus"
 enabled = true
