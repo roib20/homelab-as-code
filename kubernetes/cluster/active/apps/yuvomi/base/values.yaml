@@ -33,8 +33,11 @@ controllers:
           HOME: /tmp
           DB_PATH: /data/yuvomi.db
           BASE_URL: "https://household.${FQDN_01}"
+          DMS_ALLOW_PRIVATE_NETWORK: "true"
+          MAX_UPLOAD_MB: "100"
           RECIPE_PROVIDER_ALLOW_PRIVATE_NETWORK: "true"
           SESSION_SECURE: "true"
+          SYNC_INTERVAL_MINUTES: "5"
           TRUST_PROXY: "1"
           AUTH_ALLOW_PASSWORD_LOGIN: "false"
           OIDC_ALLOW_SIGNUP: "true"
