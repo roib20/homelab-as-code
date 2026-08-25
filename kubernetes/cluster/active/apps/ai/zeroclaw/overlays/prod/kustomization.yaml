@@ -9,7 +9,7 @@ resources:
 helmCharts:
   - name: app-template
     repo: oci://ghcr.io/bjw-s-labs/helm
-    version: 5.0.1
+    version: 5.1.0
     releaseName: zeroclaw
     namespace: zeroclaw
     valuesFile: ../../base/values.yaml
