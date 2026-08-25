@@ -20,11 +20,12 @@
   main .col-md-3:has(img#opengist) { order: 18; }
   main .col-md-3:has(img#outline) { order: 19; }
   main .col-md-3:has(img#pinepods) { order: 20; }
-  main .col-md-3:has(img#pve) { order: 21; }
-  main .col-md-3:has(img#renovate-operator) { order: 22; }
-  main .col-md-3:has(img#seerr) { order: 23; }
-  main .col-md-3:has(img#tandoor) { order: 24; }
-  main .col-md-3:has(img#transmute) { order: 25; }
-  main .col-md-3:has(img#trek) { order: 26; }
-  main .col-md-3:has(img#yuvomi) { order: 27; }
+  main .col-md-3:has(img#profilarr) { order: 21; }
+  main .col-md-3:has(img#pve) { order: 22; }
+  main .col-md-3:has(img#renovate-operator) { order: 23; }
+  main .col-md-3:has(img#seerr) { order: 24; }
+  main .col-md-3:has(img#tandoor) { order: 25; }
+  main .col-md-3:has(img#transmute) { order: 26; }
+  main .col-md-3:has(img#trek) { order: 27; }
+  main .col-md-3:has(img#yuvomi) { order: 28; }
 }
