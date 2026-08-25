@@ -14,3 +14,70 @@
       options:
         delimiter: "."
         index: 1
+    - select:
+        kind: ConfigMap
+        name: profilarr-config
+      fieldPaths:
+        - data.ORIGIN_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars-profilarr
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: profilarr-config
+      fieldPaths:
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: profilarr-config
+    fieldPath: data.ORIGIN_HOST
+  targets:
+    - select:
+        kind: ConfigMap
+        name: profilarr-config
+      fieldPaths:
+        - data.ORIGIN
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: profilarr-config
+    fieldPath: data.AUTH_HOST
+  targets:
+    - select:
+        kind: ConfigMap
+        name: profilarr-config
+      fieldPaths:
+        - data.OIDC_DISCOVERY_URL
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: profilarr-config
+    fieldPath: data.ORIGIN
+  targets:
+    - select:
+        kind: Deployment
+        name: profilarr
+      fieldPaths:
+        - spec.template.spec.containers.[name=profilarr].env.[name=ORIGIN].value
+- source:
+    kind: ConfigMap
+    name: profilarr-config
+    fieldPath: data.OIDC_DISCOVERY_URL
+  targets:
+    - select:
+        kind: Deployment
+        name: profilarr
+      fieldPaths:
+        - spec.template.spec.containers.[name=profilarr].env.[name=OIDC_DISCOVERY_URL].value

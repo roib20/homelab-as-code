@@ -17,5 +17,13 @@ configMapGenerator:
   - name: env-vars-profilarr
     envs:
       - /tmp/env-vars.env
+  - name: profilarr-config
+    literals:
+      - ORIGIN_HOST=profilarr.${FQDN_02}
+      - AUTH_HOST=auth.${FQDN_01}
+      - ORIGIN=https://profilarr.${FQDN_02}
+      - OIDC_DISCOVERY_URL=https://auth.${FQDN_01}/oauth2/openid/profilarr/.well-known/openid-configuration
+    options:
+      disableNameSuffixHash: true
 replacements:
   - path: replacements.yaml
