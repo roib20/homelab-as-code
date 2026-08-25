@@ -29,17 +29,17 @@ controllers:
         env:
           AUTH_ALLOW_PASSWORD_LOGIN: "false"
           BASE_URL: "https://household.${FQDN_01}"
-          DB_PATH: /data/yuvomi.db
+          DB_PATH: "/data/yuvomi.db"
           DMS_ALLOW_PRIVATE_NETWORK: "true"
-          HOME: /tmp
+          HOME: "/tmp"
           MAX_UPLOAD_MB: "100"
-          NODE_ENV: production
+          NODE_ENV: "production"
           PORT: &port 3000
           RECIPE_PROVIDER_ALLOW_PRIVATE_NETWORK: "true"
           SESSION_SECURE: "true"
           SYNC_INTERVAL_MINUTES: "5"
           TRUST_PROXY: "1"
-          TZ: Asia/Jerusalem
+          TZ: "Asia/Jerusalem"
           # OIDC_* stays last: OIDC_ISSUER interpolates $(OIDC_CLIENT_ID) at runtime.
           OIDC_ALLOW_SIGNUP: "true"
           OIDC_TRUST_EMAIL_WITHOUT_VERIFIED_CLAIM: "false"
@@ -76,7 +76,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /health
+                path: "/health"
                 port: *port
               periodSeconds: 30
               timeoutSeconds: 10
@@ -86,7 +86,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /health
+                path: "/health"
                 port: *port
               periodSeconds: 30
               timeoutSeconds: 10
@@ -96,7 +96,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /health
+                path: "/health"
                 port: *port
               periodSeconds: 10
               timeoutSeconds: 10
@@ -115,16 +115,16 @@ persistence:
     advancedMounts:
       yuvomi:
         main:
-          - path: /data
-            subPath: data
-          - path: /backups
-            subPath: backups
+          - path: "/data"
+            subPath: "data"
+          - path: "/backups"
+            subPath: "backups"
   # Drop-in module directory; empty, but the app expects it to be writable.
   modules:
     type: emptyDir
     globalMounts:
-      - path: /app/modules
+      - path: "/app/modules"
   tmpfs:
     type: emptyDir
     globalMounts:
-      - path: /tmp
+      - path: "/tmp"
