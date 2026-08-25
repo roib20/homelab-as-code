@@ -6,6 +6,7 @@ global:
     pvcSize: 1Gi
 podOptions:
   defaultAffinity: false
+TZ: Asia/Jerusalem
 workload:
   main:
     podSpec:
