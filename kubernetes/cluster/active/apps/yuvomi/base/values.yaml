@@ -36,6 +36,8 @@ controllers:
           RECIPE_PROVIDER_ALLOW_PRIVATE_NETWORK: "true"
           SESSION_SECURE: "true"
           TRUST_PROXY: "1"
+          AUTH_ALLOW_PASSWORD_LOGIN: "false"
+          OIDC_ALLOW_SIGNUP: "true"
           OIDC_ISSUER: "https://auth.${FQDN_01}/oauth2/openid/$(OIDC_CLIENT_ID)"
           OIDC_REDIRECT_URI: "https://household.${FQDN_01}/api/v1/auth/oidc/callback"
           OIDC_CLIENT_ID:
