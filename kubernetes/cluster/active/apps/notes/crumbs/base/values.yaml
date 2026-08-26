@@ -55,7 +55,7 @@ controllers:
                 key: CLIENT_SECRET
         resources:
           requests:
-            cpu: 25m
+            cpu: 10m
             memory: 128Mi
           limits:
             memory: 512Mi
