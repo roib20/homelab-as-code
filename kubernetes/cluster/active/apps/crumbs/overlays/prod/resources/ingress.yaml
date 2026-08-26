@@ -1,0 +1,29 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: crumbs
+  annotations:
+    tailscale.com/proxy-group: ingress-proxies
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Self-hosted notes and checklists.
+    gethomepage.dev/group: Productivity
+    gethomepage.dev/icon: sh-crumbs-notes.webp
+    gethomepage.dev/name: Crumbs
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=crumbs"
+spec:
+  ingressClassName: tailscale
+  rules:
+    - host: "crumbs.${FQDN_02}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: crumbs
+                port:
+                  number: 3000
+  tls:
+    - hosts:
+        - "crumbs.${FQDN_02}"

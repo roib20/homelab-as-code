@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "crumbs",
+  "destName": "in-cluster",
+  "destNamespace": "bretzel",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "crumbs"
+}
