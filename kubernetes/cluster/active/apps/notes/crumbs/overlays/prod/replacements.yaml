@@ -1,0 +1,38 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_02"
+  targets:
+    - select:
+        kind: Ingress
+        name: crumbs
+      fieldPaths:
+        - spec.rules.0.host
+        - spec.tls.0.hosts.0
+      options:
+        delimiter: "."
+        index: 1
+    # External base URL (CSRF origin, OIDC redirect URI)
+    - select:
+        kind: Deployment
+        name: crumbs
+      fieldPaths:
+        - spec.template.spec.containers.[name=main].env.[name=ORIGIN].value
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    # Kanidm host that AUTH_OIDC_ISSUER interpolates at runtime
+    - select:
+        kind: Deployment
+        name: crumbs
+      fieldPaths:
+        - spec.template.spec.containers.[name=main].env.[name=AUTH_OIDC_AUTH_HOST].value
+      options:
+        delimiter: "."
+        index: 1

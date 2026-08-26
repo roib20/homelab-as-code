@@ -1,0 +1,117 @@
+---
+global:
+  createDefaultServiceAccount: true
+defaultPodOptions:
+  automountServiceAccountToken: false
+  enableServiceLinks: false
+controllers:
+  crumbs:
+    # SQLite on a single RWO volume: never let two pods hold the database open at once.
+    strategy: Recreate
+    replicas: 1
+    pod:
+      hostUsers: false
+      annotations:
+        secret.reloader.stakater.com/reload: "crumbs-kanidm-oauth2-credentials"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+    containers:
+      main:
+        image:
+          repository: ghcr.io/bretzel-app/crumbs
+          tag: 0.34.0@sha256:0a722733dcee8d78cd61153724b14fabda533502d10dfff11c65cacc20e4ce96
+        env:
+          NODE_ENV: production
+          PORT: &port 3000
+          TZ: Asia/Jerusalem
+          HOME: /tmp
+          DATA_DIR: /data
+          DATABASE_URL: /data/crumbs.db
+          # adapter-node default body limit (512K) is too small for image attachments.
+          BODY_SIZE_LIMIT: "25M"
+          # External URL: adapter-node CSRF origin check and OIDC redirect URI.
+          ORIGIN: "https://crumbs.${FQDN_02}"
+          AUTH_OIDC_DISPLAY_NAME: Kanidm
+          # AUTH_OIDC_AUTH_HOST sorts before AUTH_OIDC_ISSUER, so kubelet has expanded
+          # it by the time the issuer URL is resolved. client_id is fixed to the
+          # KanidmOAuth2Client name (crumbs).
+          AUTH_OIDC_AUTH_HOST: "auth.${FQDN_01}"
+          AUTH_OIDC_ISSUER: "https://$(AUTH_OIDC_AUTH_HOST)/oauth2/openid/crumbs"
+          AUTH_OIDC_CLIENT_ID:
+            valueFrom:
+              secretKeyRef:
+                name: crumbs-kanidm-oauth2-credentials
+                key: CLIENT_ID
+          AUTH_OIDC_CLIENT_SECRET:
+            valueFrom:
+              secretKeyRef:
+                name: crumbs-kanidm-oauth2-credentials
+                key: CLIENT_SECRET
+        resources:
+          requests:
+            cpu: 25m
+            memory: 128Mi
+          limits:
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: *port
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 3
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: *port
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 3
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: *port
+              periodSeconds: 10
+              timeoutSeconds: 10
+              failureThreshold: 30
+service:
+  main:
+    controller: crumbs
+    ports:
+      http:
+        port: *port
+persistence:
+  data:
+    accessMode: ReadWriteOnce
+    size: 2Gi
+    storageClass: longhorn
+    advancedMounts:
+      crumbs:
+        main:
+          - path: /data
+  tmpfs:
+    type: emptyDir
+    globalMounts:
+      - path: /tmp
