@@ -25,7 +25,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/ulsklyc/yuvomi
-          tag: 2.43.0@sha256:7d81076107e2603a8e3d427b492e66d5b1ecdc795d2086046b6a2ed7c466b741
+          tag: 2.46.0@sha256:d0b7e6f16c2fe73e55c5f0ec097f77c923ea1fac7bd0093301d69ea6a2edfb51
         env:
           AUTH_ALLOW_PASSWORD_LOGIN: "false"
           BASE_URL: "https://household.${FQDN_01}"
