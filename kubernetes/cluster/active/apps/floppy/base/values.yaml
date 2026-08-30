@@ -66,6 +66,7 @@ controllers:
         env:
           PUID: "1000"
           PGID: "1000"
+          TZ: Asia/Jerusalem
           # Writable home for the app user.
           HOME: /tmp
           # Lean profile: 1 gunicorn worker, 2 threads.
