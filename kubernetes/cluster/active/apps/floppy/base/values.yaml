@@ -74,7 +74,7 @@ controllers:
           WEB_CONCURRENCY: "1"
           GUNICORN_THREADS: "2"
           # Public origin (feeds ALLOWED_HOSTS and CSRF_TRUSTED_ORIGINS).
-          URLS: "https://floppy.${FQDN_01}"
+          URLS: "https://track.${FQDN_01}"
           ACCOUNT_DEFAULT_HTTP_PROTOCOL: https
           # TLS terminates at the gateway; trust the forwarded scheme.
           USE_X_FORWARDED_PROTO: "True"
