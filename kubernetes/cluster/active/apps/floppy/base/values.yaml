@@ -68,7 +68,7 @@ controllers:
           PGID: "1000"
           TZ: Asia/Jerusalem
           # Writable home for the app user.
-          HOME: /tmp
+          HOME: "/tmp"
           # Lean profile: 1 gunicorn worker, 2 threads.
           FLOPPY_RESOURCE_TIER: minimal
           WEB_CONCURRENCY: "1"
@@ -109,7 +109,7 @@ controllers:
                 name: floppy-postgres-app
                 key: password
           DB_SSL_MODE: verify-full
-          PGSSLROOTCERT: /postgres-ca/ca.crt
+          PGSSLROOTCERT: "/postgres-ca/ca.crt"
           REDIS_URL: redis://floppy-valkey:6379
           SECRET:
             valueFrom:

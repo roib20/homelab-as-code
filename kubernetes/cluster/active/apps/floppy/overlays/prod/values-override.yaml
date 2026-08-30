@@ -5,21 +5,21 @@ persistence:
     advancedMounts:
       floppy:
         app:
-          - path: /tmp
+          - path: "/tmp"
   postgres-ca:
     type: secret
     name: floppy-postgres-ca
     advancedMounts:
       floppy:
         app:
-          - path: /postgres-ca
+          - path: "/postgres-ca"
             readOnly: true
         wait-for-postgres:
-          - path: /postgres-ca
+          - path: "/postgres-ca"
             readOnly: true
   valkey-data:
     type: emptyDir
     advancedMounts:
       valkey:
         app:
-          - path: /data
+          - path: "/data"
