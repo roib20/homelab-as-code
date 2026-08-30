@@ -1,0 +1,25 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: floppy-postgres
+  namespace: floppy
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
+  postgresql:
+    pg_hba:
+      - hostssl floppy floppy all scram-sha-256
+      - host floppy floppy all reject
+  bootstrap:
+    initdb:
+      database: floppy
+      owner: floppy
+  managed:
+    services:
+      disabledDefaultServices:
+        - ro
+        - r
+  storage:
+    size: 4Gi
+    storageClass: longhorn-cnpg

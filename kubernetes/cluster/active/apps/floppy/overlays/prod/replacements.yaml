@@ -1,0 +1,32 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    # HTTPRoute hostname
+    - select:
+        kind: HTTPRoute
+        name: floppy
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: Deployment
+        name: floppy
+      fieldPaths:
+        - spec.template.spec.containers.[name=app].env.[name=URLS].value
+      options:
+        delimiter: "."
+        index: 1
+    # Kanidm auth host consumed by SOCIALACCOUNT_PROVIDERS via $(AUTH_HOST)
+    - select:
+        kind: Deployment
+        name: floppy
+      fieldPaths:
+        - spec.template.spec.containers.[name=app].env.[name=AUTH_HOST].value
+      options:
+        delimiter: "."
+        index: 1
