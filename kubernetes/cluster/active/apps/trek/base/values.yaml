@@ -11,7 +11,7 @@ controllers:
     strategy: Recreate
     pod:
       annotations:
-        secret.reloader.stakater.com/reload: "trek-secrets,trek-kanidm-oauth2-credentials"
+        secret.reloader.stakater.com/reload: "trek-kanidm-oauth2-credentials,trek-secrets"
       securityContext:
         # The entrypoint starts as root, chowns `/app/data` and `/app/uploads`, then
         # drops to `node` (1000) via `gosu`, so no `runAsNonRoot` here.
@@ -34,6 +34,11 @@ controllers:
           # feed URLs, and the WebAuthn RP ID are all derived from it.
           APP_URL: "https://trek.${FQDN_01}"
           ALLOWED_ORIGINS: "https://trek.${FQDN_01}"
+          CARTO_API_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: trek-secrets
+                key: CARTO_API_KEY
           ENCRYPTION_KEY:
             valueFrom:
               secretKeyRef:
