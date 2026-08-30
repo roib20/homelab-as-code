@@ -9,7 +9,7 @@ resources:
 helmCharts:
   - name: opengist
     repo: https://helm.opengist.io
-    version: 0.12.0
+    version: 0.13.0
     releaseName: opengist
     namespace: opengist
     valuesFile: ../../base/values.yaml
