@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "floppy",
+  "destName": "in-cluster",
+  "destNamespace": "floppy",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "floppy"
+}

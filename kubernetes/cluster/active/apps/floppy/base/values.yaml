@@ -1,0 +1,273 @@
+---
+global:
+  createDefaultServiceAccount: true
+defaultPodOptionsStrategy: merge
+defaultPodOptions:
+  automountServiceAccountToken: false
+  securityContext:
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile:
+      type: RuntimeDefault
+
+controllers:
+  floppy:
+    pod:
+      annotations:
+        secret.reloader.stakater.com/reload: "floppy-kanidm-oauth2-credentials,floppy-postgres-app,floppy-postgres-ca,floppy-secrets"
+      # Omnibus image (nginx+gunicorn+celery) runs as root and drops to PUID/PGID.
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 1000
+        fsGroup: 1000
+    initContainers:
+      wait-for-postgres:
+        image:
+          repository: ghcr.io/wait4x/wait4x
+          tag: 3.7.1@sha256:4168ec1328e4fa51b82f7d601c18813b5e4aa85d0eda237cf3501b4ddd70d2c5
+        args:
+          - postgresql
+          - $(POSTGRES_URI)?sslmode=verify-full&sslrootcert=/postgres-ca/ca.crt
+        env:
+          POSTGRES_URI:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-postgres-app
+                key: uri
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 5m
+            memory: 16Mi
+          limits:
+            cpu: 10m
+            memory: 32Mi
+    containers:
+      app:
+        image:
+          repository: ghcr.io/dannyvfilms/floppy
+          tag: 26.8.13@sha256:e50cd36fc20bfe038a29c98590f51eb1aafbe581707c09db8f26558113488129
+        securityContext:
+          capabilities:
+            drop:
+              - ALL
+            add:
+              - CHOWN
+              - DAC_OVERRIDE
+              - SETGID
+              - SETUID
+        env:
+          PUID: "1000"
+          PGID: "1000"
+          # Writable home for the app user.
+          HOME: /tmp
+          # Lean profile: 1 gunicorn worker, 2 threads.
+          FLOPPY_RESOURCE_TIER: minimal
+          WEB_CONCURRENCY: "1"
+          GUNICORN_THREADS: "2"
+          # Public origin (feeds ALLOWED_HOSTS and CSRF_TRUSTED_ORIGINS).
+          URLS: "https://floppy.${FQDN_01}"
+          ACCOUNT_DEFAULT_HTTP_PROTOCOL: https
+          # TLS terminates at the gateway; trust the forwarded scheme.
+          USE_X_FORWARDED_PROTO: "True"
+          ADMIN_ENABLED: "False"
+          DEMO_ACCOUNT_ENABLED: "False"
+          # OIDC signup stays open; the Kanidm floppy-users group is the allowlist.
+          REGISTRATION: "True"
+          # PostgreSQL over TLS (verify-full); CA at PGSSLROOTCERT.
+          DB_HOST:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-postgres-app
+                key: host
+          DB_PORT:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-postgres-app
+                key: port
+          DB_NAME:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-postgres-app
+                key: dbname
+          DB_USER:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-postgres-app
+                key: user
+          DB_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-postgres-app
+                key: password
+          DB_SSL_MODE: verify-full
+          PGSSLROOTCERT: /postgres-ca/ca.crt
+          REDIS_URL: redis://floppy-valkey:6379
+          SECRET:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-secrets
+                key: SECRET
+          TMDB_API:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-secrets
+                key: TMDB_API
+          # $(CLIENT_ID)/$(CLIENT_SECRET)/$(AUTH_HOST) are expanded by k8s at runtime.
+          SOCIAL_PROVIDERS: allauth.socialaccount.providers.openid_connect
+          SOCIALACCOUNT_ONLY: "True"
+          REDIRECT_LOGIN_TO_SSO: "True"
+          AUTH_HOST: "auth.${FQDN_01}"
+          CLIENT_ID:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-kanidm-oauth2-credentials
+                key: CLIENT_ID
+          CLIENT_SECRET:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-kanidm-oauth2-credentials
+                key: CLIENT_SECRET
+          SOCIALACCOUNT_PROVIDERS: >-
+            {"openid_connect":{"OAUTH_PKCE_ENABLED":true,
+            "APPS":[{"provider_id":"kanidm","name":"Kanidm",
+            "client_id":"$(CLIENT_ID)","secret":"$(CLIENT_SECRET)",
+            "settings":{"server_url":"https://$(AUTH_HOST)/oauth2/openid/$(CLIENT_ID)/.well-known/openid-configuration",
+            "token_auth_method":"client_secret_post"}}]}}
+        probes:
+          # Probes use an allowed Host for Django's ALLOWED_HOSTS check.
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health/
+                port: 8000
+                httpHeaders:
+                  - name: Host
+                    value: localhost
+              periodSeconds: 30
+              timeoutSeconds: 5
+              failureThreshold: 5
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health/
+                port: 8000
+                httpHeaders:
+                  - name: Host
+                    value: localhost
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 5
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health/
+                port: 8000
+                httpHeaders:
+                  - name: Host
+                    value: localhost
+              # 5m budget for first-run migrations (30 x 10s).
+              failureThreshold: 30
+              periodSeconds: 10
+        resources:
+          requests:
+            cpu: 50m
+            memory: 384Mi
+          limits:
+            memory: 1Gi
+
+  valkey:
+    defaultContainerOptionsStrategy: merge
+    defaultContainerOptions:
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
+    pod:
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 999
+        runAsNonRoot: true
+        fsGroup: 999
+    containers:
+      app:
+        image:
+          repository: ghcr.io/valkey-io/valkey
+          tag: 9.1.1@sha256:3acc0687f2a2e1091fae6450d7842dd658c941338cf0a873ddd9e14b9e4ea4dd
+        command:
+          - valkey-server
+          - --appendonly
+          - "no"
+          - --save
+          - ""
+          - --maxmemory
+          - 128mb
+          - --maxmemory-policy
+          - volatile-lru
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command:
+                  - valkey-cli
+                  - ping
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command:
+                  - valkey-cli
+                  - ping
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command:
+                  - valkey-cli
+                  - ping
+              failureThreshold: 10
+              periodSeconds: 5
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            memory: 192Mi
+
+service:
+  app:
+    controller: floppy
+    ports:
+      http:
+        port: 8000
+  valkey:
+    controller: valkey
+    ports:
+      valkey:
+        port: 6379
