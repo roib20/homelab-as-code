@@ -16,6 +16,8 @@ resources:
   - zeroclaw-telegram-coach-bot.yaml.externalsecret
   - zeroclaw-telegram-default-bot.yaml.externalsecret
   - zeroclaw-telegram-household-bot.yaml.externalsecret
+  - zeroclaw-telegram-media-1-bot.yaml.externalsecret
+  - zeroclaw-telegram-media-2-bot.yaml.externalsecret
   - zeroclaw-telegram-smart-homer-bot.yaml.externalsecret
   - zeroclaw-telegram-travel-agent-bot.yaml.externalsecret
   - zeroclaw-yuvomi-mcp.yaml.externalsecret
