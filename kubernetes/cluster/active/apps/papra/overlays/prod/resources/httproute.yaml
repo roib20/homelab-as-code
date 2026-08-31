@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Document management and archiving.
-    gethomepage.dev/group: Tools
+    gethomepage.dev/group: Productivity
     gethomepage.dev/icon: papra.svg
     gethomepage.dev/name: Papra
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=papra"
