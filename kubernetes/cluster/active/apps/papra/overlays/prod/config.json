@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "papra",
+  "destName": "in-cluster",
+  "destNamespace": "papra",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "papra"
+}
