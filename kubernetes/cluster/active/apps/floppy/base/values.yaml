@@ -51,7 +51,7 @@ controllers:
             memory: 32Mi
     containers:
       app:
-        image:
+        image: &floppy-image
           repository: ghcr.io/dannyvfilms/floppy
           tag: 26.8.27@sha256:790eeaea6d23caa91457cb73e675ab6bdb39e36f03a64beb80a04904543142e1
         securityContext:
@@ -191,6 +191,60 @@ controllers:
             memory: 384Mi
           limits:
             memory: 1Gi
+      # streamable-HTTP MCP server (wraps the REST API) for in-cluster clients.
+      mcp:
+        image: *floppy-image
+        command:
+          - uvicorn
+          - floppy_mcp.server:mcp.streamable_http_app
+          - --host
+          - 0.0.0.0
+          - --port
+          - "8787"
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        env:
+          HOME: "/tmp"
+          FLOPPY_URL: http://localhost:8000
+          FLOPPY_TOKEN:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-secrets
+                key: FLOPPY_TOKEN
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 8787
+              periodSeconds: 30
+              timeoutSeconds: 5
+              failureThreshold: 5
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 8787
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 5
+          startup:
+            enabled: false
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            memory: 256Mi
 
   valkey:
     defaultContainerOptionsStrategy: merge
@@ -269,6 +323,8 @@ service:
     ports:
       http:
         port: 8000
+      mcp:
+        port: 8787
   valkey:
     controller: valkey
     ports:
