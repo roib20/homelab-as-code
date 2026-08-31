@@ -9,6 +9,8 @@ spec:
     name: idm
     namespace: kaniop
   displayname: Papra
+  image:
+    url: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/papra.svg
   origin: https://papra.${FQDN_01}
   redirectUrl:
     - https://papra.${FQDN_01}/api/auth/oauth2/callback/kanidm
