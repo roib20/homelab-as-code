@@ -25,7 +25,7 @@ model_provider = "openai.codex"
 risk_profile = "chef"
 runtime_profile = "unbounded"
 transcription_provider = "groq.default"
-tts_provider = "edge.ava"
+tts_provider = "edge.andrew"
 
 [agents.coach]
 channels = ["telegram.coach"]
