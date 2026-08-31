@@ -1,5 +1,6 @@
 ---
 defaultSettings:
+  concurrentReplicaRebuildPerNodeLimit: 3
   defaultDataLocality: best-effort
   defaultDataPath: "/var/mnt/longhorn"
   defaultReplicaCount: '{"v1":"2","v2":"2"}'
