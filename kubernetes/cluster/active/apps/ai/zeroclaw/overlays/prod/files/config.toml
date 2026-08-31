@@ -45,6 +45,24 @@ runtime_profile = "unbounded"
 transcription_provider = "groq.default"
 tts_provider = "edge.emma"
 
+[agents.media-1]
+channels = ["telegram.media_1"]
+mcp_bundles = ["media-1"]
+model_provider = "openai.codex"
+risk_profile = "media-1"
+runtime_profile = "unbounded"
+transcription_provider = "groq.default"
+tts_provider = "edge.emma"
+
+[agents.media-2]
+channels = ["telegram.media_2"]
+mcp_bundles = ["media-2"]
+model_provider = "openai.codex"
+risk_profile = "media-2"
+runtime_profile = "unbounded"
+transcription_provider = "groq.default"
+tts_provider = "edge.emma"
+
 [agents.smart-homer]
 channels = ["telegram.smart_homer"]
 mcp_bundles = ["home-assistant"]
@@ -97,6 +115,18 @@ enabled = true
 mention_only = true
 stream_mode = "off"
 
+[channels.telegram.media_1]
+bot_token = ""
+enabled = true
+mention_only = true
+stream_mode = "off"
+
+[channels.telegram.media_2]
+bot_token = ""
+enabled = true
+mention_only = true
+stream_mode = "off"
+
 [channels.telegram.smart_homer]
 bot_token = ""
 enabled = true
@@ -128,6 +158,18 @@ name = "calendar"
 tool_timeout_secs = 120
 transport = "http"
 url = "http://127.0.0.1:8590/mcp"
+
+[[mcp.servers]]
+name = "floppy_1"
+tool_timeout_secs = 120
+transport = "http"
+url = "http://floppy-app.floppy.svc.cluster.local:8787/mcp"
+
+[[mcp.servers]]
+name = "floppy_2"
+tool_timeout_secs = 120
+transport = "http"
+url = "http://floppy-app.floppy.svc.cluster.local:8788/mcp"
 
 [[mcp.servers]]
 command = "garmin-mcp"
@@ -209,6 +251,12 @@ servers = ["ha-mcp"]
 [mcp_bundles.mcp]
 servers = ["gitmcp", "zeroclaw"]
 
+[mcp_bundles.media-1]
+servers = ["floppy_1"]
+
+[mcp_bundles.media-2]
+servers = ["floppy_2"]
+
 [mcp_bundles.tandoor]
 servers = ["tandoor-mcp"]
 
@@ -256,6 +304,14 @@ channel = "telegram.default"
 [peer_groups.telegram_household]
 agents = ["household"]
 channel = "telegram.household"
+
+[peer_groups.telegram_media_1]
+agents = ["media-1"]
+channel = "telegram.media_1"
+
+[peer_groups.telegram_media_2]
+agents = ["media-2"]
+channel = "telegram.media_2"
 
 [peer_groups.telegram_smart_homer]
 agents = ["smart-homer"]
@@ -747,6 +803,90 @@ auto_approve = [
   "yuvomi_mcp__list_shopping_items",
   "yuvomi_mcp__list_tasks",
   "yuvomi_mcp__list_upcoming_events"
+]
+level = "supervised"
+
+[risk_profiles.media-1]
+# Floppy reads and safe logging writes (track, progress, play logs) auto-approve;
+# untrack, list/tag edits, imports and settings changes fall through to confirmation.
+auto_approve = [
+  "calculator",
+  "content_search",
+  "file_edit",
+  "file_read",
+  "file_write",
+  "git_operations",
+  "glob_search",
+  "image_info",
+  "mcp_prompts",
+  "mcp_resources",
+  "memory_recall",
+  "memory_store",
+  "send_via",
+  "sessions_current",
+  "sessions_history",
+  "tool_list",
+  "tool_search",
+  "weather",
+  "web_fetch",
+  "web_search_tool",
+  "floppy_1__get_discover",
+  "floppy_1__get_history",
+  "floppy_1__get_home",
+  "floppy_1__get_media",
+  "floppy_1__get_statistics",
+  "floppy_1__get_task_status",
+  "floppy_1__list_custom_lists",
+  "floppy_1__list_tracked_media",
+  "floppy_1__log_episode_play",
+  "floppy_1__log_podcast_play",
+  "floppy_1__log_song_play",
+  "floppy_1__search_media",
+  "floppy_1__search_tracked_media",
+  "floppy_1__track_media",
+  "floppy_1__update_progress"
+]
+level = "supervised"
+
+[risk_profiles.media-2]
+# Floppy reads and safe logging writes (track, progress, play logs) auto-approve;
+# untrack, list/tag edits, imports and settings changes fall through to confirmation.
+auto_approve = [
+  "calculator",
+  "content_search",
+  "file_edit",
+  "file_read",
+  "file_write",
+  "git_operations",
+  "glob_search",
+  "image_info",
+  "mcp_prompts",
+  "mcp_resources",
+  "memory_recall",
+  "memory_store",
+  "send_via",
+  "sessions_current",
+  "sessions_history",
+  "tool_list",
+  "tool_search",
+  "weather",
+  "web_fetch",
+  "web_search_tool",
+  "floppy_2__get_discover",
+  "floppy_2__get_history",
+  "floppy_2__get_home",
+  "floppy_2__get_media",
+  "floppy_2__get_statistics",
+  "floppy_2__get_task_status",
+  "floppy_2__list_custom_lists",
+  "floppy_2__list_tracked_media",
+  "floppy_2__log_episode_play",
+  "floppy_2__log_podcast_play",
+  "floppy_2__log_song_play",
+  "floppy_2__search_media",
+  "floppy_2__search_tracked_media",
+  "floppy_2__track_media",
+  "floppy_2__update_progress"
 ]
 level = "supervised"
 
