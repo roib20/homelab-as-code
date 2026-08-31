@@ -21,13 +21,14 @@
   main .col-md-3:has(img#omnitools) { order: 19; }
   main .col-md-3:has(img#opengist) { order: 20; }
   main .col-md-3:has(img#outline) { order: 21; }
-  main .col-md-3:has(img#pinepods) { order: 22; }
-  main .col-md-3:has(img#profilarr) { order: 23; }
-  main .col-md-3:has(img#pve) { order: 24; }
-  main .col-md-3:has(img#renovate-operator) { order: 25; }
-  main .col-md-3:has(img#seerr) { order: 26; }
-  main .col-md-3:has(img#tandoor) { order: 27; }
-  main .col-md-3:has(img#transmute) { order: 28; }
-  main .col-md-3:has(img#trek) { order: 29; }
-  main .col-md-3:has(img#yuvomi) { order: 30; }
+  main .col-md-3:has(img#papra) { order: 22; }
+  main .col-md-3:has(img#pinepods) { order: 23; }
+  main .col-md-3:has(img#profilarr) { order: 24; }
+  main .col-md-3:has(img#pve) { order: 25; }
+  main .col-md-3:has(img#renovate-operator) { order: 26; }
+  main .col-md-3:has(img#seerr) { order: 27; }
+  main .col-md-3:has(img#tandoor) { order: 28; }
+  main .col-md-3:has(img#transmute) { order: 29; }
+  main .col-md-3:has(img#trek) { order: 30; }
+  main .col-md-3:has(img#yuvomi) { order: 31; }
 }
