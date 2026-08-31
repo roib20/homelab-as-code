@@ -1,0 +1,80 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    # HTTPRoute hostname
+    - select:
+        kind: HTTPRoute
+        name: papra
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    # Build auth host used by OIDC discovery URL
+    - select:
+        kind: ConfigMap
+        name: papra-oidc
+      fieldPaths:
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+    # Build papra host used by APP_BASE_URL and KanidmOAuth2Client
+    - select:
+        kind: ConfigMap
+        name: papra-oidc
+      fieldPaths:
+        - data.PAPRA_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: papra-oidc
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    # Auth host in AUTH_PROVIDERS_CUSTOMS JSON ($(CLIENT_ID) expands to secret value at runtime)
+    - select:
+        kind: Deployment
+        name: papra
+      fieldPaths:
+        - spec.template.spec.containers.[name=papra].env.[name=AUTH_PROVIDERS_CUSTOMS].value
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: papra-oidc
+    fieldPath: "data.PAPRA_HOST"
+  targets:
+    # APP_BASE_URL hostname
+    - select:
+        kind: Deployment
+        name: papra
+      fieldPaths:
+        - spec.template.spec.containers.[name=papra].env.[name=APP_BASE_URL].value
+      options:
+        delimiter: "/"
+        index: 2
+    # TRUSTED_ORIGINS public hostname (internal origin listed first)
+    - select:
+        kind: Deployment
+        name: papra
+      fieldPaths:
+        - spec.template.spec.containers.[name=papra].env.[name=TRUSTED_ORIGINS].value
+      options:
+        delimiter: "/"
+        index: 4
+    # KanidmOAuth2Client origin and redirect URL
+    - select:
+        kind: KanidmOAuth2Client
+        name: papra
+      fieldPaths:
+        - spec.origin
+        - spec.redirectUrl.0
+      options:
+        delimiter: "/"
+        index: 2

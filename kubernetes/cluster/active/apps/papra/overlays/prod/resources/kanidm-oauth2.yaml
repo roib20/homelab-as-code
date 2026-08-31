@@ -1,0 +1,22 @@
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmOAuth2Client
+metadata:
+  name: papra
+  namespace: papra
+spec:
+  kanidmRef:
+    name: idm
+    namespace: kaniop
+  displayname: Papra
+  image:
+    url: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/papra.svg
+  origin: https://papra.${FQDN_01}
+  redirectUrl:
+    - https://papra.${FQDN_01}/api/auth/oauth2/callback/kanidm
+  scopeMap:
+    - group: papra-users
+      scopes:
+        - email
+        - openid
+        - profile

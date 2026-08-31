@@ -105,6 +105,10 @@ spec:
             # TREK upload/import bodies (covers, booking imports, attachments) exceed Envoy's body buffer, causing 413; skip body inspection host-wide
             - SecRule REQUEST_HEADERS:Host "@rx ^trek\." "id:100026,phase:1,pass,nolog,chain"
             - SecRule REQUEST_METHOD "@rx ^(POST|PUT|PATCH)$" "ctl:requestBodyAccess=Off"
+            # Papra document upload: multipart file bodies break the Coraza WASM filter ("Failed to process request body: unexpected EOF" -> 413); do not buffer/inspect the body
+            - SecRule REQUEST_METHOD "@streq POST" "id:100027,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^papra\." "chain"
+            - SecRule REQUEST_FILENAME "@rx ^/api/organizations/[^/]+/documents$" "ctl:requestBodyAccess=Off"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---

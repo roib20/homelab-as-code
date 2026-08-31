@@ -1,0 +1,41 @@
+---
+controllers:
+  papra:
+    pod:
+      annotations:
+        secret.reloader.stakater.com/reload: "papra-secrets,papra-kanidm-oauth2-credentials"
+    containers:
+      papra:
+        env:
+          APP_BASE_URL: "https://papra.${FQDN_01}"
+          AUTH_FIRST_USER_AS_ADMIN: "true"
+          AUTH_IS_REGISTRATION_ENABLED: "false"
+          AUTH_CLIENT_ID:
+            secretKeyRef:
+              name: papra-kanidm-oauth2-credentials
+              key: CLIENT_ID
+          AUTH_CLIENT_SECRET:
+            secretKeyRef:
+              name: papra-kanidm-oauth2-credentials
+              key: CLIENT_SECRET
+          AUTH_PROVIDERS_CUSTOMS: >-
+            [{"providerId":"kanidm","providerName":"Kanidm",
+            "clientId":"$(AUTH_CLIENT_ID)","clientSecret":"$(AUTH_CLIENT_SECRET)",
+            "type":"oidc","pkce":true,
+            "discoveryUrl":"https://auth.${FQDN_01}/oauth2/openid/$(AUTH_CLIENT_ID)/.well-known/openid-configuration",
+            "scopes":["openid","profile","email"]}]
+          AUTH_PROVIDERS_EMAIL_IS_ENABLED: "false"
+          AUTH_SECRET:
+            secretKeyRef:
+              name: papra-secrets
+              key: AUTH_SECRET
+          AUTO_TAGGING_ENABLED: "false"
+          DATABASE_ENCRYPTION_KEY:
+            secretKeyRef:
+              name: papra-secrets
+              key: DATABASE_ENCRYPTION_KEY
+          DOCUMENTS_OCR_LANGUAGES: "eng,heb"
+          DOCUMENT_STORAGE_MAX_UPLOAD_SIZE: "104857600"
+          INGESTION_FOLDER_ERROR_FOLDER_PATH: "/app/app-data/ingestion-error"
+          INGESTION_FOLDER_IS_ENABLED: "true"
+          TRUSTED_ORIGINS: "http://papra.papra:1221,http://papra.papra.svc.cluster.local:1221,https://papra.${FQDN_01}"
