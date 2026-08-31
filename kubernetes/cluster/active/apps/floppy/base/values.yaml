@@ -192,16 +192,23 @@ controllers:
           limits:
             memory: 1Gi
       # streamable-HTTP MCP sidecars (wrap the REST API) for in-cluster clients;
-      # one per user, each authenticating with that user's API token.
+      # one per user, each authenticating with that user's API token. The command
+      # widens the MCP SDK's DNS-rebinding allowlist to the in-cluster Service host
+      # (default allows only localhost, so remote callers get HTTP 421).
       mcp-1: &mcp
         image: *floppy-image
         command:
-          - uvicorn
-          - floppy_mcp.server:mcp.streamable_http_app
-          - --host
-          - 0.0.0.0
-          - --port
-          - "8787"
+          - python
+          - -c
+          - |
+            import os, uvicorn
+            from floppy_mcp.server import mcp
+            from mcp.server.transport_security import TransportSecuritySettings as T
+            mcp.settings.transport_security = T(
+                allowed_hosts=["floppy-app.floppy.svc.cluster.local:*", "floppy-app.floppy:*", "localhost:*", "127.0.0.1:*"],
+                allowed_origins=["http://floppy-app.floppy.svc.cluster.local:*", "http://floppy-app.floppy:*"],
+            )
+            uvicorn.run(mcp.streamable_http_app(), host="0.0.0.0", port=int(os.environ["PORT"]))
         securityContext:
           runAsUser: 1000
           runAsGroup: 1000
@@ -214,6 +221,7 @@ controllers:
         env:
           HOME: "/tmp"
           FLOPPY_URL: http://localhost:8000
+          PORT: "8787"
           FLOPPY_TOKEN:
             valueFrom:
               secretKeyRef:
@@ -225,19 +233,13 @@ controllers:
             memory: 64Mi
           limits:
             memory: 256Mi
-      # Inherits mcp-1; only the listen port and token differ.
+      # Inherits mcp-1 (command included); only the listen port and token differ.
       mcp-2:
         <<: *mcp
-        command:
-          - uvicorn
-          - floppy_mcp.server:mcp.streamable_http_app
-          - --host
-          - 0.0.0.0
-          - --port
-          - "8788"
         env:
           HOME: "/tmp"
           FLOPPY_URL: http://localhost:8000
+          PORT: "8788"
           FLOPPY_TOKEN:
             valueFrom:
               secretKeyRef:
