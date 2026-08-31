@@ -6,7 +6,9 @@ persistence:
       floppy:
         app:
           - path: "/tmp"
-        mcp:
+        mcp-1:
+          - path: "/tmp"
+        mcp-2:
           - path: "/tmp"
   postgres-ca:
     type: secret

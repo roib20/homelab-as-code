@@ -191,8 +191,9 @@ controllers:
             memory: 384Mi
           limits:
             memory: 1Gi
-      # streamable-HTTP MCP server (wraps the REST API) for in-cluster clients.
-      mcp:
+      # streamable-HTTP MCP sidecars (wrap the REST API) for in-cluster clients;
+      # one per user, each authenticating with that user's API token.
+      mcp-1: &mcp
         image: *floppy-image
         command:
           - uvicorn
@@ -217,34 +218,31 @@ controllers:
             valueFrom:
               secretKeyRef:
                 name: floppy-secrets
-                key: FLOPPY_TOKEN
-        probes:
-          liveness:
-            enabled: true
-            custom: true
-            spec:
-              tcpSocket:
-                port: 8787
-              periodSeconds: 30
-              timeoutSeconds: 5
-              failureThreshold: 5
-          readiness:
-            enabled: true
-            custom: true
-            spec:
-              tcpSocket:
-                port: 8787
-              periodSeconds: 10
-              timeoutSeconds: 5
-              failureThreshold: 5
-          startup:
-            enabled: false
+                key: FLOPPY_TOKEN_1
         resources:
           requests:
             cpu: 10m
             memory: 64Mi
           limits:
             memory: 256Mi
+      # Inherits mcp-1; only the listen port and token differ.
+      mcp-2:
+        <<: *mcp
+        command:
+          - uvicorn
+          - floppy_mcp.server:mcp.streamable_http_app
+          - --host
+          - 0.0.0.0
+          - --port
+          - "8788"
+        env:
+          HOME: "/tmp"
+          FLOPPY_URL: http://localhost:8000
+          FLOPPY_TOKEN:
+            valueFrom:
+              secretKeyRef:
+                name: floppy-secrets
+                key: FLOPPY_TOKEN_2
 
   valkey:
     defaultContainerOptionsStrategy: merge
@@ -323,8 +321,10 @@ service:
     ports:
       http:
         port: 8000
-      mcp:
+      mcp-1:
         port: 8787
+      mcp-2:
+        port: 8788
   valkey:
     controller: valkey
     ports:
