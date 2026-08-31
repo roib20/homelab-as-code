@@ -38,4 +38,4 @@ controllers:
           DOCUMENT_STORAGE_MAX_UPLOAD_SIZE: "104857600"
           INGESTION_FOLDER_ERROR_FOLDER_PATH: "/app/app-data/ingestion-error"
           INGESTION_FOLDER_IS_ENABLED: "true"
-          TRUSTED_ORIGINS: "http://papra.papra.svc.cluster.local:1221,https://papra.${FQDN_01}"
+          TRUSTED_ORIGINS: "http://papra.papra:1221,http://papra.papra.svc.cluster.local:1221,https://papra.${FQDN_01}"
