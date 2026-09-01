@@ -5,6 +5,7 @@ defaultPodOptions:
   automountServiceAccountToken: false
   enableServiceLinks: false
   securityContext:
+    fsGroup: 1000
     seccompProfile:
       type: RuntimeDefault
 controllers:
