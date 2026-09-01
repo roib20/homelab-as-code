@@ -1,0 +1,39 @@
+---
+controllers:
+  romm:
+    containers:
+      romm:
+        env:
+          ROMM_BASE_URL: "https://romm.${FQDN_01}"
+          ROMM_CORS_ALLOWED_ORIGINS: "https://romm.${FQDN_01}"
+          OIDC_REDIRECT_URI: "https://romm.${FQDN_01}/api/oauth/openid"
+          OIDC_SERVER_APPLICATION_URL: "https://auth.${FQDN_01}"
+          OIDC_SERVER_METADATA_URL: "https://auth.${FQDN_01}/oauth2/openid/romm/.well-known/openid-configuration"
+persistence:
+  data:
+    accessMode: ReadWriteOnce
+    size: 20Gi
+    storageClass: longhorn
+    advancedMounts:
+      romm:
+        romm:
+          - path: "/romm"
+  roms:
+    type: persistentVolumeClaim
+    existingClaim: smb-mediadata-rwx
+    advancedMounts:
+      romm:
+        romm:
+          - path: "/romm/library/roms"
+            subPath: "Games/roms"
+  postgres-ca:
+    type: secret
+    name: romm-postgres-ca
+    advancedMounts:
+      romm:
+        romm:
+          - path: "/postgres-ca"
+            readOnly: true
+        wait-for-postgres:
+          - path: "/postgres-ca"
+            readOnly: true

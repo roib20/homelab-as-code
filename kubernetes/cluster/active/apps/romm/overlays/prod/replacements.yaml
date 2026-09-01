@@ -1,0 +1,58 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: "data.FQDN_01"
+  targets:
+    - select:
+        kind: ConfigMap
+        name: romm-oidc
+      fieldPaths:
+        - data.AUTH_HOST
+        - data.ROMM_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: romm-oidc
+    fieldPath: "data.ROMM_HOST"
+  targets:
+    - select:
+        kind: HTTPRoute
+        name: romm
+      fieldPaths:
+        - spec.hostnames.0
+    - select:
+        kind: Deployment
+        name: romm
+      fieldPaths:
+        - spec.template.spec.containers.[name=romm].env.[name=ROMM_BASE_URL].value
+        - spec.template.spec.containers.[name=romm].env.[name=ROMM_CORS_ALLOWED_ORIGINS].value
+        - spec.template.spec.containers.[name=romm].env.[name=OIDC_REDIRECT_URI].value
+      options:
+        delimiter: "/"
+        index: 2
+    - select:
+        kind: KanidmOAuth2Client
+        name: romm
+      fieldPaths:
+        - spec.origin
+        - spec.redirectUrl.0
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: romm-oidc
+    fieldPath: "data.AUTH_HOST"
+  targets:
+    - select:
+        kind: Deployment
+        name: romm
+      fieldPaths:
+        - spec.template.spec.containers.[name=romm].env.[name=OIDC_SERVER_APPLICATION_URL].value
+        - spec.template.spec.containers.[name=romm].env.[name=OIDC_SERVER_METADATA_URL].value
+      options:
+        delimiter: "/"
+        index: 2

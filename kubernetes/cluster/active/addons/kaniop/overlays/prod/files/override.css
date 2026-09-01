@@ -26,10 +26,11 @@
   main .col-md-3:has(img#profilarr) { order: 24; }
   main .col-md-3:has(img#pve) { order: 25; }
   main .col-md-3:has(img#renovate-operator) { order: 26; }
-  main .col-md-3:has(img#seerr) { order: 27; }
-  main .col-md-3:has(img#streamystats) { order: 28; }
-  main .col-md-3:has(img#tandoor) { order: 29; }
-  main .col-md-3:has(img#transmute) { order: 30; }
-  main .col-md-3:has(img#trek) { order: 31; }
-  main .col-md-3:has(img#yuvomi) { order: 32; }
+  main .col-md-3:has(img#romm) { order: 27; }
+  main .col-md-3:has(img#seerr) { order: 28; }
+  main .col-md-3:has(img#streamystats) { order: 29; }
+  main .col-md-3:has(img#tandoor) { order: 30; }
+  main .col-md-3:has(img#transmute) { order: 31; }
+  main .col-md-3:has(img#trek) { order: 32; }
+  main .col-md-3:has(img#yuvomi) { order: 33; }
 }
