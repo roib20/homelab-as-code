@@ -20,6 +20,14 @@ persistence:
       romm:
         romm:
           - path: "/romm"
+  redis-data:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: longhorn
+    advancedMounts:
+      romm:
+        romm:
+          - path: "/redis-data"
   roms:
     type: persistentVolumeClaim
     existingClaim: smb-mediadata-rwx
