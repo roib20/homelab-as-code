@@ -20,6 +20,12 @@ spec:
       disabledDefaultServices:
         - ro
         - r
+  resources:
+    requests:
+      cpu: 25m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
   storage:
     size: 4Gi
     storageClass: longhorn-cnpg
