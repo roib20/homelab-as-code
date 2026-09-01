@@ -9,7 +9,7 @@ metadata:
     gethomepage.dev/group: Media
     gethomepage.dev/icon: streamystats.svg
     gethomepage.dev/name: StreamyStats
-    gethomepage.dev/pod-selector: "app.kubernetes.io/controller=frontend"
+    gethomepage.dev/pod-selector: "app.kubernetes.io/name=streamystats,app.kubernetes.io/controller=frontend"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
