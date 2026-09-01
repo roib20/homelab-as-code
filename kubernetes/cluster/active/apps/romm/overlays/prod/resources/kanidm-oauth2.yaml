@@ -9,6 +9,7 @@ spec:
     name: idm
     namespace: kaniop
   displayname: RomM
+  allowInsecureClientDisablePkce: true
   image:
     url: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/romm.svg
   origin: https://romm.${FQDN_01}
