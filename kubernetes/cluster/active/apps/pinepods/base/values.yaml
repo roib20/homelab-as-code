@@ -117,7 +117,8 @@ controllers:
               periodSeconds: 10
         resources:
           requests:
-            cpu: 50m
+            cpu: 10m
+            memory: 64Mi
           limits:
             memory: 1.5Gi
 
@@ -225,7 +226,8 @@ controllers:
               periodSeconds: 5
         resources:
           requests:
-            cpu: 10m
+            cpu: 25m
+            memory: 32Mi
           limits:
             memory: 128Mi
 
@@ -318,10 +320,9 @@ rawResources:
           storageClass: longhorn-cnpg
         resources:
           requests:
-            cpu: 75m
+            cpu: 25m
             memory: 200Mi
           limits:
-            cpu: 1500m
             memory: 2400Mi
 
   external-secret-pinepods:

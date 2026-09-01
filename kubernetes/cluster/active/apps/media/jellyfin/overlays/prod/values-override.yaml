@@ -32,6 +32,16 @@ persistence:
     existingClaim: smb-mediadata-rox
     subPath: Media
 workload:
+  broadcastproxy:
+    podSpec:
+      containers:
+        broadcastproxy:
+          resources:
+            limits:
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
   main:
     podSpec:
       containers:
@@ -39,3 +49,6 @@ workload:
           resources:
             limits:
               memory: 8Gi
+            requests:
+              cpu: 150m
+              memory: 1280Mi

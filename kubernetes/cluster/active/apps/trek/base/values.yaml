@@ -108,8 +108,8 @@ controllers:
               - SETGID
         resources:
           requests:
-            cpu: 100m
-            memory: 256Mi
+            cpu: 10m
+            memory: 128Mi
           limits:
             memory: 1Gi
 service:
