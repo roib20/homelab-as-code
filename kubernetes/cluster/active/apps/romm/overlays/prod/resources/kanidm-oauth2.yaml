@@ -12,9 +12,9 @@ spec:
   allowInsecureClientDisablePkce: true
   image:
     url: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/romm.svg
-  origin: https://romm.${FQDN_01}
+  origin: https://games.${FQDN_01}
   redirectUrl:
-    - https://romm.${FQDN_01}/api/oauth/openid
+    - https://games.${FQDN_01}/api/oauth/openid
   scopeMap:
     - group: romm-users
       scopes:
