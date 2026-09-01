@@ -47,7 +47,6 @@ controllers:
             cpu: 5m
             memory: 16Mi
           limits:
-            cpu: 10m
             memory: 32Mi
     containers:
       app:
@@ -187,8 +186,8 @@ controllers:
               periodSeconds: 10
         resources:
           requests:
-            cpu: 50m
-            memory: 384Mi
+            cpu: 30m
+            memory: 288Mi
           limits:
             memory: 1Gi
       # streamable-HTTP MCP sidecars (wrap the REST API) for in-cluster clients;
@@ -312,7 +311,7 @@ controllers:
               periodSeconds: 5
         resources:
           requests:
-            cpu: 10m
+            cpu: 30m
             memory: 32Mi
           limits:
             memory: 192Mi

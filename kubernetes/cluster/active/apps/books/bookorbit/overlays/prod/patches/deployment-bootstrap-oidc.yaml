@@ -90,7 +90,6 @@ spec:
               cpu: 5m
               memory: 16Mi
             limits:
-              cpu: 50m
               memory: 64Mi
       volumes:
         - name: oidc-config

@@ -14,6 +14,13 @@ workload:
         secret.reloader.stakater.com/reload: "tandoor-secret-key,tandoor-fdc-api-key,tandoor-kanidm-oauth2-credentials,tandoor-postgres-app,tandoor-postgres-ca"
       containers:
         main:
+          resources:
+            limits:
+              cpu: null
+              memory: 1Gi
+            requests:
+              cpu: 10m
+              memory: 512Mi
           # Configuration - Tandoor Recipes: https://docs.tandoor.dev/system/configuration/
           env:
             DEBUG: 0

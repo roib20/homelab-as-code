@@ -14,6 +14,13 @@ workload:
         secret.reloader.stakater.com/reload: "miniflux-kanidm-oauth2-credentials,miniflux-postgres-app"
       containers:
         main:
+          resources:
+            limits:
+              cpu: null
+              memory: 256Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
           # Configuration Parameters: https://miniflux.app/docs/configuration.html
           env:
             ADMIN_PASSWORD: ""

@@ -39,6 +39,13 @@ extraEnv:
         name: seerr-postgres-app
         key: dbname
 
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    cpu: 15m
+    memory: 256Mi
+
 volumes:
   - name: seerr-settings
     configMap:

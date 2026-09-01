@@ -1,4 +1,12 @@
 ---
+resources:
+  limits:
+    cpu: null
+    memory: 576Mi
+  requests:
+    cpu: 25m
+    memory: 288Mi
+
 byparrImage:
   repository: ghcr.io/thephaseless/byparr
   # renovate: datasource=docker depName=ghcr.io/thephaseless/byparr

@@ -44,8 +44,8 @@ controllers:
           ALLOW_UNAUTHENTICATED: "false"
         resources:
           requests:
-            cpu: 100m
-            memory: 512Mi
+            cpu: 10m
+            memory: 32Mi
           limits:
             memory: 2Gi
         securityContext:

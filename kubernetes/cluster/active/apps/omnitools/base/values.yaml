@@ -21,8 +21,8 @@ controllers:
           tag: 0.6.0@sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69
         resources:
           requests:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 10m
+            memory: 32Mi
           limits:
             memory: 500Mi
         securityContext:
