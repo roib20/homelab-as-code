@@ -78,16 +78,6 @@ controllers:
           DISABLE_SETUP_WIZARD: "true"
           DISABLE_USERPASS_LOGIN: "true"
           ENABLE_SCHEDULED_RESCAN: "true"
-          IGDB_CLIENT_ID:
-            valueFrom:
-              secretKeyRef:
-                name: romm-secrets
-                key: IGDB_CLIENT_ID
-          IGDB_CLIENT_SECRET:
-            valueFrom:
-              secretKeyRef:
-                name: romm-secrets
-                key: IGDB_CLIENT_SECRET
           OIDC_ALLOW_REGISTRATION: "true"
           OIDC_CLAIM_ROLES: roles
           OIDC_CLIENT_ID:
@@ -106,35 +96,13 @@ controllers:
           OIDC_ROLE_VIEWER: user
           OIDC_USERNAME_ATTRIBUTE: preferred_username
           REDIS_SAVE_POLICY: ""
-          RETROACHIEVEMENTS_API_KEY:
-            valueFrom:
-              secretKeyRef:
-                name: romm-secrets
-                key: RETROACHIEVEMENTS_API_KEY
-          ROMM_AUTH_SECRET_KEY:
-            valueFrom:
-              secretKeyRef:
-                name: romm-secrets
-                key: ROMM_AUTH_SECRET_KEY
           ROMM_DB_DRIVER: postgresql
           ROMM_PORT: &port 8080
           ROMM_SESSION_SECURE_COOKIE: "true"
           SCHEDULED_RESCAN_CRON: "0 3 * * *"
-          SCREENSCRAPER_PASSWORD:
-            valueFrom:
-              secretKeyRef:
-                name: romm-secrets
-                key: SCREENSCRAPER_PASSWORD
-          SCREENSCRAPER_USER:
-            valueFrom:
-              secretKeyRef:
-                name: romm-secrets
-                key: SCREENSCRAPER_USER
-          STEAMGRIDDB_API_KEY:
-            valueFrom:
-              secretKeyRef:
-                name: romm-secrets
-                key: STEAMGRIDDB_API_KEY
+        envFrom:
+          - secretRef:
+              name: romm-secrets
         probes:
           liveness:
             enabled: true
