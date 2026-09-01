@@ -1,0 +1,6 @@
+resources:
+  limits:
+    memory: 576Mi
+  requests:
+    cpu: 25m
+    memory: 288Mi

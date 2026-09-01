@@ -10,3 +10,9 @@ persistence:
   downloads:
     enabled: true
     mountPath: /downloads
+resources:
+  limits:
+    memory: 256Mi
+  requests:
+    cpu: 10m
+    memory: 64Mi

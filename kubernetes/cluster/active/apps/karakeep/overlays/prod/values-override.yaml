@@ -7,6 +7,15 @@ secrets:
 applicationProtocol: https
 applicationHost: "links.${FQDN_01}"
 controllers:
+  chrome:
+    containers:
+      chrome:
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            cpu: 25m
+            memory: 128Mi
   karakeep:
     containers:
       karakeep:
@@ -37,6 +46,12 @@ controllers:
               name: "karakeep-meilisearch"
           - secretRef:
               name: "karakeep-openai-api-key"
+        resources:
+          limits:
+            memory: 768Mi
+          requests:
+            cpu: 50m
+            memory: 384Mi
     pod:
       annotations:
         secret.reloader.stakater.com/reload: "karakeep,karakeep-kanidm-oauth2-credentials,karakeep-meilisearch,karakeep-openai-api-key"
@@ -45,3 +60,9 @@ meilisearch:
     existingMasterKeySecret: "karakeep-meilisearch"
   podAnnotations:
     secret.reloader.stakater.com/reload: "karakeep-meilisearch"
+  resources:
+    limits:
+      memory: 128Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi

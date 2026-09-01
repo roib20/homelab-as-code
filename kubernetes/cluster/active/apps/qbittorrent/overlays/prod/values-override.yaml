@@ -36,3 +36,9 @@ persistence:
     mountPath: "/MediaData"
     readOnly: false
     existingClaim: smb-mediadata-rwx
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

@@ -7,6 +7,13 @@ global:
 cnpg:
   main:
     enabled: false
+redis:
+  resources:
+    limits:
+      memory: 128Mi
+    requests:
+      cpu: 15m
+      memory: 32Mi
 workload:
   main:
     podSpec:
@@ -14,6 +21,12 @@ workload:
         secret.reloader.stakater.com/reload: "outline-app-secrets,outline-kanidm-oauth2-credentials,outline-postgres-app,outline-rediscreds"
       containers:
         main:
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 10m
+              memory: 224Mi
           env:
             DATABASE_URL:
               secretKeyRef:

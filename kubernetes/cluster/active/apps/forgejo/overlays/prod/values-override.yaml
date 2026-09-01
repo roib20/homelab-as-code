@@ -69,3 +69,10 @@ httpRoute:
     gethomepage.dev/widget.type: "gitea"
     gethomepage.dev/widget.url: "http://forgejo-http.forgejo.svc.cluster.local:3000"
     gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_FORGEJO_KEY}}"
+
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    cpu: 15m
+    memory: 160Mi
