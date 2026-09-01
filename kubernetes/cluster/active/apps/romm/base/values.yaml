@@ -41,7 +41,6 @@ controllers:
             cpu: 5m
             memory: 16Mi
           limits:
-            cpu: 10m
             memory: 32Mi
     containers:
       romm:
@@ -138,7 +137,7 @@ controllers:
           allowPrivilegeEscalation: false
         resources:
           requests:
-            cpu: 100m
+            cpu: 50m
             memory: 512Mi
           limits:
             memory: 4Gi
