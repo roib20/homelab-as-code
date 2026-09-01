@@ -1,0 +1,32 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: romm
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Game library and ROM manager.
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: romm.svg
+    gethomepage.dev/name: RomM
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=romm"
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: envoy-gateway-ingress
+  hostnames:
+    - "romm.${FQDN_01}"
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: romm
+          namespace: romm
+          port: 8080
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /

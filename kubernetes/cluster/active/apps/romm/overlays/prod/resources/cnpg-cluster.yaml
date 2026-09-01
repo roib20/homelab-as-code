@@ -1,0 +1,25 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: romm-postgres
+  namespace: romm
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
+  postgresql:
+    pg_hba:
+      - hostssl romm romm all scram-sha-256
+      - host romm romm all reject
+  bootstrap:
+    initdb:
+      database: romm
+      owner: romm
+  managed:
+    services:
+      disabledDefaultServices:
+        - ro
+        - r
+  storage:
+    size: 4Gi
+    storageClass: longhorn-cnpg
