@@ -77,6 +77,10 @@ controllers:
           DISABLE_SETUP_WIZARD: "true"
           DISABLE_USERPASS_LOGIN: "true"
           ENABLE_SCHEDULED_RESCAN: "true"
+          FLASHPOINT_API_ENABLED: "true"
+          HASHEOUS_API_ENABLED: "true"
+          HLTB_API_ENABLED: "true"
+          LAUNCHBOX_API_ENABLED: "true"
           OIDC_ALLOW_REGISTRATION: "true"
           OIDC_CLAIM_ROLES: roles
           OIDC_CLIENT_ID:
@@ -94,11 +98,13 @@ controllers:
           OIDC_ROLE_ADMIN: admin
           OIDC_ROLE_VIEWER: user
           OIDC_USERNAME_ATTRIBUTE: preferred_username
+          PLAYMATCH_API_ENABLED: "true"
           REDIS_SAVE_POLICY: ""
           ROMM_DB_DRIVER: postgresql
           ROMM_PORT: &port 8080
           ROMM_SESSION_SECURE_COOKIE: "true"
           SCHEDULED_RESCAN_CRON: "0 3 * * *"
+          TGDB_API_ENABLED: "true"
         envFrom:
           - secretRef:
               name: romm-secrets
