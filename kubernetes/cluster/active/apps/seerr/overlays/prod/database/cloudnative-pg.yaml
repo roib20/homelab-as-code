@@ -21,3 +21,9 @@ spec:
   storage:
     size: 5Gi
     storageClass: longhorn-cnpg
+  resources:
+    requests:
+      cpu: 60m
+      memory: 128Mi
+    limits:
+      memory: 512Mi

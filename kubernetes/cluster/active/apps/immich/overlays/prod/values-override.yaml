@@ -50,6 +50,12 @@ server:
           env:
             IMMICH_HOST: 0.0.0.0
             IMMICH_WORKERS_INCLUDE: api
+          resources:
+            limits:
+              memory: 2Gi
+            requests:
+              cpu: 25m
+              memory: 512Mi
     microservices:
       type: deployment
       pod:
@@ -101,6 +107,11 @@ server:
           resources:
             claims: &gpuContainerClaims
               - name: gpu
+            limits:
+              memory: 2Gi
+            requests:
+              cpu: 25m
+              memory: 512Mi
   service:
     microservices:
       enabled: true
@@ -284,6 +295,12 @@ server:
             enablePodAntiAffinity: true
             topologyKey: kubernetes.io/hostname
             podAntiAffinityType: required
+          resources:
+            requests:
+              cpu: 20m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
     cnpg-database:
       forceRename: immich-database
       manifest:
@@ -333,6 +350,12 @@ valkey:
               add: []
               drop:
                 - ALL
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 30m
+              memory: 32Mi
   persistence:
     data:
       enabled: true
@@ -356,3 +379,8 @@ machine-learning:
             HOME: /tmp
           resources:
             claims: *gpuContainerClaims
+            limits:
+              memory: 2Gi
+            requests:
+              cpu: 25m
+              memory: 512Mi
