@@ -140,7 +140,7 @@ controllers:
             cpu: 50m
             memory: 512Mi
           limits:
-            memory: 4Gi
+            memory: 2Gi
 service:
   romm:
     controller: romm
