@@ -1,0 +1,152 @@
+---
+global:
+  createDefaultServiceAccount: false
+defaultPodOptions:
+  automountServiceAccountToken: false
+  enableServiceLinks: false
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+controllers:
+  romm:
+    pod:
+      annotations:
+        secret.reloader.stakater.com/reload: "romm-postgres-app,romm-postgres-ca,romm-secrets,romm-kanidm-oauth2-credentials"
+      terminationGracePeriodSeconds: 30
+    initContainers:
+      wait-for-postgres:
+        image:
+          repository: ghcr.io/wait4x/wait4x
+          tag: 3.7.1@sha256:4168ec1328e4fa51b82f7d601c18813b5e4aa85d0eda237cf3501b4ddd70d2c5
+        args:
+          - postgresql
+          - $(POSTGRES_URI)?sslmode=verify-full&sslrootcert=/postgres-ca/ca.crt
+        env:
+          POSTGRES_URI:
+            valueFrom:
+              secretKeyRef:
+                name: romm-postgres-app
+                key: uri
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 5m
+            memory: 16Mi
+          limits:
+            cpu: 10m
+            memory: 32Mi
+    containers:
+      romm:
+        image:
+          repository: ghcr.io/rommapp/romm
+          tag: 5.2.0@sha256:6a2a16f74ce55c4d528eafda5f49993357731cb638a55932abec8dde14e3a93f
+        env:
+          DB_HOST:
+            valueFrom:
+              secretKeyRef:
+                name: romm-postgres-app
+                key: host
+          DB_NAME:
+            valueFrom:
+              secretKeyRef:
+                name: romm-postgres-app
+                key: dbname
+          DB_PASSWD:
+            valueFrom:
+              secretKeyRef:
+                name: romm-postgres-app
+                key: password
+          DB_PORT:
+            valueFrom:
+              secretKeyRef:
+                name: romm-postgres-app
+                key: port
+          DB_QUERY_JSON: '{"sslmode":"verify-full","sslrootcert":"/postgres-ca/ca.crt"}'
+          DB_USER:
+            valueFrom:
+              secretKeyRef:
+                name: romm-postgres-app
+                key: user
+          DISABLE_SETUP_WIZARD: "true"
+          DISABLE_USERPASS_LOGIN: "true"
+          ENABLE_SCHEDULED_RESCAN: "true"
+          OIDC_ALLOW_REGISTRATION: "true"
+          OIDC_CLAIM_ROLES: roles
+          OIDC_CLIENT_ID:
+            valueFrom:
+              secretKeyRef:
+                name: romm-kanidm-oauth2-credentials
+                key: CLIENT_ID
+          OIDC_CLIENT_SECRET:
+            valueFrom:
+              secretKeyRef:
+                name: romm-kanidm-oauth2-credentials
+                key: CLIENT_SECRET
+          OIDC_ENABLED: "true"
+          OIDC_PROVIDER: kanidm
+          OIDC_ROLE_ADMIN: admin
+          OIDC_ROLE_VIEWER: user
+          OIDC_USERNAME_ATTRIBUTE: preferred_username
+          REDIS_SAVE_POLICY: ""
+          ROMM_AUTH_SECRET_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: romm-secrets
+                key: ROMM_AUTH_SECRET_KEY
+          ROMM_DB_DRIVER: postgresql
+          ROMM_PORT: &port 8080
+          ROMM_SESSION_SECURE_COOKIE: "true"
+          SCHEDULED_RESCAN_CRON: "0 3 * * *"
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/heartbeat
+                port: *port
+              periodSeconds: 30
+              timeoutSeconds: 5
+              failureThreshold: 3
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/heartbeat
+                port: *port
+              initialDelaySeconds: 20
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/heartbeat
+                port: *port
+              failureThreshold: 60
+              periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            memory: 4Gi
+service:
+  romm:
+    controller: romm
+    ports:
+      http:
+        port: *port
