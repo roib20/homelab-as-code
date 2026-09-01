@@ -6,6 +6,14 @@ metadata:
 spec:
   domain: "auth.${FQDN_01}"
   tlsSecretName: tls-wildcard
+  containers:
+    - name: kanidm
+      resources:
+        requests:
+          cpu: 25m
+          memory: 128Mi
+        limits:
+          memory: 512Mi
   volumes:
     - name: override-css
       configMap:
