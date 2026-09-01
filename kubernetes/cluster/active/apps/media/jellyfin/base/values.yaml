@@ -1,6 +1,5 @@
 # https://github.com/trueforge-org/truecharts/blob/master/charts/stable/jellyfin/values.yaml
 ---
-TZ: Asia/Jerusalem
 image:
   repository: oci.trueforge.org/containerforge/jellyfin
   pullPolicy: IfNotPresent
