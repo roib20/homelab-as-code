@@ -13,3 +13,13 @@
       options:
         delimiter: "."
         index: 1
+    # KanidmOAuth2Client landing (origin) and redirect URLs
+    - select:
+        kind: KanidmOAuth2Client
+        name: streamystats
+      fieldPaths:
+        - spec.origin
+        - spec.redirectUrl.0
+      options:
+        delimiter: "."
+        index: 1

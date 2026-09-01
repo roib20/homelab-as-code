@@ -6,6 +6,7 @@ resources:
   - external-secrets
   - resources/cnpg-cluster.yaml
   - resources/httproute.yaml
+  - resources/kanidm-oauth2.yaml
 helmCharts:
   - name: app-template
     repo: oci://ghcr.io/bjw-s-labs/helm
