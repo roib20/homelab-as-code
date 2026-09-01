@@ -8,7 +8,7 @@ spec:
   kanidmRef:
     name: idm
     namespace: kaniop
-  displayname: StreamyStats
+  displayname: Streamystats
   image:
     url: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/streamystats.svg
   origin: https://stats.${FQDN_01}
