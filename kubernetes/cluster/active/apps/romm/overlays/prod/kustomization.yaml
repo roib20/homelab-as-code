@@ -25,7 +25,7 @@ configMapGenerator:
   - name: romm-oidc
     literals:
       - AUTH_HOST=auth.${FQDN_01}
-      - ROMM_HOST=romm.${FQDN_01}
+      - ROMM_HOST=games.${FQDN_01}
     options:
       disableNameSuffixHash: true
 replacements:

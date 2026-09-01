@@ -17,7 +17,7 @@ spec:
       name: http-gateway-api
       namespace: envoy-gateway-ingress
   hostnames:
-    - "romm.${FQDN_01}"
+    - "games.${FQDN_01}"
   rules:
     - backendRefs:
         - group: ""
