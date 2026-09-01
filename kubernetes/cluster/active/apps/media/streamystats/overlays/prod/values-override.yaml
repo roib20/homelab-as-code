@@ -1,0 +1,32 @@
+---
+controllers:
+  frontend:
+    pod:
+      annotations:
+        secret.reloader.stakater.com/reload: "streamystats-postgres-app,streamystats-secrets"
+    containers:
+      main:
+        env:
+          DATABASE_URL:
+            secretKeyRef:
+              name: streamystats-postgres-app
+              key: uri
+          SESSION_SECRET:
+            secretKeyRef:
+              name: streamystats-secrets
+              key: SESSION_SECRET
+          NEXT_SERVER_ACTIONS_ENCRYPTION_KEY:
+            secretKeyRef:
+              name: streamystats-secrets
+              key: NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+  job-server:
+    pod:
+      annotations:
+        secret.reloader.stakater.com/reload: "streamystats-postgres-app"
+    containers:
+      main:
+        env:
+          DATABASE_URL:
+            secretKeyRef:
+              name: streamystats-postgres-app
+              key: uri

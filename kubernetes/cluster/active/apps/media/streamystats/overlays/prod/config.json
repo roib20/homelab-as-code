@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "streamystats",
+  "destName": "in-cluster",
+  "destNamespace": "streamystats",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "streamystats"
+}

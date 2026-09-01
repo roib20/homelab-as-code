@@ -1,0 +1,107 @@
+---
+global:
+  createDefaultServiceAccount: false
+defaultPodOptions:
+  automountServiceAccountToken: false
+  enableServiceLinks: false
+  hostUsers: false
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile:
+      type: RuntimeDefault
+controllers:
+  frontend:
+    strategy: RollingUpdate
+    containers:
+      main:
+        image:
+          repository: ghcr.io/fredrikburmester/streamystats-nextjs
+          tag: v2.18.1@sha256:5560e0a936617a56e70f1951700d202b440072dcd2d7ebffd35e7999c388be8b
+        env:
+          NODE_ENV: production
+          HOSTNAME: 0.0.0.0
+          JOB_SERVER_URL: http://streamystats-job-server:3005
+        probes:
+          liveness: &frontendProbe
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/health
+                port: 3000
+          readiness: *frontendProbe
+          startup:
+            enabled: true
+            spec:
+              failureThreshold: 30
+              periodSeconds: 5
+        securityContext: &sec
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 50m
+            memory: 256Mi
+          limits:
+            memory: 1Gi
+  job-server:
+    strategy: RollingUpdate
+    containers:
+      main:
+        image:
+          repository: ghcr.io/fredrikburmester/streamystats-job-server
+          tag: v2.18.1@sha256:fba43363b72e1418418e881aca05a8f85652fde5461ff7d71cda209f5d50ab4a
+        env:
+          NODE_ENV: production
+          HOST: 0.0.0.0
+          PORT: "3005"
+        probes:
+          liveness: &jobProbe
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health
+                port: 3005
+          readiness: *jobProbe
+          startup:
+            enabled: true
+            spec:
+              failureThreshold: 30
+              periodSeconds: 5
+        securityContext: *sec
+        resources:
+          requests:
+            cpu: 50m
+            memory: 320Mi
+          limits:
+            memory: 1Gi
+service:
+  frontend:
+    controller: frontend
+    ports:
+      http:
+        port: 3000
+  job-server:
+    controller: job-server
+    ports:
+      http:
+        port: 3005
+persistence:
+  nextjs-cache:
+    type: emptyDir
+    advancedMounts:
+      frontend:
+        main:
+          - path: /app/apps/nextjs-app/.next/cache
+  tmp:
+    type: emptyDir
+    globalMounts:
+      - path: /tmp

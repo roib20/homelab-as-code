@@ -1,0 +1,22 @@
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmOAuth2Client
+metadata:
+  name: streamystats
+  namespace: streamystats
+spec:
+  kanidmRef:
+    name: idm
+    namespace: kaniop
+  displayname: StreamyStats
+  image:
+    url: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/streamystats.svg
+  origin: https://stats.${FQDN_01}
+  redirectUrl:
+    - https://stats.${FQDN_01}
+  scopeMap:
+    - group: jellyfin-users
+      scopes:
+        - email
+        - openid
+        - profile

@@ -109,6 +109,12 @@ spec:
             - SecRule REQUEST_METHOD "@streq POST" "id:100027,phase:1,pass,nolog,chain"
             - SecRule REQUEST_HEADERS:Host "@rx ^papra\." "chain"
             - SecRule REQUEST_FILENAME "@rx ^/api/organizations/[^/]+/documents$" "ctl:requestBodyAccess=Off"
+            # StreamyStats Next.js Server Actions (login, etc.) POST Content-Type: text/plain, which trips 920420 (content-type policy); allow it for the StreamyStats host (/setup is blocked at the HTTPRoute)
+            - SecRule REQUEST_HEADERS:Host "@rx ^stats\." "id:100028,phase:1,pass,nolog,ctl:ruleRemoveById=920420"
+            # StreamyStats login: passwords contain $, quotes and other metacharacters that trip body rules like 933180 (PHP variable function call); do not inspect the login body
+            - SecRule REQUEST_METHOD "@streq POST" "id:100029,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^stats\." "chain"
+            - SecRule REQUEST_FILENAME "@rx ^/servers/[0-9]+/login$" "ctl:requestBodyAccess=Off"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---
