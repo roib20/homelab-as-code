@@ -10,6 +10,7 @@ cnpg:
 redis:
   resources:
     limits:
+      cpu: null
       memory: 128Mi
     requests:
       cpu: 15m
@@ -23,6 +24,7 @@ workload:
         main:
           resources:
             limits:
+              cpu: null
               memory: 512Mi
             requests:
               cpu: 10m

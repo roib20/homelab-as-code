@@ -38,6 +38,7 @@ workload:
         broadcastproxy:
           resources:
             limits:
+              cpu: null
               memory: 64Mi
             requests:
               cpu: 10m
@@ -48,6 +49,7 @@ workload:
         main:
           resources:
             limits:
+              cpu: null
               memory: 8Gi
             requests:
               cpu: 150m

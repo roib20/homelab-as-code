@@ -38,6 +38,7 @@ persistence:
     existingClaim: smb-mediadata-rwx
 resources:
   limits:
+    cpu: null
     memory: 512Mi
   requests:
     cpu: 100m

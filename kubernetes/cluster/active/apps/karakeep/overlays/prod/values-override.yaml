@@ -12,6 +12,7 @@ controllers:
       chrome:
         resources:
           limits:
+            cpu: null
             memory: 512Mi
           requests:
             cpu: 25m
