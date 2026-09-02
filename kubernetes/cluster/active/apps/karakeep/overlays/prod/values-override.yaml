@@ -13,9 +13,9 @@ controllers:
         resources:
           limits:
             cpu: null
-            memory: 512Mi
+            memory: 1Gi
           requests:
-            cpu: 25m
+            cpu: 10m
             memory: 128Mi
   karakeep:
     containers:
@@ -49,9 +49,9 @@ controllers:
               name: "karakeep-openai-api-key"
         resources:
           limits:
-            memory: 768Mi
+            memory: 1Gi
           requests:
-            cpu: 50m
+            cpu: 25m
             memory: 384Mi
     pod:
       annotations:
@@ -63,7 +63,7 @@ meilisearch:
     secret.reloader.stakater.com/reload: "karakeep-meilisearch"
   resources:
     limits:
-      memory: 128Mi
+      memory: 1Gi
     requests:
       cpu: 10m
-      memory: 32Mi
+      memory: 128Mi
