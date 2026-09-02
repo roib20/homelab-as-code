@@ -11,14 +11,9 @@ controllers:
             secretKeyRef:
               name: streamystats-postgres-app
               key: uri
-          SESSION_SECRET:
-            secretKeyRef:
+        envFrom:
+          - secretRef:
               name: streamystats-secrets
-              key: SESSION_SECRET
-          NEXT_SERVER_ACTIONS_ENCRYPTION_KEY:
-            secretKeyRef:
-              name: streamystats-secrets
-              key: NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
   job-server:
     pod:
       annotations:
