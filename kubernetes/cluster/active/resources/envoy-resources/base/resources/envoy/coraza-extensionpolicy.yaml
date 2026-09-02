@@ -115,6 +115,10 @@ spec:
             - SecRule REQUEST_METHOD "@streq POST" "id:100029,phase:1,pass,nolog,chain"
             - SecRule REQUEST_HEADERS:Host "@rx ^stats\." "chain"
             - SecRule REQUEST_FILENAME "@rx ^/servers/[0-9]+/login$" "ctl:requestBodyAccess=Off"
+            # Jellyfin image upload: content-type and body trip the WAF; allow it on the Images endpoint
+            - SecRule REQUEST_METHOD "@rx ^(POST|PUT)$" "id:100030,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^media\." "chain"
+            - SecRule REQUEST_FILENAME "@rx ^/Items/[^/]+/Images/" "ctl:ruleRemoveById=920420,ctl:requestBodyAccess=Off"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---
