@@ -1,0 +1,35 @@
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmOAuth2Client
+metadata:
+  name: romm
+  namespace: romm
+spec:
+  kanidmRef:
+    name: idm
+    namespace: kaniop
+  displayname: RomM
+  allowInsecureClientDisablePkce: true
+  image:
+    url: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/romm.svg
+  origin: https://games.${FQDN_01}
+  redirectUrl:
+    - https://games.${FQDN_01}/api/oauth/openid
+  scopeMap:
+    - group: romm-users
+      scopes:
+        - email
+        - openid
+        - profile
+        - roles
+  claimMap:
+    - name: roles
+      joinStrategy: array
+      valuesMap:
+        - group: romm-admins
+          values:
+            - admin
+        - group: romm-users
+          values:
+            - user
+  preferShortUsername: true
