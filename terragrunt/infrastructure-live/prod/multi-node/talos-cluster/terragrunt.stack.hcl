@@ -146,7 +146,7 @@ locals {
       name      = "talos-cloud-controller-manager"
       namespace = "kube-system"
       # renovate: datasource=docker depName=ghcr.io/siderolabs/charts/talos-cloud-controller-manager
-      chart_version   = "0.5.6"
+      chart_version   = "0.5.7"
       helm_repository = "oci://ghcr.io/siderolabs/charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/talos-cloud-controller-manager/base/values.yaml")
     }
