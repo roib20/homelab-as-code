@@ -190,7 +190,7 @@ controllers:
       app:
         image:
           repository: ghcr.io/valkey-io/valkey
-          tag: 9.1.1
+          tag: 9.1.2
         probes:
           liveness:
             enabled: true
