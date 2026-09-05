@@ -21,7 +21,7 @@ locals {
     kubernetes_version    = "1.37.0",
     initial_talos_version = "1.12.5", # Do not change this value after initial deployment
     # renovate: datasource=github-releases depName=siderolabs/talos extractVersion=^v(?<version>.+)$
-    talos_version = "1.13.9", # Change this value to safely upgrade the Talos version
+    talos_version = "1.14.0", # Change this value to safely upgrade the Talos version
     # renovate: datasource=docker depName=ghcr.io/external-secrets/charts/external-secrets
     external-secrets_version = "2.10.0",
     # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
