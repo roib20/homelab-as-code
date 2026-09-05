@@ -10,7 +10,7 @@ ARG TERRAGRUNT_VERSION=1.1.4
 # renovate: datasource=github-releases depName=go-task/task
 ARG TASK_VERSION=3.53.1
 # renovate: datasource=github-releases depName=siderolabs/talos
-ARG TALOS_VERSION=1.13.9
+ARG TALOS_VERSION=1.14.0
 # renovate: datasource=github-releases depName=kubernetes/kubernetes
 ARG KUBECTL_VERSION=1.37.0
 # renovate: datasource=github-releases depName=helm/helm
