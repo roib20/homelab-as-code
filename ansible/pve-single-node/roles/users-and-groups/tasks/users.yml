@@ -16,7 +16,7 @@
   become: true
   ansible.builtin.user:
     comment: "Personal User"
-    name: "{{ ansible_user_id }}"
+    name: "{{ ansible_facts[\"user_id\"] }}"
     password: "!"
     update_password: on_create
     create_home: true

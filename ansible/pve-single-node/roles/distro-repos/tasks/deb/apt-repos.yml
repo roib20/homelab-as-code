@@ -1,6 +1,6 @@
 ---
 - name: Add Debian repositories
-  when: ansible_os_family == 'Debian'
+  when: ansible_facts["os_family"] == 'Debian'
   become: true
   block:
     - ansible.builtin.file:
@@ -14,7 +14,7 @@
         state: present
         types: [deb]
         uris: "http://deb.debian.org/debian"
-        suites: ["{{ ansible_distribution_release|lower }}", "{{ ansible_distribution_release|lower }}-updates", "{{ ansible_distribution_release|lower }}-backports"]
+        suites: ["{{ ansible_facts[\"distribution_release\"]|lower }}", "{{ ansible_facts[\"distribution_release\"]|lower }}-updates", "{{ ansible_facts[\"distribution_release\"]|lower }}-backports"]
         components: [main, contrib, non-free, non-free-firmware]
         signed_by: "/usr/share/keyrings/debian-archive-keyring.gpg"
         enabled: true
@@ -23,56 +23,56 @@
         state: present
         types: [deb]
         uris: "http://deb.debian.org/debian-security"
-        suites: ["{{ ansible_distribution_release|lower }}-security"]
+        suites: ["{{ ansible_facts[\"distribution_release\"]|lower }}-security"]
         components: [main, contrib, non-free, non-free-firmware]
         signed_by: "/usr/share/keyrings/debian-archive-keyring.gpg"
         enabled: true
 - name: Disable non-deb822 Proxmox repositories
-  when: ansible_os_family == 'Debian'
+  when: ansible_facts["os_family"] == 'Debian'
   become: true
   block:
     - ansible.builtin.apt_repository:
-        repo: "deb https://enterprise.proxmox.com/{{ ansible_distribution|lower }}/pve {{ ansible_distribution_release|lower }} pve-enterprise"
+        repo: "deb https://enterprise.proxmox.com/{{ ansible_facts[\"distribution\"]|lower }}/pve {{ ansible_facts[\"distribution_release\"]|lower }} pve-enterprise"
         state: absent
         filename: /etc/apt/sources.list.d/pve-enterprise.list
     - ansible.builtin.apt_repository:
-        repo: "deb http://download.proxmox.com/{{ ansible_distribution|lower }}/pve {{ ansible_distribution_release|lower }} pve-no-subscription"
+        repo: "deb http://download.proxmox.com/{{ ansible_facts[\"distribution\"]|lower }}/pve {{ ansible_facts[\"distribution_release\"]|lower }} pve-no-subscription"
         state: absent
         filename: pve-install-repo
     - block:
         - ansible.builtin.apt_repository:
-            repo: "deb https://enterprise.proxmox.com/{{ ansible_distribution|lower }}/ceph-squid {{ ansible_distribution_release|lower }} enterprise"
+            repo: "deb https://enterprise.proxmox.com/{{ ansible_facts[\"distribution\"]|lower }}/ceph-squid {{ ansible_facts[\"distribution_release\"]|lower }} enterprise"
             state: absent
             filename: ceph
         - ansible.builtin.apt_repository:
-            repo: "deb http://download.proxmox.com/{{ ansible_distribution|lower }}/ceph-squid {{ ansible_distribution_release|lower }} no-subscription"
+            repo: "deb http://download.proxmox.com/{{ ansible_facts[\"distribution\"]|lower }}/ceph-squid {{ ansible_facts[\"distribution_release\"]|lower }} no-subscription"
             state: absent
             filename: ceph
     - ansible.builtin.apt_repository:
-        repo: "deb http://download.proxmox.com/{{ ansible_distribution|lower }}/pve {{ ansible_distribution_release|lower }} pvetest"
+        repo: "deb http://download.proxmox.com/{{ ansible_facts[\"distribution\"]|lower }}/pve {{ ansible_facts[\"distribution_release\"]|lower }} pvetest"
         state: absent
         filename: pvetest-for-beta.list
 - name: Add Proxmox deb822 repositories
-  when: ansible_os_family == 'Debian'
+  when: ansible_facts["os_family"] == 'Debian'
   become: true
   block:
     - name: Disable 'pve-enterprise' repository
       ansible.builtin.deb822_repository:
         name: pve-enterprise
         types: [deb]
-        uris: "https://enterprise.proxmox.com/{{ ansible_distribution|lower }}/pve"
-        suites: ["{{ ansible_distribution_release|lower }}"]
+        uris: "https://enterprise.proxmox.com/{{ ansible_facts[\"distribution\"]|lower }}/pve"
+        suites: ["{{ ansible_facts[\"distribution_release\"]|lower }}"]
         components: [pve-enterprise]
-        signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release|lower }}.gpg"
+        signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_facts[\"distribution_release\"]|lower }}.gpg"
         enabled: false
     - name: Enable 'pve-no-subscription' repository
       ansible.builtin.deb822_repository:
         name: pve-no-subscription
         types: [deb]
-        uris: "http://download.proxmox.com/{{ ansible_distribution|lower }}/pve"
-        suites: ["{{ ansible_distribution_release|lower }}"]
+        uris: "http://download.proxmox.com/{{ ansible_facts[\"distribution\"]|lower }}/pve"
+        suites: ["{{ ansible_facts[\"distribution_release\"]|lower }}"]
         components: [pve-no-subscription]
-        signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release|lower }}.gpg"
+        signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_facts[\"distribution_release\"]|lower }}.gpg"
         enabled: true
     - name: Correct 'ceph' package sources
       block:
@@ -80,31 +80,31 @@
           ansible.builtin.deb822_repository:
             name: ceph-enterprise
             types: [deb]
-            uris: "https://enterprise.proxmox.com/{{ ansible_distribution|lower }}/ceph-squid"
-            suites: ["{{ ansible_distribution_release|lower }}"]
+            uris: "https://enterprise.proxmox.com/{{ ansible_facts[\"distribution\"]|lower }}/ceph-squid"
+            suites: ["{{ ansible_facts[\"distribution_release\"]|lower }}"]
             components: [enterprise]
-            signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release|lower }}.gpg"
+            signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_facts[\"distribution_release\"]|lower }}.gpg"
             enabled: false
         - name: Enable 'ceph' no-subscription repository
           ansible.builtin.deb822_repository:
             name: ceph-no-subscription
             types: [deb]
-            uris: "http://download.proxmox.com/{{ ansible_distribution|lower }}/ceph-squid"
-            suites: ["{{ ansible_distribution_release|lower }}"]
+            uris: "http://download.proxmox.com/{{ ansible_facts[\"distribution\"]|lower }}/ceph-squid"
+            suites: ["{{ ansible_facts[\"distribution_release\"]|lower }}"]
             components: [no-subscription]
-            signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release|lower }}.gpg"
+            signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_facts[\"distribution_release\"]|lower }}.gpg"
             enabled: true
     - name: Disable 'pvetest' repository
       ansible.builtin.deb822_repository:
         name: pvetest
         types: [deb]
-        uris: "http://download.proxmox.com/{{ ansible_distribution|lower }}/pve"
-        suites: ["{{ ansible_distribution_release|lower }}"]
+        uris: "http://download.proxmox.com/{{ ansible_facts[\"distribution\"]|lower }}/pve"
+        suites: ["{{ ansible_facts[\"distribution_release\"]|lower }}"]
         components: [pvetest]
-        signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release|lower }}.gpg"
+        signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_facts[\"distribution_release\"]|lower }}.gpg"
         enabled: false
 - name: Add additional APT repositories
-  when: ansible_os_family == 'Debian'
+  when: ansible_facts["os_family"] == 'Debian'
   become: true
   block:
     - name: Add Docker APT repository
@@ -112,18 +112,18 @@
         name: docker
         state: present
         types: [deb]
-        uris: "https://download.docker.com/linux/{{ ansible_distribution|lower }}"
-        suites: ["{{ ansible_distribution_release|lower }}"]
+        uris: "https://download.docker.com/linux/{{ ansible_facts[\"distribution\"]|lower }}"
+        suites: ["{{ ansible_facts[\"distribution_release\"]|lower }}"]
         components: [stable]
-        signed_by: "https://download.docker.com/linux/{{ ansible_distribution|lower }}/gpg"
+        signed_by: "https://download.docker.com/linux/{{ ansible_facts[\"distribution\"]|lower }}/gpg"
         enabled: true
     - name: Add Tailscale stable APT repository
       ansible.builtin.deb822_repository:
         name: tailscale-stable
         types: [deb]
-        uris: "https://pkgs.tailscale.com/stable/{{ ansible_distribution|lower }}"
-        signed_by: "https://pkgs.tailscale.com/stable/{{ ansible_distribution|lower }}/{{ ansible_distribution_release|lower }}.noarmor.gpg"
-        suites: ["{{ ansible_distribution_release|lower }}"]
+        uris: "https://pkgs.tailscale.com/stable/{{ ansible_facts[\"distribution\"]|lower }}"
+        signed_by: "https://pkgs.tailscale.com/stable/{{ ansible_facts[\"distribution\"]|lower }}/{{ ansible_facts[\"distribution_release\"]|lower }}.noarmor.gpg"
+        suites: ["{{ ansible_facts[\"distribution_release\"]|lower }}"]
         components: [main]
         state: present
         enabled: true

@@ -26,7 +26,7 @@
         docker_compose_package_state: latest
         docker_install_compose: false
         docker_service_enabled: true
-        docker_users: ["{{ ansible_user_id }}"]
+        docker_users: ["{{ ansible_facts[\"user_id\"] }}"]
     - name: Install packages
       ansible.builtin.include_role:
         name: install-packages

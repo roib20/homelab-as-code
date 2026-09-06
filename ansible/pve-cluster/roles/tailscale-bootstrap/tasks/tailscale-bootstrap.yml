@@ -22,7 +22,7 @@
 - name: Linux optimizations for subnet routers and exit nodes
   become: true
   vars:
-    tailscale_netdev: "{{ ansible_default_ipv4.interface }}"
+    tailscale_netdev: "{{ ansible_facts[\"default_ipv4\"][\"interface\"] }}"
   block:
     - name: Ensure networkd-dispatcher directory exists
       ansible.builtin.file:
