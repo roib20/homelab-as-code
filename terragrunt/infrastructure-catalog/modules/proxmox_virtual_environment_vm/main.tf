@@ -260,7 +260,6 @@ resource "proxmox_virtual_environment_vm" "vm" {
     content {
       bridge       = try(network_device.value.bridge, "vmbr0")
       disconnected = try(network_device.value.disconnected, false)
-      enabled      = try(network_device.value.enabled, true)
       firewall     = try(network_device.value.firewall, false)
       mac_address  = try(network_device.value.mac_address, null)
       model        = try(network_device.value.model, "virtio")
