@@ -4,7 +4,7 @@
 #   register: brew_cleanup_output
 #   changed_when: "'Removing:' in brew_cleanup_output.stdout"
 - name: "Update Homebrew and upgrade all packages: `brew update && brew upgrade`"
-  become_user: "{{ ansible_user_id }}"
+  become_user: "{{ ansible_facts[\"user_id\"] }}"
   community.general.homebrew:
     update_homebrew: true
     upgrade_all: true

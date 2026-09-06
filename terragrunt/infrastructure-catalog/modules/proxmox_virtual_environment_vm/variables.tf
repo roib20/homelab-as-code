@@ -331,7 +331,6 @@ variable "network_devices" {
   type = list(object({
     bridge       = optional(string, "vmbr0")  # (Optional) Network bridge name (defaults to `vmbr0`).
     disconnected = optional(bool, false)      # (Optional) Disconnect NIC from the network (defaults to `false`).
-    enabled      = optional(bool, true)       # (Optional) Enable network interface (defaults to `true`).
     firewall     = optional(bool, false)      # (Optional) Apply Proxmox firewall rules (defaults to `false`).
     mac_address  = optional(string)           # (Optional) MAC address for the NIC.
     model        = optional(string, "virtio") # (Optional) Network adapter model: `virtio`, `e1000`, `vmxnet3`, etc. (defaults to `virtio`).

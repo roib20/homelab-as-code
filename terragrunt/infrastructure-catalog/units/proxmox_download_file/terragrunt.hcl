@@ -12,7 +12,7 @@ locals {
 }
 
 terraform {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/modules/proxmox_virtual_environment_download_file"
+  source = "${local.terragrunt_dir}/infrastructure-catalog/modules/proxmox_download_file"
 }
 
 inputs = {

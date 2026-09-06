@@ -1,9 +1,9 @@
 ---
-- when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+- when: ansible_facts["distribution"] == 'Debian' or ansible_facts["distribution"] == 'Ubuntu'
   block:
     - ansible.builtin.include_tasks:
         file: deb/apt-upgrade.yml
-- when: ansible_distribution == 'Fedora' and ansible_cmdline.ostree is not defined
+- when: ansible_facts["distribution"] == 'Fedora' and ansible_facts["cmdline"].ostree is not defined
   block:
     - ansible.builtin.include_tasks:
         file: rpm/dnf-upgrade.yml

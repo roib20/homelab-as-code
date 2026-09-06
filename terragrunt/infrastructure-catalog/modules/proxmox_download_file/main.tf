@@ -8,7 +8,7 @@ locals {
   download_file_name = var.url != null ? try(var.file_name, null) : local.talos_file_name
 }
 
-resource "proxmox_virtual_environment_download_file" "download" {
+resource "proxmox_download_file" "download" {
   for_each = toset(var.node_names)
 
   node_name = each.key # Required: Proxmox node name

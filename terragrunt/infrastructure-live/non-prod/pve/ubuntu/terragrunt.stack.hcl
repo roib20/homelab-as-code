@@ -29,7 +29,7 @@ unit "cloud-config" {
 }
 
 unit "download_file" {
-  source = "${local.terragrunt_dir}/infrastructure-catalog/units/proxmox_virtual_environment_download_file"
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/proxmox_download_file"
 
   path = "download_file"
 

@@ -1,5 +1,5 @@
 ---
-- when: ansible_os_family == "Debian"
+- when: ansible_facts["os_family"] == "Debian"
   block:
     - name: Ensure localisation files for '{{ config_system_locale }}' are available
       community.general.locale_gen:
