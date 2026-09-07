@@ -92,6 +92,7 @@ controllers:
           PUID: "1000"
           PGID: "1000"
           NODE_MAX_OLD_SPACE_SIZE: "2048"
+          DISABLE_LOCAL_AUTH: "false"
         probes:
           liveness:
             enabled: true
