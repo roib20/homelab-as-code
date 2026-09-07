@@ -29,6 +29,9 @@ spec:
             - name: krr
               image: robustadev/krr:v1.30.0@sha256:b8d782e568c7d23aac6460e69dd136e44eca67e8cbfce19915197a48dc28e23f
               imagePullPolicy: IfNotPresent
+              env:
+                - name: FORCE_COLOR
+                  value: "1"
               command: [python, krr.py, simple]
               args: [--history_duration, "336", --max-workers, "3", --prometheus-url, "http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428", --width, "2048"]
               securityContext:
