@@ -9,3 +9,20 @@ grafana:
   sidecar:
     dashboards:
       searchNamespace: ALL
+
+# Drop extra node labels added by Talos, NFD and device plugins.
+kubelet:
+  vmScrape:
+    spec:
+      relabelConfigs:
+        - sourceLabels:
+            - __meta_kubernetes_node_name
+          targetLabel: node
+        - action: labelmap
+          regex: __meta_kubernetes_node_label_(.+)
+        - action: labeldrop
+          regex: (extensions_talos_dev_.+|feature_node_kubernetes_io_.+|gpu_intel_com_.+|intel_feature_node_kubernetes_io_.+)
+        - sourceLabels: [__metrics_path__]
+          targetLabel: metrics_path
+        - replacement: kubelet
+          targetLabel: job
