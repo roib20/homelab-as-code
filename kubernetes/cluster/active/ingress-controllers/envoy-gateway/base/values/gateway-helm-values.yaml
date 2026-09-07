@@ -1,3 +1,5 @@
 ---
 global:
   imageRegistry: mirror.gcr.io
+crds:
+  enabled: false
