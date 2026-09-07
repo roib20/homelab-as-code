@@ -1,0 +1,8 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - resources/clusterrole.yaml
+  - resources/clusterrolebinding.yaml
+  - resources/cronjob.yaml
+  - resources/serviceaccount.yaml

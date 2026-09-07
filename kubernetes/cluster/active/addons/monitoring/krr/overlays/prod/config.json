@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "krr",
+  "destName": "in-cluster",
+  "destNamespace": "krr",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "krr"
+}

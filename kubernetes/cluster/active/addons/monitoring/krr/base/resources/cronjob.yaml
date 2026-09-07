@@ -1,0 +1,45 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: krr
+  namespace: krr
+spec:
+  schedule: "0 4 * * 0"
+  timeZone: Asia/Jerusalem
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      ttlSecondsAfterFinished: 604800  # 7 days
+      template:
+        spec:
+          serviceAccountName: krr
+          restartPolicy: Never
+          enableServiceLinks: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: krr
+              image: robustadev/krr:v1.30.0@sha256:b8d782e568c7d23aac6460e69dd136e44eca67e8cbfce19915197a48dc28e23f
+              imagePullPolicy: IfNotPresent
+              command: [python, krr.py, simple]
+              args: [--history_duration, "336", --max-workers, "3", --prometheus-url, "http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428", --width, "2048"]
+              securityContext:
+                runAsNonRoot: true
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 512Mi
+                limits:
+                  memory: 1Gi
