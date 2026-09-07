@@ -18,9 +18,14 @@ spec:
               env:
                 - name: FORCE_COLOR
                   value: "1"
+                - name: MPLCONFIGDIR
+                  value: "/tmp/matplotlib"
               image: robustadev/krr:v1.30.0@sha256:b8d782e568c7d23aac6460e69dd136e44eca67e8cbfce19915197a48dc28e23f
               imagePullPolicy: IfNotPresent
               name: krr
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
               resources:
                 limits:
                   memory: 1Gi
@@ -42,6 +47,9 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           serviceAccountName: krr
+          volumes:
+            - name: "tmp"
+              emptyDir: {}
       ttlSecondsAfterFinished: 604800  # 7 days
   schedule: "0 4 * * 0"
   successfulJobsHistoryLimit: 1
