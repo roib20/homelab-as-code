@@ -26,3 +26,8 @@ kubelet:
           targetLabel: metrics_path
         - replacement: kubelet
           targetLabel: job
+
+vmsingle:
+  spec:
+    extraArgs:
+      search.maxConcurrentRequests: "4"
