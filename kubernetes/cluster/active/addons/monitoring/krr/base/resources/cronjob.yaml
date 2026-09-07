@@ -13,7 +13,7 @@ spec:
       template:
         spec:
           containers:
-            - args: [--history_duration, "336", --max-workers, "3", --prometheus-url, "http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428", --width, "2048"]
+            - args: [--history_duration, "336", --max-workers, "3", --prometheus-url, "http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428", --quiet, --width, "2048"]
               command: [python, krr.py, simple]
               env:
                 - name: FORCE_COLOR
