@@ -54,9 +54,6 @@ locals {
   extraManifests = [
     # External Secrets CRDs
     "https://raw.githubusercontent.com/external-secrets/external-secrets/v${var.versions.external-secrets_version}/deploy/crds/bundle.yaml",
-
-    # Gateway API CRDs: https://gateway-api.sigs.k8s.io/guides/getting-started/#installing-gateway-api
-    "https://github.com/kubernetes-sigs/gateway-api/releases/download/v${var.versions.gateway-api_version}/${var.versions.gateway-api_channel}-install.yaml",
   ]
 }
 
