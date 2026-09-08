@@ -83,61 +83,61 @@ tts_provider = "edge.brian"
 
 [channels]
 ack_reactions = true
-show_tool_calls = true
+show_tool_calls = false
 
 [channels.telegram.arr_bot]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.chef]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.coach]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.default]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.household]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.media_1]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.media_2]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.smart_homer]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.travel_agent]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [conversational_ai]
 supported_languages = ["en", "he"]
