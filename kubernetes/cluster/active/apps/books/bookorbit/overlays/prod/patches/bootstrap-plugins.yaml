@@ -11,6 +11,7 @@
         set -eu
         mkdir -p "/data/plugins/indexers"
         for repository in bookorbit-open-plugins bookorbit-plugins-extra; do
+          rm -rf "/tmp/${repository}"
           git clone --depth 1 \
             "https://github.com/orbit-plugins/${repository}.git" \
             "/tmp/${repository}"
