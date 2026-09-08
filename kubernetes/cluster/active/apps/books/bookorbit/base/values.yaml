@@ -59,26 +59,6 @@ controllers:
                 name: bookorbit-postgres-app
                 key: uri
           DATABASE_URL: "$(DATABASE_CONN_URI)?sslmode=verify-full&sslrootcert=/postgres-ca/ca.crt"
-          JWT_SECRET:
-            valueFrom:
-              secretKeyRef:
-                name: bookorbit-secrets
-                key: JWT_SECRET
-          SETUP_BOOTSTRAP_TOKEN:
-            valueFrom:
-              secretKeyRef:
-                name: bookorbit-secrets
-                key: SETUP_BOOTSTRAP_TOKEN
-          EMAIL_ENCRYPTION_KEY:
-            valueFrom:
-              secretKeyRef:
-                name: bookorbit-secrets
-                key: EMAIL_ENCRYPTION_KEY
-          MIGRATION_ENCRYPTION_KEY:
-            valueFrom:
-              secretKeyRef:
-                name: bookorbit-secrets
-                key: MIGRATION_ENCRYPTION_KEY
           # Public/external URL — used for OIDC redirect-URI validation
           # (${APP_URL}/oauth2-callback), password-reset links, and Kobo endpoints.
           # Must be the browser-facing origin, not the in-cluster Service URL.
@@ -93,6 +73,9 @@ controllers:
           PGID: "1000"
           NODE_MAX_OLD_SPACE_SIZE: "2048"
           DISABLE_LOCAL_AUTH: "false"
+        envFrom:
+          - secretRef:
+              name: bookorbit-secrets
         probes:
           liveness:
             enabled: true

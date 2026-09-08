@@ -1,0 +1,47 @@
+---
+- op: add
+  path: /spec/template/spec/initContainers/-
+  value:
+    name: bootstrap-plugins
+    image: alpine/git:2.54.0@sha256:6f3b5029566da8e90b24945933dcd806be866b64b1e706f51828bf84faccf21b
+    command:
+      - /bin/sh
+      - -c
+      - |
+        set -eu
+        mkdir -p "/data/plugins/indexers"
+        for repository in bookorbit-open-plugins bookorbit-plugins-extra; do
+          rm -rf "/tmp/${repository}"
+          git clone --depth 1 \
+            "https://github.com/orbit-plugins/${repository}.git" \
+            "/tmp/${repository}"
+          find "/tmp/${repository}" -type f -name "index.mjs" -print0 |
+            while IFS= read -r -d '' plugin; do
+              name=$(basename "$(dirname "${plugin}")")
+              mkdir -p "/data/plugins/indexers/${name}"
+              cp "${plugin}" "/data/plugins/indexers/${name}/index.mjs"
+              echo "Installed ${name} from ${repository}"
+            done
+        done
+    volumeMounts:
+      - name: "data"
+        mountPath: "/data"
+      - name: "tmp"
+        mountPath: "/tmp"
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      capabilities:
+        drop:
+          - ALL
+      seccompProfile:
+        type: RuntimeDefault
+    resources:
+      requests:
+        cpu: 5m
+        memory: 16Mi
+      limits:
+        memory: 64Mi
