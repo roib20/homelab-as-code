@@ -25,12 +25,12 @@ configMapGenerator:
 replacements:
   - path: replacements.yaml
 patches:
-  - path: patches/deployment-bootstrap-oidc.yaml
+  - path: patches/bootstrap-oidc.yaml
     target:
       kind: Deployment
       name: bookorbit
       namespace: bookorbit
-  - path: patches/deployment-bootstrap-plugins.yaml
+  - path: patches/bootstrap-plugins.yaml
     target:
       kind: Deployment
       name: bookorbit

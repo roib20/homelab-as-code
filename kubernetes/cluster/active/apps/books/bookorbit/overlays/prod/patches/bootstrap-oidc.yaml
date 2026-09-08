@@ -15,16 +15,16 @@
         CONN="${POSTGRES_URI}?sslmode=verify-full&sslrootcert=/postgres-ca/ca.crt&connect_timeout=10"
         # Wait until the app's migrate.js has created the table.
         echo "bootstrap-oidc: waiting for oidc_providers schema..."
-        until psql "$CONN" -tAc "SELECT to_regclass('public.oidc_providers')" 2>/dev/null | grep -q oidc_providers
+        until psql "${CONN}" -tAc "SELECT to_regclass('public.oidc_providers')" 2>/dev/null | grep -q oidc_providers
         do
           sleep 5
         done
         echo "bootstrap-oidc: schema present; applying config..."
-        until psql "$CONN" \
+        until psql "${CONN}" \
             -v ON_ERROR_STOP=1 \
-            -v issuer="$ISSUER" \
-            -v client_id="$OIDC_CLIENT_ID" \
-            -v client_secret="$OIDC_CLIENT_SECRET" \
+            -v issuer="${ISSUER}" \
+            -v client_id="${OIDC_CLIENT_ID}" \
+            -v client_secret="${OIDC_CLIENT_SECRET}" \
             -f /oidc/oidc.sql
         do
           echo "bootstrap-oidc: apply failed, retrying in 10s..."
@@ -59,10 +59,10 @@
         mountPath: /postgres-ca
         readOnly: true
       - name: oidc-config
-        mountPath: /oidc
+        mountPath: "/oidc"
         readOnly: true
       - name: tmp
-        mountPath: /tmp
+        mountPath: "/tmp"
     securityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
