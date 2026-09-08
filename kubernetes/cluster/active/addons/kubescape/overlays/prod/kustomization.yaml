@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+helmCharts:
+  - name: kubescape-operator
+    repo: https://kubescape.github.io/helm-charts
+    version: 1.40.4
+    releaseName: kubescape
+    namespace: kubescape
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true

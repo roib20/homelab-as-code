@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "kubescape",
+  "destName": "in-cluster",
+  "destNamespace": "kubescape",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "kubescape"
+}

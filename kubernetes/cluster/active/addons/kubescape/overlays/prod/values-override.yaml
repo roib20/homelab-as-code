@@ -1,0 +1,69 @@
+---
+capabilities:
+  admissionController: disable
+  agentRuntimePosture: disable
+  autoUpgrading: disable
+  configurationScan: disable
+  continuousScan: disable
+  httpDetection: disable
+  kubescapeOffline: disable
+  malwareDetection: disable
+  manageWorkloads: disable
+  networkEventsStreaming: disable
+  networkPolicyService: enable
+  nodeProfileService: disable
+  nodeSbomGeneration: disable
+  nodeScan: disable
+  operator: disable
+  prometheusExporter: disable
+  relevancy: disable
+  remediation: disable
+  riskAcceptance: disable
+  runtimeDetection: disable
+  runtimeObservability: disable
+  scanEmbeddedSBOMs: disable
+  seccompProfileService: disable
+  syncSBOM: disable
+  vexGeneration: disable
+  vulnerabilityScan: disable
+
+certificates:
+  strategy: initContainer
+
+clusterName: talos
+
+configurations:
+  persistence: enable
+  prometheusAnnotations: disable
+
+global:
+  enableClusterWideSecretAccess: false
+
+nodeAgent:
+  config:
+    hostSensor:
+      enabled: false
+    maxLearningPeriod: 168h
+    tracers:
+      bpf: disable
+      capSys: disable
+      dns: enable
+      exec: disable
+      exit: disable
+      fork: disable
+      hardlink: disable
+      http: disable
+      iouring: disable
+      kmod: disable
+      network: enable
+      open: disable
+      ptrace: disable
+      randomx: disable
+      seccomp: disable
+      ssh: disable
+      symlink: disable
+      top: disable
+      unshare: disable
+
+storage:
+  enabled: true
