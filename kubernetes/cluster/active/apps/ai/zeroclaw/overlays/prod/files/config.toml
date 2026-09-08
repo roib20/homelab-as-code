@@ -83,61 +83,61 @@ tts_provider = "edge.brian"
 
 [channels]
 ack_reactions = true
-show_tool_calls = true
+show_tool_calls = false
 
 [channels.telegram.arr_bot]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.chef]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.coach]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.default]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.household]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.media_1]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.media_2]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.smart_homer]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [channels.telegram.travel_agent]
 bot_token = ""
 enabled = true
 mention_only = true
-stream_mode = "off"
+stream_mode = "partial"
 
 [conversational_ai]
 supported_languages = ["en", "he"]
@@ -353,6 +353,7 @@ voice = "en-US-EmmaMultilingualNeural"
 # and search (including download-triggering) flows auto-approve; queue deletes
 # and remaining mutating operations fall through to confirmation.
 auto_approve = [
+  "ask_user",
   "calculator",
   "content_search",
   "file_edit",
@@ -368,8 +369,10 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "sessions_list",
   "tool_list",
   "tool_search",
+  "ToDoWrite",
   "weather",
   "web_fetch",
   "web_search_tool",
@@ -496,6 +499,7 @@ allowed_commands = [
   "rg"
 ]
 auto_approve = [
+  "ask_user",
   "calculator",
   "content_search",
   "file_edit",
@@ -511,8 +515,10 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "sessions_list",
   "tool_list",
   "tool_search",
+  "ToDoWrite",
   "weather",
   "web_fetch",
   "web_search_tool",
@@ -557,6 +563,7 @@ level = "supervised"
 # Reads and low-risk writes (shopping, meal plans, cook logs) auto-approve;
 # recipe/food/unit edits, imports, deletes and merges fall through to confirmation.
 auto_approve = [
+  "ask_user",
   "calculator",
   "content_search",
   "file_edit",
@@ -572,8 +579,10 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "sessions_list",
   "tool_list",
   "tool_search",
+  "ToDoWrite",
   "weather",
   "web_fetch",
   "web_search_tool",
@@ -650,6 +659,7 @@ level = "supervised"
 # Read-only Garmin and calendar tools auto-approve; all other tools require
 # confirmation.
 auto_approve = [
+  "ask_user",
   "calculator",
   "content_search",
   "file_edit",
@@ -665,8 +675,10 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "sessions_list",
   "tool_list",
   "tool_search",
+  "ToDoWrite",
   "weather",
   "web_fetch",
   "web_search_tool",
@@ -774,6 +786,7 @@ level = "supervised"
 
 [risk_profiles.household]
 auto_approve = [
+  "ask_user",
   "calculator",
   "content_search",
   "file_edit",
@@ -789,8 +802,10 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "sessions_list",
   "tool_list",
   "tool_search",
+  "ToDoWrite",
   "weather",
   "web_fetch",
   "web_search_tool",
@@ -810,6 +825,7 @@ level = "supervised"
 # Floppy reads and safe logging writes (track, progress, play logs) auto-approve;
 # untrack, list/tag edits, imports and settings changes fall through to confirmation.
 auto_approve = [
+  "ask_user",
   "calculator",
   "content_search",
   "file_edit",
@@ -825,8 +841,10 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "sessions_list",
   "tool_list",
   "tool_search",
+  "ToDoWrite",
   "weather",
   "web_fetch",
   "web_search_tool",
@@ -841,6 +859,7 @@ auto_approve = [
   "floppy_1__log_episode_play",
   "floppy_1__log_podcast_play",
   "floppy_1__log_song_play",
+  "floppy_1__manage_list",
   "floppy_1__search_media",
   "floppy_1__search_tracked_media",
   "floppy_1__track_media",
@@ -856,6 +875,7 @@ auto_approve = [
   "floppy_2__log_episode_play",
   "floppy_2__log_podcast_play",
   "floppy_2__log_song_play",
+  "floppy_2__manage_list",
   "floppy_2__search_media",
   "floppy_2__search_tracked_media",
   "floppy_2__track_media",
@@ -954,6 +974,7 @@ level = "supervised"
 # budgets) auto-approve; deletes, member changes and share-link creation fall
 # through to confirmation.
 auto_approve = [
+  "ask_user",
   "calculator",
   "content_search",
   "file_edit",
@@ -969,8 +990,10 @@ auto_approve = [
   "send_via",
   "sessions_current",
   "sessions_history",
+  "sessions_list",
   "tool_list",
   "tool_search",
+  "ToDoWrite",
   "weather",
   "web_fetch",
   "web_search_tool",
@@ -994,6 +1017,7 @@ auto_approve = [
   "trek_mcp__get_airport",
   "trek_mcp__get_assignment_participants",
   "trek_mcp__get_detailed_weather",
+  "trek_mcp__get_help_page",
   "trek_mcp__get_place_details",
   "trek_mcp__get_share_link",
   "trek_mcp__get_trip_summary",
@@ -1017,6 +1041,7 @@ auto_approve = [
   "trek_mcp__reverse_geocode",
   "trek_mcp__search_airports",
   "trek_mcp__search_place",
+  "trek_mcp__search_pois",
   "trek_mcp__search_transit_routes",
   "trek_mcp__search_transit_stops",
   "trek_mcp__set_assignment_participants",
