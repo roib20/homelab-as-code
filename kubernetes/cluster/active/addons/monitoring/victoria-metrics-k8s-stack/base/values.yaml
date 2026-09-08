@@ -6,9 +6,31 @@ victoria-metrics-operator:
       enabled: false
 
 grafana:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
   sidecar:
     dashboards:
       searchNamespace: ALL
+
+kube-state-metrics:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+prometheus-node-exporter:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      memory: 128Mi
 
 # Drop extra node labels added by Talos, NFD and device plugins.
 kubelet:
