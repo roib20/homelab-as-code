@@ -19,6 +19,7 @@
               name=$(basename "$(dirname "${plugin}")")
               mkdir -p "/data/plugins/indexers/${name}"
               cp "${plugin}" "/data/plugins/indexers/${name}/index.mjs"
+              echo "Installed ${name} from ${repository}"
             done
         done
     volumeMounts:
