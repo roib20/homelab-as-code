@@ -26,3 +26,4 @@ replacements:
   - path: replacements.yaml
 patches:
   - path: patches/deployment-bootstrap-oidc.yaml
+  - path: patches/deployment-bootstrap-plugins.yaml

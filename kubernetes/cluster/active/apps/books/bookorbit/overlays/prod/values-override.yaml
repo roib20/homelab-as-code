@@ -25,6 +25,8 @@ persistence:
       bookorbit:
         app:
           - path: "/data"
+        bootstrap-plugins:
+          - path: "/data"
   postgres-ca:
     type: secret
     name: bookorbit-postgres-ca
