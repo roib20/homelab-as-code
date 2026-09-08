@@ -1,0 +1,144 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: krr
+  namespace: krr
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 3600
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+            - args:
+                - |
+                  import json
+                  import subprocess
+                  import sys
+                  import time
+                  from datetime import datetime, timezone
+                  from pathlib import Path
+                  from shutil import copyfile, disk_usage
+                  from uuid import uuid4
+
+                  from rich.console import Console
+                  from robusta_krr.core.models.config import Config
+                  from robusta_krr.core.models.result import Result
+                  from robusta_krr.formatters.table import table
+
+                  LOGS_FORMAT = "table"
+                  OUTPUT_DIRECTORY = Path("/output")
+                  OUTPUT_FORMAT = "json"
+                  REPORT_RETENTION = 10
+                  STALE_TEMP_MAX_AGE_SECONDS = 3600
+                  STRATEGY = "simple"
+
+                  stale_before = time.time() - STALE_TEMP_MAX_AGE_SECONDS
+                  for path in OUTPUT_DIRECTORY.glob(f"krr-*.{OUTPUT_FORMAT}.tmp"):
+                      if path.stat().st_mtime < stale_before:
+                          path.unlink()
+
+                  report = Path("/tmp") / f"krr-{uuid4().hex}.{OUTPUT_FORMAT}"
+                  subprocess.run(
+                      [
+                          sys.executable,
+                          "krr.py",
+                          STRATEGY,
+                          "--fileoutput",
+                          str(report),
+                          "--formatter",
+                          OUTPUT_FORMAT,
+                          "--history_duration",
+                          "336",
+                          "--max-workers",
+                          "1",
+                          "--prometheus-url",
+                          "http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428",
+                      ],
+                      check=True,
+                  )
+
+                  payload = json.loads(report.read_text(encoding="utf-8"))
+                  config_payload = payload.pop("config")
+                  config_payload.update(format=LOGS_FORMAT, resources=[])
+
+                  result = Result.parse_obj(payload)
+                  Config.set_config(Config.parse_obj(config_payload))
+
+                  Console(force_terminal=True, width=2048).print(table(result))
+                  reports = sorted(
+                      OUTPUT_DIRECTORY.glob(f"krr-*.{OUTPUT_FORMAT}"),
+                      reverse=True,
+                  )
+                  required_space = report.stat().st_size
+                  while (
+                      len(reports) >= REPORT_RETENTION
+                      or disk_usage(OUTPUT_DIRECTORY).free < required_space
+                  ):
+                      if not reports:
+                          raise OSError("Insufficient space for KRR report")
+                      reports.pop().unlink()
+
+                  output = (
+                      OUTPUT_DIRECTORY / f"krr-{datetime.now(timezone.utc):%Y%m%d%H%M%S}.{OUTPUT_FORMAT}"
+                  )
+                  staged = OUTPUT_DIRECTORY / f"krr-{uuid4().hex}.{OUTPUT_FORMAT}.tmp"
+                  copyfile(report, staged)
+                  staged.replace(output)
+                  report.unlink()
+
+              command: [python3, -c]
+              env:
+                - name: FORCE_COLOR
+                  value: "1"
+                - name: MPLCONFIGDIR
+                  value: "/tmp/matplotlib"
+                - name: TTY_COMPATIBLE
+                  value: "1"
+                - name: TTY_INTERACTIVE
+                  value: "0"
+              image: robustadev/krr:v1.30.0@sha256:b8d782e568c7d23aac6460e69dd136e44eca67e8cbfce19915197a48dc28e23f
+              imagePullPolicy: IfNotPresent
+              name: krr
+              volumeMounts:
+                - name: "output"
+                  mountPath: "/output"
+                - name: "tmp"
+                  mountPath: "/tmp"
+              resources:
+                limits:
+                  memory: 1Gi
+                requests:
+                  cpu: 200m
+                  memory: 512Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+          enableServiceLinks: false
+          restartPolicy: Never
+          securityContext:
+            fsGroup: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          serviceAccountName: krr
+          volumes:
+            - name: "output"
+              persistentVolumeClaim:
+                claimName: "krr-output"
+            - name: "tmp"
+              emptyDir: {}
+      ttlSecondsAfterFinished: 604800  # 7 days
+  schedule: "0 4 * * 0"
+  successfulJobsHistoryLimit: 1
+  timeZone: Asia/Jerusalem
