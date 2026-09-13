@@ -113,10 +113,9 @@ spec:
 
 
               def main():
-                  if not SETTINGS_PATH.exists():
-                      return
-
-                  base = json.loads(SETTINGS_PATH.read_text(encoding="utf-8"))
+                  base = {}
+                  if SETTINGS_PATH.exists():
+                      base = json.loads(SETTINGS_PATH.read_text(encoding="utf-8"))
                   if not isinstance(base, dict):
                       raise ValueError(f"Base settings must be an object: {SETTINGS_PATH}")
 
@@ -181,6 +180,11 @@ spec:
                 secretKeyRef:
                   name: seerr-kanidm-oauth2-credentials
                   key: CLIENT_SECRET
+            - name: JELLYFIN_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jellyfin-api-key
+                  key: jellyfin_api_key
             - name: RADARR_HD_API_KEY
               valueFrom:
                 secretKeyRef:

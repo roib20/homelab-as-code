@@ -2,5 +2,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - jellyfin-api-key.yaml.externalsecret
   - seerr-servarr-secrets.yaml.externalsecret
   - seerr-secrets.yaml.externalsecret

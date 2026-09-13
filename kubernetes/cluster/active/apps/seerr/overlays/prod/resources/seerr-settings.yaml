@@ -42,12 +42,18 @@ data:
     }
   jellyfin: |
     {
+      "name": "Jellyfin",
       "ip": "jellyfin.jellyfin.svc.cluster.local",
       "port": 8096,
       "useSsl": false,
       "urlBase": "",
       "externalHostname": "https://media.${FQDN_01}",
-      "jellyfinForgotPasswordUrl": "https://auth.${FQDN_01}/ui/update_credentials"
+      "jellyfinForgotPasswordUrl": "https://auth.${FQDN_01}/ui/update_credentials",
+      "apiKey": "${JELLYFIN_API_KEY}"
+    }
+  public: |
+    {
+      "initialized": true
     }
   oidc: |
     {
