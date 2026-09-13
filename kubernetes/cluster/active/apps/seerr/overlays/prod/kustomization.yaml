@@ -28,7 +28,11 @@ configMapGenerator:
 replacements:
   - path: replacements.yaml
 patches:
-  - path: patches/statefulset-bootstrap-settings.yaml
+  - path: patches/bootstrap-settings.yaml
+    target:
+      kind: StatefulSet
+      name: seerr
+      namespace: seerr
   - target:
       kind: ObjectStore
       name: cnpg-backups
