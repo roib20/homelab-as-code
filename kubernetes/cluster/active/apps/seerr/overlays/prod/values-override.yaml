@@ -1,6 +1,6 @@
 ---
 podAnnotations:
-  secret.reloader.stakater.com/reload: "seerr-kanidm-oauth2-credentials,seerr-postgres-app,seerr-secrets,seerr-servarr-secrets"
+  secret.reloader.stakater.com/reload: "jellyfin-api-key,seerr-kanidm-oauth2-credentials,seerr-postgres-app,seerr-secrets,seerr-servarr-secrets"
   configmap.reloader.stakater.com/reload: "seerr-settings"
 
 extraEnv:
