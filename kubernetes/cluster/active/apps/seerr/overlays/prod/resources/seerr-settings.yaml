@@ -84,7 +84,7 @@ data:
         "useSsl": false,
         "baseUrl": "",
         "activeProfileId": 7,
-        "activeProfileName": "1080p Efficient",
+        "activeProfileName": "1080p Compact",
         "activeDirectory": "/MediaData/Media/Video/Movies/HD Movies",
         "is4k": false,
         "minimumAvailability": "released",
