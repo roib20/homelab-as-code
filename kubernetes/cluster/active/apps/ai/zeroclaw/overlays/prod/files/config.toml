@@ -193,6 +193,12 @@ tool_timeout_secs = 120
 transport = "stdio"
 
 [[mcp.servers]]
+command = "google-news-trends-mcp"
+name = "google-news-trends"
+tool_timeout_secs = 120
+transport = "stdio"
+
+[[mcp.servers]]
 command = "karakeep-mcp"
 env = { KARAKEEP_API_ADDR = "http://karakeep.karakeep.svc.cluster.local:3000" }
 name = "karakeep"
@@ -286,7 +292,7 @@ servers = ["floppy_1"]
 servers = ["floppy_2"]
 
 [mcp_bundles.articles]
-servers = ["karakeep", "miniflux"]
+servers = ["google-news-trends", "karakeep", "miniflux"]
 
 [mcp_bundles.tandoor]
 servers = ["tandoor-mcp"]
@@ -1031,6 +1037,11 @@ auto_approve = [
   "weather",
   "web_fetch",
   "web_search_tool",
+  "google-news-trends__get_news_by_keyword",
+  "google-news-trends__get_news_by_location",
+  "google-news-trends__get_news_by_topic",
+  "google-news-trends__get_top_news",
+  "google-news-trends__get_trending_terms",
   "karakeep__get-bookmark",
   "karakeep__get-bookmark-content",
   "karakeep__get-list",
