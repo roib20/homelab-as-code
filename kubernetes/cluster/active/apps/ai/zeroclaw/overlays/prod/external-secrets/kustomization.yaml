@@ -7,6 +7,8 @@ resources:
   - zeroclaw-garmin-mcp.yaml.externalsecret
   - zeroclaw-groq-api-key.yaml.externalsecret
   - zeroclaw-ha-mcp.yaml.externalsecret
+  - zeroclaw-karakeep-mcp.yaml.externalsecret
+  - zeroclaw-miniflux-mcp.yaml.externalsecret
   - zeroclaw-secret-key.yaml.externalsecret
   - zeroclaw-servarr-secrets.yaml.externalsecret
   - zeroclaw-tandoor-mcp.yaml.externalsecret
@@ -18,6 +20,7 @@ resources:
   - zeroclaw-telegram-household-bot.yaml.externalsecret
   - zeroclaw-telegram-media-1-bot.yaml.externalsecret
   - zeroclaw-telegram-media-2-bot.yaml.externalsecret
+  - zeroclaw-telegram-news-bot.yaml.externalsecret
   - zeroclaw-telegram-smart-homer-bot.yaml.externalsecret
   - zeroclaw-telegram-travel-agent-bot.yaml.externalsecret
   - zeroclaw-yuvomi-mcp.yaml.externalsecret
