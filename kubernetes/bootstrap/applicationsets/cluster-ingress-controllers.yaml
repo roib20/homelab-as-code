@@ -74,6 +74,6 @@ spec:
           name: http-gateway-api
           namespace: envoy-gateway-ingress
           jsonPointers:
-            - /metadata/annotations/external-dns.alpha.kubernetes.io~1target
+            - /metadata/annotations/external-dns.kubernetes.io~1target
         {{- end }}
 status: {}
