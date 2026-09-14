@@ -18,7 +18,7 @@ bpf:
   masquerade: true
   distributedLRU:
     enabled: true
-  mapDynamicSizeRatio: 0.08
+  mapDynamicSizeRatio: 0.02
 bpfClockProbe: true
 bandwidthManager:
   enabled: true
