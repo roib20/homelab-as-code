@@ -63,6 +63,15 @@ runtime_profile = "unbounded"
 transcription_provider = "groq.default"
 tts_provider = "edge.emma"
 
+[agents.news]
+channels = ["telegram.news"]
+mcp_bundles = ["articles"]
+model_provider = "openai.codex"
+risk_profile = "news"
+runtime_profile = "unbounded"
+transcription_provider = "groq.default"
+tts_provider = "edge.andrew"
+
 [agents.smart-homer]
 channels = ["telegram.smart_homer"]
 mcp_bundles = ["home-assistant"]
@@ -127,6 +136,12 @@ enabled = true
 mention_only = true
 stream_mode = "partial"
 
+[channels.telegram.news]
+bot_token = ""
+enabled = true
+mention_only = true
+stream_mode = "partial"
+
 [channels.telegram.smart_homer]
 bot_token = ""
 enabled = true
@@ -178,6 +193,19 @@ tool_timeout_secs = 120
 transport = "stdio"
 
 [[mcp.servers]]
+command = "google-news-trends-mcp"
+name = "google-news-trends"
+tool_timeout_secs = 120
+transport = "stdio"
+
+[[mcp.servers]]
+command = "karakeep-mcp"
+env = { KARAKEEP_API_ADDR = "http://karakeep.karakeep.svc.cluster.local:3000" }
+name = "karakeep"
+tool_timeout_secs = 120
+transport = "stdio"
+
+[[mcp.servers]]
 name = "gitmcp"
 transport = "http"
 url = "https://gitmcp.io/docs"
@@ -199,6 +227,12 @@ name = "mcp-arr-uhd"
 tool_timeout_secs = 120
 transport = "http"
 url = "http://127.0.0.1:43000/mcp"
+
+[[mcp.servers]]
+name = "miniflux"
+tool_timeout_secs = 120
+transport = "http"
+url = "http://127.0.0.1:8080/mcp"
 
 [[mcp.servers]]
 command = "tandoor-recipes-mcp"
@@ -257,6 +291,9 @@ servers = ["floppy_1"]
 [mcp_bundles.media-2]
 servers = ["floppy_2"]
 
+[mcp_bundles.articles]
+servers = ["google-news-trends", "karakeep", "miniflux"]
+
 [mcp_bundles.tandoor]
 servers = ["tandoor-mcp"]
 
@@ -312,6 +349,10 @@ channel = "telegram.media_1"
 [peer_groups.telegram_media_2]
 agents = ["media-2"]
 channel = "telegram.media_2"
+
+[peer_groups.telegram_news]
+agents = ["news"]
+channel = "telegram.news"
 
 [peer_groups.telegram_smart_homer]
 agents = ["smart-homer"]
@@ -966,6 +1007,72 @@ auto_approve = [
   "mcp-arr-uhd__trash_get_quality_sizes",
   "mcp-arr-uhd__trash_list_custom_formats",
   "mcp-arr-uhd__trash_list_profiles"
+]
+level = "supervised"
+
+[risk_profiles.news]
+# Read and summarization tools auto-approve; saving bookmarks, changing entry
+# state, and feed/category changes require confirmation.
+auto_approve = [
+  "ask_user",
+  "calculator",
+  "content_search",
+  "file_edit",
+  "file_read",
+  "file_write",
+  "git_operations",
+  "glob_search",
+  "image_info",
+  "mcp_prompts",
+  "mcp_resources",
+  "memory_recall",
+  "memory_store",
+  "send_via",
+  "sessions_current",
+  "sessions_history",
+  "sessions_list",
+  "tool_list",
+  "tool_search",
+  "ToDoWrite",
+  "weather",
+  "web_fetch",
+  "web_search_tool",
+  "google-news-trends__get_news_by_keyword",
+  "google-news-trends__get_news_by_location",
+  "google-news-trends__get_news_by_topic",
+  "google-news-trends__get_top_news",
+  "google-news-trends__get_trending_terms",
+  "karakeep__get-bookmark",
+  "karakeep__get-bookmark-content",
+  "karakeep__get-list",
+  "karakeep__get-lists",
+  "karakeep__get-tag",
+  "karakeep__get-tag-bookmarks",
+  "karakeep__get-tags",
+  "karakeep__search-bookmarks",
+  "miniflux__fetch_counters",
+  "miniflux__get_categories",
+  "miniflux__get_category_entries",
+  "miniflux__get_category_feeds",
+  "miniflux__get_entries",
+  "miniflux__get_entry",
+  "miniflux__get_feed",
+  "miniflux__get_feed_entry",
+  "miniflux__get_feed_entries",
+  "miniflux__get_feed_icon",
+  "miniflux__get_feeds",
+  "miniflux__get_me",
+  "miniflux__get_users",
+  "miniflux__get_user_by_id",
+  "miniflux__get_user_by_username",
+  "miniflux__get_category_entry",
+  "miniflux__fetch_original_content",
+  "miniflux__discover",
+  "miniflux__export",
+  "miniflux__get_enclosure",
+  "miniflux__get_icon",
+  "miniflux__get_version",
+  "miniflux__healthcheck"
 ]
 level = "supervised"
 

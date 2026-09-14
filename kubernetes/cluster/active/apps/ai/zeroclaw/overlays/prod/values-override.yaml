@@ -12,8 +12,9 @@ controllers:
         zeroclaw-telegram-arr-bot,zeroclaw-telegram-chef-bot,zeroclaw-telegram-coach-bot,\
         zeroclaw-telegram-default-bot,zeroclaw-telegram-household-bot,\
         zeroclaw-telegram-media-1-bot,zeroclaw-telegram-media-2-bot,\
+        zeroclaw-telegram-news-bot,\
         zeroclaw-telegram-smart-homer-bot,zeroclaw-telegram-travel-agent-bot,\
-        zeroclaw-trek-mcp,zeroclaw-yuvomi-mcp"
+        zeroclaw-karakeep-mcp,zeroclaw-miniflux-mcp,zeroclaw-trek-mcp,zeroclaw-yuvomi-mcp"
     initContainers:
       bootstrap:
         image:
@@ -219,6 +220,42 @@ controllers:
               periodSeconds: 1
         securityContext: *mcp-arr-security
         resources: *mcp-arr-resources
+      miniflux-mcp:
+        restartPolicy: Always
+        image:
+          repository: docker.io/jwonder/miniflux-mcp
+          tag: 0.7.0@sha256:19eeea47118e3d1696638729b229f9a84f467ba45d4f04805bcf29dd623cc2d8
+        env:
+          MCP_HTTP_ADDR: "127.0.0.1:8080"
+          MCP_TRANSPORT: "streamable-http"
+          MINIFLUX_URL: "http://miniflux.miniflux.svc.cluster.local:10091"
+        envFrom:
+          - secretRef:
+              name: zeroclaw-miniflux-mcp
+        probes:
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command: ["wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/healthz"]
+              failureThreshold: 30
+              periodSeconds: 1
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: false
+          runAsUser: 0
+          runAsGroup: 0
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            memory: 64Mi
     containers:
       app:
         envFrom:
@@ -226,6 +263,10 @@ controllers:
               name: zeroclaw-garmin-mcp
           - secretRef:
               name: zeroclaw-groq-api-key
+          - secretRef:
+              name: zeroclaw-karakeep-mcp
+          - secretRef:
+              name: zeroclaw-miniflux-mcp
           - secretRef:
               name: zeroclaw-tandoor-mcp
           - secretRef:
@@ -242,6 +283,8 @@ controllers:
               name: zeroclaw-telegram-media-1-bot
           - secretRef:
               name: zeroclaw-telegram-media-2-bot
+          - secretRef:
+              name: zeroclaw-telegram-news-bot
           - secretRef:
               name: zeroclaw-telegram-smart-homer-bot
           - secretRef:
