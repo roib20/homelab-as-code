@@ -42,7 +42,7 @@ spec:
 
                   EXISTING_IP="$(kubectl --namespace "envoy-gateway-ingress" \
                     get service "http-gateway-api" \
-                    -o jsonpath='{.metadata.annotations.external-dns\.alpha\.kubernetes\.io/target}')"
+                    -o jsonpath='{.metadata.annotations.external-dns\.kubernetes\.io/target}')"
 
                   if [ "${REAL_IP}" = "${EXISTING_IP}" ]; then
                     echo "No change: ${REAL_IP}"
@@ -51,7 +51,7 @@ spec:
 
                   kubectl --namespace "envoy-gateway-ingress" \
                     annotate service "http-gateway-api" \
-                    external-dns.alpha.kubernetes.io/target="${REAL_IP}" \
+                    external-dns.kubernetes.io/target="${REAL_IP}" \
                     --overwrite
 
                   echo "Updated target: ${EXISTING_IP:-<missing>} -> ${REAL_IP}"

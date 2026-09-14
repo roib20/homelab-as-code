@@ -1,5 +1,5 @@
 ---
-annotationFilter: external-dns.alpha.kubernetes.io/hostname
+annotationFilter: external-dns.kubernetes.io/hostname
 domainFilters:
   - "${FQDN_01}"
 extraArgs:
