@@ -51,8 +51,10 @@ spec:
       region:
         name: cnpg-backup-secret
         key: AWS_REGION
+    data:
+      compression: zstd
     wal:
-      compression: gzip
+      compression: zstd
       maxParallel: 2
   retentionPolicy: "7d"
   instanceSidecarConfiguration:
