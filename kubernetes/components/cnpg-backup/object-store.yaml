@@ -20,7 +20,7 @@ spec:
       compression: zstd
     wal:
       compression: zstd
-      maxParallel: 2
+      maxParallel: 1
   retentionPolicy: "7d"
   instanceSidecarConfiguration:
     env:
