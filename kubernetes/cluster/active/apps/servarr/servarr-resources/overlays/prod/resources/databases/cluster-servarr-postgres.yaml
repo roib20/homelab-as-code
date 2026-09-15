@@ -27,3 +27,8 @@ spec:
       memory: 320Mi
     limits:
       memory: 768Mi
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: cnpg-backups

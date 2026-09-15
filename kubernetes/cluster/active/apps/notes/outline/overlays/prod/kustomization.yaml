@@ -6,6 +6,8 @@ resources:
   - external-secrets
   - resources/cnpg-cluster.yaml
   - resources/httproute.yaml
+components:
+  - ../../../../../../../components/cnpg-backup
 helmCharts:
   - name: outline
     repo: oci://oci.trueforge.org/truecharts
@@ -29,3 +31,10 @@ patches:
     target:
       kind: Deployment
       name: outline
+  - target:
+      kind: ObjectStore
+      name: cnpg-backups
+    patch: |-
+      - op: replace
+        path: /spec/configuration/destinationPath
+        value: s3://k8s-backups/cnpg/outline

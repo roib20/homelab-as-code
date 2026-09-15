@@ -324,6 +324,11 @@ rawResources:
             memory: 200Mi
           limits:
             memory: 2400Mi
+        plugins:
+          - name: barman-cloud.cloudnative-pg.io
+            isWALArchiver: true
+            parameters:
+              barmanObjectName: cnpg-backups
 
   external-secret-pinepods:
     forceRename: pinepods-env
