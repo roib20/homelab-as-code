@@ -25,7 +25,6 @@ ARG PYTHON_VERSION=3.14.7
 ARG GO_VERSION=1.27.1
 # renovate: datasource=github-releases depName=ovh/ovh-ttyrec
 ARG TTYREC_VERSION=1.1.7.1
-ARG CURL_FLAGS="-sSL --proto '=https' --tlsv1.3 --ciphers 'HIGH:!aNULL:!MD5' --cacert /etc/ssl/certs/ca-certificates.crt --capath /etc/ssl/certs --compressed"
 
 # Stage 1: Build ovh-ttyrec
 FROM alpine:${ALPINE_VERSION} AS ttyrec
@@ -46,7 +45,6 @@ FROM ghcr.io/opentofu/opentofu:${TOFU_VERSION}-minimal AS tofu
 
 # Stage 4 – common downloader utilities
 FROM alpine:${ALPINE_VERSION} AS downloader
-ARG CURL_FLAGS
 RUN apk add --no-cache curl
 
 # ----- generic download / verify / (optionally) extract helper -----
@@ -67,9 +65,12 @@ tmp_dir="$(mktemp -d)"
 cleanup() { rm -rf "${tmp_dir}"; }
 trap cleanup EXIT INT TERM
 
-set -- ${CURL_FLAGS:-"-sSL --proto '=https' --tlsv1.3 --ciphers 'HIGH:!aNULL:!MD5' --cacert /etc/ssl/certs/ca-certificates.crt --capath /etc/ssl/certs --compressed"}
-curl "$@" -o "${tmp_dir}/${file}" "${url}"
-curl "$@" -o "${tmp_dir}/${checksum_hash}sum.txt" "${checksum_url}"
+curl -sSL --proto '=https' --tlsv1.3 --ciphers 'HIGH:!aNULL:!MD5' \
+  --cacert /etc/ssl/certs/ca-certificates.crt --capath /etc/ssl/certs --compressed \
+  -o "${tmp_dir}/${file}" "${url}"
+curl -sSL --proto '=https' --tlsv1.3 --ciphers 'HIGH:!aNULL:!MD5' \
+  --cacert /etc/ssl/certs/ca-certificates.crt --capath /etc/ssl/certs --compressed \
+  -o "${tmp_dir}/${checksum_hash}sum.txt" "${checksum_url}"
 
 CHECKSUM="$("${checksum_hash}sum" "${tmp_dir}/${file}" | awk '{print $1}')"
 EXPECTED_CHECKSUM="$(grep -E "[[:space:]]+${file}$" "${tmp_dir}/${checksum_hash}sum.txt" | awk '{print $1}')"
