@@ -1,5 +1,6 @@
 ---
 defaultSettings:
+  backupCompressionMethod: lz4
   concurrentReplicaRebuildPerNodeLimit: 3
   defaultDataLocality: best-effort
   defaultDataPath: "/var/mnt/longhorn"
