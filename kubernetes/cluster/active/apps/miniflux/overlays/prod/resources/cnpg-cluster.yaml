@@ -54,7 +54,7 @@ spec:
     wal:
       compression: gzip
       maxParallel: 2
-  retentionPolicy: "30d"
+  retentionPolicy: "7d"
   instanceSidecarConfiguration:
     env:
       - name: AWS_ENDPOINT_URL
