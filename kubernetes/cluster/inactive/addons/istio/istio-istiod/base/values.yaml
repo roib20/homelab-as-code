@@ -1,7 +1,7 @@
 ---
 global:
   istioNamespace: istio-system
-  hub: gcr.io/istio-release
+  hub: docker.io/istio
   variant: distroless
 autoscaleEnabled: false
 replicaCount: 1
