@@ -23,21 +23,27 @@ tasks:
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
+      - sh: kubectl get namespace longhorn-system >/dev/null 2>&1
+        msg: "longhorn-system namespace not found"
+      - sh: kubectl get crd systembackups.longhorn.io >/dev/null 2>&1
+        msg: "Longhorn CRD systembackups.longhorn.io not found"
 
   longhorn-backups:
     desc: "List all Longhorn backup volumes and target status"
     cmds:
       - echo "=== Longhorn Backup Target ==="
-      - kubectl get backuptargets.longhorn.io -n longhorn-system default -o wide || true
+      - kubectl get backuptargets.longhorn.io -n longhorn-system default -o wide 2>/dev/null || true
       - echo ""
       - echo "=== Longhorn Backup Volumes ==="
-      - kubectl get backupvolumes.longhorn.io -n longhorn-system -o wide || true
+      - kubectl get backupvolumes.longhorn.io -n longhorn-system -o wide 2>/dev/null || true
       - echo ""
       - echo "=== Longhorn System Backups (Metadata) ==="
-      - kubectl get systembackup.longhorn.io -n longhorn-system -o wide || true
+      - kubectl get systembackup.longhorn.io -n longhorn-system -o wide 2>/dev/null || true
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
+      - sh: kubectl get namespace longhorn-system >/dev/null 2>&1
+        msg: "longhorn-system namespace not found"
 
   longhorn-recurring-jobs:
     desc: "List all Longhorn recurring jobs"
@@ -46,6 +52,10 @@ tasks:
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
+      - sh: kubectl get namespace longhorn-system >/dev/null 2>&1
+        msg: "longhorn-system namespace not found"
+      - sh: kubectl get crd recurringjobs.longhorn.io >/dev/null 2>&1
+        msg: "Longhorn CRD recurringjobs.longhorn.io not found"
 
   cnpg-backup:
     desc: "Trigger an ad-hoc CNPG base backup (usage: task backup:cnpg-backup CLUSTER=<name> NS=<namespace>)"
@@ -71,29 +81,56 @@ tasks:
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
+      - sh: kubectl get namespace {{.NS}} >/dev/null 2>&1
+        msg: "Namespace '{{.NS}}' not found"
+      - sh: kubectl get crd backups.postgresql.cnpg.io >/dev/null 2>&1
+        msg: "CNPG CRD backups.postgresql.cnpg.io not found"
 
   cnpg-status:
     desc: "Inspect CNPG cluster backup and WAL status (usage: task backup:cnpg-status CLUSTER=<name> NS=<namespace>)"
     requires:
       vars: [CLUSTER, NS]
     cmds:
+      - echo "=== CNPG Cluster Status ({{.CLUSTER}} in {{.NS}}) ==="
+      - kubectl get cluster {{.CLUSTER}} -n {{.NS}} -o wide 2>/dev/null || echo "Cluster {{.CLUSTER}} not found in {{.NS}}"
+      - echo ""
+      - echo "=== ObjectStore Configuration & Status ==="
+      - kubectl get objectstores.barmancloud.cnpg.io -n {{.NS}} -o wide 2>/dev/null || echo "No ObjectStore found in {{.NS}}"
+      - echo ""
+      - echo "=== Recent Backups ==="
+      - kubectl get backups.postgresql.cnpg.io -n {{.NS}} --sort-by=.metadata.creationTimestamp 2>/dev/null | tail -n 6 || echo "No backups found in {{.NS}}"
+      - echo ""
+      - echo "=== Backup Status JSON ==="
       - |
         STATUS=$(kubectl get cluster {{.CLUSTER}} -n {{.NS}} -o jsonpath='{.status.backupStatus}' 2>/dev/null || true)
         if [ -z "${STATUS}" ]; then
-          echo "No backup status found for cluster {{.CLUSTER}} in {{.NS}}"
+          echo "No backup status recorded yet on cluster {{.CLUSTER}}"
         else
-          echo "${STATUS}" | jq . || echo "${STATUS}"
+          echo "${STATUS}" | jq . 2>/dev/null || echo "${STATUS}"
         fi
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
       - sh: which jq
         msg: "jq is required"
+      - sh: kubectl get namespace {{.NS}} >/dev/null 2>&1
+        msg: "Namespace '{{.NS}}' not found"
+      - sh: kubectl get crd clusters.postgresql.cnpg.io >/dev/null 2>&1
+        msg: "CNPG CRD clusters.postgresql.cnpg.io not found"
 
   cnpg-backups:
-    desc: "List all CNPG backups across all namespaces"
+    desc: "List all CNPG backups, schedules, and object stores across all namespaces"
     cmds:
-      - kubectl get backups.postgresql.cnpg.io -A -o wide
+      - echo "=== CNPG ObjectStores (R2 / S3 Targets) ==="
+      - kubectl get objectstores.barmancloud.cnpg.io -A -o wide 2>/dev/null || echo "No ObjectStores found"
+      - echo ""
+      - echo "=== CNPG Scheduled Backups ==="
+      - kubectl get scheduledbackups.postgresql.cnpg.io -A -o wide 2>/dev/null || echo "No ScheduledBackups found"
+      - echo ""
+      - echo "=== CNPG Backup Instances ==="
+      - kubectl get backups.postgresql.cnpg.io -A -o wide 2>/dev/null || echo "No Backup instances found"
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
+      - sh: kubectl get crd backups.postgresql.cnpg.io >/dev/null 2>&1
+        msg: "CNPG CRD backups.postgresql.cnpg.io not found"
