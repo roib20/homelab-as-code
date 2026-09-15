@@ -1,0 +1,99 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+set: [pipefail]
+shopt: [globstar]
+
+tasks:
+  longhorn-system-backup:
+    desc: "Create an immediate Longhorn metadata system backup"
+    cmds:
+      - |
+        BACKUP_NAME="system-backup-$(date +%Y%m%d%H%M%S)"
+        cat <<EOF | kubectl apply -f -
+        apiVersion: longhorn.io/v1beta2
+        kind: SystemBackup
+        metadata:
+          name: ${BACKUP_NAME}
+          namespace: longhorn-system
+        spec:
+          volumeBackupPolicy: if-not-present
+        EOF
+        echo "✅ Created Longhorn SystemBackup: ${BACKUP_NAME}"
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+
+  longhorn-backups:
+    desc: "List all Longhorn backup volumes and target status"
+    cmds:
+      - echo "=== Longhorn Backup Target ==="
+      - kubectl get backuptargets.longhorn.io -n longhorn-system default -o wide || true
+      - echo ""
+      - echo "=== Longhorn Backup Volumes ==="
+      - kubectl get backupvolumes.longhorn.io -n longhorn-system -o wide || true
+      - echo ""
+      - echo "=== Longhorn System Backups (Metadata) ==="
+      - kubectl get systembackup.longhorn.io -n longhorn-system -o wide || true
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+
+  longhorn-recurring-jobs:
+    desc: "List all Longhorn recurring jobs"
+    cmds:
+      - kubectl get recurringjobs.longhorn.io -n longhorn-system -o wide
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+
+  cnpg-backup:
+    desc: "Trigger an ad-hoc CNPG base backup (usage: task backup:cnpg-backup CLUSTER=<name> NS=<namespace>)"
+    requires:
+      vars: [CLUSTER, NS]
+    cmds:
+      - |
+        BACKUP_NAME="{{.CLUSTER}}-backup-$(date +%Y%m%d%H%M%S)"
+        cat <<EOF | kubectl apply -f -
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Backup
+        metadata:
+          name: ${BACKUP_NAME}
+          namespace: {{.NS}}
+        spec:
+          cluster:
+            name: {{.CLUSTER}}
+          method: plugin
+          pluginConfiguration:
+            name: barman-cloud.cloudnative-pg.io
+        EOF
+        echo "✅ Triggered CNPG backup: ${BACKUP_NAME} in namespace {{.NS}}"
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+
+  cnpg-status:
+    desc: "Inspect CNPG cluster backup and WAL status (usage: task backup:cnpg-status CLUSTER=<name> NS=<namespace>)"
+    requires:
+      vars: [CLUSTER, NS]
+    cmds:
+      - |
+        STATUS=$(kubectl get cluster {{.CLUSTER}} -n {{.NS}} -o jsonpath='{.status.backupStatus}' 2>/dev/null || true)
+        if [ -z "${STATUS}" ]; then
+          echo "No backup status found for cluster {{.CLUSTER}} in {{.NS}}"
+        else
+          echo "${STATUS}" | jq . || echo "${STATUS}"
+        fi
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"
+      - sh: which jq
+        msg: "jq is required"
+
+  cnpg-backups:
+    desc: "List all CNPG backups across all namespaces"
+    cmds:
+      - kubectl get backups.postgresql.cnpg.io -A -o wide
+    preconditions:
+      - sh: which kubectl
+        msg: "kubectl is required"

@@ -23,6 +23,7 @@ includes:
   talos: .taskfiles/talos
   proxmox: .taskfiles/proxmox
   argocd: .taskfiles/argocd
+  backup: .taskfiles/backup
 tasks:
   default:
     desc: List all available tasks (root + included)
