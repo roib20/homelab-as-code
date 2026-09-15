@@ -28,6 +28,13 @@ patches:
       - op: replace
         path: /spec/configuration/destinationPath
         value: s3://k8s-backups/cnpg/opengist
+  - target:
+      kind: ScheduledBackup
+      name: cnpg-backup
+    patch: |-
+      - op: replace
+        path: /spec/schedule
+        value: "0 0 23 * * *"
 configMapGenerator:
   - name: env-vars
     envs:

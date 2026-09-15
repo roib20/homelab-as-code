@@ -33,3 +33,10 @@ patches:
       - op: replace
         path: /spec/configuration/destinationPath
         value: s3://k8s-backups/cnpg/streamystats
+  - target:
+      kind: ScheduledBackup
+      name: cnpg-backup
+    patch: |-
+      - op: replace
+        path: /spec/schedule
+        value: "0 30 1 * * *"
