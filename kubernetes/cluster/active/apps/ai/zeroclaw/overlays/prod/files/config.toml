@@ -200,12 +200,6 @@ tool_timeout_secs = 120
 transport = "stdio"
 
 [[mcp.servers]]
-command = "mcp-trendpulse"
-name = "mcp-trendpulse"
-tool_timeout_secs = 120
-transport = "stdio"
-
-[[mcp.servers]]
 name = "gitmcp"
 transport = "http"
 url = "https://gitmcp.io/docs"
@@ -292,7 +286,7 @@ servers = ["floppy_1"]
 servers = ["floppy_2"]
 
 [mcp_bundles.articles]
-servers = ["karakeep", "mcp-trendpulse", "miniflux"]
+servers = ["karakeep", "miniflux"]
 
 [mcp_bundles.tandoor]
 servers = ["tandoor-mcp"]
@@ -1045,22 +1039,6 @@ auto_approve = [
   "karakeep__get-tag-bookmarks",
   "karakeep__get-tags",
   "karakeep__search-bookmarks",
-  "mcp-trendpulse__get_article_content",
-  "mcp-trendpulse__get_categories",
-  "mcp-trendpulse__get_growth",
-  "mcp-trendpulse__get_interest_by_region",
-  "mcp-trendpulse__get_news_by_keyword",
-  "mcp-trendpulse__get_news_by_location",
-  "mcp-trendpulse__get_news_by_site",
-  "mcp-trendpulse__get_news_by_topic",
-  "mcp-trendpulse__get_ranked_trends",
-  "mcp-trendpulse__get_related_queries",
-  "mcp-trendpulse__get_related_topics",
-  "mcp-trendpulse__get_suggestions",
-  "mcp-trendpulse__get_top_news",
-  "mcp-trendpulse__get_top_trends",
-  "mcp-trendpulse__get_trending_terms",
-  "mcp-trendpulse__get_trends",
   "miniflux__fetch_counters",
   "miniflux__get_categories",
   "miniflux__get_category_entries",

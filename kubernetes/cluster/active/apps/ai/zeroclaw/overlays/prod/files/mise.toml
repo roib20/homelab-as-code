@@ -8,6 +8,5 @@
 "npm:@cliftonz/tandoor-recipes-mcp" = { version = "2.0.1", allow_low_downloads = true }
 "pipx:edge-tts" = "latest"
 "pipx:git+https://github.com/Taxuspt/garmin_mcp.git" = "main"
-"pipx:mcp-trendpulse" = "0.2.13"
 "ripgrep" = "latest"
 "uv" = "latest"
