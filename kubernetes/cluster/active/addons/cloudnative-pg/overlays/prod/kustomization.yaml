@@ -13,3 +13,9 @@ helmCharts:
     additionalValuesFiles:
       - values-override.yaml
     includeCRDs: true
+  - name: plugin-barman-cloud
+    repo: oci://ghcr.io/cloudnative-pg/charts
+    version: 0.8.0
+    releaseName: plugin-barman-cloud
+    namespace: cnpg-system
+    includeCRDs: true
