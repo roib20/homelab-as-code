@@ -12,9 +12,15 @@ spec:
       - hostssl floppy floppy all scram-sha-256
       - host floppy floppy all reject
   bootstrap:
-    initdb:
-      database: floppy
-      owner: floppy
+    recovery:
+      source: clusterBackup
+  externalClusters:
+    - name: clusterBackup
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: cnpg-backups
+          serverName: floppy-postgres
   managed:
     services:
       disabledDefaultServices:

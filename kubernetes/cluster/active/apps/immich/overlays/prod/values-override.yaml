@@ -283,9 +283,15 @@ server:
                 extension_control_path:
                   - /usr/share/postgresql/18/
           bootstrap:
-            initdb:
-              database: immich
-              owner: immich
+            recovery:
+              source: clusterBackup
+          externalClusters:
+            - name: clusterBackup
+              plugin:
+                name: barman-cloud.cloudnative-pg.io
+                parameters:
+                  barmanObjectName: cnpg-backups
+                  serverName: immich-cnpg
           managed:
             services:
               disabledDefaultServices:

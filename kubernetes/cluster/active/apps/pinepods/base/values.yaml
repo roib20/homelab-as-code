@@ -307,9 +307,15 @@ rawResources:
       spec:
         instances: 1
         bootstrap:
-          initdb:
-            database: pinepods_database
-            owner: pinepods
+          recovery:
+            source: clusterBackup
+        externalClusters:
+          - name: clusterBackup
+            plugin:
+              name: barman-cloud.cloudnative-pg.io
+              parameters:
+                barmanObjectName: cnpg-backups
+                serverName: pinepods-postgres
         managed:
           services:
             disabledDefaultServices:

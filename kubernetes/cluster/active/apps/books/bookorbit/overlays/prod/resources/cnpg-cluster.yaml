@@ -16,13 +16,15 @@ spec:
         image:
           reference: ghcr.io/cloudnative-pg/pgvector:0.8.2-18-trixie
   bootstrap:
-    initdb:
-      database: bookorbit
-      owner: bookorbit
-      postInitApplicationSQL:
-        - CREATE EXTENSION IF NOT EXISTS pg_trgm
-        - CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
-        - CREATE EXTENSION IF NOT EXISTS vector
+    recovery:
+      source: clusterBackup
+  externalClusters:
+    - name: clusterBackup
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: cnpg-backups
+          serverName: bookorbit-postgres
   managed:
     services:
       disabledDefaultServices:
