@@ -251,6 +251,18 @@
       "minimumGroupSize": 2
     },
     {
+      "description": "Streamystats Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Streamystats",
+      "groupSlug": "streamystats",
+      "matchPackageNames": [
+        "/streamystats/"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
       "description": "Talos Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
