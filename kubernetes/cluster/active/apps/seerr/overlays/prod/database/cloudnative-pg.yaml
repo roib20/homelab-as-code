@@ -10,9 +10,15 @@ spec:
     topologyKey: kubernetes.io/hostname
     podAntiAffinityType: required
   bootstrap:
-    initdb:
-      database: seerr
-      owner: seerr
+    recovery:
+      source: clusterBackup
+  externalClusters:
+    - name: clusterBackup
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: cnpg-backups
+          serverName: seerr-postgres
   managed:
     services:
       disabledDefaultServices:
