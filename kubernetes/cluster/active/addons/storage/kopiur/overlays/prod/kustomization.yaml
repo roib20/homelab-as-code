@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - external-secrets/kopiur-secret.yaml.externalsecret
+  - resources/cluster-repository.yaml
+helmCharts:
+  - name: kopiur
+    repo: oci://ghcr.io/home-operations/charts
+    version: 0.10.8
+    releaseName: kopiur
+    namespace: kopiur-system
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true

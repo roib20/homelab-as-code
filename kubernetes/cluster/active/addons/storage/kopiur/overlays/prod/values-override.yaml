@@ -1,0 +1,4 @@
+---
+webhook:
+  tls:
+    mode: cert-manager

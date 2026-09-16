@@ -1,0 +1,25 @@
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: cluster-kopia
+spec:
+  onNamespaceDelete: Orphan
+  allowedNamespaces:
+    all: true
+  credentialProjection:
+    allowed: true
+  backend:
+    s3:
+      bucket: k8s-backups
+      prefix: kopiur/
+      region: auto
+      auth:
+        secretRef:
+          name: kopiur-secret
+          namespace: kopiur-system
+  encryption:
+    passwordSecretRef:
+      name: kopiur-secret
+      namespace: kopiur-system
+      key: KOPIA_PASSWORD
