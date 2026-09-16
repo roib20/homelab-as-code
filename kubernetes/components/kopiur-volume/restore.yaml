@@ -1,0 +1,20 @@
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Restore
+metadata:
+  name: kopiur-restore
+spec:
+  credentialProjection:
+    enabled: true
+  repository:
+    kind: ClusterRepository
+    name: cluster-kopia
+  source:
+    fromPolicy:
+      name: kopiur-snapshot-policy
+      offset: 0
+  target:
+    populator: {}
+  policy:
+    onMissingSnapshot: Continue
+    waitTimeout: 5m

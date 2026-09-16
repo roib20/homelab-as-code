@@ -1,0 +1,25 @@
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: kopiur-snapshot-policy
+spec:
+  credentialProjection:
+    enabled: true
+  repository:
+    kind: ClusterRepository
+    name: cluster-kopia
+  copyMethod: Direct
+  sources:
+    - pvcSelector:
+        labelSelector:
+          matchLabels:
+            kopiur.home-operations.com/policy: kopiur-snapshot-policy
+      sourcePathStrategy: PvcName
+  groupBy: None
+  defaultDeletionPolicy: Delete
+  deletion:
+    onPolicyDelete: Retain
+  retention:
+    keepDaily: 7
+    keepWeekly: 4

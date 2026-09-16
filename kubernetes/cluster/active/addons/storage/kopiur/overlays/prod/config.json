@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "kopiur",
+  "destName": "in-cluster",
+  "destNamespace": "kopiur-system",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "kopiur"
+}

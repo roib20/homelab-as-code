@@ -1,0 +1,12 @@
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotSchedule
+metadata:
+  name: kopiur-snapshot-schedule
+spec:
+  policyRef:
+    name: kopiur-snapshot-policy
+  schedule:
+    cron: "0 3 * * *"
+  deletion:
+    onScheduleDelete: Retain

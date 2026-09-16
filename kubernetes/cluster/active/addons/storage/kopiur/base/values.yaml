@@ -1,0 +1,8 @@
+---
+installScope: cluster
+features:
+  credentialProjection:
+    enabled: true
+webhook:
+  tls:
+    mode: self
