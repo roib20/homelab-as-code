@@ -17,6 +17,15 @@ spec:
         app.kubernetes.io/name: cnpg-bootstrap-webhook
     spec:
       serviceAccountName: cnpg-bootstrap-webhook
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: cnpg-bootstrap-webhook
+                topologyKey: kubernetes.io/hostname
       securityContext:
         runAsNonRoot: true
         seccompProfile:

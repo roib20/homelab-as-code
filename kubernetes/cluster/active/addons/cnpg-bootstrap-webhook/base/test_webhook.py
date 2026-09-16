@@ -184,6 +184,32 @@ class HTTPTests(unittest.TestCase):
         self.assertFalse(review["response"]["allowed"])
         self.assertIn('"level": "error"', stderr.getvalue())
 
+    def test_malformed_nested_object_is_denied_with_uid(self):
+        with mock.patch("sys.stderr", new_callable=StringIO):
+            status, review = self.post(
+                {
+                    "apiVersion": "admission.k8s.io/v1",
+                    "kind": "AdmissionReview",
+                    "request": {
+                        "uid": "request-nested",
+                        "operation": "CREATE",
+                        "resource": {"group": "postgresql.cnpg.io", "version": "v1", "resource": "clusters"},
+                        "object": {"metadata": {"annotations": None}},
+                    },
+                }
+            )
+        self.assertEqual(status, 200)
+        self.assertFalse(review["response"]["allowed"])
+        self.assertEqual(review["response"]["uid"], "request-nested")
+
+    @mock.patch.object(webhook.BaseHTTPRequestHandler, "setup")
+    def test_client_socket_has_read_timeout(self, setup):
+        handler = webhook.Webhook.__new__(webhook.Webhook)
+        handler.connection = mock.Mock()
+        handler.setup()
+        setup.assert_called_once_with()
+        handler.connection.settimeout.assert_called_once_with(webhook.HTTP_TIMEOUT)
+
     @mock.patch.object(webhook, "recovery_patch", side_effect=RuntimeError("recovery failed"))
     def test_recovery_failure_denies_valid_review(self, _recovery_patch):
         with mock.patch("sys.stderr", new_callable=StringIO) as stderr:

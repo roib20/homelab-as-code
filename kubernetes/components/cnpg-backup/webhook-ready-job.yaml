@@ -4,6 +4,8 @@ kind: Job
 metadata:
   name: cnpg-bootstrap-webhook-ready
   annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-2"
 spec:
   activeDeadlineSeconds: 300
