@@ -37,6 +37,10 @@ spec:
             - /spec/bootstrap
             - /spec/externalClusters
           kind: Cluster
+        - group: ""
+          jsonPointers:
+            - /spec/dataSourceRef
+          kind: PersistentVolumeClaim
         - group: argoproj.io
           jsonPointers:
             - /status
@@ -51,6 +55,7 @@ spec:
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
+          - RespectIgnoreDifferences=true
           - ServerSideApply=true
           - ServerSideDiff=true
   templatePatch: |
