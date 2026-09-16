@@ -16,6 +16,7 @@ CA_PATH = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
 ANNOTATION = "postgresql.cnpg.homelab.towerofkubes.com/barman-server-name"
 API_TIMEOUT = 3
 BARMAN_TIMEOUT = 8
+HTTP_TIMEOUT = 8
 MAX_BODY_SIZE = 1024 * 1024
 CNPG_GROUP = "postgresql.cnpg.io"
 
@@ -154,6 +155,10 @@ def recovery_patch(cluster):
 
 
 class Webhook(BaseHTTPRequestHandler):
+    def setup(self):
+        super().setup()
+        self.connection.settimeout(HTTP_TIMEOUT)
+
     def _send_review(self, status: int, response: dict[str, Any]) -> None:
         body = json.dumps(
             {"apiVersion": "admission.k8s.io/v1", "kind": "AdmissionReview", "response": response}
@@ -224,6 +229,7 @@ class Webhook(BaseHTTPRequestHandler):
             TypeError,
             UnicodeError,
             ValueError,
+            AttributeError,
             subprocess.SubprocessError,
         ) as error:
             uid = review.get("request", {}).get("uid", "") if isinstance(review, dict) and isinstance(review.get("request"), dict) else ""
