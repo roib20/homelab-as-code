@@ -6,6 +6,8 @@ resources:
   - external-secrets
   - resources/cnpg-cluster.yaml
   - resources/httproute.yaml
+components:
+  - ../../../../../../components/cnpg-backup
 helmCharts:
   - name: app-template
     repo: oci://ghcr.io/bjw-s-labs/helm
@@ -22,3 +24,18 @@ configMapGenerator:
       - /tmp/env-vars.env
 replacements:
   - path: replacements.yaml
+patches:
+  - target:
+      kind: ObjectStore
+      name: cnpg-backups
+    patch: |-
+      - op: replace
+        path: /spec/configuration/destinationPath
+        value: s3://k8s-backups/cnpg/floppy
+  - target:
+      kind: ScheduledBackup
+      name: cnpg-backup
+    patch: |-
+      - op: replace
+        path: /spec/schedule
+        value: "0 30 21 * * *"

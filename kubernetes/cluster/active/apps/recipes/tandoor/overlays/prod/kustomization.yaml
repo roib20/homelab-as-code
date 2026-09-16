@@ -6,6 +6,8 @@ resources:
   - external-secrets
   - resources/cnpg-cluster.yaml
   - resources/httproute.yaml
+components:
+  - ../../../../../../../components/cnpg-backup
 helmCharts:
   - name: tandoor-recipes
     repo: oci://oci.trueforge.org/truecharts
@@ -30,3 +32,17 @@ replacements:
 patches:
   - path: patches/chart-secret-cleanup.yaml
   - path: patches/postgres-ca-mount.yaml
+  - target:
+      kind: ObjectStore
+      name: cnpg-backups
+    patch: |-
+      - op: replace
+        path: /spec/configuration/destinationPath
+        value: s3://k8s-backups/cnpg/tandoor
+  - target:
+      kind: ScheduledBackup
+      name: cnpg-backup
+    patch: |-
+      - op: replace
+        path: /spec/schedule
+        value: "0 0 2 * * *"

@@ -6,3 +6,20 @@ resources:
   - resources/databases
   - resources/external-secrets
   - resources/storage
+components:
+  - ../../../../../../../components/cnpg-backup
+patches:
+  - target:
+      kind: ObjectStore
+      name: cnpg-backups
+    patch: |-
+      - op: replace
+        path: /spec/configuration/destinationPath
+        value: s3://k8s-backups/cnpg/servarr
+  - target:
+      kind: ScheduledBackup
+      name: cnpg-backup
+    patch: |-
+      - op: replace
+        path: /spec/schedule
+        value: "0 0 1 * * *"

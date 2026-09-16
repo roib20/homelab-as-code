@@ -35,6 +35,11 @@ spec:
       disabledDefaultServices:
         - ro
         - r
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: cnpg-backups
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database

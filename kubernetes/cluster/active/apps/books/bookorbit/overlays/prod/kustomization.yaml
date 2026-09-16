@@ -8,6 +8,8 @@ resources:
   - resources/httproute.yaml
   - resources/oidc.yaml
   - resources/smb-mediadata-rwx.yaml
+components:
+  - ../../../../../../../components/cnpg-backup
 helmCharts:
   - name: app-template
     repo: oci://ghcr.io/bjw-s-labs/helm
@@ -35,3 +37,17 @@ patches:
       kind: Deployment
       name: bookorbit
       namespace: bookorbit
+  - target:
+      kind: ObjectStore
+      name: cnpg-backups
+    patch: |-
+      - op: replace
+        path: /spec/configuration/destinationPath
+        value: s3://k8s-backups/cnpg/bookorbit
+  - target:
+      kind: ScheduledBackup
+      name: cnpg-backup
+    patch: |-
+      - op: replace
+        path: /spec/schedule
+        value: "0 0 21 * * *"

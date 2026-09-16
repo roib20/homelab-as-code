@@ -6,6 +6,8 @@ resources:
   - external-secrets
   - resources/cnpg-cluster.yaml
   - resources/httproute.yaml
+components:
+  - ../../../../../../components/cnpg-backup
 helmCharts:
   - name: opengist
     repo: https://helm.opengist.io
@@ -19,6 +21,20 @@ helmCharts:
 patches:
   - path: patches/service-http-targetport.yaml
   - path: patches/statefulset-command.yaml
+  - target:
+      kind: ObjectStore
+      name: cnpg-backups
+    patch: |-
+      - op: replace
+        path: /spec/configuration/destinationPath
+        value: s3://k8s-backups/cnpg/opengist
+  - target:
+      kind: ScheduledBackup
+      name: cnpg-backup
+    patch: |-
+      - op: replace
+        path: /spec/schedule
+        value: "0 0 23 * * *"
 configMapGenerator:
   - name: env-vars
     envs:
