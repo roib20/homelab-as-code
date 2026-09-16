@@ -16,6 +16,11 @@ webhooks:
         port: 443
     failurePolicy: Fail
     matchPolicy: Equivalent
+    matchConditions:
+      - name: annotated-for-barman-recovery
+        expression: >-
+          has(object.metadata.annotations) &&
+          'postgresql.cnpg.homelab.towerofkubes.com/barman-server-name' in object.metadata.annotations
     namespaceSelector: {}
     reinvocationPolicy: Never
     rules:
@@ -25,4 +30,4 @@ webhooks:
         resources: [clusters]
         scope: Namespaced
     sideEffects: None
-    timeoutSeconds: 10
+    timeoutSeconds: 25

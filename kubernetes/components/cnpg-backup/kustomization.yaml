@@ -4,6 +4,7 @@ kind: Component
 resources:
   - object-store.yaml
   - scheduled-backup.yaml
+  - webhook-ready-job.yaml
 replacements:
   - source:
       kind: Cluster

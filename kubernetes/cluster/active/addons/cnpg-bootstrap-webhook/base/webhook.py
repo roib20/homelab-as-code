@@ -1,4 +1,5 @@
 import base64
+import binascii
 import json
 import os
 import ssl
@@ -11,6 +12,8 @@ API = "https://kubernetes.default.svc"
 TOKEN_PATH = "/var/run/secrets/kubernetes.io/serviceaccount/token"
 CA_PATH = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
 ANNOTATION = "postgresql.cnpg.homelab.towerofkubes.com/barman-server-name"
+API_TIMEOUT = 3
+BARMAN_TIMEOUT = 8
 
 
 def request(path):
@@ -19,7 +22,7 @@ def request(path):
     req = urllib.request.Request(API + path, headers={"Authorization": f"Bearer {token}"})
     context = ssl.create_default_context(cafile=CA_PATH)
     try:
-        with urllib.request.urlopen(req, context=context, timeout=10) as response:
+        with urllib.request.urlopen(req, context=context, timeout=API_TIMEOUT) as response:
             return response.status, json.load(response)
     except urllib.error.HTTPError as error:
         return error.code, None
@@ -32,7 +35,7 @@ def secret_value(namespace, selector):
     value = secret.get("data", {}).get(selector["key"])
     if value is None:
         raise RuntimeError(f"Secret {selector['name']} has no key {selector['key']}")
-    return base64.b64decode(value).decode()
+    return base64.b64decode(value, validate=True).decode()
 
 
 def completed_backups(namespace, object_store, server_name):
@@ -54,7 +57,7 @@ def completed_backups(namespace, object_store, server_name):
             endpoint = secret_value(namespace, item["valueFrom"]["secretKeyRef"])
             command.extend(["--endpoint-url", endpoint])
     command.extend([configuration["destinationPath"], server_name])
-    result = subprocess.run(command, env=env, capture_output=True, text=True, timeout=10, check=False)
+    result = subprocess.run(command, env=env, capture_output=True, text=True, timeout=BARMAN_TIMEOUT, check=False)
     if result.returncode != 0:
         raise RuntimeError("Barman catalog query failed")
     catalog = json.loads(result.stdout)
@@ -90,7 +93,22 @@ def recovery_patch(cluster):
         raise RuntimeError(f"ObjectStore {object_store_name} is unavailable")
     if not completed_backups(namespace, object_store, server_name):
         return []
-    return [
+    external_clusters = cluster["spec"].get("externalClusters", [])
+    if not isinstance(external_clusters, list):
+        raise TypeError("spec.externalClusters must be a list")
+    if any(item.get("name") == "clusterBackup" for item in external_clusters if isinstance(item, dict)):
+        raise ValueError("spec.externalClusters already contains clusterBackup")
+    external_cluster = {
+        "name": "clusterBackup",
+        "plugin": {
+            "name": "barman-cloud.cloudnative-pg.io",
+            "parameters": {
+                "barmanObjectName": object_store_name,
+                "serverName": server_name,
+            },
+        },
+    }
+    patch = [
         {
             "op": "replace",
             "path": "/spec/bootstrap",
@@ -102,26 +120,20 @@ def recovery_patch(cluster):
                 }
             },
         },
-        {
-            "op": "add",
-            "path": "/spec/externalClusters",
-            "value": [
-                {
-                    "name": "clusterBackup",
-                    "plugin": {
-                        "name": "barman-cloud.cloudnative-pg.io",
-                        "parameters": {
-                            "barmanObjectName": object_store_name,
-                            "serverName": server_name,
-                        },
-                    },
-                }
-            ],
-        },
     ]
+    if external_clusters:
+        patch.append({"op": "add", "path": "/spec/externalClusters/-", "value": external_cluster})
+    else:
+        patch.append({"op": "add", "path": "/spec/externalClusters", "value": [external_cluster]})
+    return patch
 
 
 class Webhook(BaseHTTPRequestHandler):
+    def do_GET(self):
+        status = 200 if self.path == "/healthz" else 404
+        self.send_response(status)
+        self.end_headers()
+
     def do_POST(self):
         review = {}
         try:
@@ -132,7 +144,17 @@ class Webhook(BaseHTTPRequestHandler):
             if patch:
                 response["patchType"] = "JSONPatch"
                 response["patch"] = base64.b64encode(json.dumps(patch).encode()).decode()
-        except (KeyError, OSError, RuntimeError, TypeError, ValueError, json.JSONDecodeError, subprocess.SubprocessError) as error:
+        except (
+            binascii.Error,
+            KeyError,
+            OSError,
+            RuntimeError,
+            TypeError,
+            UnicodeError,
+            ValueError,
+            json.JSONDecodeError,
+            subprocess.SubprocessError,
+        ) as error:
             response = {"uid": review.get("request", {}).get("uid", ""), "allowed": False, "status": {"message": str(error)}}
         body = json.dumps({"apiVersion": "admission.k8s.io/v1", "kind": "AdmissionReview", "response": response}).encode()
         self.send_response(200)
@@ -145,8 +167,13 @@ class Webhook(BaseHTTPRequestHandler):
         return
 
 
-server = ThreadingHTTPServer(("", 8443), Webhook)
-context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-context.load_cert_chain("/tls/tls.crt", "/tls/tls.key")
-server.socket = context.wrap_socket(server.socket, server_side=True)
-server.serve_forever()
+def main():
+    server = ThreadingHTTPServer(("", 8443), Webhook)
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    context.load_cert_chain("/tls/tls.crt", "/tls/tls.key")
+    server.socket = context.wrap_socket(server.socket, server_side=True)
+    server.serve_forever()
+
+
+if __name__ == "__main__":
+    main()

@@ -5,6 +5,7 @@ resources:
   - namespace.yaml
   - rbac.yaml
   - deployment.yaml
+  - pod-disruption-budget.yaml
   - service.yaml
   - certificate.yaml
   - mutating-webhook.yaml
