@@ -262,6 +262,10 @@ server:
       manifest:
         apiVersion: postgresql.cnpg.io/v1
         kind: Cluster
+        metadata:
+          annotations:
+            argocd.argoproj.io/sync-wave: "-1"
+            postgresql.cnpg.homelab.towerofkubes.com/barman-server-name: immich-cnpg
         spec:
           instances: 2
           storage:
@@ -282,16 +286,6 @@ server:
                   - /usr/lib/postgresql/18/lib
                 extension_control_path:
                   - /usr/share/postgresql/18/
-          bootstrap:
-            recovery:
-              source: clusterBackup
-          externalClusters:
-            - name: clusterBackup
-              plugin:
-                name: barman-cloud.cloudnative-pg.io
-                parameters:
-                  barmanObjectName: cnpg-backups
-                  serverName: immich-cnpg
           managed:
             services:
               disabledDefaultServices:
@@ -312,6 +306,10 @@ server:
               isWALArchiver: true
               parameters:
                 barmanObjectName: cnpg-backups
+          bootstrap:
+            initdb:
+              database: immich
+              owner: immich
     cnpg-database:
       forceRename: immich-database
       manifest:

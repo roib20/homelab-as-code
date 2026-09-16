@@ -2,6 +2,9 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+    postgresql.cnpg.homelab.towerofkubes.com/barman-server-name: tandoor-postgres
   name: tandoor-postgres
 spec:
   instances: 2
@@ -14,16 +17,6 @@ spec:
     pg_hba:
       - hostssl tandoor tandoor all scram-sha-256
       - host tandoor tandoor all reject
-  bootstrap:
-    recovery:
-      source: clusterBackup
-  externalClusters:
-    - name: clusterBackup
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        parameters:
-          barmanObjectName: cnpg-backups
-          serverName: tandoor-postgres
   managed:
     services:
       disabledDefaultServices:
@@ -43,3 +36,7 @@ spec:
       isWALArchiver: true
       parameters:
         barmanObjectName: cnpg-backups
+  bootstrap:
+    initdb:
+      database: tandoor
+      owner: tandoor

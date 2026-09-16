@@ -2,6 +2,9 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+    postgresql.cnpg.homelab.towerofkubes.com/barman-server-name: streamystats-postgres
   name: streamystats-postgres
 spec:
   instances: 1
@@ -26,16 +29,6 @@ spec:
           - /usr/lib/postgresql/18/lib
         extension_control_path:
           - /usr/share/postgresql/18/
-  bootstrap:
-    recovery:
-      source: clusterBackup
-  externalClusters:
-    - name: clusterBackup
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        parameters:
-          barmanObjectName: cnpg-backups
-          serverName: streamystats-postgres
   managed:
     services:
       disabledDefaultServices:
@@ -46,6 +39,10 @@ spec:
       isWALArchiver: true
       parameters:
         barmanObjectName: cnpg-backups
+  bootstrap:
+    initdb:
+      database: streamystats
+      owner: streamystats
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
