@@ -6,6 +6,7 @@ resources:
   - resources/cnpg-cluster.yaml
   - resources/httproute.yaml
 components:
+  - ../../../../../../components/kopiur-volume
   - ../../../../../../components/cnpg-backup
 helmCharts:
   - name: miniflux
@@ -47,3 +48,23 @@ patches:
       - op: replace
         path: /spec/schedule
         value: "0 30 22 * * *"
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: miniflux
+  - target:
+      kind: PersistentVolumeClaim
+      name: miniflux-config
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: miniflux
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore

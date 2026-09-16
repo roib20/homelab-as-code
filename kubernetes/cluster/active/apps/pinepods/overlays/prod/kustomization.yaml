@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
 components:
+  - ../../../../../../components/kopiur-volume
   - ../../../../../../components/cnpg-backup
 helmCharts:
   - name: app-template
@@ -41,3 +42,36 @@ patches:
       - op: replace
         path: /spec/schedule
         value: "0 0 0 * * *"
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: pinepods
+  - target:
+      kind: PersistentVolumeClaim
+      name: pinepods-backup
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: pinepods
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore
+  - target:
+      kind: PersistentVolumeClaim
+      name: pinepods-config
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: pinepods
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore

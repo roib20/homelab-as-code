@@ -5,6 +5,8 @@ resources:
   - ../../base
   - external-secrets
   - resources/httproute.yaml
+components:
+  - ../../../../../../components/kopiur-volume
 helmCharts:
   - name: karakeep
     repo: https://karakeep-app.github.io/helm-charts
@@ -28,3 +30,23 @@ replacements:
   - path: replacements.yaml
 patches:
   - path: patches/karakeep-sts.yaml
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: karakeep
+  - target:
+      kind: PersistentVolumeClaim
+      name: karakeep-meilisearch
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: karakeep
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore

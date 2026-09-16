@@ -17,5 +17,51 @@ configMapGenerator:
   - name: env-vars-sonarr-hd
     envs:
       - /tmp/env-vars.env
+components:
+  - ../../../../../../../components/kopiur-volume
 replacements:
   - path: replacements.yaml
+patches:
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: sonarr-hd-snapshot-policy
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: sonarr-hd-config
+  - target:
+      kind: SnapshotSchedule
+      name: kopiur-snapshot-schedule
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: sonarr-hd-snapshot-schedule
+      - op: replace
+        path: /spec/policyRef/name
+        value: sonarr-hd-snapshot-policy
+  - target:
+      kind: Restore
+      name: kopiur-restore
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: sonarr-hd-restore
+      - op: replace
+        path: /spec/source/fromPolicy/name
+        value: sonarr-hd-snapshot-policy
+  - target:
+      kind: PersistentVolumeClaim
+      name: sonarr-hd-config
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: sonarr-hd-config
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: sonarr-hd-restore

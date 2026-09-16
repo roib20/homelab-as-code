@@ -3,6 +3,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+components:
+  - ../../../../../../../components/kopiur-volume
 helmCharts:
   - name: prowlarr
     repo: oci://oci.trueforge.org/truecharts
@@ -19,3 +21,47 @@ configMapGenerator:
       - /tmp/env-vars.env
 replacements:
   - path: replacements.yaml
+patches:
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: prowlarr-snapshot-policy
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: prowlarr-config
+  - target:
+      kind: SnapshotSchedule
+      name: kopiur-snapshot-schedule
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: prowlarr-snapshot-schedule
+      - op: replace
+        path: /spec/policyRef/name
+        value: prowlarr-snapshot-policy
+  - target:
+      kind: Restore
+      name: kopiur-restore
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: prowlarr-restore
+      - op: replace
+        path: /spec/source/fromPolicy/name
+        value: prowlarr-snapshot-policy
+  - target:
+      kind: PersistentVolumeClaim
+      name: prowlarr-config
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: prowlarr-config
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: prowlarr-restore

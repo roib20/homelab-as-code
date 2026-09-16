@@ -6,6 +6,8 @@ resources:
   - ../../base
   - external-secrets
   - resources/ingress.yaml
+components:
+  - ../../../../../../../components/kopiur-volume
 helmCharts:
   - name: app-template
     repo: oci://ghcr.io/bjw-s-labs/helm
@@ -33,3 +35,24 @@ configMapGenerator:
       disableNameSuffixHash: true
 replacements:
   - path: replacements.yaml
+patches:
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: zeroclaw
+  - target:
+      kind: PersistentVolumeClaim
+      name: zeroclaw
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: zeroclaw
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore

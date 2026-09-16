@@ -7,6 +7,7 @@ resources:
   - resources/cnpg-cluster.yaml
   - resources/httproute.yaml
 components:
+  - ../../../../../../../components/kopiur-volume
   - ../../../../../../../components/cnpg-backup
 helmCharts:
   - name: outline
@@ -45,3 +46,23 @@ patches:
       - op: replace
         path: /spec/schedule
         value: "0 30 23 * * *"
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: outline
+  - target:
+      kind: PersistentVolumeClaim
+      name: outline-data
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: outline
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore

@@ -3,6 +3,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+components:
+  - ../../../../../../../components/kopiur-volume
 helmCharts:
   - name: radarr
     repo: oci://oci.trueforge.org/truecharts
@@ -19,3 +21,47 @@ configMapGenerator:
       - /tmp/env-vars.env
 replacements:
   - path: replacements.yaml
+patches:
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: radarr-uhd-snapshot-policy
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: radarr-uhd-config
+  - target:
+      kind: SnapshotSchedule
+      name: kopiur-snapshot-schedule
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: radarr-uhd-snapshot-schedule
+      - op: replace
+        path: /spec/policyRef/name
+        value: radarr-uhd-snapshot-policy
+  - target:
+      kind: Restore
+      name: kopiur-restore
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: radarr-uhd-restore
+      - op: replace
+        path: /spec/source/fromPolicy/name
+        value: radarr-uhd-snapshot-policy
+  - target:
+      kind: PersistentVolumeClaim
+      name: radarr-uhd-config
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: radarr-uhd-config
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: radarr-uhd-restore

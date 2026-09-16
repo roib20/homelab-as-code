@@ -4,6 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
   - resources/ingress.yaml
+components:
+  - ../../../../../../../components/kopiur-volume
 helmCharts:
   - name: app-template
     repo: oci://ghcr.io/bjw-s-labs/helm
@@ -20,3 +22,24 @@ configMapGenerator:
       - /tmp/env-vars.env
 replacements:
   - path: replacements.yaml
+patches:
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: crumbs
+  - target:
+      kind: PersistentVolumeClaim
+      name: crumbs
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: crumbs
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore
