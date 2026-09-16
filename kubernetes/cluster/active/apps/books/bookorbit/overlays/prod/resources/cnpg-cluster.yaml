@@ -2,6 +2,9 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+    postgresql.cnpg.homelab.towerofkubes.com/barman-server-name: bookorbit-postgres
   name: bookorbit-postgres
   namespace: bookorbit
 spec:
@@ -15,16 +18,6 @@ spec:
       - name: pgvector
         image:
           reference: ghcr.io/cloudnative-pg/pgvector:0.8.2-18-trixie
-  bootstrap:
-    recovery:
-      source: clusterBackup
-  externalClusters:
-    - name: clusterBackup
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        parameters:
-          barmanObjectName: cnpg-backups
-          serverName: bookorbit-postgres
   managed:
     services:
       disabledDefaultServices:
@@ -44,3 +37,11 @@ spec:
       isWALArchiver: true
       parameters:
         barmanObjectName: cnpg-backups
+  bootstrap:
+    initdb:
+      database: bookorbit
+      owner: bookorbit
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS pg_trgm
+        - CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
+        - CREATE EXTENSION IF NOT EXISTS vector

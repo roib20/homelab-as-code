@@ -304,18 +304,12 @@ rawResources:
     manifest:
       apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
+      metadata:
+        annotations:
+          argocd.argoproj.io/sync-wave: "-1"
+          postgresql.cnpg.homelab.towerofkubes.com/barman-server-name: pinepods-postgres
       spec:
         instances: 1
-        bootstrap:
-          recovery:
-            source: clusterBackup
-        externalClusters:
-          - name: clusterBackup
-            plugin:
-              name: barman-cloud.cloudnative-pg.io
-              parameters:
-                barmanObjectName: cnpg-backups
-                serverName: pinepods-postgres
         managed:
           services:
             disabledDefaultServices:
@@ -335,6 +329,10 @@ rawResources:
             isWALArchiver: true
             parameters:
               barmanObjectName: cnpg-backups
+        bootstrap:
+          initdb:
+            database: pinepods_database
+            owner: pinepods
 
   external-secret-pinepods:
     forceRename: pinepods-env

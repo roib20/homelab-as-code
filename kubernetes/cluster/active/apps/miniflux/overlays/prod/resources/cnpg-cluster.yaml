@@ -2,24 +2,21 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+    postgresql.cnpg.homelab.towerofkubes.com/barman-server-name: miniflux-postgres
   name: miniflux-postgres
 spec:
+  bootstrap:
+    initdb:
+      database: miniflux
+      owner: miniflux
   instances: 2
   primaryUpdateMethod: switchover
   affinity:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname
     podAntiAffinityType: required
-  bootstrap:
-    recovery:
-      source: clusterBackup
-  externalClusters:
-    - name: clusterBackup
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        parameters:
-          barmanObjectName: cnpg-backups
-          serverName: miniflux-postgres
   managed:
     services:
       disabledDefaultServices:

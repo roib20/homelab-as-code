@@ -2,23 +2,20 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+    postgresql.cnpg.homelab.towerofkubes.com/barman-server-name: servarr-postgres
   name: servarr-postgres
 spec:
+  bootstrap:
+    initdb:
+      database: servarr
+      owner: servarr
   instances: 3
   affinity:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname
     podAntiAffinityType: required
-  bootstrap:
-    recovery:
-      source: clusterBackup
-  externalClusters:
-    - name: clusterBackup
-      plugin:
-        name: barman-cloud.cloudnative-pg.io
-        parameters:
-          barmanObjectName: cnpg-backups
-          serverName: servarr-postgres
   managed:
     services:
       disabledDefaultServices:
