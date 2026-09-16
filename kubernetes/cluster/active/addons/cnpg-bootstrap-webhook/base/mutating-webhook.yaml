@@ -1,0 +1,28 @@
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: cnpg-bootstrap-webhook
+  annotations:
+    cert-manager.io/inject-ca-from: cnpg-bootstrap-system/cnpg-bootstrap-webhook
+webhooks:
+  - name: bootstrap.postgresql.cnpg.homelab.towerofkubes.com
+    admissionReviewVersions: [v1]
+    clientConfig:
+      service:
+        name: cnpg-bootstrap-webhook
+        namespace: cnpg-bootstrap-system
+        path: /mutate
+        port: 443
+    failurePolicy: Fail
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    reinvocationPolicy: Never
+    rules:
+      - apiGroups: [postgresql.cnpg.io]
+        apiVersions: [v1]
+        operations: [CREATE]
+        resources: [clusters]
+        scope: Namespaced
+    sideEffects: None
+    timeoutSeconds: 10
