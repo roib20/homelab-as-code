@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "cnpg-bootstrap-webhook",
+  "destName": "in-cluster",
+  "destNamespace": "cnpg-bootstrap-system",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "cnpg-bootstrap-webhook"
+}

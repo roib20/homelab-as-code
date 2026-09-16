@@ -1,0 +1,26 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: cnpg-bootstrap-webhook-issuer
+  namespace: cnpg-bootstrap-system
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cnpg-bootstrap-webhook
+  namespace: cnpg-bootstrap-system
+spec:
+  commonName: cnpg-bootstrap-webhook
+  dnsNames:
+    - cnpg-bootstrap-webhook
+    - cnpg-bootstrap-webhook.cnpg-bootstrap-system
+    - cnpg-bootstrap-webhook.cnpg-bootstrap-system.svc
+  duration: 2160h
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: cnpg-bootstrap-webhook-issuer
+  secretName: cnpg-bootstrap-webhook
