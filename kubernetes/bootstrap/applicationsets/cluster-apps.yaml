@@ -32,6 +32,11 @@ spec:
         name: '{{ .destName }}'
         namespace: '{{ .destNamespace }}'
       ignoreDifferences:
+        - group: postgresql.cnpg.io
+          jsonPointers:
+            - /spec/bootstrap
+            - /spec/externalClusters
+          kind: Cluster
         - group: argoproj.io
           jsonPointers:
             - /status
