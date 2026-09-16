@@ -9,13 +9,16 @@ helmCharts:
     version: 0.29.0
     releaseName: cloudnative-pg
     namespace: cnpg-system
-    valuesFile: ../../base/values.yaml
+    valuesFile: ../../base/values/cloudnative-pg-values.yaml
     additionalValuesFiles:
-      - values-override.yaml
+      - values/cloudnative-pg-values-override.yaml
     includeCRDs: true
   - name: plugin-barman-cloud
     repo: oci://ghcr.io/cloudnative-pg/charts
     version: 0.8.0
     releaseName: plugin-barman-cloud
     namespace: cnpg-system
+    valuesFile: ../../base/values/plugin-barman-cloud-values.yaml
+    additionalValuesFiles:
+      - values/plugin-barman-cloud-values-override.yaml
     includeCRDs: true
