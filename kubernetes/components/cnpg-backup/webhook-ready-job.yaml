@@ -4,8 +4,7 @@ kind: Job
 metadata:
   name: cnpg-bootstrap-webhook-ready
   annotations:
-    argocd.argoproj.io/hook: PreSync
-    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+    argocd.argoproj.io/sync-wave: "-2"
 spec:
   activeDeadlineSeconds: 300
   backoffLimit: 5
@@ -20,6 +19,9 @@ spec:
         - name: check
           # renovate: datasource=docker depName=curlimages/curl
           image: docker.io/curlimages/curl:8.16.0
+          envFrom:
+            - secretRef:
+                name: cnpg-backup-secret
           args:
             - --fail
             - --insecure

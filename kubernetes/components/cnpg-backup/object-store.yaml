@@ -3,6 +3,8 @@ apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
 metadata:
   name: cnpg-backups
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
 spec:
   configuration:
     destinationPath: "s3://k8s-backups/cnpg"

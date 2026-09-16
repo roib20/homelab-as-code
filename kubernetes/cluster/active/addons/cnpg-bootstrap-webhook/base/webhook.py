@@ -4,6 +4,7 @@ import json
 import os
 import ssl
 import subprocess
+import sys
 import urllib.error
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -28,25 +29,31 @@ def request(path):
         return error.code, None
 
 
-def secret_value(namespace, selector):
-    status, secret = request(f"/api/v1/namespaces/{namespace}/secrets/{selector['name']}")
-    if status != 200:
-        raise RuntimeError(f"Secret {selector['name']} is unavailable")
+def secret_value(namespace, selector, cache=None):
+    name = selector["name"]
+    secret = cache.get(name) if cache is not None else None
+    if secret is None:
+        status, secret = request(f"/api/v1/namespaces/{namespace}/secrets/{name}")
+        if status != 200:
+            raise RuntimeError(f"Secret {name} is unavailable")
+        if cache is not None:
+            cache[name] = secret
     value = secret.get("data", {}).get(selector["key"])
     if value is None:
-        raise RuntimeError(f"Secret {selector['name']} has no key {selector['key']}")
+        raise RuntimeError(f"Secret {name} has no key {selector['key']}")
     return base64.b64decode(value, validate=True).decode()
 
 
 def completed_backups(namespace, object_store, server_name):
     configuration = object_store["spec"]["configuration"]
     credentials = configuration["s3Credentials"]
-    region = secret_value(namespace, credentials["region"])
+    secrets = {}
+    region = secret_value(namespace, credentials["region"], secrets)
     env = os.environ.copy()
     env.update(
         {
-            "AWS_ACCESS_KEY_ID": secret_value(namespace, credentials["accessKeyId"]),
-            "AWS_SECRET_ACCESS_KEY": secret_value(namespace, credentials["secretAccessKey"]),
+            "AWS_ACCESS_KEY_ID": secret_value(namespace, credentials["accessKeyId"], secrets),
+            "AWS_SECRET_ACCESS_KEY": secret_value(namespace, credentials["secretAccessKey"], secrets),
             "AWS_DEFAULT_REGION": region,
             "AWS_REGION": region,
         }
@@ -54,7 +61,7 @@ def completed_backups(namespace, object_store, server_name):
     command = ["barman-cloud-backup-list", "--cloud-provider", "aws-s3", "--format", "json"]
     for item in object_store["spec"].get("instanceSidecarConfiguration", {}).get("env", []):
         if item.get("name") == "AWS_ENDPOINT_URL" and "valueFrom" in item:
-            endpoint = secret_value(namespace, item["valueFrom"]["secretKeyRef"])
+            endpoint = secret_value(namespace, item["valueFrom"]["secretKeyRef"], secrets)
             command.extend(["--endpoint-url", endpoint])
     command.extend([configuration["destinationPath"], server_name])
     result = subprocess.run(command, env=env, capture_output=True, text=True, timeout=BARMAN_TIMEOUT, check=False)
@@ -155,6 +162,17 @@ class Webhook(BaseHTTPRequestHandler):
             json.JSONDecodeError,
             subprocess.SubprocessError,
         ) as error:
+            print(
+                json.dumps(
+                    {
+                        "level": "error",
+                        "message": str(error),
+                        "requestUID": review.get("request", {}).get("uid", ""),
+                    }
+                ),
+                file=sys.stderr,
+                flush=True,
+            )
             response = {"uid": review.get("request", {}).get("uid", ""), "allowed": False, "status": {"message": str(error)}}
         body = json.dumps({"apiVersion": "admission.k8s.io/v1", "kind": "AdmissionReview", "response": response}).encode()
         self.send_response(200)

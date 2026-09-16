@@ -94,6 +94,17 @@ class BarmanTests(unittest.TestCase):
         request.return_value = (200, {"data": {"key": value}})
         self.assertEqual(webhook.secret_value("default", {"name": "secret", "key": "key"}), "secret")
 
+    @mock.patch.object(webhook, "request")
+    def test_secret_reads_are_cached(self, request):
+        first = base64.b64encode(b"first").decode()
+        second = base64.b64encode(b"second").decode()
+        request.return_value = (200, {"data": {"first": first, "second": second}})
+        cache = {}
+
+        self.assertEqual(webhook.secret_value("default", {"name": "secret", "key": "first"}, cache), "first")
+        self.assertEqual(webhook.secret_value("default", {"name": "secret", "key": "second"}, cache), "second")
+        request.assert_called_once()
+
 
 if __name__ == "__main__":
     unittest.main()
