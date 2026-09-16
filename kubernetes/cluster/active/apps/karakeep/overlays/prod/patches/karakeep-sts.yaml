@@ -11,7 +11,9 @@ spec:
       metadata:
         name: data
         labels:
-          kopiur.home-operations.com/policy: karakeep
+          app.kubernetes.io/component: karakeep
+          app.kubernetes.io/instance: karakeep
+          app.kubernetes.io/name: karakeep
       spec:
         accessModes:
           - ReadWriteOnce

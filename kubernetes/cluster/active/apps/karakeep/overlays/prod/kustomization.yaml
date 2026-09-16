@@ -35,15 +35,13 @@ patches:
       name: kopiur-snapshot-policy
     patch: |-
       - op: replace
-        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
-        value: karakeep
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels
+        value:
+          app.kubernetes.io/instance: karakeep
   - target:
       kind: PersistentVolumeClaim
       name: karakeep-meilisearch
     patch: |-
-      - op: add
-        path: /metadata/labels/kopiur.home-operations.com~1policy
-        value: karakeep
       - op: add
         path: /spec/dataSourceRef
         value:
