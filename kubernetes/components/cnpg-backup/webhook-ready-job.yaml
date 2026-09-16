@@ -1,0 +1,44 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cnpg-bootstrap-webhook-ready
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+spec:
+  activeDeadlineSeconds: 300
+  backoffLimit: 5
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: check
+          # renovate: datasource=docker depName=curlimages/curl
+          image: docker.io/curlimages/curl:8.16.0
+          args:
+            - --fail
+            - --insecure
+            - --retry
+            - "60"
+            - --retry-all-errors
+            - --retry-delay
+            - "5"
+            - --silent
+            - --show-error
+            - https://cnpg-bootstrap-webhook.cnpg-bootstrap-system.svc/healthz
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            readOnlyRootFilesystem: true
+          resources:
+            requests:
+              cpu: 5m
+              memory: 8Mi
+            limits:
+              memory: 32Mi

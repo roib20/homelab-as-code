@@ -5,7 +5,7 @@ metadata:
   name: cnpg-bootstrap-webhook
   namespace: cnpg-bootstrap-system
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: cnpg-bootstrap-webhook
@@ -27,6 +27,18 @@ spec:
           ports:
             - name: https
               containerPort: 8443
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: https
+              scheme: HTTPS
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: https
+              scheme: HTTPS
+            periodSeconds: 5
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

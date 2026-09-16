@@ -1,5 +1,7 @@
 {
-  "annotations": {},
+  "annotations": {
+    "argocd.argoproj.io/sync-wave": "-10"
+  },
   "appName": "cnpg-bootstrap-webhook",
   "destName": "in-cluster",
   "destNamespace": "cnpg-bootstrap-system",
