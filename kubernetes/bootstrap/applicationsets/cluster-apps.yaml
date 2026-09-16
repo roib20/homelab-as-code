@@ -43,7 +43,7 @@ spec:
           kind: PersistentVolumeClaim
         - group: apps
           jsonPointers:
-            - /spec/volumeClaimTemplates/0/metadata/labels/kopiur.home-operations.com~1policy
+            - /spec/volumeClaimTemplates/0/metadata/labels
             - /spec/volumeClaimTemplates/0/spec/dataSourceRef
           kind: StatefulSet
           name: karakeep
