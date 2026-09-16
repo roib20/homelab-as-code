@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: cnpg-bootstrap-webhook
+      annotations:
+        secret.reloader.stakater.com/reload: cnpg-bootstrap-webhook
     spec:
       serviceAccountName: cnpg-bootstrap-webhook
       securityContext:

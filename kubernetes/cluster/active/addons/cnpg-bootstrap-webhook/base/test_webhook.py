@@ -2,7 +2,11 @@ import base64
 import binascii
 import importlib.util
 import json
+import threading
 import unittest
+from http.client import HTTPConnection
+from http.server import ThreadingHTTPServer
+from io import StringIO
 from pathlib import Path
 from unittest import mock
 
@@ -82,6 +86,35 @@ class BarmanTests(unittest.TestCase):
             webhook.completed_backups("default", object_store, "example-postgres")
         self.assertEqual(run.call_args.kwargs["timeout"], webhook.BARMAN_TIMEOUT)
 
+    @mock.patch.object(webhook, "secret_value", return_value="value")
+    @mock.patch.object(webhook.subprocess, "run")
+    def test_completed_backups_accepts_done_entry(self, run, _secret_value):
+        run.return_value = mock.Mock(returncode=0, stdout=json.dumps({"backups_list": [{"status": "DONE"}]}))
+        object_store = {
+            "spec": {
+                "configuration": {
+                    "destinationPath": "s3://backups",
+                    "s3Credentials": {"region": {}, "accessKeyId": {}, "secretAccessKey": {}},
+                }
+            }
+        }
+        self.assertTrue(webhook.completed_backups("default", object_store, "example-postgres"))
+
+    @mock.patch.object(webhook, "secret_value", side_effect=["region", "access", "password"])
+    @mock.patch.object(webhook.subprocess, "run")
+    def test_barman_failure_includes_sanitized_stderr(self, run, _secret_value):
+        run.return_value = mock.Mock(returncode=1, stdout="", stderr="  password failed\nwith details ")
+        object_store = {
+            "spec": {
+                "configuration": {
+                    "destinationPath": "s3://backups",
+                    "s3Credentials": {"region": {}, "accessKeyId": {}, "secretAccessKey": {}},
+                }
+            }
+        }
+        with self.assertRaisesRegex(RuntimeError, r"Barman catalog query failed: \[redacted\] failed with details"):
+            webhook.completed_backups("default", object_store, "server")
+
     @mock.patch.object(webhook, "request")
     def test_invalid_secret_encoding_is_rejected(self, request):
         request.return_value = (200, {"data": {"key": "not base64"}})
@@ -104,6 +137,82 @@ class BarmanTests(unittest.TestCase):
         self.assertEqual(webhook.secret_value("default", {"name": "secret", "key": "first"}, cache), "first")
         self.assertEqual(webhook.secret_value("default", {"name": "secret", "key": "second"}, cache), "second")
         request.assert_called_once()
+
+
+class HTTPTests(unittest.TestCase):
+    def setUp(self):
+        self.server = ThreadingHTTPServer(("127.0.0.1", 0), webhook.Webhook)
+        self.thread = threading.Thread(target=self.server.serve_forever)
+        self.thread.start()
+
+    def tearDown(self):
+        self.server.shutdown()
+        self.thread.join()
+        self.server.server_close()
+
+    def post(self, value, path="/mutate", content_type="application/json"):
+        connection = HTTPConnection(*self.server.server_address)
+        body = value if isinstance(value, bytes) else json.dumps(value).encode()
+        connection.request("POST", path, body, {"Content-Type": content_type})
+        response = connection.getresponse()
+        result = response.status, json.loads(response.read()) if response.getheader("Content-Type") == "application/json" else None
+        connection.close()
+        return result
+
+    @mock.patch.object(webhook, "recovery_patch", return_value=[{"op": "add", "path": "/spec/x", "value": 1}])
+    def test_allowed_mutation_returns_encoded_patch(self, recovery_patch):
+        status, review = self.post(
+            {
+                "apiVersion": "admission.k8s.io/v1",
+                "kind": "AdmissionReview",
+                "request": {
+                    "uid": "request-1",
+                    "operation": "CREATE",
+                    "resource": {"group": "postgresql.cnpg.io", "version": "v1", "resource": "clusters"},
+                    "object": {},
+                },
+            }
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(review["response"]["uid"], "request-1")
+        self.assertEqual(json.loads(base64.b64decode(review["response"]["patch"])), recovery_patch.return_value)
+
+    def test_malformed_request_is_denied_and_logged(self):
+        with mock.patch("sys.stderr", new_callable=StringIO) as stderr:
+            status, review = self.post({"apiVersion": "admission.k8s.io/v1", "kind": "AdmissionReview"})
+        self.assertEqual(status, 200)
+        self.assertFalse(review["response"]["allowed"])
+        self.assertIn('"level": "error"', stderr.getvalue())
+
+    @mock.patch.object(webhook, "recovery_patch", side_effect=RuntimeError("recovery failed"))
+    def test_recovery_failure_denies_valid_review(self, _recovery_patch):
+        with mock.patch("sys.stderr", new_callable=StringIO) as stderr:
+            status, review = self.post(
+                {
+                    "apiVersion": "admission.k8s.io/v1",
+                    "kind": "AdmissionReview",
+                    "request": {
+                        "uid": "request-2",
+                        "operation": "CREATE",
+                        "resource": {"group": "postgresql.cnpg.io", "version": "v1", "resource": "clusters"},
+                        "object": {},
+                    },
+                }
+            )
+        self.assertEqual(status, 200)
+        self.assertFalse(review["response"]["allowed"])
+        self.assertEqual(review["response"]["uid"], "request-2")
+        self.assertIn("recovery failed", stderr.getvalue())
+
+    def test_wrong_path_is_rejected(self):
+        status, _ = self.post({}, "/wrong")
+        self.assertEqual(status, 404)
+
+    def test_wrong_content_type_is_denied(self):
+        with mock.patch("sys.stderr", new_callable=StringIO):
+            status, review = self.post({}, content_type="text/plain")
+        self.assertEqual(status, 415)
+        self.assertFalse(review["response"]["allowed"])
 
 
 if __name__ == "__main__":
