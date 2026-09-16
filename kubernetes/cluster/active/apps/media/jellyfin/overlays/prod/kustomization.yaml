@@ -6,11 +6,46 @@ resources:
   - resources/httproute.yaml
   - resources/pvc-smb-mediadata-rox.yaml
   - resources/resource-claim-template.yaml
+components:
+  - ../../../../../../../components/kopiur-volume
 patches:
   - path: patches/deployment-patch.yaml
     target:
       kind: Deployment
       name: jellyfin
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: jellyfin
+  - target:
+      kind: PersistentVolumeClaim
+      name: jellyfin-config
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: jellyfin
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore
+  - target:
+      kind: PersistentVolumeClaim
+      name: jellyfin-data
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: jellyfin
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore
 helmCharts:
   - name: jellyfin
     repo: oci://oci.trueforge.org/truecharts

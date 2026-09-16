@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
 components:
+  - ../../../../../../components/kopiur-volume
   - ../../../../../../components/cnpg-backup
 helmCharts:
   - name: immich
@@ -37,3 +38,49 @@ patches:
       - op: replace
         path: /spec/schedule
         value: "0 0 22 * * *"
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: immich
+  - target:
+      kind: PersistentVolumeClaim
+      name: immich-server-profile
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: immich
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore
+  - target:
+      kind: PersistentVolumeClaim
+      name: immich-server-thumbs
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: immich
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore
+  - target:
+      kind: PersistentVolumeClaim
+      name: immich-valkey
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: immich
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore

@@ -3,6 +3,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+components:
+  - ../../../../../../../components/kopiur-volume
 helmCharts:
   - name: profilarr
     repo: oci://oci.trueforge.org/truecharts
@@ -27,3 +29,47 @@ configMapGenerator:
       disableNameSuffixHash: true
 replacements:
   - path: replacements.yaml
+patches:
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: profilarr-snapshot-policy
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: profilarr-config
+  - target:
+      kind: SnapshotSchedule
+      name: kopiur-snapshot-schedule
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: profilarr-snapshot-schedule
+      - op: replace
+        path: /spec/policyRef/name
+        value: profilarr-snapshot-policy
+  - target:
+      kind: Restore
+      name: kopiur-restore
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: profilarr-restore
+      - op: replace
+        path: /spec/source/fromPolicy/name
+        value: profilarr-snapshot-policy
+  - target:
+      kind: PersistentVolumeClaim
+      name: profilarr-config
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: profilarr-config
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: profilarr-restore

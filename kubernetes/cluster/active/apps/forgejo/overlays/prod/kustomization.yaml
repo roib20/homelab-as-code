@@ -4,6 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
   - external-secrets/gitea-admin-secret.yaml.externalsecret
+components:
+  - ../../../../../../components/kopiur-volume
 helmCharts:
   - name: forgejo
     repo: oci://code.forgejo.org/forgejo-helm
@@ -20,3 +22,25 @@ configMapGenerator:
       - /tmp/env-vars.env
 replacements:
   - path: replacements.yaml
+patches:
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: forgejo
+  - target:
+      kind: PersistentVolumeClaim
+      name: gitea-shared-storage
+    patch: |-
+      - op: add
+        path: /metadata/labels
+        value:
+          kopiur.home-operations.com/policy: forgejo
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore

@@ -10,9 +10,15 @@ spec:
       kind: PersistentVolumeClaim
       metadata:
         name: data
+        labels:
+          kopiur.home-operations.com/policy: karakeep
       spec:
         accessModes:
           - ReadWriteOnce
+        dataSourceRef:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore
         resources:
           requests:
             storage: 2Gi

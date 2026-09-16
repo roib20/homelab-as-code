@@ -4,6 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
   - resources/pvc-smb-mediadata-rwx.yaml
+components:
+  - ../../../../../../components/kopiur-volume
 helmCharts:
   - name: qbittorrent
     repo: oci://oci.trueforge.org/truecharts
@@ -20,3 +22,24 @@ configMapGenerator:
       - /tmp/env-vars.env
 replacements:
   - path: replacements.yaml
+patches:
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: qbittorrent
+  - target:
+      kind: PersistentVolumeClaim
+      name: qbittorrent-config
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: qbittorrent
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore

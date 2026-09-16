@@ -8,6 +8,7 @@ resources:
   - resources/httproute.yaml
 components:
   - ../../../../../../../components/cnpg-backup
+  - ../../../../../../../components/kopiur-volume
 helmCharts:
   - name: tandoor-recipes
     repo: oci://oci.trueforge.org/truecharts
@@ -46,3 +47,23 @@ patches:
       - op: replace
         path: /spec/schedule
         value: "0 0 2 * * *"
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: tandoor
+  - target:
+      kind: PersistentVolumeClaim
+      name: tandoor-recipes-media
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: tandoor
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: kopiur-restore

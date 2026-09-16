@@ -3,6 +3,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+components:
+  - ../../../../../../../components/kopiur-volume
 helmCharts:
   - name: bazarr
     repo: oci://oci.trueforge.org/truecharts
@@ -19,3 +21,47 @@ configMapGenerator:
       - /tmp/env-vars.env
 replacements:
   - path: replacements.yaml
+patches:
+  - target:
+      kind: SnapshotPolicy
+      name: kopiur-snapshot-policy
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: bazarr-hd-snapshot-policy
+      - op: replace
+        path: /spec/sources/0/pvcSelector/labelSelector/matchLabels/kopiur.home-operations.com~1policy
+        value: bazarr-hd-config
+  - target:
+      kind: SnapshotSchedule
+      name: kopiur-snapshot-schedule
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: bazarr-hd-snapshot-schedule
+      - op: replace
+        path: /spec/policyRef/name
+        value: bazarr-hd-snapshot-policy
+  - target:
+      kind: Restore
+      name: kopiur-restore
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: bazarr-hd-restore
+      - op: replace
+        path: /spec/source/fromPolicy/name
+        value: bazarr-hd-snapshot-policy
+  - target:
+      kind: PersistentVolumeClaim
+      name: bazarr-hd-config
+    patch: |-
+      - op: add
+        path: /metadata/labels/kopiur.home-operations.com~1policy
+        value: bazarr-hd-config
+      - op: add
+        path: /spec/dataSourceRef
+        value:
+          apiGroup: kopiur.home-operations.com
+          kind: Restore
+          name: bazarr-hd-restore
