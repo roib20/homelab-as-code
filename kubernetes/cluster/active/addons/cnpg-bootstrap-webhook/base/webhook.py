@@ -8,6 +8,7 @@ import sys
 import urllib.error
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from typing import Any
 
 API = "https://kubernetes.default.svc"
 TOKEN_PATH = "/var/run/secrets/kubernetes.io/serviceaccount/token"
@@ -15,6 +16,8 @@ CA_PATH = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
 ANNOTATION = "postgresql.cnpg.homelab.towerofkubes.com/barman-server-name"
 API_TIMEOUT = 3
 BARMAN_TIMEOUT = 8
+MAX_BODY_SIZE = 1024 * 1024
+CNPG_GROUP = "postgresql.cnpg.io"
 
 
 def request(path):
@@ -59,14 +62,29 @@ def completed_backups(namespace, object_store, server_name):
         }
     )
     command = ["barman-cloud-backup-list", "--cloud-provider", "aws-s3", "--format", "json"]
+    sensitive = [
+        region,
+        env["AWS_ACCESS_KEY_ID"],
+        env["AWS_SECRET_ACCESS_KEY"],
+        configuration["destinationPath"],
+    ]
     for item in object_store["spec"].get("instanceSidecarConfiguration", {}).get("env", []):
         if item.get("name") == "AWS_ENDPOINT_URL" and "valueFrom" in item:
             endpoint = secret_value(namespace, item["valueFrom"]["secretKeyRef"], secrets)
+            sensitive.append(endpoint)
             command.extend(["--endpoint-url", endpoint])
     command.extend([configuration["destinationPath"], server_name])
     result = subprocess.run(command, env=env, capture_output=True, text=True, timeout=BARMAN_TIMEOUT, check=False)
     if result.returncode != 0:
-        raise RuntimeError("Barman catalog query failed")
+        detail = " ".join(result.stderr.split())
+        for value in sensitive:
+            if value:
+                detail = detail.replace(value, "[redacted]")
+        detail = detail[:512]
+        message = "Barman catalog query failed"
+        if detail:
+            message += f": {detail}"
+        raise RuntimeError(message)
     catalog = json.loads(result.stdout)
     entries = catalog.get("backups_list") if isinstance(catalog, dict) else None
     if not isinstance(entries, list):
@@ -136,18 +154,65 @@ def recovery_patch(cluster):
 
 
 class Webhook(BaseHTTPRequestHandler):
+    def _send_review(self, status: int, response: dict[str, Any]) -> None:
+        body = json.dumps(
+            {"apiVersion": "admission.k8s.io/v1", "kind": "AdmissionReview", "response": response}
+        ).encode()
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _deny(self, message: str, uid: str = "", status: int = 400) -> None:
+        response = {"uid": uid, "allowed": False, "status": {"message": message}}
+        print(
+            json.dumps({"level": "error", "message": message, "requestUID": uid}),
+            file=sys.stderr,
+            flush=True,
+        )
+        self._send_review(status, response)
+
     def do_GET(self):
         status = 200 if self.path == "/healthz" else 404
         self.send_response(status)
         self.end_headers()
 
     def do_POST(self):
-        review = {}
+        if self.path != "/mutate":
+            self.send_error(404)
+            return
+        if self.headers.get_content_type() != "application/json":
+            self._deny("Content-Type must be application/json", status=415)
+            return
         try:
-            review = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+            length = int(self.headers["Content-Length"])
+        except (KeyError, TypeError, ValueError):
+            self._deny("Content-Length is required")
+            return
+        if length < 0 or length > MAX_BODY_SIZE:
+            self._deny("request body is too large", status=413)
+            return
+        review = {}
+        review_status = 400
+        try:
+            review = json.loads(self.rfile.read(length))
+            if not isinstance(review, dict) or review.get("apiVersion") != "admission.k8s.io/v1" or review.get("kind") != "AdmissionReview":
+                raise ValueError("request must be an AdmissionReview v1")
+            review_status = 200
             request_data = review["request"]
+            if not isinstance(request_data, dict):
+                raise TypeError("AdmissionReview request is required")
+            uid = request_data.get("uid", "")
+            if not isinstance(uid, str) or not uid:
+                raise ValueError("request uid is required")
+            if request_data.get("operation") != "CREATE":
+                raise ValueError("only CREATE requests are supported")
+            resource = request_data.get("resource", {})
+            if resource != {"group": CNPG_GROUP, "version": "v1", "resource": "clusters"}:
+                raise ValueError("request is not a CloudNativePG Cluster")
             patch = recovery_patch(request_data["object"])
-            response = {"uid": request_data["uid"], "allowed": True}
+            response = {"uid": uid, "allowed": True}
             if patch:
                 response["patchType"] = "JSONPatch"
                 response["patch"] = base64.b64encode(json.dumps(patch).encode()).decode()
@@ -159,27 +224,12 @@ class Webhook(BaseHTTPRequestHandler):
             TypeError,
             UnicodeError,
             ValueError,
-            json.JSONDecodeError,
             subprocess.SubprocessError,
         ) as error:
-            print(
-                json.dumps(
-                    {
-                        "level": "error",
-                        "message": str(error),
-                        "requestUID": review.get("request", {}).get("uid", ""),
-                    }
-                ),
-                file=sys.stderr,
-                flush=True,
-            )
-            response = {"uid": review.get("request", {}).get("uid", ""), "allowed": False, "status": {"message": str(error)}}
-        body = json.dumps({"apiVersion": "admission.k8s.io/v1", "kind": "AdmissionReview", "response": response}).encode()
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+            uid = review.get("request", {}).get("uid", "") if isinstance(review, dict) and isinstance(review.get("request"), dict) else ""
+            self._deny(str(error), uid, review_status)
+            return
+        self._send_review(200, response)
 
     def log_message(self, _format, *_args):
         return
