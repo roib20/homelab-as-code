@@ -32,13 +32,13 @@ tasks:
     desc: "List all Longhorn backup volumes and target status"
     cmds:
       - echo "=== Longhorn Backup Target ==="
-      - kubectl get backuptargets.longhorn.io -n longhorn-system default -o wide 2>/dev/null || true
+      - kubectl get backuptargets.longhorn.io -n longhorn-system default -o wide
       - echo ""
       - echo "=== Longhorn Backup Volumes ==="
-      - kubectl get backupvolumes.longhorn.io -n longhorn-system -o wide 2>/dev/null || true
+      - kubectl get backupvolumes.longhorn.io -n longhorn-system -o wide
       - echo ""
       - echo "=== Longhorn System Backups (Metadata) ==="
-      - kubectl get systembackup.longhorn.io -n longhorn-system -o wide 2>/dev/null || true
+      - kubectl get systembackup.longhorn.io -n longhorn-system -o wide
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
@@ -92,17 +92,19 @@ tasks:
       vars: [CLUSTER, NS]
     cmds:
       - echo "=== CNPG Cluster Status ({{.CLUSTER}} in {{.NS}}) ==="
-      - kubectl get cluster {{.CLUSTER}} -n {{.NS}} -o wide 2>/dev/null || echo "Cluster {{.CLUSTER}} not found in {{.NS}}"
+      - kubectl get cluster {{.CLUSTER}} -n {{.NS}} -o wide
       - echo ""
       - echo "=== ObjectStore Configuration & Status ==="
-      - kubectl get objectstores.barmancloud.cnpg.io -n {{.NS}} -o wide 2>/dev/null || echo "No ObjectStore found in {{.NS}}"
+      - kubectl get objectstores.barmancloud.cnpg.io -n {{.NS}} -o wide
       - echo ""
       - echo "=== Recent Backups ==="
-      - kubectl get backups.postgresql.cnpg.io -n {{.NS}} --sort-by=.metadata.creationTimestamp 2>/dev/null | tail -n 6 || echo "No backups found in {{.NS}}"
+      - kubectl get backups.postgresql.cnpg.io -n {{.NS}} --sort-by=.metadata.creationTimestamp | tail -n 6
       - echo ""
       - echo "=== Backup Status JSON ==="
       - |
-        STATUS=$(kubectl get cluster {{.CLUSTER}} -n {{.NS}} -o jsonpath='{.status.backupStatus}' 2>/dev/null || true)
+        if ! STATUS=$(kubectl get cluster {{.CLUSTER}} -n {{.NS}} -o jsonpath='{.status.backupStatus}'); then
+          exit 1
+        fi
         if [ -z "${STATUS}" ]; then
           echo "No backup status recorded yet on cluster {{.CLUSTER}}"
         else
@@ -122,13 +124,13 @@ tasks:
     desc: "List all CNPG backups, schedules, and object stores across all namespaces"
     cmds:
       - echo "=== CNPG ObjectStores (R2 / S3 Targets) ==="
-      - kubectl get objectstores.barmancloud.cnpg.io -A -o wide 2>/dev/null || echo "No ObjectStores found"
+      - kubectl get objectstores.barmancloud.cnpg.io -A -o wide
       - echo ""
       - echo "=== CNPG Scheduled Backups ==="
-      - kubectl get scheduledbackups.postgresql.cnpg.io -A -o wide 2>/dev/null || echo "No ScheduledBackups found"
+      - kubectl get scheduledbackups.postgresql.cnpg.io -A -o wide
       - echo ""
       - echo "=== CNPG Backup Instances ==="
-      - kubectl get backups.postgresql.cnpg.io -A -o wide 2>/dev/null || echo "No Backup instances found"
+      - kubectl get backups.postgresql.cnpg.io -A -o wide
     preconditions:
       - sh: which kubectl
         msg: "kubectl is required"
