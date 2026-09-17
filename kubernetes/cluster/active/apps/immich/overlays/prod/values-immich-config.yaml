@@ -290,7 +290,7 @@ server:
                     loginPageMessage: ""
                     publicUsers: true
                   storageTemplate:
-                    enabled: false
+                    enabled: true
                     hashVerificationEnabled: true
                     template: '{{ printf "{{ \"{{\" }}y{{ \"}}\" }}/{{ \"{{\" }}y{{ \"}}\" }}-{{ \"{{\" }}MM{{ \"}}\" }}-{{ \"{{\" }}dd{{ \"}}\" }}/{{ \"{{\" }}filename{{ \"}}\" }}" }}'
                   templates:
