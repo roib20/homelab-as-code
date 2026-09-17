@@ -4,5 +4,4 @@ kind: Kustomization
 resources:
   - ../../base
   - external-secrets
-  - resources/backup-targets
   - resources/recurring-jobs

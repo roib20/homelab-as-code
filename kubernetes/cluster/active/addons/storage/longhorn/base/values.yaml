@@ -18,6 +18,10 @@ defaultSettings:
     "longhorn-csi-plugin":{"requests":{"cpu":"50m","memory":"128Mi"}},
     "longhorn-liveness-probe":{"requests":{"cpu":"10m","memory":"32Mi"}},
     "node-driver-registrar":{"requests":{"cpu":"10m","memory":"32Mi"}}}
+defaultBackupStore:
+  backupTarget: "s3://k8s-backups@auto/longhorn"
+  backupTargetCredentialSecret: longhorn-backup-secret
+  pollInterval: 300
 longhornManager:
   resources:
     requests:
