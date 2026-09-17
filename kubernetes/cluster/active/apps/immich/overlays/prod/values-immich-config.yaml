@@ -259,6 +259,7 @@ server:
                         secure: false
                         username: ""
                   oauth:
+                    accountManagementUrl: 'https://auth.{{ printf "{{ .FQDN_01 }}" }}/ui/profile'
                     allowInsecureRequests: false
                     autoLaunch: true
                     autoRegister: true
