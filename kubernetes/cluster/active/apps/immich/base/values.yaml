@@ -1,13 +1,13 @@
 ---
-# renovate: datasource=github-releases depName=immich-app/immich
-immichVersion: v3.2.2
+# renovate: datasource=github-releases depName=open-noodle/gallery
+immichVersion: v5.7.0-rc.1
 
 controllers:
   main:
     containers:
       main:
         image:
-          repository: &immichServerRepository ghcr.io/immich-app/immich-server
+          repository: &immichServerRepository ghcr.io/open-noodle/gallery-server
           tag: '{{ .Values.immichVersion }}'
 
 server:
@@ -32,7 +32,7 @@ machine-learning:
       containers:
         main:
           image:
-            repository: ghcr.io/immich-app/immich-machine-learning
+            repository: ghcr.io/open-noodle/gallery-ml
             tag: '{{ .Values.immichVersion }}-openvino'
 
 valkey:
