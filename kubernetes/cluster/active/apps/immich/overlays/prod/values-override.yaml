@@ -1,7 +1,7 @@
 ---
 defaultPodOptions:
   annotations:
-    secret.reloader.stakater.com/reload: "immich-cnpg-app,immich-cnpg-ca"
+    secret.reloader.stakater.com/reload: "immich-postgres-app,immich-postgres-ca"
 
 controllers:
   main:
@@ -26,7 +26,7 @@ controllers:
           DATABASE_CONN_URI:
             valueFrom:
               secretKeyRef:
-                name: immich-cnpg-app
+                name: immich-postgres-app
                 key: uri
           DB_URL: "$(DATABASE_CONN_URI)?sslmode=verify-full&sslrootcert=/postgres-ca/ca.crt"
           DB_VECTOR_EXTENSION: vectorchord
@@ -54,7 +54,7 @@ server:
             limits:
               memory: 2Gi
             requests:
-              cpu: 25m
+              cpu: 75m
               memory: 512Mi
     microservices:
       type: deployment
@@ -110,7 +110,7 @@ server:
             limits:
               memory: 2Gi
             requests:
-              cpu: 25m
+              cpu: 75m
               memory: 512Mi
   service:
     microservices:
@@ -174,7 +174,7 @@ server:
         - path: /data/profile
     postgres-ca:
       type: secret
-      name: immich-cnpg-ca
+      name: immich-postgres-ca
       globalMounts:
         - path: /postgres-ca
           readOnly: true
@@ -189,8 +189,8 @@ server:
             gethomepage.dev/enabled: "true"
             gethomepage.dev/description: Self-hosted photo and video backup solution.
             gethomepage.dev/group: Media
-            gethomepage.dev/icon: immich.svg
-            gethomepage.dev/name: Immich
+            gethomepage.dev/icon: noodle-gallery.svg
+            gethomepage.dev/name: Noodle Gallery
             gethomepage.dev/pod-selector: "app.kubernetes.io/instance=immich"
             gethomepage.dev/widget.type: "immich"
             gethomepage.dev/widget.url: "http://immich-server-main.immich.svc.cluster.local:2283"
@@ -258,7 +258,7 @@ server:
                     count: 1
                     deviceClassName: gpu.intel.com
     cnpg-cluster:
-      forceRename: immich-cnpg
+      forceRename: immich-postgres
       manifest:
         apiVersion: postgresql.cnpg.io/v1
         kind: Cluster
@@ -297,7 +297,7 @@ server:
             podAntiAffinityType: required
           resources:
             requests:
-              cpu: 20m
+              cpu: 75m
               memory: 128Mi
             limits:
               memory: 512Mi
@@ -315,7 +315,7 @@ server:
           name: immich
           owner: immich
           cluster:
-            name: immich-cnpg
+            name: immich-postgres
           extensions:
             - ensure: present
               name: vector
@@ -359,7 +359,7 @@ valkey:
             limits:
               memory: 128Mi
             requests:
-              cpu: 30m
+              cpu: 75m
               memory: 32Mi
   persistence:
     data:
@@ -387,5 +387,5 @@ machine-learning:
             limits:
               memory: 2Gi
             requests:
-              cpu: 25m
+              cpu: 75m
               memory: 512Mi
