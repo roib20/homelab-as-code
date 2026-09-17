@@ -9,7 +9,7 @@ resources:
 helmCharts:
   - name: app-template
     repo: oci://ghcr.io/bjw-s-labs/helm
-    version: 5.1.0
+    version: 5.2.0
     releaseName: papra
     namespace: papra
     valuesFile: ../../base/values.yaml
