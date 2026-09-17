@@ -1,7 +1,7 @@
 ---
 defaultPodOptions:
   annotations:
-    secret.reloader.stakater.com/reload: "immich-cnpg-app,immich-cnpg-ca,immich-config,immich-kanidm-oauth2-credentials"
+    secret.reloader.stakater.com/reload: "immich-config,immich-kanidm-oauth2-credentials,immich-postgres-app,immich-postgres-ca"
 
 immich:
   configurationKind: Secret
