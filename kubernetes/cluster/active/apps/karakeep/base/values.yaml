@@ -85,3 +85,10 @@ persistence:
       karakeep:
         karakeep:
           - path: /run
+  karakeep-tmp:
+    type: emptyDir
+    advancedMounts:
+      karakeep:
+        karakeep:
+          - path: /tmp
+            readonly: false

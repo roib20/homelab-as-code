@@ -1,4 +1,5 @@
 ---
+fullnameOverride: reloader
 reloader:
   enableHA: true
   reloadOnCreate: true
