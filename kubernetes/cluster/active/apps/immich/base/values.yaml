@@ -1,6 +1,6 @@
 ---
 # renovate: datasource=github-releases depName=immich-app/immich
-immichVersion: v3.2.1
+immichVersion: v3.2.2
 
 controllers:
   main:
