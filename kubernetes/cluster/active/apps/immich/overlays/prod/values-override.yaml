@@ -189,7 +189,7 @@ server:
             gethomepage.dev/enabled: "true"
             gethomepage.dev/description: Self-hosted photo and video backup solution.
             gethomepage.dev/group: Media
-            gethomepage.dev/icon: noodle-gallery.svg
+            gethomepage.dev/icon: sh-noodle-gallery.svg
             gethomepage.dev/name: Noodle Gallery
             gethomepage.dev/pod-selector: "app.kubernetes.io/instance=immich"
             gethomepage.dev/widget.type: "immich"
