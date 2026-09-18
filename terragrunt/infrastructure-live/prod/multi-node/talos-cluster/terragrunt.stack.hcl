@@ -35,7 +35,7 @@ locals {
       ip          = "192.168.1.61"
       endpoint    = "192.168.1.61"
       vm_id       = 1001
-      cpu_cores   = 4
+      cpu_cores   = 6
       memory      = 24576
       system_disk = 100
       data_disk   = 300
