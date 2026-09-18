@@ -50,6 +50,39 @@ server:
           env:
             IMMICH_HOST: 0.0.0.0
             IMMICH_WORKERS_INCLUDE: api
+          probes:
+            readiness:
+              enabled: true
+              custom: true
+              spec:
+                httpGet:
+                  path: /api/server/ping
+                  port: http
+                initialDelaySeconds: 20
+                periodSeconds: 10
+                timeoutSeconds: 5
+                failureThreshold: 12
+            liveness:
+              enabled: true
+              custom: true
+              spec:
+                httpGet:
+                  path: /api/server/ping
+                  port: http
+                initialDelaySeconds: 60
+                periodSeconds: 20
+                timeoutSeconds: 5
+                failureThreshold: 6
+            startup:
+              enabled: true
+              custom: true
+              spec:
+                httpGet:
+                  path: /api/server/ping
+                  port: http
+                periodSeconds: 10
+                timeoutSeconds: 5
+                failureThreshold: 60
           resources:
             limits:
               memory: 2Gi
@@ -382,6 +415,39 @@ machine-learning:
           workingDir: /tmp
           env:
             HOME: /tmp
+          probes:
+            readiness:
+              enabled: true
+              custom: true
+              spec:
+                httpGet:
+                  path: /ping
+                  port: http
+                initialDelaySeconds: 20
+                periodSeconds: 10
+                timeoutSeconds: 5
+                failureThreshold: 12
+            liveness:
+              enabled: true
+              custom: true
+              spec:
+                httpGet:
+                  path: /ping
+                  port: http
+                initialDelaySeconds: 60
+                periodSeconds: 20
+                timeoutSeconds: 5
+                failureThreshold: 6
+            startup:
+              enabled: true
+              custom: true
+              spec:
+                httpGet:
+                  path: /ping
+                  port: http
+                periodSeconds: 10
+                timeoutSeconds: 5
+                failureThreshold: 60
           resources:
             claims: *gpuContainerClaims
             limits:
