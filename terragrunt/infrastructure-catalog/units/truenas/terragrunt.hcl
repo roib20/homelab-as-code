@@ -82,7 +82,8 @@ inputs = {
 
   # CPU
   cpu = {
-    type = "host"
+    type  = "host"
+    cores = 2
   }
 
   # EFI Disk
