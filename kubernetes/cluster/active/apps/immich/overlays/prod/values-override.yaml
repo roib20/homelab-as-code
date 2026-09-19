@@ -52,10 +52,10 @@ server:
             IMMICH_WORKERS_INCLUDE: api
           resources:
             limits:
-              memory: 2Gi
+              memory: 1Gi
             requests:
-              cpu: 75m
-              memory: 512Mi
+              cpu: 500m
+              memory: 1Gi
     microservices:
       type: deployment
       pod:
@@ -108,10 +108,10 @@ server:
             claims: &gpuContainerClaims
               - name: gpu
             limits:
-              memory: 2Gi
+              memory: 2560Mi
             requests:
-              cpu: 75m
-              memory: 512Mi
+              cpu: 1000m
+              memory: 2560Mi
   service:
     microservices:
       enabled: true
@@ -359,8 +359,8 @@ valkey:
             limits:
               memory: 128Mi
             requests:
-              cpu: 75m
-              memory: 32Mi
+              cpu: 50m
+              memory: 128Mi
   persistence:
     data:
       enabled: true
@@ -385,7 +385,7 @@ machine-learning:
           resources:
             claims: *gpuContainerClaims
             limits:
-              memory: 2Gi
+              memory: 2560Mi
             requests:
-              cpu: 75m
-              memory: 512Mi
+              cpu: 1000m
+              memory: 2560Mi
