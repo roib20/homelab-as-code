@@ -10,7 +10,7 @@ locals {
   schematic_id = (
     var.talos_schematic_id != null && var.talos_schematic_id != ""
     ? var.talos_schematic_id
-    : try(jsondecode(data.http.schematic_id.response_body)["id"], null)
+    : try(jsondecode(data.http.schematic_id[0].response_body)["id"], null)
   )
   image_id = try("${local.schematic_id}_${local.version}", null)
 
@@ -26,6 +26,8 @@ locals {
 }
 
 data "http" "schematic_id" {
+  count = var.url == null && (var.talos_schematic_id == null || var.talos_schematic_id == "") ? 1 : 0
+
   url          = "${local.factory_url}/schematics"
   method       = "POST"
   request_body = local.schematic_file
