@@ -156,14 +156,7 @@ server:
         - path: "/external-libraries"
           subPath: "immich/external-libraries"
           readOnly: true
-    thumbs:
-      enabled: true
-      type: persistentVolumeClaim
-      storageClass: longhorn
-      accessMode: ReadWriteMany
-      size: 20Gi
-      globalMounts:
-        - path: /data/thumbs
+
     profile:
       enabled: true
       type: persistentVolumeClaim
