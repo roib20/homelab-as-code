@@ -2,7 +2,7 @@
 
 # Global build arguments
 # renovate: datasource=docker depName=alpine
-ARG ALPINE_VERSION=3.24.1
+ARG ALPINE_VERSION=3.24.2
 # renovate: datasource=github-releases depName=opentofu/opentofu extractVersion=^v(?<version>.*)$
 ARG TOFU_VERSION=1.12.6
 # renovate: datasource=github-releases depName=gruntwork-io/terragrunt extractVersion=^v(?<version>.*)$
