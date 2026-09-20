@@ -157,14 +157,6 @@ server:
           subPath: "immich/external-libraries"
           readOnly: true
 
-    profile:
-      enabled: true
-      type: persistentVolumeClaim
-      storageClass: longhorn
-      accessMode: ReadWriteMany
-      size: 1Gi
-      globalMounts:
-        - path: /data/profile
     postgres-ca:
       type: secret
       name: immich-postgres-ca
