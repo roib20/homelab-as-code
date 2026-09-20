@@ -13,12 +13,14 @@ controllers:
 server:
   controllers:
     main:
+      strategy: Recreate
       containers:
         main:
           image:
             repository: *immichServerRepository
             tag: '{{ .Values.immichVersion }}'
     microservices:
+      strategy: Recreate
       containers:
         main:
           image:

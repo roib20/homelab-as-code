@@ -292,7 +292,7 @@ server:
                   storageTemplate:
                     enabled: true
                     hashVerificationEnabled: true
-                    template: '{{ printf "{{ \"{{\" }}y{{ \"}}\" }}/{{ \"{{\" }}y{{ \"}}\" }}-{{ \"{{\" }}MM{{ \"}}\" }}-{{ \"{{\" }}dd{{ \"}}\" }}/{{ \"{{\" }}filename{{ \"}}\" }}" }}'
+                    template: '{{ printf "{{ \"{{\" }}y{{ \"}}\" }}/{{ \"{{\" }}y{{ \"}}\" }}-{{ \"{{\" }}MM{{ \"}}\" }}/{{ \"{{\" }}filename{{ \"}}\" }}" }}'
                   templates:
                     email:
                       albumInviteTemplate: ""

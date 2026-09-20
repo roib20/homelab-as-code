@@ -52,10 +52,10 @@ server:
             IMMICH_WORKERS_INCLUDE: api
           resources:
             limits:
-              memory: 2Gi
+              memory: 1Gi
             requests:
-              cpu: 75m
-              memory: 512Mi
+              cpu: 500m
+              memory: 1Gi
     microservices:
       type: deployment
       pod:
@@ -108,10 +108,10 @@ server:
             claims: &gpuContainerClaims
               - name: gpu
             limits:
-              memory: 2Gi
+              memory: 2560Mi
             requests:
-              cpu: 75m
-              memory: 512Mi
+              cpu: 1000m
+              memory: 2560Mi
   service:
     microservices:
       enabled: true
@@ -156,22 +156,7 @@ server:
         - path: "/external-libraries"
           subPath: "immich/external-libraries"
           readOnly: true
-    thumbs:
-      enabled: true
-      type: persistentVolumeClaim
-      storageClass: longhorn
-      accessMode: ReadWriteMany
-      size: 20Gi
-      globalMounts:
-        - path: /data/thumbs
-    profile:
-      enabled: true
-      type: persistentVolumeClaim
-      storageClass: longhorn
-      accessMode: ReadWriteMany
-      size: 1Gi
-      globalMounts:
-        - path: /data/profile
+
     postgres-ca:
       type: secret
       name: immich-postgres-ca
@@ -189,7 +174,7 @@ server:
             gethomepage.dev/enabled: "true"
             gethomepage.dev/description: Self-hosted photo and video backup solution.
             gethomepage.dev/group: Media
-            gethomepage.dev/icon: noodle-gallery.svg
+            gethomepage.dev/icon: sh-noodle-gallery.svg
             gethomepage.dev/name: Noodle Gallery
             gethomepage.dev/pod-selector: "app.kubernetes.io/instance=immich"
             gethomepage.dev/widget.type: "immich"
@@ -359,8 +344,8 @@ valkey:
             limits:
               memory: 128Mi
             requests:
-              cpu: 75m
-              memory: 32Mi
+              cpu: 50m
+              memory: 128Mi
   persistence:
     data:
       enabled: true
@@ -385,7 +370,7 @@ machine-learning:
           resources:
             claims: *gpuContainerClaims
             limits:
-              memory: 2Gi
+              memory: 2560Mi
             requests:
-              cpu: 75m
-              memory: 512Mi
+              cpu: 1000m
+              memory: 2560Mi
