@@ -93,6 +93,9 @@ server:
                       cronExpression: "0 02 * * *"
                       enabled: true
                       keepLastAmount: 14
+                  classification:
+                    categories: []
+                    enabled: true
                   ffmpeg:
                     accel: "qsv"
                     accelDecode: true
@@ -133,18 +136,6 @@ server:
                     tonemap: "hable"
                     transcode: "disabled"
                     twoPass: false
-                  integrityChecks:
-                    checksumFiles:
-                      cronExpression: "0 03 * * *"
-                      enabled: true
-                      percentageLimit: 1
-                      timeLimit: 3600000
-                    missingFiles:
-                      cronExpression: "0 03 * * *"
-                      enabled: true
-                    untrackedFiles:
-                      cronExpression: "0 03 * * *"
-                      enabled: true
                   image:
                     colorspace: "p3"
                     extractEmbedded: false
@@ -163,9 +154,23 @@ server:
                       progressive: false
                       quality: 80
                       size: 250
+                  integrityChecks:
+                    checksumFiles:
+                      cronExpression: "0 03 * * *"
+                      enabled: true
+                      percentageLimit: 1
+                      timeLimit: 3600000
+                    missingFiles:
+                      cronExpression: "0 03 * * *"
+                      enabled: true
+                    untrackedFiles:
+                      cronExpression: "0 03 * * *"
+                      enabled: true
                   job:
                     backgroundTask:
                       concurrency: 5
+                    classification:
+                      concurrency: 1
                     editor:
                       concurrency: 2
                     faceDetection:
@@ -181,6 +186,10 @@ server:
                     notifications:
                       concurrency: 5
                     ocr:
+                      concurrency: 1
+                    peopleBackfill:
+                      concurrency: 1
+                    petDetection:
                       concurrency: 1
                     search:
                       concurrency: 5
@@ -210,6 +219,7 @@ server:
                       timeout: 2000
                     clip:
                       enabled: true
+                      maxDistance: 0
                       modelName: "ViT-B-32__openai"
                     duplicateDetection:
                       enabled: true
@@ -221,18 +231,37 @@ server:
                       minFaces: 3
                       minScore: 0.7
                       modelName: "buffalo_l"
+                      suggestions:
+                        enabled: true
+                        maxDistance: 0.7
                     ocr:
                       enabled: true
                       maxResolution: 736
                       minDetectionScore: 0.5
                       minRecognitionScore: 0.8
                       modelName: "PP-OCRv5_mobile"
+                    petDetection:
+                      enabled: false
+                      minScore: 0.3
+                      modelName: "rfdetr-nano"
+                    petRecognition:
+                      enabled: false
+                      maxDistance: 0.55
+                      minFaces: 1
+                      modelName: "pet-recognition-base"
                     urls:
                       - "http://immich-machine-learning:3003"
                   map:
                     darkStyle: "https://tiles.immich.cloud/v1/style/dark.json"
                     enabled: true
                     lightStyle: "https://tiles.immich.cloud/v1/style/light.json"
+                  memories:
+                    birthday: true
+                    personThrowbackDormancyMonths: 6
+                    recentTrips: true
+                    retentionDays: 365
+                    themeMaxDistance: 0.75
+                    types: {}
                   metadata:
                     faces:
                       import: false
@@ -241,6 +270,7 @@ server:
                     enabled: true
                   nightlyTasks:
                     clusterNewFaces: true
+                    clusterNewPets: true
                     databaseCleanup: true
                     generateMemories: true
                     missingThumbnails: true
@@ -288,11 +318,14 @@ server:
                   server:
                     externalDomain: ""
                     loginPageMessage: ""
+                    mergePeopleAcrossOwners: false
                     publicUsers: true
                   storageTemplate:
                     enabled: true
                     hashVerificationEnabled: true
                     template: '{{ printf "{{ \"{{\" }}y{{ \"}}\" }}/{{ \"{{\" }}y{{ \"}}\" }}-{{ \"{{\" }}MM{{ \"}}\" }}/{{ \"{{\" }}filename{{ \"}}\" }}" }}'
+                  storageUsage:
+                    includeDerivatives: false
                   templates:
                     email:
                       albumInviteTemplate: ""
