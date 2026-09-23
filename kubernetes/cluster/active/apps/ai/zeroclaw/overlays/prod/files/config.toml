@@ -359,7 +359,7 @@ channel = "telegram.travel_agent"
 # OpenAI Codex over a ChatGPT unbounded:
 # https://docs.zeroclawlabs.ai/master/en/providers/openai-codex-unbounded.html
 [providers.models.openai.codex]
-model = "gpt-5.6-luna"
+model = "gpt-6-luna"
 requires_openai_auth = true
 wire_api = "responses"
 
