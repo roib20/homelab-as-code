@@ -23,7 +23,7 @@ controllers:
       app:
         image:
           repository: mauriceboe/trek
-          tag: 4.2.1@sha256:777f4d647e973fe7d87fecd957e854b86d57e8d977fd041763e0ca19b3c2e2c0
+          tag: 4.3.1@sha256:819bee7d6b15cfe4252215fe0ddd8a99da8ab0c68fef7f9cb2b02ce2fa82f104
         env:
           NODE_ENV: production
           PORT: &port 3000
