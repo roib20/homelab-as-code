@@ -1,7 +1,7 @@
 schema_version = 3
 
 [providers.models.openai.codex]
-model = "gpt-5.6-luna"
+model = "gpt-6-luna"
 requires_openai_auth = true
 wire_api = "responses"
 
