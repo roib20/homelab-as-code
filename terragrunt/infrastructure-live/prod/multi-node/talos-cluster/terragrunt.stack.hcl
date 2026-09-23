@@ -23,7 +23,7 @@ locals {
     # renovate: datasource=github-releases depName=siderolabs/talos extractVersion=^v(?<version>.+)$
     talos_version = "1.14.0", # Change this value to safely upgrade the Talos version
     # renovate: datasource=docker depName=ghcr.io/external-secrets/charts/external-secrets
-    external-secrets_version = "2.10.0",
+    external-secrets_version = "2.11.0",
   }
 
   default_swap_disk = 32
