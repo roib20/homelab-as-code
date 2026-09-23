@@ -19,7 +19,8 @@ controllers:
       bootstrap:
         image:
           repository: ghcr.io/zeroclaw-labs/zeroclaw
-          tag: v0.8.3-debian@sha256:287325c1446d14ee8e8ca9ed2f424c718652b811f91bfb6155eca07aba054466
+          # renovate: datasource=docker depName=ghcr.io/zeroclaw-labs/zeroclaw
+          tag: v0.8.5-debian@sha256:1876f4cfc85d1fd3f418e0607fc9207ef6525113e985092ac09b8dcd179df05e
         command:
           - /bin/sh
           - -c
