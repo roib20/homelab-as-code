@@ -342,10 +342,10 @@ valkey:
                 - ALL
           resources:
             limits:
-              memory: 128Mi
+              memory: 256Mi
             requests:
               cpu: 50m
-              memory: 128Mi
+              memory: 256Mi
   persistence:
     data:
       enabled: true
