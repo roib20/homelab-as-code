@@ -241,11 +241,11 @@ server:
                       minRecognitionScore: 0.8
                       modelName: "PP-OCRv5_mobile"
                     petDetection:
-                      enabled: false
+                      enabled: true
                       minScore: 0.3
                       modelName: "rfdetr-nano"
                     petRecognition:
-                      enabled: false
+                      enabled: true
                       maxDistance: 0.55
                       minFaces: 1
                       modelName: "pet-recognition-base"
