@@ -266,7 +266,7 @@ server:
                       on_this_day: true
                       on_this_day_place: true
                       people_together: true
-                      person_throwback: true
+                      person_throwback: false
                       recent_trip: true
                       season_recap: true
                       themed: true
