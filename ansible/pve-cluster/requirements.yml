@@ -6,7 +6,7 @@ roles:
     source: https://galaxy.ansible.com
   # https://galaxy.ansible.com/ui/standalone/roles/lae/proxmox/
   - name: lae.proxmox
-    version: "v1.10.0"
+    version: "v1.10.1"
     source: https://galaxy.ansible.com
   # https://galaxy.ansible.com/ui/standalone/roles/alvistack/zram_generator/
   - name: alvistack.zram_generator
