@@ -256,12 +256,22 @@ server:
                     enabled: true
                     lightStyle: "https://tiles.immich.cloud/v1/style/light.json"
                   memories:
-                    birthday: true
                     personThrowbackDormancyMonths: 6
-                    recentTrips: true
                     retentionDays: 365
                     themeMaxDistance: 0.75
-                    types: {}
+                    types:
+                      birthday: true
+                      favorites_throwback: true
+                      month_recap: true
+                      on_this_day: true
+                      on_this_day_place: true
+                      people_together: true
+                      person_throwback: true
+                      recent_trip: true
+                      season_recap: true
+                      themed: true
+                      trip_anniversary: true
+                      video_moments: true
                   metadata:
                     faces:
                       import: false
