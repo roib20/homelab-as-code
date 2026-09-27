@@ -21,7 +21,7 @@ controllers:
             drop:
               - ALL
         env: &immichCommonEnv
-          BACKUP_LOCATION: /data/backups
+          BACKUP_LOCATION: "/data/backups"
           DATABASE_CONN_URI:
             valueFrom:
               secretKeyRef:
@@ -29,13 +29,13 @@ controllers:
                 key: uri
           DB_URL: "$(DATABASE_CONN_URI)?sslmode=verify-full&sslrootcert=/postgres-ca/ca.crt"
           DB_VECTOR_EXTENSION: vectorchord
-          ENCODED_VIDEO_LOCATION: /data/encoded-video
+          ENCODED_VIDEO_LOCATION: "/data/encoded-video"
           IMMICH_ALLOW_SETUP: false
           IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
-          PROFILE_LOCATION: /data/profile
+          PROFILE_LOCATION: "/data/profile"
           REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
-          THUMB_LOCATION: /data/thumbs
-          UPLOAD_LOCATION: /data
+          THUMB_LOCATION: "/data/thumbs"
+          UPLOAD_LOCATION: "/data"
 
 server:
   enabled: true
