@@ -18,16 +18,16 @@ all:
           hosts:
 {%     for host in groups[subgroup] | default([]) %}
 {%       if host in groups['pve'] | default([]) %}
-            {{ hostvars[host].tailscale_node_hostname_short }}:
-              ansible_host: {{ hostvars[host].tailscale_node_hostname_short }}
+            {{ host }}:
+              ansible_host: {{ host }}
 {%       endif %}
 {%     endfor %}
 {%   endfor %}
 {% else %}
       hosts:
 {%   for host in groups['pve'] | default([]) %}
-        {{ hostvars[host].tailscale_node_hostname_short }}:
-          ansible_host: {{ hostvars[host].tailscale_node_hostname_short }}
+        {{ host }}:
+          ansible_host: {{ host }}
 {%   endfor %}
 {% endif %}
       vars:
