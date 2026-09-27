@@ -36,6 +36,7 @@ controllers:
           PROFILE_LOCATION: "/data/profile"
           REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
           THUMB_LOCATION: "/data/thumbs"
+          TZ: "Etc/UTC"
           UPLOAD_LOCATION: "/data"
 
 server:
