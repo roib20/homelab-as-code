@@ -32,6 +32,7 @@ controllers:
           ENCODED_VIDEO_LOCATION: "/data/encoded-video"
           IMMICH_ALLOW_SETUP: false
           IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
+          IMMICH_PEOPLE_STATISTICS_ENABLED: true
           PROFILE_LOCATION: "/data/profile"
           REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
           THUMB_LOCATION: "/data/thumbs"
