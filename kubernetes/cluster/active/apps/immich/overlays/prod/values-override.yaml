@@ -28,7 +28,7 @@ controllers:
                 name: immich-postgres-app
                 key: uri
           DB_URL: "$(DATABASE_CONN_URI)?sslmode=verify-full&sslrootcert=/postgres-ca/ca.crt"
-          DB_VECTOR_EXTENSION: vectorchord
+          DB_VECTOR_EXTENSION: "vectorchord"
           ENCODED_VIDEO_LOCATION: "/data/encoded-video"
           IMMICH_ALLOW_SETUP: false
           IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
