@@ -220,7 +220,7 @@ server:
                     clip:
                       enabled: true
                       maxDistance: 0
-                      modelName: "ViT-B-32__openai"
+                      modelName: "ViT-B-16-SigLIP-384__webli"
                     duplicateDetection:
                       enabled: true
                       maxDistance: 0.01
@@ -241,11 +241,11 @@ server:
                       minRecognitionScore: 0.8
                       modelName: "PP-OCRv5_mobile"
                     petDetection:
-                      enabled: false
+                      enabled: true
                       minScore: 0.3
                       modelName: "rfdetr-nano"
                     petRecognition:
-                      enabled: false
+                      enabled: true
                       maxDistance: 0.55
                       minFaces: 1
                       modelName: "pet-recognition-base"
@@ -256,12 +256,22 @@ server:
                     enabled: true
                     lightStyle: "https://tiles.immich.cloud/v1/style/light.json"
                   memories:
-                    birthday: true
                     personThrowbackDormancyMonths: 6
-                    recentTrips: true
                     retentionDays: 365
                     themeMaxDistance: 0.75
-                    types: {}
+                    types:
+                      birthday: true
+                      favorites_throwback: true
+                      month_recap: true
+                      on_this_day: true
+                      on_this_day_place: true
+                      people_together: true
+                      person_throwback: false
+                      recent_trip: true
+                      season_recap: true
+                      themed: true
+                      trip_anniversary: true
+                      video_moments: true
                   metadata:
                     faces:
                       import: false
