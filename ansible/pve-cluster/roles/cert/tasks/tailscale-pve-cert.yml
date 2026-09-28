@@ -43,5 +43,9 @@
   block:
     - name: Generate Tailscale cert
       ansible.builtin.command: "tailscale cert {{ ts_dns_name }}"
+      register: tailscale_cert
+      until: tailscale_cert.rc == 0
+      retries: 3
+      delay: 30
     - name: Install PEM as Proxmox certificate
       ansible.builtin.command: "pvenode cert set {{ ts_dns_name }}.crt {{ ts_dns_name }}.key --force --restart"
