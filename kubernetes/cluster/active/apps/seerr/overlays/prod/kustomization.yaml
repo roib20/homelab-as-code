@@ -14,7 +14,7 @@ components:
 helmCharts:
   - name: seerr-chart
     repo: oci://ghcr.io/seerr-team/seerr
-    version: 3.9.1
+    version: 3.10.0
     releaseName: seerr
     namespace: seerr
     valuesFile: ../../base/values.yaml
