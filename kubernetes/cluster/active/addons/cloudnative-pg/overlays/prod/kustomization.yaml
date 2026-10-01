@@ -15,7 +15,7 @@ helmCharts:
     includeCRDs: true
   - name: plugin-barman-cloud
     repo: oci://ghcr.io/cloudnative-pg/charts
-    version: 0.8.0
+    version: 0.8.1
     releaseName: plugin-barman-cloud
     namespace: cnpg-system
     valuesFile: ../../base/values/plugin-barman-cloud-values.yaml
