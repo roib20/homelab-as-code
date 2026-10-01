@@ -1,6 +1,6 @@
 ---
 # renovate: datasource=github-releases depName=open-noodle/gallery
-immichVersion: v5.7.0
+immichVersion: v5.7.1
 
 controllers:
   main:
