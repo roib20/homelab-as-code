@@ -6,7 +6,7 @@ resources:
 helmCharts:
   - name: longhorn
     repo: oci://ghcr.io/home-operations/charts-mirror
-    version: 1.12.1
+    version: 1.13.0
     releaseName: longhorn
     namespace: longhorn-system
     valuesFile: ../../base/values.yaml
