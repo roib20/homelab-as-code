@@ -25,7 +25,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/bretzel-app/crumbs
-          tag: 0.35.0@sha256:c0a18a473809256c5d079a4e326faa850de95e83744ec3e3ee821d669b26b4f7
+          tag: 0.35.1@sha256:143fc8d1f7c03ce79907d3d50c7509dd2692f33a55225007341277a35076dd94
         env:
           NODE_ENV: production
           PORT: &port 3000
