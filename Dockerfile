@@ -22,7 +22,7 @@ ARG JQ_VERSION=1.8.1
 # renovate: datasource=docker depName=python
 ARG PYTHON_VERSION=3.14.8
 # renovate: datasource=docker depName=golang
-ARG GO_VERSION=1.27.1
+ARG GO_VERSION=1.27.2
 # renovate: datasource=github-releases depName=ovh/ovh-ttyrec
 ARG TTYREC_VERSION=1.1.7.1
 
