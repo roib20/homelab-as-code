@@ -12,10 +12,6 @@ locals {
   cluster_name     = try(yamldecode(var.talos_cluster_config).clusterName, "talos.local")
   cluster_endpoint = yamldecode(var.talos_cluster_config).controlPlane.endpoint
 
-  extramounts = [
-    "/var/mnt/longhorn", # Longhorn: https://longhorn.io/docs/latest/advanced-resources/os-distro-specific/talos-linux-support/
-  ]
-
   zswap_patches_enabled = var.zswap.enabled && var.swap_disk_min > 0 && var.swap_disk_max > 0
 }
 
@@ -47,14 +43,21 @@ data "talos_machine_configuration" "this" {
   talos_version      = "v${var.versions.talos_version}"
 
   config_patches = compact([
+    # Upgraded nodes need a reboot to start sandboxd.
+    yamlencode({
+      apiVersion        = "v1alpha1"
+      kind              = "SecurityProfileConfig"
+      workloadIsolation = true
+    }),
     templatefile("${path.module}/resources/talos-patches/ccm.yaml.tftpl", {
       type = yamldecode(each.value.talos_config).type
     }),
     templatefile("${path.module}/resources/talos-patches/cluster.yaml.tftpl", {
       type           = yamldecode(each.value.talos_config).type
-      cluster_config = var.talos_cluster_config
+      cluster_config = yamldecode(var.talos_cluster_config)
     }),
     templatefile("${path.module}/resources/talos-patches/coredns.yaml.tftpl", {
+      type       = yamldecode(each.value.talos_config).type
       disabled   = true
       clusterDNS = "10.96.0.10"
     }),
@@ -92,9 +95,6 @@ data "talos_machine_configuration" "this" {
       max_pods = 200
     }),
     local.zswap_patches_enabled ? templatefile("${path.module}/resources/talos-patches/kubelet-memory-swap.yaml.tftpl", {}) : "",
-    templatefile("${path.module}/resources/talos-patches/extramount.yaml.tftpl", {
-      extramounts = local.extramounts
-    }),
     templatefile("${path.module}/resources/talos-patches/network-configuration.yaml.tftpl", {
       machine_hostname    = try(each.value.hostname, "")
       machine_nameservers = each.value.machine_nameservers
@@ -113,24 +113,18 @@ data "talos_machine_configuration" "this" {
       machine_install_disk_image = each.value.secureboot ? local.machine_installer_secureboot[each.key] : local.machine_installer[each.key]
     }),
     templatefile("${path.module}/resources/talos-patches/machine_kernel.yaml.tftpl", {
-      sysctls = merge(
-        # {
-        #   "vm.nr_hugepages" = "1024"
-        # },
-        var.zswap.enabled ? {
-          "vm.swappiness"   = "130"
-          "vm.page-cluster" = "0"
-        } : {}
-      )
+      sysctls = var.zswap.enabled ? {
+        "vm.swappiness"   = "130"
+        "vm.page-cluster" = "0"
+      } : {}
       kernel_modules = [
         "binfmt_misc",
         "nvme_tcp",
         "vfio_pci",
-        # "uio_pci_generic",
       ]
     }),
     templatefile("${path.module}/resources/talos-patches/machine.yaml.tftpl", {
-      machine_config = each.value.talos_config
+      machine_config = yamldecode(each.value.talos_config)
     }),
     templatefile("${path.module}/resources/talos-patches/tailscale.patch.yaml.tftpl", {
       TS_AUTHKEY  = var.ts_authkey

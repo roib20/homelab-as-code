@@ -1,16 +1,18 @@
 %{ if type == "controlplane" ~}
-# https://www.talos.dev/v1.9/reference/configuration/v1alpha1/config/#Config.cluster.inlineManifests.
----
-cluster:
-  inlineManifests:
 %{ for content in manifests ~}
 %{ for index, crd in content.crds ~}
-    - name: ${content.name}-crd-${index}
-      contents: |-
-        ${indent(8, crd)}
+---
+apiVersion: v1alpha1
+kind: KubeInlineManifestConfig
+name: ${content.name}-crd-${index}
+manifest: |-
+  ${indent(2, crd)}
 %{ endfor ~}
-    - name: ${content.name}
-      contents: |-
-        ${indent(8,content.manifest)}
+---
+apiVersion: v1alpha1
+kind: KubeInlineManifestConfig
+name: ${content.name}
+manifest: |-
+  ${indent(2,content.manifest)}
 %{ endfor ~}
 %{ endif ~}

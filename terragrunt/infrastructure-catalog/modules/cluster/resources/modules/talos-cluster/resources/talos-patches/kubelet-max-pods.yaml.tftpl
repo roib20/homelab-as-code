@@ -1,5 +1,5 @@
 ---
-machine:
-  kubelet:
-    extraConfig:
-      maxPods: ${max_pods}
+apiVersion: v1alpha1
+kind: KubeletConfig
+config:
+  maxPods: ${max_pods}

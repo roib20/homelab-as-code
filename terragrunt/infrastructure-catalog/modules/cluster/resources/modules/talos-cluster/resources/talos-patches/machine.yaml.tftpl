@@ -1,4 +1,35 @@
-# https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/#Config.machine
 ---
-machine:
-  ${indent(2,machine_config)}
+${yamlencode({
+  machine = merge(
+    { for key, value in machine_config : key => value
+      if !contains(["kubelet", "install", "features", "nodeLabels", "nodeAnnotations", "time"], key)
+    },
+    { features = { for key, value in machine_config.features : key => value if key != "hostDNS" } }
+  )
+})}
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+${yamlencode({
+  nodeIP      = machine_config.kubelet.nodeIP
+  labels      = coalesce(machine_config.nodeLabels, {})
+  annotations = coalesce(machine_config.nodeAnnotations, {})
+})}
+---
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  diskSelector:
+    match: ${jsonencode("disk.dev_path == ${jsonencode(machine_config.install.disk)}")}
+  wipe: ${machine_config.install.wipe}
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+hostDNS:
+  enabled: ${machine_config.features.hostDNS.enabled}
+  resolveMemberNames: ${machine_config.features.hostDNS.resolveMemberNames}
+---
+apiVersion: v1alpha1
+kind: TimeSyncConfig
+ntp:
+  ${indent(2, yamlencode({ servers = machine_config.time.servers }))}

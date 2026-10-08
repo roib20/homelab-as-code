@@ -6,14 +6,14 @@ variable "versions" {
 }
 
 variable "talos_cluster_config" {
-  description = "The config for the talos cluster.  This will be applied to each controlplane node. See: https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/#Config.cluster"
+  description = "The config for the talos cluster.  This will be applied to each controlplane node. See: https://docs.siderolabs.com/talos/latest/reference/configuration/v1alpha1/config#cluster"
   type        = string
 }
 
 variable "machines" {
   description = "A list of machines to create the talos cluster from."
   type = list(object({
-    talos_config = string # https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/#Config.machine
+    talos_config = string # https://docs.siderolabs.com/talos/latest/reference/configuration/v1alpha1/config#machine
     hostname     = string
     primary_ip   = string
     endpoint     = optional(string, "")

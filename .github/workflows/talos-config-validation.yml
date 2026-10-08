@@ -1,0 +1,39 @@
+---
+name: Talos Config Validation
+'on':
+  push:
+    branches: [main]
+    paths:
+      - 'terragrunt/infrastructure-catalog/modules/cluster/**'
+      - '.github/workflows/talos-config-validation.yml'
+  pull_request:
+    paths:
+      - 'terragrunt/infrastructure-catalog/modules/cluster/**'
+      - '.github/workflows/talos-config-validation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  talos-config-validation:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: terragrunt/infrastructure-catalog/modules/cluster/resources/modules/talos-cluster
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Install Terragrunt & OpenTofu
+        uses: gruntwork-io/terragrunt-action@v3
+      - name: Install talosctl
+        shell: bash
+        run: |
+          VERSION="$(sed -n 's/^TALOS_VERSION = "\(.*\)"/\1/p' tests/test_config.py)"
+          URL="https://github.com/siderolabs/talos/releases/download/${VERSION}"
+          cd "${RUNNER_TEMP}"
+          curl -fsSLO "${URL}/talosctl-linux-amd64"
+          curl -fsSL "${URL}/sha256sum.txt" | grep '  talosctl-linux-amd64$' > talosctl.sha256
+          sha256sum --check talosctl.sha256
+          sudo install -m 755 talosctl-linux-amd64 /usr/local/bin/talosctl
+      - name: Validate Talos configuration
+        run: python3 tests/test_config.py

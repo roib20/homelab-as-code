@@ -1,8 +1,10 @@
-# https://www.talos.dev/latest/reference/configuration/v1alpha1/config/#Config.cluster.coreDNS
+%{ if type == "controlplane" ~}
 ---
-cluster:
-    coreDNS:
-        disabled: ${disabled}
-machine:
-    kubelet:
-        clusterDNS: [${clusterDNS}]
+apiVersion: v1alpha1
+kind: KubeCoreDNSConfig
+enabled: ${!disabled}
+%{ endif ~}
+---
+apiVersion: v1alpha1
+kind: KubeletConfig
+clusterDNS: [${clusterDNS}]
