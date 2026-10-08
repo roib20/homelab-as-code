@@ -32,7 +32,6 @@ patches:
     target:
       kind: StatefulSet
       name: seerr
-      namespace: seerr
   - target:
       kind: ObjectStore
       name: cnpg-backups
