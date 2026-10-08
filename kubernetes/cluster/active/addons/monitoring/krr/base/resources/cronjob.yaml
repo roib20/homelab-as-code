@@ -53,7 +53,7 @@ spec:
                           "--formatter",
                           OUTPUT_FORMAT,
                           "--history_duration",
-                          "336",
+                          "744",
                           "--max-workers",
                           "1",
                           "--prometheus-url",
