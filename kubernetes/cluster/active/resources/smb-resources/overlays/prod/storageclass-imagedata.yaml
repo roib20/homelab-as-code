@@ -11,12 +11,12 @@ parameters:
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
 mountOptions:
-  - vers=3.1.1
+  - cache=strict
   - dir_mode=0777
   - file_mode=0777
-  - uid=3000
   - gid=3000
-  - noperm
   - mfsymlinks
-  - cache=strict
+  - noperm
   - noserverino
+  - uid=3000
+  - vers=3.1.1
