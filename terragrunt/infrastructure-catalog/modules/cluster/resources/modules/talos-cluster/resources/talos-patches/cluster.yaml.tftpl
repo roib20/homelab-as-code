@@ -1,6 +1,40 @@
 %{ if type == "controlplane" ~}
-# https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/#Config.cluster
 ---
-cluster:
-  ${indent(2,cluster_config)}
+${yamlencode({
+  cluster = { for key, value in cluster_config : key => value
+    if !contains(["clusterName", "controlPlane", "allowSchedulingOnControlPlanes", "network", "proxy", "coreDNS", "extraManifests"], key)
+  }
+})}
+---
+apiVersion: v1alpha1
+kind: KubeClusterConfig
+clusterName: ${jsonencode(cluster_config.clusterName)}
+endpoint: ${jsonencode(cluster_config.controlPlane.endpoint)}
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+%{ if cluster_config.allowSchedulingOnControlPlanes ~}
+taints:
+  $patch: delete
+%{ endif ~}
+---
+${yamlencode(merge(
+  { apiVersion = "v1alpha1", kind = "KubeNetworkConfig" },
+  { for key, value in cluster_config.network : key => value if key != "cni" }
+))}
+---
+apiVersion: v1alpha1
+kind: KubeFlannelCNIConfig
+$patch: delete
+---
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+enabled: ${!cluster_config.proxy.disabled}
+%{ for index, manifest in cluster_config.extraManifests ~}
+---
+apiVersion: v1alpha1
+kind: KubeExternalManifestConfig
+name: extra-manifest-${index}
+url: ${jsonencode(manifest)}
+%{ endfor ~}
 %{ endif ~}

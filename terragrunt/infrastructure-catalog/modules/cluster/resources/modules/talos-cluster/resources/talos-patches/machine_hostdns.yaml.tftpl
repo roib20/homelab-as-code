@@ -1,7 +1,7 @@
-# https://www.talos.dev/latest/kubernetes-guides/network/deploying-cilium/#known-issues
+# https://docs.siderolabs.com/talos/latest/reference/configuration/network/resolverconfig
 ---
-machine:
-  features:
-    hostDNS:
-      enabled: true
-      forwardKubeDNSToHost: ${forwardKubeDNSToHost}
+apiVersion: v1alpha1
+kind: ResolverConfig
+hostDNS:
+  enabled: true
+  forwardKubeDNSToHost: ${forwardKubeDNSToHost}

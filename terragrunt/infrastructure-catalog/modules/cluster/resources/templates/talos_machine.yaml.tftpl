@@ -17,11 +17,11 @@ features:
     resolveMemberNames: true
 nodeLabels:
 %{ for item in machine_labels ~}
-  ${item.key}: ${item.value}
+  ${jsonencode(item.key)}: ${jsonencode(item.value)}
 %{ endfor ~}
 nodeAnnotations:
 %{ for item in machine_annotations ~}
-  ${item.key}: ${item.value}
+  ${jsonencode(item.key)}: ${jsonencode(item.value)}
 %{ endfor ~}
 files:
 %{ for file in machine_files ~}

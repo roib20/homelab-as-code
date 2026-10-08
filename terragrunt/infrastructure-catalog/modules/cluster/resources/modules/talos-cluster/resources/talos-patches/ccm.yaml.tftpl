@@ -1,20 +1,17 @@
 ---
-machine:
-  kubelet:
-    extraArgs:
-      cloud-provider: external
-      # For security reasons, it is recommended to enable the rotation of server certificates.
-      rotate-server-certificates: true
-  features:
-    kubernetesTalosAPIAccess:
-      enabled: true
-      allowedKubernetesNamespaces:
-        - system-upgrade
+apiVersion: v1alpha1
+kind: KubeletConfig
+extraArgs:
+  cloud-provider: external
+  rotate-server-certificates: "true"
 %{ if type == "controlplane" ~}
-        - kube-system
-%{ endif ~}
-      allowedRoles:
-        - os:admin
-%{ if type == "controlplane" ~}
-        - os:reader
+---
+apiVersion: v1alpha1
+kind: KubeTalosAPIAccessConfig
+allowedKubernetesNamespaces:
+  - system-upgrade
+  - kube-system
+allowedRoles:
+  - os:admin
+  - os:reader
 %{ endif ~}

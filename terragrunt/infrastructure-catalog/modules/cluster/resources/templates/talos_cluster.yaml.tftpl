@@ -12,8 +12,6 @@ network:
 etcd:
   advertisedSubnets:
     - ${cluster_node_subnet}
-apiServer:
-  disablePodSecurityPolicy: true
 proxy:
   disabled: true
 coreDNS:

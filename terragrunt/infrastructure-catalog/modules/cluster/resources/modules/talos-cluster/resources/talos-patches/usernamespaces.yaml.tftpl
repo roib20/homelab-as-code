@@ -1,5 +1,6 @@
-# https://docs.siderolabs.com/kubernetes-guides/security/usernamespace
+# https://docs.siderolabs.com/talos/latest/reference/configuration/runtime/sysctlconfig
 ---
-machine:
-  sysctls:
-    user.max_user_namespaces: "11255"
+apiVersion: v1alpha1
+kind: SysctlConfig
+params:
+  user.max_user_namespaces: "11255"
