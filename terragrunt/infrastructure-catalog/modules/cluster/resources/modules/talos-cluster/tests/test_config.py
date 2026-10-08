@@ -108,6 +108,7 @@ with tempfile.TemporaryDirectory(prefix="talos-config-check-") as directory:
             assert len(identities) == len(set(identities)), identities
             kinds = {doc["kind"]: doc for doc in docs if "kind" in doc and "name" not in doc}
             named = {(doc["kind"], doc["name"]): doc for doc in docs if "kind" in doc and "name" in doc}
+            assert kinds["SecurityProfileConfig"]["workloadIsolation"] is True
             legacy = docs[0]["machine"]
             assert not {"kubelet", "install", "time", "nodeLabels", "nodeAnnotations"} & legacy.keys()
             assert kinds["KubeletConfig"]["config"]["maxPods"] == 200

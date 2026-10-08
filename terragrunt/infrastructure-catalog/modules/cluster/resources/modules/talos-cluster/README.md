@@ -8,6 +8,7 @@ This is a generic terraform module for deploying and managing a talos cluster vi
 * **Talos Imagefactory**: `machine.install.image` is automatically populated via the arguments provided in each `machine` variable via integration with [talos image factory](https://factory.talos.dev/).
 * **Upgrades**: Talos and Kubernetes upgrades are delegated to the Tuppr controller and driven by `TalosUpgrade`/`KubernetesUpgrade` resources.
 * **Configuration format**: Legacy-shaped machine/cluster inputs are rendered as standalone configuration documents; etcd and custom machine files remain in `v1alpha1`. The configured Talos release must support these documents. Longhorn uses `UserVolumeConfig` and Talos's built-in `/var/mnt` mount, not legacy kubelet extra mounts.
+* **Runtime mode**: `SecurityProfileConfig.workloadIsolation` is explicitly enabled. On upgraded nodes, applying this can stop CRI/kubelet until a reboot registers `sandboxd`. Apply and reboot one node at a time, verifying node readiness and etcd health before proceeding; a parallel apply can make all nodes NotReady before the reboots.
 
 Offline regression check (requires Python 3.11+, `tofu`, and `talosctl` matching the test's pinned release): `python3 tests/test_config.py` from this module directory. No cluster access or apply. Legacy file preservation is checked separately because strict validation rejects its deprecation warning.
 

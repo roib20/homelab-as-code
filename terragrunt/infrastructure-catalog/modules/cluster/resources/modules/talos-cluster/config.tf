@@ -43,6 +43,12 @@ data "talos_machine_configuration" "this" {
   talos_version      = "v${var.versions.talos_version}"
 
   config_patches = compact([
+    # Upgraded nodes need a reboot to start sandboxd.
+    yamlencode({
+      apiVersion        = "v1alpha1"
+      kind              = "SecurityProfileConfig"
+      workloadIsolation = true
+    }),
     templatefile("${path.module}/resources/talos-patches/ccm.yaml.tftpl", {
       type = yamldecode(each.value.talos_config).type
     }),
