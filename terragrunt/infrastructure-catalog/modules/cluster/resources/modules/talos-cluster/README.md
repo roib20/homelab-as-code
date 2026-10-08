@@ -12,6 +12,8 @@ This is a generic terraform module for deploying and managing a talos cluster vi
 
 Offline regression check (requires Python 3.11+, `tofu`, and `talosctl` matching the test's pinned release): `python3 tests/test_config.py` from this module directory. No cluster access or apply. Legacy file preservation is checked separately because strict validation rejects its deprecation warning.
 
+The `Talos Config Validation` workflow runs these checks when the cluster module changes in a pull request or on `main`, and supports manual runs.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
