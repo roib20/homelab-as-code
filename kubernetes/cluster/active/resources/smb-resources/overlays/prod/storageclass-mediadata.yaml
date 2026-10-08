@@ -11,6 +11,7 @@ parameters:
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
 mountOptions:
+  - vers=3.1.1
   - dir_mode=0777
   - file_mode=0777
   - uid=3000
