@@ -1,0 +1,4 @@
+---
+vmsingle:
+  spec:
+    retentionPeriod: "1M"
