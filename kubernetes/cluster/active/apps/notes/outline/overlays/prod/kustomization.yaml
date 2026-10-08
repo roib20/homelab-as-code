@@ -11,7 +11,7 @@ components:
 helmCharts:
   - name: outline
     repo: oci://oci.trueforge.org/truecharts
-    version: 21.23.0
+    version: 21.23.1
     releaseName: outline
     namespace: outline
     valuesFile: ../../base/values.yaml
