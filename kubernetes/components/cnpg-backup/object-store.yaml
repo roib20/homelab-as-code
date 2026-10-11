@@ -5,7 +5,7 @@ metadata:
   name: cnpg-backups
 spec:
   configuration:
-    destinationPath: "s3://k8s-backups/cnpg"
+    destinationPath: "s3://k8s-backups-b2/cnpg"
     s3Credentials:
       accessKeyId:
         name: cnpg-backup-secret
