@@ -33,7 +33,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/configuration/destinationPath
-        value: s3://k8s-backups/cnpg/pinepods
+        value: s3://k8s-backups-b2/cnpg/pinepods
   - target:
       kind: ScheduledBackup
       name: cnpg-backup

@@ -37,7 +37,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/configuration/destinationPath
-        value: s3://k8s-backups/cnpg/outline
+        value: s3://k8s-backups-b2/cnpg/outline
   - target:
       kind: ScheduledBackup
       name: cnpg-backup

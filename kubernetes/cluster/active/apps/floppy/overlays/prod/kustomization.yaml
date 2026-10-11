@@ -31,7 +31,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/configuration/destinationPath
-        value: s3://k8s-backups/cnpg/floppy
+        value: s3://k8s-backups-b2/cnpg/floppy
   - target:
       kind: ScheduledBackup
       name: cnpg-backup
