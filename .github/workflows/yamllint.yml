@@ -24,7 +24,7 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install --assume-yes -qq wget
       - uses: actions/setup-python@v7
         with:
-          python-version: '3.14'
+          python-version: '3.15'
           check-latest: true
       - name: Install yamllint
         run: python3 -m pip install yamllint
