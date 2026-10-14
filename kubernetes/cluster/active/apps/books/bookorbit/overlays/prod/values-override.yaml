@@ -11,6 +11,7 @@ persistence:
             readOnly: false
           - path: "/books"
             subPath: "Media/Books/BookOrbit/eBooks"
+            readOnly: false
           - path: "/comics"
             subPath: "Media/Books/BookOrbit/Comics"
             readOnly: false
