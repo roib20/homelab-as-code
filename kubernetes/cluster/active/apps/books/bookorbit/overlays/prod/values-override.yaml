@@ -18,6 +18,9 @@ persistence:
           - path: "/data/book-dock"
             subPath: "Media/Books/.bookdrop/bookorbit"
             readOnly: false
+          - path: "/textbooks"
+            subPath: "Media/Books/BookOrbit/textbooks"
+            readOnly: false
   data:
     accessMode: ReadWriteOnce
     size: 5Gi
