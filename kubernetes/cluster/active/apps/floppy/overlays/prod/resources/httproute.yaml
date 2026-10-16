@@ -7,7 +7,7 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Self-hosted all-in-one media tracker.
     gethomepage.dev/group: Media
-    gethomepage.dev/icon: sh-yamtrack.svg
+    gethomepage.dev/icon: sh-floppy.webp
     gethomepage.dev/name: Floppy
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=floppy"
 spec:
