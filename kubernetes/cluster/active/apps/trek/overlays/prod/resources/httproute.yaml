@@ -4,12 +4,29 @@ kind: HTTPRoute
 metadata:
   name: trek
   annotations:
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Collaborative travel planner.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Productivity
     gethomepage.dev/icon: sh-trek.svg
     gethomepage.dev/name: TREK
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=trek"
+    gethomepage.dev/widget.headers.Authorization: "Bearer {{HOMEPAGE_VAR_TREK_KEY}}"
+    gethomepage.dev/widget.headers.X-Forwarded-Proto: "https"
+    gethomepage.dev/widget.mappings.0.field: "total_countries"
+    gethomepage.dev/widget.mappings.0.format: "number"
+    gethomepage.dev/widget.mappings.0.label: "Countries"
+    gethomepage.dev/widget.mappings.1.field: "total_days"
+    gethomepage.dev/widget.mappings.1.format: "number"
+    gethomepage.dev/widget.mappings.1.label: "Days"
+    gethomepage.dev/widget.mappings.2.field: "total_distance_km"
+    gethomepage.dev/widget.mappings.2.format: "number"
+    gethomepage.dev/widget.mappings.2.label: "Distance"
+    gethomepage.dev/widget.mappings.2.suffix: " km"
+    gethomepage.dev/widget.mappings.3.field: "total_trips"
+    gethomepage.dev/widget.mappings.3.format: "number"
+    gethomepage.dev/widget.mappings.3.label: "Trips"
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://trek.trek.svc.cluster.local:3000/api/v1/stats"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
