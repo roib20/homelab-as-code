@@ -161,7 +161,7 @@ locals {
       name      = "spegel"
       namespace = "kube-system"
       # renovate: datasource=docker depName=ghcr.io/spegel-org/helm-charts/spegel
-      chart_version   = "0.7.4"
+      chart_version   = "0.8.0"
       helm_repository = "oci://ghcr.io/spegel-org/helm-charts"
       values          = file("${local.kubernetes_dir}/cluster/active/addons/spegel/base/values.yaml")
     }
