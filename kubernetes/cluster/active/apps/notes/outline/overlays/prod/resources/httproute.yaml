@@ -4,13 +4,22 @@ kind: HTTPRoute
 metadata:
   name: outline
   annotations:
-    tailscale.com/proxy-group: ingress-proxies
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Team knowledge base & wiki.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Productivity
     gethomepage.dev/icon: outline.svg
     gethomepage.dev/name: Outline
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=outline"
+    gethomepage.dev/widget.headers.Authorization: "Bearer {{HOMEPAGE_VAR_OUTLINE_KEY}}"
+    gethomepage.dev/widget.headers.Content-Type: "application/json"
+    gethomepage.dev/widget.mappings.0.field: "pagination.total"
+    gethomepage.dev/widget.mappings.0.format: "number"
+    gethomepage.dev/widget.mappings.0.label: "Documents"
+    gethomepage.dev/widget.method: "POST"
+    gethomepage.dev/widget.requestBody: '{"limit":1}'
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://outline.outline.svc.cluster.local:10196/api/documents.list"
+    tailscale.com/proxy-group: ingress-proxies
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
