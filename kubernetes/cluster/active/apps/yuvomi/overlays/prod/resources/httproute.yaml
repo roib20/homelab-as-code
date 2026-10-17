@@ -4,12 +4,24 @@ kind: HTTPRoute
 metadata:
   name: yuvomi
   annotations:
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Family and household planner.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Productivity
     gethomepage.dev/icon: sh-yuvomi.svg
     gethomepage.dev/name: Yuvomi
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=yuvomi"
+    gethomepage.dev/widget.headers.Authorization: "Bearer {{HOMEPAGE_VAR_YUVOMI_TOKEN}}"
+    gethomepage.dev/widget.mappings.0.field: "shoppingOpenCount"
+    gethomepage.dev/widget.mappings.0.format: "number"
+    gethomepage.dev/widget.mappings.0.label: "Groceries"
+    gethomepage.dev/widget.mappings.1.field: "notesTotal"
+    gethomepage.dev/widget.mappings.1.format: "number"
+    gethomepage.dev/widget.mappings.1.label: "Notes"
+    gethomepage.dev/widget.mappings.2.field: "openTaskCount"
+    gethomepage.dev/widget.mappings.2.format: "number"
+    gethomepage.dev/widget.mappings.2.label: "Tasks"
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://yuvomi.yuvomi.svc.cluster.local:3000/api/v1/dashboard"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
