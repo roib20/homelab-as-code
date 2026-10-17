@@ -4,12 +4,27 @@ kind: HTTPRoute
 metadata:
   name: floppy
   annotations:
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Self-hosted all-in-one media tracker.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Media
     gethomepage.dev/icon: sh-floppy.webp
     gethomepage.dev/name: Floppy
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=floppy"
+    gethomepage.dev/widget.headers.Authorization: "Bearer {{HOMEPAGE_VAR_FLOPPY_KEY}}"
+    gethomepage.dev/widget.mappings.0.field: "statistics.status_distribution.total_completed"
+    gethomepage.dev/widget.mappings.0.format: "number"
+    gethomepage.dev/widget.mappings.0.label: "Completed"
+    gethomepage.dev/widget.mappings.1.field: "statistics.media_count.total"
+    gethomepage.dev/widget.mappings.1.format: "number"
+    gethomepage.dev/widget.mappings.1.label: "Media"
+    gethomepage.dev/widget.mappings.2.field: "statistics.media_count.movie"
+    gethomepage.dev/widget.mappings.2.format: "number"
+    gethomepage.dev/widget.mappings.2.label: "Movies"
+    gethomepage.dev/widget.mappings.3.field: "statistics.media_count.tv"
+    gethomepage.dev/widget.mappings.3.format: "number"
+    gethomepage.dev/widget.mappings.3.label: "TV Shows"
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://floppy-app.floppy.svc.cluster.local:8000/api/v1/statistics/overview/?start_date=all&end_date=all"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
