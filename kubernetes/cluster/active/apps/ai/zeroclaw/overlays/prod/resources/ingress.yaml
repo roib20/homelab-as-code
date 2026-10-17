@@ -10,6 +10,17 @@ metadata:
     gethomepage.dev/icon: https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/docs/book/theme/favicon.svg
     gethomepage.dev/name: ZeroClaw
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=zeroclaw"
+    gethomepage.dev/widget.mappings.0.field: "process.cpu_percent"
+    gethomepage.dev/widget.mappings.0.format: "float"
+    gethomepage.dev/widget.mappings.0.label: "CPU"
+    gethomepage.dev/widget.mappings.0.suffix: "%"
+    gethomepage.dev/widget.mappings.1.field: "process.rss_bytes"
+    gethomepage.dev/widget.mappings.1.format: "float"
+    gethomepage.dev/widget.mappings.1.label: "RAM"
+    gethomepage.dev/widget.mappings.1.scale: "1/1048576"
+    gethomepage.dev/widget.mappings.1.suffix: "MiB"
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://zeroclaw.zeroclaw.svc.cluster.local:42617/api/status"
     tailscale.com/proxy-group: ingress-proxies
 spec:
   ingressClassName: tailscale
