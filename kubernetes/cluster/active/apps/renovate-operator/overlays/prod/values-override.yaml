@@ -7,13 +7,18 @@ ingress:
     - hosts:
         - "renovate.${FQDN_02}"
   annotations:
-    tailscale.com/proxy-group: ingress-proxies
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Operator to streamline renovate executions in Kubernetes.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Operations
     gethomepage.dev/icon: renovate.svg
     gethomepage.dev/name: Renovate Operator
     gethomepage.dev/pod-selector: "app=renovate-operator"
+    gethomepage.dev/widget.metrics.0.format.type: "number"
+    gethomepage.dev/widget.metrics.0.label: "Projects"
+    gethomepage.dev/widget.metrics.0.query: 'count(renovate_operator_run_failed{job="renovate-operator",namespace="renovate"})'
+    gethomepage.dev/widget.type: "prometheusmetric"
+    gethomepage.dev/widget.url: "http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428"
+    tailscale.com/proxy-group: ingress-proxies
 webhook:
   enabled: true
   port: 8082
