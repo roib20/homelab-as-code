@@ -4,12 +4,21 @@ kind: HTTPRoute
 metadata:
   name: papra
   annotations:
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Document management and archiving.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Productivity
     gethomepage.dev/icon: papra.svg
     gethomepage.dev/name: Papra
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=papra"
+    gethomepage.dev/widget.headers.Authorization: "Bearer {{HOMEPAGE_VAR_PAPRA_KEY}}"
+    gethomepage.dev/widget.mappings.0.field: "organizationStats.documentsCount"
+    gethomepage.dev/widget.mappings.0.format: "number"
+    gethomepage.dev/widget.mappings.0.label: "Documents"
+    gethomepage.dev/widget.mappings.1.field: "organizationStats.documentsSize"
+    gethomepage.dev/widget.mappings.1.format: "bytes"
+    gethomepage.dev/widget.mappings.1.label: "Storage"
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://papra.papra.svc.cluster.local:1221/api/organizations/{{HOMEPAGE_VAR_PAPRA_ORGANIZATION_ID}}/documents/statistics"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
