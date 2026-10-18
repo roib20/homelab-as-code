@@ -158,11 +158,6 @@ configmap:
               memory: true
               # Shows the label, which is always the node name
               showLabel: true
-        - search:
-            provider: google # google, duckduckgo, bing, baidu, brave or custom
-            focus: false # Optional, will set focus to the search bar on page load
-            showSearchSuggestions: true # Optional, will show search suggestions. Defaults to false
-            target: _blank # One of _self, _blank, _parent or _top
         - longhorn:
             # Show the expanded
             expanded: true
@@ -172,3 +167,8 @@ configmap:
             labels: true
             # Show the nodes
             nodes: true
+        - search:
+            provider: google # google, duckduckgo, bing, baidu, brave or custom
+            focus: false # Optional, will set focus to the search bar on page load
+            showSearchSuggestions: true # Optional, will show search suggestions. Defaults to false
+            target: _blank # One of _self, _blank, _parent or _top
