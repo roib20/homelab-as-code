@@ -167,6 +167,8 @@ configmap:
             labels: true
             # Show the nodes
             nodes: true
+        - openmeteo:
+            units: metric
         - search:
             provider: google # google, duckduckgo, bing, baidu, brave or custom
             focus: false # Optional, will set focus to the search bar on page load
