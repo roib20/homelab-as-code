@@ -32,9 +32,9 @@ rawResources:
         annotations:
           gethomepage.dev/description: Self-hosted podcasts server.
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Media
+          gethomepage.dev/group: Media Libraries
           gethomepage.dev/icon: sh-pinepods.svg
-          gethomepage.dev/name: pinepods
+          gethomepage.dev/name: Pinepods
           gethomepage.dev/pod-selector: "app.kubernetes.io/instance=pinepods"
           gethomepage.dev/widget.headers.Api-Key: '{{`{{HOMEPAGE_VAR_PINEPODS_KEY}}`}}'
           gethomepage.dev/widget.mappings.0.field: "PodcastsAdded"

@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Self-hosted book library manager.
-    gethomepage.dev/group: Media
+    gethomepage.dev/group: Reading
     gethomepage.dev/icon: sh-openbooks.svg
     gethomepage.dev/name: BookBoss
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=bookboss"

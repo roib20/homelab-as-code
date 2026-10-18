@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Minimalist RSS and feed reader.
-    gethomepage.dev/group: Productivity
+    gethomepage.dev/group: Reading
     gethomepage.dev/icon: miniflux.svg
     gethomepage.dev/name: Miniflux
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=miniflux"

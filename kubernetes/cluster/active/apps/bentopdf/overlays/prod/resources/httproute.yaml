@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: PDF Toolkit.
-    gethomepage.dev/group: Productivity
+    gethomepage.dev/group: Toolkits
     gethomepage.dev/icon: bentopdf.svg
     gethomepage.dev/name: BentoPDF
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=bentopdf"

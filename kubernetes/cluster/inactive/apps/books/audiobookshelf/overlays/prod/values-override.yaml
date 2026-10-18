@@ -33,7 +33,7 @@ rawResources:
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/description: Self-hosted audiobook, eBooks and podcast server.
-          gethomepage.dev/group: Media
+          gethomepage.dev/group: Reading
           gethomepage.dev/icon: audiobookshelf.svg
           gethomepage.dev/name: audiobookshelf
           gethomepage.dev/pod-selector: "app.kubernetes.io/instance=audiobookshelf"

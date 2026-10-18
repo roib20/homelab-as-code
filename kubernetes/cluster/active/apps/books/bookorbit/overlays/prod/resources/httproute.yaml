@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/description: Self-hosted book library manager.
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Media
+    gethomepage.dev/group: Reading
     gethomepage.dev/icon: sh-bookorbit.webp
     gethomepage.dev/name: BookOrbit
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=bookorbit"

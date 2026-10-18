@@ -7,7 +7,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "10"
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Request management and media discovery for Jellyfin.
-    gethomepage.dev/group: Media Requests
+    gethomepage.dev/group: Media Trackers
     gethomepage.dev/icon: overseerr.svg
     gethomepage.dev/name: Seerr
     gethomepage.dev/widget.type: "seerr"

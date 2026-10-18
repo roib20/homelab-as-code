@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/description: Self-hosted Gist service with Git-backed snippets.
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Development
+    gethomepage.dev/group: Documents & Notes
     gethomepage.dev/icon: opengist.svg
     gethomepage.dev/name: Opengist
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=opengist"

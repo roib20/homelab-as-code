@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: The Free Software Media System
-    gethomepage.dev/group: Media
+    gethomepage.dev/group: Media Libraries
     gethomepage.dev/icon: jellyfin.svg
     gethomepage.dev/name: Jellyfin
     gethomepage.dev/widget.type: "jellyfin"

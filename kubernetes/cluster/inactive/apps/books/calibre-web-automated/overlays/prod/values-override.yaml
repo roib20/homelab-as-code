@@ -66,7 +66,7 @@ rawResources:
         annotations:
           gethomepage.dev/description: Calibre-Web with automated book management.
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Media
+          gethomepage.dev/group: Reading
           gethomepage.dev/icon: calibre-web.svg
           gethomepage.dev/name: Calibre-Web Automated
           gethomepage.dev/pod-selector: "app.kubernetes.io/instance=calibre-web-automated"

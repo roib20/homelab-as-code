@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/description: Family and household planner.
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Productivity
+    gethomepage.dev/group: Planners
     gethomepage.dev/icon: sh-yuvomi.svg
     gethomepage.dev/name: Yuvomi
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=yuvomi"

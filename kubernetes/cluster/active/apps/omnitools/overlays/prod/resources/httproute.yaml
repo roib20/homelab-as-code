@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Web tools collection.
-    gethomepage.dev/group: Productivity
+    gethomepage.dev/group: Toolkits
     gethomepage.dev/icon: omni-tools.webp
     gethomepage.dev/name: OmniTools
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=omnitools"

@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Bookmark manager and web archiver.
-    gethomepage.dev/group: Productivity
+    gethomepage.dev/group: Reading
     gethomepage.dev/icon: karakeep.svg
     gethomepage.dev/name: Karakeep
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=karakeep"
