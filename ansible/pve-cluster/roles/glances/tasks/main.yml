@@ -1,37 +1,9 @@
 ---
 - name: Install Glances
-  become: true
-  ansible.builtin.apt:
-    name:
-      - glances
-      - python3-uvicorn  # web server mode
-      - python3-jinja2  # web server mode
-    install_recommends: false
-    state: latest
+  ansible.builtin.include_tasks:
+    file: package.yml
+  when: install_glances
 
-- name: Configure Glances web service
-  become: true
-  block:
-    - name: Create Glances systemd drop-in directory
-      ansible.builtin.file:
-        path: "/etc/systemd/system/glances.service.d"
-        state: directory
-        owner: root
-        group: root
-        mode: "0755"
-
-    - name: Configure Glances Web Server Mode
-      ansible.builtin.template:
-        src: "override.conf.j2"
-        dest: "/etc/systemd/system/glances.service.d/override.conf"
-        owner: root
-        group: root
-        mode: "0644"
-      register: glances_override
-
-    - name: Enable and start Glances
-      ansible.builtin.systemd_service:
-        name: glances.service
-        daemon_reload: true
-        enabled: true
-        state: "{{ 'restarted' if glances_override.changed else 'started' }}"
+- name: Configure Glances web server
+  ansible.builtin.include_tasks:
+    file: web-server.yml

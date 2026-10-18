@@ -1,0 +1,11 @@
+---
+- name: Install Glances
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - glances
+      - lm_sensors
+      - python3-jinja2
+      - python3-uvicorn
+    install_weak_deps: false
+    state: latest
