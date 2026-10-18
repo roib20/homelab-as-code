@@ -75,6 +75,12 @@ configmap:
         ---
       settings.yaml: |
         ---
+        background:
+          blur: sm
+          brightness: 50
+          image: https://picsum.photos/3840/2160
+          opacity: 100
+          saturate: 100
         providers:
           longhorn:
             url: http://longhorn-frontend.longhorn-system.svc.cluster.local
