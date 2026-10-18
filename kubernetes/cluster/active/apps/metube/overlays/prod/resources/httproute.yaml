@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/description: YouTube downloader (Web UI for yt-dlp).
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Media
+    gethomepage.dev/group: Downloaders
     gethomepage.dev/icon: metube.svg
     gethomepage.dev/name: MeTube
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=metube"

@@ -7,7 +7,7 @@ ingress:
   annotations:
     gethomepage.dev/description: Distributed block storage for Kubernetes.
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Storage
+    gethomepage.dev/group: Operations
     gethomepage.dev/icon: longhorn.svg
     gethomepage.dev/name: Longhorn
     gethomepage.dev/pod-selector: "app=longhorn-ui"

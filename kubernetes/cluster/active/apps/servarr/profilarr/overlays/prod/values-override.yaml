@@ -38,7 +38,7 @@ ingress:
       gethomepage.dev/description: Configuration Management Platform for Radarr/Sonarr
       gethomepage.dev/group: Media Automation (Configuration)
       gethomepage.dev/icon: profilarr.svg
-      gethomepage.dev/name: profilarr
+      gethomepage.dev/name: Profilarr
       gethomepage.dev/pod-selector: "app.kubernetes.io/instance=profilarr"
     hosts:
       - host: "profilarr.${FQDN_02}"

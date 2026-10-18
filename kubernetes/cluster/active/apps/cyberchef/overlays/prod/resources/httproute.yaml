@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis.
-    gethomepage.dev/group: Productivity
+    gethomepage.dev/group: Toolkits
     gethomepage.dev/icon: cyberchef.svg
     gethomepage.dev/name: CyberChef
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=cyberchef"
