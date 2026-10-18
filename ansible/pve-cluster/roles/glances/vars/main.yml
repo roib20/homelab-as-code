@@ -1,0 +1,3 @@
+---
+glances_webui: false
+install_glances: true

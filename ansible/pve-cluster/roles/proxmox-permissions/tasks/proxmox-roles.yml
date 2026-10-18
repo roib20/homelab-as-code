@@ -25,3 +25,31 @@
   register: aclmod_result
   failed_when: aclmod_result.rc != 0
   changed_when: true
+
+- name: Configure Homepage PVEAuditor permissions
+  run_once: true
+  tags: homepage
+  block:
+    - name: Read Proxmox ACLs
+      ansible.builtin.command: pveum acl list --output-format json
+      register: homepage_acls
+      changed_when: false
+      check_mode: false
+
+    - name: Assign propagated PVEAuditor permissions to Homepage on root '/'
+      ansible.builtin.command:
+        cmd: "pveum acl modify / --{{ item.type }}s {{ item.id }} --roles PVEAuditor --propagate 1"
+      loop:
+        - type: user
+          id: homepage@pve
+        - type: token
+          id: homepage@pve!homepage
+      when: >-
+        homepage_acls.stdout | from_json
+        | selectattr('path', 'equalto', '/')
+        | selectattr('type', 'equalto', item.type)
+        | selectattr('ugid', 'equalto', item.id)
+        | selectattr('roleid', 'equalto', 'PVEAuditor')
+        | selectattr('propagate', 'equalto', 1)
+        | list | length == 0
+      changed_when: true

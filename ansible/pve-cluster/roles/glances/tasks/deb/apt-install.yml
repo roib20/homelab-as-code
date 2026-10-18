@@ -1,0 +1,10 @@
+---
+- name: Install Glances
+  become: true
+  ansible.builtin.apt:
+    name:
+      - glances
+      - python3-jinja2
+      - python3-uvicorn
+    install_recommends: false
+    state: latest

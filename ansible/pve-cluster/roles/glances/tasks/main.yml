@@ -1,0 +1,9 @@
+---
+- name: Install Glances
+  ansible.builtin.include_tasks:
+    file: package.yml
+  when: install_glances
+
+- name: Configure Glances web server
+  ansible.builtin.include_tasks:
+    file: web-server.yml
