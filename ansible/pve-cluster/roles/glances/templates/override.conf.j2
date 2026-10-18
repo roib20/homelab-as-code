@@ -1,6 +1,6 @@
 [Service]
 ExecStart=
-ExecStart=/usr/bin/glances -w -B ::
+ExecStart=/usr/bin/glances -w --disable-webui -B ::
 Restart=on-failure
 # Bind all interfaces, but only accept tailnet source addresses (dual-stack):
 # https://tailscale.com/docs/reference/reserved-ip-addresses
