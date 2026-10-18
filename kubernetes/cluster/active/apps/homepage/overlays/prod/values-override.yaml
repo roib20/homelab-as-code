@@ -47,7 +47,7 @@ configmap:
                 widget:
                   type: calendar
                   view: agenda
-                  showTime: true
+                  showTime: false
                   integrations:
                     - type: radarr
                       service_group: Media Automation (HD Video)
