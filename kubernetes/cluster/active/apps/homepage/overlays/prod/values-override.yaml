@@ -5,9 +5,10 @@ configmap:
       services.yaml: |
         ---
         - Calendar:
-            - Calendar:
+            - Monthly:
                 widget:
                   type: calendar
+                  firstDayInWeek: sunday
                   view: monthly
                   showTime: true
                   integrations:
@@ -20,12 +21,43 @@ configmap:
                     - type: radarr
                       service_group: Media Automation (HD Video)
                       service_name: Radarr HD
+                    - type: sonarr
+                      service_group: Media Automation (HD Video)
+                      service_name: Sonarr HD
                     - type: radarr
                       service_group: Media Automation (Ultra HD Video)
                       service_name: Radarr UHD
                     - type: sonarr
+                      service_group: Media Automation (Ultra HD Video)
+                      service_name: Sonarr UHD
+        - Agenda:
+            - Upcoming Events:
+                widget:
+                  type: calendar
+                  view: agenda
+                  showTime: true
+                  integrations:
+                    - type: ical
+                      url: "http://yuvomi.yuvomi.svc.cluster.local:3000/feed/calendar/{{`{{HOMEPAGE_VAR_YUVOMI_CALENDAR_TOKEN}}`}}.ics"
+                      name: Yuvomi
+                      color: violet
+                      params:
+                        showName: true
+            - Upcoming Media Releases:
+                widget:
+                  type: calendar
+                  view: agenda
+                  showTime: false
+                  integrations:
+                    - type: radarr
+                      service_group: Media Automation (HD Video)
+                      service_name: Radarr HD
+                    - type: sonarr
                       service_group: Media Automation (HD Video)
                       service_name: Sonarr HD
+                    - type: radarr
+                      service_group: Media Automation (Ultra HD Video)
+                      service_name: Radarr UHD
                     - type: sonarr
                       service_group: Media Automation (Ultra HD Video)
                       service_name: Sonarr UHD
@@ -110,6 +142,10 @@ configmap:
             tab: Home
           Calendar:
             columns: 1
+            style: row
+            tab: Calendar
+          Agenda:
+            columns: 2
             style: row
             tab: Calendar
         providers:
