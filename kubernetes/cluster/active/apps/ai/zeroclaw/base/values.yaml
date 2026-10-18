@@ -25,7 +25,7 @@ controllers:
       app:
         image:
           repository: ghcr.io/zeroclaw-labs/zeroclaw
-          tag: v0.8.5-debian@sha256:1876f4cfc85d1fd3f418e0607fc9207ef6525113e985092ac09b8dcd179df05e
+          tag: v0.8.6-debian@sha256:7ef59a63f100dbe29b9f1e0f0c2538a553416e7af1da97163ce7a0099a641c85
         args:
           - daemon
         env:
