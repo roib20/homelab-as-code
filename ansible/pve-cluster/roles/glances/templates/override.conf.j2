@@ -1,11 +1,8 @@
-[Unit]
-Wants=tailscaled.service
-After=tailscaled.service
-StartLimitIntervalSec=0
-
 [Service]
 ExecStart=
-ExecStart="/usr/bin/glances" -w -B {{ glances_tailscale_ip.stdout_lines | first }}
+ExecStart="/usr/bin/glances" -w -B ::
 Restart=on-failure
-# Retry while Tailscale restores its address after boot.
-RestartSec=5s
+# Bind all interfaces, but only accept tailnet source addresses (dual-stack):
+# https://tailscale.com/docs/reference/reserved-ip-addresses
+IPAddressDeny=any
+IPAddressAllow=100.64.0.0/10 fd7a:115c:a1e0::/48

@@ -2,13 +2,6 @@
 - name: Configure Glances web service
   become: true
   block:
-    - name: Get Glances Tailscale bind address
-      ansible.builtin.command:
-        cmd: tailscale ip -4
-      register: glances_tailscale_ip
-      changed_when: false
-      check_mode: false
-
     - name: Create Glances systemd drop-in directory
       ansible.builtin.file:
         path: "/etc/systemd/system/glances.service.d"
