@@ -137,7 +137,10 @@ configmap:
                 icon: truenas.png
                 siteMonitor: https://192.168.1.5
                 widget:
+                  enablePools: false
+                  fields: ["load", "uptime", "alerts"]
                   key: "{{`{{HOMEPAGE_VAR_TRUENAS_KEY}}`}}"
+                  nasType: scale
                   type: truenas
                   url: https://192.168.1.5
                   version: 2
