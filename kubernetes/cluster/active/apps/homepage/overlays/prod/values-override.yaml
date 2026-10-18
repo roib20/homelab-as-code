@@ -21,13 +21,13 @@ configmap:
                       service_group: Media Automation (HD Video)
                       service_name: Radarr HD
                     - type: radarr
-                      service_group: Media Automation (4K Ultra HD Video)
+                      service_group: Media Automation (Ultra HD Video)
                       service_name: Radarr UHD
                     - type: sonarr
                       service_group: Media Automation (HD Video)
                       service_name: Sonarr HD
                     - type: sonarr
-                      service_group: Media Automation (4K Ultra HD Video)
+                      service_group: Media Automation (Ultra HD Video)
                       service_name: Sonarr UHD
         - Systems:
             - pve-node-01:
@@ -88,11 +88,11 @@ configmap:
             tab: Home
           Downloaders:
             tab: Home
-          Media Automation (4K Ultra HD Video):
-            tab: Home
           Media Automation (Configuration):
             tab: Home
           Media Automation (HD Video):
+            tab: Home
+          Media Automation (Ultra HD Video):
             tab: Home
           Media Libraries:
             tab: Home

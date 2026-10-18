@@ -78,8 +78,8 @@ ingress:
     annotations:
       tailscale.com/proxy-group: ingress-proxies
       gethomepage.dev/enabled: "true"
-      gethomepage.dev/description: Bazarr UHD is a companion application to Sonarr UHD and Radarr UHD that manages and downloads subtitles.
-      gethomepage.dev/group: Media Automation (4K Ultra HD Video)
+      gethomepage.dev/description: Subtitle downloader (UHD).
+      gethomepage.dev/group: Media Automation (Ultra HD Video)
       gethomepage.dev/icon: bazarr.svg
       gethomepage.dev/name: Bazarr UHD
       gethomepage.dev/pod-selector: "app.kubernetes.io/instance=bazarr-uhd"

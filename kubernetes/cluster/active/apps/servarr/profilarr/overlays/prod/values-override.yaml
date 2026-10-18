@@ -33,7 +33,7 @@ ingress:
     enabled: true
     ingressClassName: tailscale
     annotations:
-      gethomepage.dev/description: Configuration Management Platform for Radarr/Sonarr
+      gethomepage.dev/description: Arr configuration sync.
       gethomepage.dev/enabled: "true"
       gethomepage.dev/group: Media Automation (Configuration)
       gethomepage.dev/icon: profilarr.svg

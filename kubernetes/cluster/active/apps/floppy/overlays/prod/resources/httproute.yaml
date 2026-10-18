@@ -4,7 +4,7 @@ kind: HTTPRoute
 metadata:
   name: floppy
   annotations:
-    gethomepage.dev/description: Self-hosted all-in-one media tracker.
+    gethomepage.dev/description: Universal media tracker.
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Media Trackers
     gethomepage.dev/icon: sh-floppy.webp

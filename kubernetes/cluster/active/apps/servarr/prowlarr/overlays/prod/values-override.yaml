@@ -61,7 +61,7 @@ ingress:
     annotations:
       tailscale.com/proxy-group: ingress-proxies
       gethomepage.dev/enabled: "true"
-      gethomepage.dev/description: The Ultimate Indexer Manager.
+      gethomepage.dev/description: Indexer and tracker manager.
       gethomepage.dev/group: Media Automation (Configuration)
       gethomepage.dev/icon: prowlarr.svg
       gethomepage.dev/name: Prowlarr

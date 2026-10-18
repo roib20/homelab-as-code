@@ -32,7 +32,7 @@ rawResources:
       metadata:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/description: Self-hosted audiobook, eBooks and podcast server.
+          gethomepage.dev/description: Audiobook, eBooks and podcast server.
           gethomepage.dev/group: Reading
           gethomepage.dev/icon: audiobookshelf.svg
           gethomepage.dev/name: audiobookshelf

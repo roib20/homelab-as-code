@@ -61,8 +61,8 @@ ingress:
     annotations:
       tailscale.com/proxy-group: ingress-proxies
       gethomepage.dev/enabled: "true"
-      gethomepage.dev/description: Sonarr is an internet PVR for Usenet and Torrents (UHD).
-      gethomepage.dev/group: Media Automation (4K Ultra HD Video)
+      gethomepage.dev/description: TV shows manager (UHD).
+      gethomepage.dev/group: Media Automation (Ultra HD Video)
       gethomepage.dev/icon: sonarr.svg
       gethomepage.dev/name: Sonarr UHD
       gethomepage.dev/pod-selector: "app.kubernetes.io/instance=sonarr-uhd"

@@ -78,7 +78,7 @@ ingress:
     annotations:
       tailscale.com/proxy-group: ingress-proxies
       gethomepage.dev/enabled: "true"
-      gethomepage.dev/description: Bazarr HD is a companion application to Sonarr HD and Radarr HD that manages and downloads subtitles.
+      gethomepage.dev/description: Subtitle downloader (HD).
       gethomepage.dev/group: Media Automation (HD Video)
       gethomepage.dev/icon: bazarr.svg
       gethomepage.dev/name: Bazarr HD

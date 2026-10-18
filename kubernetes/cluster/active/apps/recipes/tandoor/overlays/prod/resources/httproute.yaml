@@ -5,7 +5,7 @@ metadata:
   name: tandoor
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/description: Recipe manager, meal planner and shopping list.
+    gethomepage.dev/description: Recipe and meal planner.
     gethomepage.dev/group: Planners
     gethomepage.dev/icon: tandoor-recipes.svg
     gethomepage.dev/name: Tandoor

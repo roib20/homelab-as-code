@@ -5,7 +5,7 @@ metadata:
   name: grimmory
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/description: Self-hosted book library manager.
+    gethomepage.dev/description: Book library manager.
     gethomepage.dev/group: Reading
     gethomepage.dev/icon: sh-grimmory.svg
     gethomepage.dev/name: Grimmory
