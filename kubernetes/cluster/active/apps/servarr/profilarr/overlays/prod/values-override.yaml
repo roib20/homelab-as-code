@@ -33,13 +33,22 @@ ingress:
     enabled: true
     ingressClassName: tailscale
     annotations:
-      tailscale.com/proxy-group: ingress-proxies
-      gethomepage.dev/enabled: "true"
       gethomepage.dev/description: Configuration Management Platform for Radarr/Sonarr
+      gethomepage.dev/enabled: "true"
       gethomepage.dev/group: Media Automation (Configuration)
       gethomepage.dev/icon: profilarr.svg
       gethomepage.dev/name: Profilarr
       gethomepage.dev/pod-selector: "app.kubernetes.io/instance=profilarr"
+      gethomepage.dev/widget.headers.X-Api-Key: "{{`{{HOMEPAGE_VAR_PROFILARR_KEY}}`}}"
+      gethomepage.dev/widget.mappings.0.field: "arrs"
+      gethomepage.dev/widget.mappings.0.format: "size"
+      gethomepage.dev/widget.mappings.0.label: "Arrs"
+      gethomepage.dev/widget.mappings.1.field: "databases"
+      gethomepage.dev/widget.mappings.1.format: "size"
+      gethomepage.dev/widget.mappings.1.label: "Databases"
+      gethomepage.dev/widget.type: "customapi"
+      gethomepage.dev/widget.url: "http://profilarr.servarr.svc.cluster.local:6868/api/v1/status"
+      tailscale.com/proxy-group: ingress-proxies
     hosts:
       - host: "profilarr.${FQDN_02}"
         paths:

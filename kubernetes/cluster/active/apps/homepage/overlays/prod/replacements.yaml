@@ -4,6 +4,21 @@
     name: env-vars
     fieldPath: "data.FQDN_02"
   targets:
+    # PVE egress targets
+    - select:
+        kind: Service
+        name: pve-node-0[123]
+      fieldPaths:
+        - metadata.annotations.[tailscale.com/tailnet-fqdn]
+      options:
+        delimiter: "."
+        index: 1
+    # Homepage substitutes this domain in the PVE card links at runtime.
+    - select:
+        kind: Deployment
+        name: homepage
+      fieldPaths:
+        - spec.template.spec.containers.[name=homepage].env.[name=HOMEPAGE_VAR_FQDN_02].value
     # Deployment container env var
     - select:
         kind: Deployment

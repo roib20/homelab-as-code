@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
   - external-secrets
+  - resources/pve-egress-services.yaml
 patches:
   - path: patches/clusterrole-gateway-api.yaml
     target:

@@ -62,4 +62,23 @@ spec:
         {{- range $k, $v := .labels }}
         {{ $k }}: {{ $v }}
         {{- end }}
+    {{- if eq .appName "homepage" }}
+    spec:
+      ignoreDifferences:
+        - group: argoproj.io
+          jsonPointers:
+            - /status
+          kind: Application
+        - group: ""
+          kind: Service
+          namespace: homepage
+          jqPathExpressions:
+            - 'select(.metadata.annotations["tailscale.com/proxy-group"] == "egress-proxies") | .spec.externalName'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - ServerSideDiff=true
+          - RespectIgnoreDifferences=true
+    {{- end }}
 status: {}

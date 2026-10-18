@@ -10,7 +10,7 @@ metadata:
     gethomepage.dev/icon: sh-bookorbit.webp
     gethomepage.dev/name: BookOrbit
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=bookorbit"
-    gethomepage.dev/widget.fields: '["authors", "books", "series", "storage"]'
+    gethomepage.dev/widget.fields: '["books", "authors", "series", "storage", "reading", "finished"]'
     gethomepage.dev/widget.password: "{{HOMEPAGE_VAR_BOOKORBIT_PASSWORD}}"
     gethomepage.dev/widget.type: "bookorbit"
     gethomepage.dev/widget.url: "http://bookorbit.bookorbit.svc.cluster.local:3000"
