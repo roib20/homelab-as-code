@@ -28,6 +28,7 @@ workload:
         main:
           env:
             HOMEPAGE_ALLOWED_HOSTS: "localhost,home.${FQDN_02}"
+            HOMEPAGE_VAR_FQDN_02: "${FQDN_02}"
           envFrom:
             - secretRef:
                 name: homepage-secrets

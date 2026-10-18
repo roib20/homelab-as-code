@@ -4,4 +4,5 @@ kind: Kustomization
 resources:
   - resources/external-secrets/operator-oauth.yaml.externalsecret
   - resources/namespace.yaml
+  - resources/egress-proxygroup.yaml
   - resources/proxygroup.yaml

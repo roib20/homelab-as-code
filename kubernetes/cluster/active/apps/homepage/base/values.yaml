@@ -100,37 +100,37 @@ configmap:
                       service_name: Sonarr UHD
         - Systems:
             - pve-node-01:
-                href: https://pve-node-01:8006
+                href: "https://pve-node-01.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
                 icon: proxmox.png
-                siteMonitor: https://pve-node-01:8006
+                siteMonitor: https://pve-node-01.homepage.svc.cluster.local:8006
                 widget:
                   fields: ["vms", "lxc", "resources.cpu", "resources.mem"]
                   node: pve-node-01
                   password: "{{`{{HOMEPAGE_VAR_PVE_PASSWORD}}`}}"
                   type: proxmox
-                  url: https://pve-node-01:8006
+                  url: https://pve-node-01.homepage.svc.cluster.local:8006
                   username: "{{`{{HOMEPAGE_VAR_PVE_USERNAME}}`}}"
             - pve-node-02:
-                href: https://pve-node-02:8006
+                href: "https://pve-node-02.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
                 icon: proxmox.png
-                siteMonitor: https://pve-node-02:8006
+                siteMonitor: https://pve-node-02.homepage.svc.cluster.local:8006
                 widget:
                   fields: ["vms", "lxc", "resources.cpu", "resources.mem"]
                   node: pve-node-02
                   password: "{{`{{HOMEPAGE_VAR_PVE_PASSWORD}}`}}"
                   type: proxmox
-                  url: https://pve-node-02:8006
+                  url: https://pve-node-02.homepage.svc.cluster.local:8006
                   username: "{{`{{HOMEPAGE_VAR_PVE_USERNAME}}`}}"
             - pve-node-03:
-                href: https://pve-node-03:8006
+                href: "https://pve-node-03.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
                 icon: proxmox.png
-                siteMonitor: https://pve-node-03:8006
+                siteMonitor: https://pve-node-03.homepage.svc.cluster.local:8006
                 widget:
                   fields: ["vms", "lxc", "resources.cpu", "resources.mem"]
                   node: pve-node-03
                   password: "{{`{{HOMEPAGE_VAR_PVE_PASSWORD}}`}}"
                   type: proxmox
-                  url: https://pve-node-03:8006
+                  url: https://pve-node-03.homepage.svc.cluster.local:8006
                   username: "{{`{{HOMEPAGE_VAR_PVE_USERNAME}}`}}"
       settings.yaml: |
         ---
