@@ -76,6 +76,20 @@ configmap:
                     - field: result_info.total_count
                       format: number
                       label: Domains
+            - GitHub:
+                description: Source code hosting.
+                href: https://github.com/
+                icon: github.svg
+                widget:
+                  type: customapi
+                  url: https://api.github.com/users/roib20
+                  refreshInterval: 900000
+                  headers:
+                    User-Agent: Homepage
+                  mappings:
+                    - field: public_repos
+                      format: number
+                      label: Repositories
         - Systems:
             - pve-node-01:
                 href: "https://pve-node-01.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
