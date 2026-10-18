@@ -132,6 +132,15 @@ configmap:
                   type: proxmox
                   url: https://pve-node-03.homepage.svc.cluster.local:8006
                   username: "{{`{{HOMEPAGE_VAR_PVE_USERNAME}}`}}"
+            - TrueNAS:
+                href: https://192.168.1.5
+                icon: truenas.png
+                siteMonitor: https://192.168.1.5
+                widget:
+                  key: "{{`{{HOMEPAGE_VAR_TRUENAS_KEY}}`}}"
+                  type: truenas
+                  url: https://192.168.1.5
+                  version: 2
       settings.yaml: |
         ---
         background:
