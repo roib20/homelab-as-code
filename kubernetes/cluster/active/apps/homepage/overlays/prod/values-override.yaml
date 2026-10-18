@@ -43,7 +43,7 @@ configmap:
                       color: violet
                       params:
                         showName: true
-            - Upcoming Releases:
+            - Upcoming Media Releases:
                 widget:
                   type: calendar
                   view: agenda
