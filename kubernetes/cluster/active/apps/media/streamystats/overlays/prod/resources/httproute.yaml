@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/description: Jellyfin statistics and watch history dashboard.
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Media
+    gethomepage.dev/group: Media Trackers
     gethomepage.dev/icon: streamystats.svg
     gethomepage.dev/name: Streamystats
     gethomepage.dev/pod-selector: "app.kubernetes.io/name=streamystats,app.kubernetes.io/controller=frontend"
