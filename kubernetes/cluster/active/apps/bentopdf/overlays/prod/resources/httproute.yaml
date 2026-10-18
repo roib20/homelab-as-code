@@ -10,6 +10,14 @@ metadata:
     gethomepage.dev/icon: bentopdf.svg
     gethomepage.dev/name: BentoPDF
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=bentopdf"
+    gethomepage.dev/widget.metrics.0.format.type: "percent"
+    gethomepage.dev/widget.metrics.0.label: "CPU"
+    gethomepage.dev/widget.metrics.0.query: '100 * sum(max by (pod, container) (rate(container_cpu_usage_seconds_total{namespace="pdf",pod=~"bentopdf-.*",container="app"}[5m])))'
+    gethomepage.dev/widget.metrics.1.format.type: "bytes"
+    gethomepage.dev/widget.metrics.1.label: "RAM"
+    gethomepage.dev/widget.metrics.1.query: 'sum(max by (pod, container) (container_memory_working_set_bytes{namespace="pdf",pod=~"bentopdf-.*",container="app"}))'
+    gethomepage.dev/widget.type: "prometheusmetric"
+    gethomepage.dev/widget.url: "http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
