@@ -4,7 +4,6 @@
   ansible.builtin.apt:
     name:
       - glances
-      - lm-sensors
       - python3-jinja2
       - python3-uvicorn
     install_recommends: false
