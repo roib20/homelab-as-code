@@ -62,7 +62,7 @@ ingress:
       tailscale.com/proxy-group: ingress-proxies
       gethomepage.dev/enabled: "true"
       gethomepage.dev/description: Movie collection manager (UHD).
-      gethomepage.dev/group: Media Automation (4K Ultra HD Video)
+      gethomepage.dev/group: Media Automation (Ultra HD Video)
       gethomepage.dev/icon: radarr.svg
       gethomepage.dev/name: Radarr UHD
       gethomepage.dev/pod-selector: "app.kubernetes.io/instance=radarr-uhd"
