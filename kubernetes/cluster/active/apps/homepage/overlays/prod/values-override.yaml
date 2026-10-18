@@ -146,6 +146,7 @@ configmap:
             tab: Calendar
           Agenda:
             columns: 2
+            header: false
             style: row
             tab: Calendar
         providers:
