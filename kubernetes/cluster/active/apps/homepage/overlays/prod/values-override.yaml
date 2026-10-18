@@ -8,6 +8,7 @@ configmap:
             - Calendar:
                 widget:
                   type: calendar
+                  firstDayInWeek: sunday
                   view: monthly
                   showTime: true
                   integrations:
