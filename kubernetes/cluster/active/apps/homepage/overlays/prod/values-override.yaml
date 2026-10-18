@@ -61,6 +61,21 @@ configmap:
                     - type: sonarr
                       service_group: Media Automation (Ultra HD Video)
                       service_name: Sonarr UHD
+        - Cloud:
+            - Cloudflare:
+                description: DNS and domain management.
+                href: https://dash.cloudflare.com/
+                icon: cloudflare.svg
+                widget:
+                  type: customapi
+                  url: https://api.cloudflare.com/client/v4/zones?per_page=5
+                  refreshInterval: 900000
+                  headers:
+                    Authorization: "Bearer {{`{{HOMEPAGE_VAR_CLOUDFLARE_TOKEN}}`}}"
+                  mappings:
+                    - field: result_info.total_count
+                      format: number
+                      label: Domains
         - Systems:
             - pve-node-01:
                 href: "https://pve-node-01.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
@@ -116,6 +131,8 @@ configmap:
           opacity: 100
           saturate: 100
         layout:
+          Cloud:
+            tab: Home
           Documents & Notes:
             tab: Home
           Downloaders:
