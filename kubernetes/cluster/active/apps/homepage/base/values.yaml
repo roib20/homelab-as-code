@@ -73,6 +73,31 @@ configmap:
         gateway: true # enable gateway-api
       services.yaml: |
         ---
+        - Calendar:
+            - Calendar:
+                widget:
+                  type: calendar
+                  view: monthly
+                  showTime: true
+                  integrations:
+                    - type: ical
+                      url: "http://yuvomi.yuvomi.svc.cluster.local:3000/feed/calendar/{{`{{HOMEPAGE_VAR_YUVOMI_CALENDAR_TOKEN}}`}}.ics"
+                      name: Yuvomi
+                      color: violet
+                      params:
+                        showName: true
+                    - type: radarr
+                      service_group: Media Automation (HD Video)
+                      service_name: Radarr HD
+                    - type: radarr
+                      service_group: Media Automation (4K Ultra HD Video)
+                      service_name: Radarr UHD
+                    - type: sonarr
+                      service_group: Media Automation (HD Video)
+                      service_name: Sonarr HD
+                    - type: sonarr
+                      service_group: Media Automation (4K Ultra HD Video)
+                      service_name: Sonarr UHD
       settings.yaml: |
         ---
         background:
@@ -104,6 +129,10 @@ configmap:
             tab: Home
           Toolkits:
             tab: Home
+          Calendar:
+            columns: 1
+            style: row
+            tab: Calendar
         providers:
           longhorn:
             url: http://longhorn-frontend.longhorn-system.svc.cluster.local
