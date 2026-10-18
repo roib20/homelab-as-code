@@ -11,6 +11,9 @@ spec:
   type: ExternalName
   externalName: placeholder
   ports:
+    - name: glances
+      port: 61208
+      protocol: TCP
     - name: https
       port: 8006
       protocol: TCP
@@ -27,6 +30,9 @@ spec:
   type: ExternalName
   externalName: placeholder
   ports:
+    - name: glances
+      port: 61208
+      protocol: TCP
     - name: https
       port: 8006
       protocol: TCP
@@ -43,6 +49,9 @@ spec:
   type: ExternalName
   externalName: placeholder
   ports:
+    - name: glances
+      port: 61208
+      protocol: TCP
     - name: https
       port: 8006
       protocol: TCP

@@ -115,6 +115,42 @@ configmap:
         providers:
           longhorn:
             url: http://longhorn-frontend.longhorn-system.svc.cluster.local
+      widgets.yaml: |
+        ---
+        - glances:
+            label: pve-node-01
+            url: http://pve-node-01.homepage.svc.cluster.local:61208
+            version: 4
+        - glances:
+            label: pve-node-02
+            url: http://pve-node-02.homepage.svc.cluster.local:61208
+            version: 4
+        - glances:
+            label: pve-node-03
+            url: http://pve-node-03.homepage.svc.cluster.local:61208
+            version: 4
+        - kubernetes:
+            cluster:
+              show: true
+              cpu: true
+              memory: true
+              showLabel: true
+              label: "cluster"
+            nodes:
+              show: true
+              cpu: true
+              memory: true
+              showLabel: true
+        - longhorn:
+            expanded: true
+            total: true
+            labels: true
+            nodes: true
+        - search:
+            provider: google
+            focus: false
+            showSearchSuggestions: true
+            target: _blank
 global:
   fallbackDefaults:
     storageClass: longhorn
