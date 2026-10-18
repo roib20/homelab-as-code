@@ -56,6 +56,12 @@
         apply:
           tags: install-packages
       tags: install-packages
+    - name: Configure Glances web service
+      ansible.builtin.include_role:
+        name: glances
+        apply:
+          tags: glances
+      tags: glances
     - name: Disable PVE subscription nag
       ansible.builtin.include_role:
         name: pve-remove-nag
