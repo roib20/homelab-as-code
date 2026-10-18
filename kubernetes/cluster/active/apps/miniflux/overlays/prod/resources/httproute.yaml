@@ -4,15 +4,17 @@ kind: HTTPRoute
 metadata:
   name: miniflux
   annotations:
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Minimalist RSS and feed reader.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Reading
     gethomepage.dev/icon: miniflux.svg
     gethomepage.dev/name: Miniflux
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=miniflux"
-    gethomepage.dev/widget.type: "miniflux"
-    gethomepage.dev/widget.url: "http://miniflux.miniflux.svc.cluster.local:10091"
-    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_MINIFLUX_KEY}}"
+    gethomepage.dev/widget.headers.X-Auth-Token: "{{HOMEPAGE_VAR_MINIFLUX_KEY}}"
+    gethomepage.dev/widget.mappings.0.format: "size"
+    gethomepage.dev/widget.mappings.0.label: "Feeds"
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://miniflux.miniflux.svc.cluster.local:10091/v1/feeds"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
