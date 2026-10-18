@@ -1,4 +1,14 @@
 ---
+- name: Install Glances
+  become: true
+  ansible.builtin.apt:
+    name:
+      - glances
+      - python3-uvicorn  # web server mode
+      - python3-jinja2  # web server mode
+    install_recommends: false
+    state: latest
+
 - name: Configure Glances web service
   become: true
   block:
