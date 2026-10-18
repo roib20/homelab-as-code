@@ -30,6 +30,37 @@ configmap:
                     - type: sonarr
                       service_group: Media Automation (Ultra HD Video)
                       service_name: Sonarr UHD
+        - Agenda:
+            - Upcoming Events:
+                widget:
+                  type: calendar
+                  view: agenda
+                  showTime: true
+                  integrations:
+                    - type: ical
+                      url: "http://yuvomi.yuvomi.svc.cluster.local:3000/feed/calendar/{{`{{HOMEPAGE_VAR_YUVOMI_CALENDAR_TOKEN}}`}}.ics"
+                      name: Yuvomi
+                      color: violet
+                      params:
+                        showName: true
+            - Upcoming Releases:
+                widget:
+                  type: calendar
+                  view: agenda
+                  showTime: true
+                  integrations:
+                    - type: radarr
+                      service_group: Media Automation (HD Video)
+                      service_name: Radarr HD
+                    - type: radarr
+                      service_group: Media Automation (Ultra HD Video)
+                      service_name: Radarr UHD
+                    - type: sonarr
+                      service_group: Media Automation (HD Video)
+                      service_name: Sonarr HD
+                    - type: sonarr
+                      service_group: Media Automation (Ultra HD Video)
+                      service_name: Sonarr UHD
         - Systems:
             - pve-node-01:
                 href: "https://pve-node-01.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
@@ -111,6 +142,10 @@ configmap:
             tab: Home
           Calendar:
             columns: 1
+            style: row
+            tab: Calendar
+          Agenda:
+            columns: 2
             style: row
             tab: Calendar
         providers:
