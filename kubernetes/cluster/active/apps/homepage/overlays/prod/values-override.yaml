@@ -61,7 +61,7 @@ configmap:
                     - type: sonarr
                       service_group: Media Automation (Ultra HD Video)
                       service_name: Sonarr UHD
-        - Cloud:
+        - Cloud Services:
             - Cloudflare:
                 description: DNS and domain management.
                 href: https://dash.cloudflare.com/
@@ -159,7 +159,7 @@ configmap:
           opacity: 100
           saturate: 100
         layout:
-          Cloud:
+          Cloud Services:
             tab: Home
           Documents & Notes:
             tab: Home
