@@ -5,3 +5,18 @@
   register: user_add_result
   failed_when: user_add_result.rc != 0 and 'already exists' not in user_add_result.stderr
   changed_when: "'already exists' not in user_add_result.stderr"
+
+- name: Configure Homepage user
+  run_once: true
+  tags: homepage
+  block:
+    - name: Read Proxmox users and token metadata
+      ansible.builtin.command: pveum user list --full 1 --output-format json
+      register: homepage_users
+      changed_when: false
+      check_mode: false
+
+    - name: Create Proxmox user 'homepage@pve'
+      ansible.builtin.command: pveum user add homepage@pve
+      when: homepage_users.stdout | from_json | selectattr('userid', 'equalto', 'homepage@pve') | list | length == 0
+      changed_when: true

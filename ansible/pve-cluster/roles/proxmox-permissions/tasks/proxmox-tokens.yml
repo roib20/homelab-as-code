@@ -43,3 +43,24 @@
     - name: Output formatted Proxmox API token
       debug:
         msg: "{{ full_tokenid }}={{ token_value }}"
+
+- name: Configure Homepage API token
+  run_once: true
+  tags: homepage
+  vars:
+    homepage_user: "{{ homepage_users.stdout | from_json | selectattr('userid', 'equalto', 'homepage@pve') | first | default({}) }}"
+    homepage_token: "{{ homepage_user.tokens | default([], true) | selectattr('tokenid', 'equalto', 'homepage') | first | default({}) }}"
+  block:
+    # The generated secret is deliberately neither printed nor saved.
+    - name: Create privilege-separated API token 'homepage' for 'homepage@pve'
+      ansible.builtin.command: pveum user token add homepage@pve homepage --privsep 1
+      when: homepage_token | length == 0
+      changed_when: true
+      no_log: true
+
+    - name: Ensure privilege separation for the existing Homepage API token
+      ansible.builtin.command: pveum user token modify homepage@pve homepage --privsep 1
+      when:
+        - homepage_token | length > 0
+        - homepage_token.privsep | default(1) | int != 1
+      changed_when: true

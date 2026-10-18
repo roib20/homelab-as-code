@@ -49,7 +49,7 @@
         name: proxmox-permissions
         apply:
           tags: proxmox-permissions
-      tags: proxmox-permissions
+      tags: [proxmox-permissions, homepage]
     - name: Install other packages
       ansible.builtin.include_role:
         name: install-packages
