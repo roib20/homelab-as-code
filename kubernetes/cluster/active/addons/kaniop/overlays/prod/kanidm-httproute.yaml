@@ -3,6 +3,24 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: idm
+  annotations:
+    gethomepage.dev/description: Identity and access management.
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Operations
+    gethomepage.dev/icon: kanidm.svg
+    gethomepage.dev/name: Kanidm
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=idm,app.kubernetes.io/name=kanidm"
+    gethomepage.dev/widget.metrics.0.format.type: "number"
+    gethomepage.dev/widget.metrics.0.label: "Clients"
+    gethomepage.dev/widget.metrics.0.query: 'count(count by (resource_namespace, name) (kube_kanidm_oauth2client_info{kanidm="idm",kanidm_namespace="kaniop"}))'
+    gethomepage.dev/widget.metrics.1.format.type: "number"
+    gethomepage.dev/widget.metrics.1.label: "Groups"
+    gethomepage.dev/widget.metrics.1.query: 'count(count by (resource_namespace, name) (kube_kanidm_group_info{kanidm="idm",kanidm_namespace="kaniop"}))'
+    gethomepage.dev/widget.metrics.2.format.type: "number"
+    gethomepage.dev/widget.metrics.2.label: "Users"
+    gethomepage.dev/widget.metrics.2.query: 'count(count by (resource_namespace, name) (kube_kanidm_personaccount_info{kanidm="idm",kanidm_namespace="kaniop"}))'
+    gethomepage.dev/widget.type: "prometheusmetric"
+    gethomepage.dev/widget.url: "http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

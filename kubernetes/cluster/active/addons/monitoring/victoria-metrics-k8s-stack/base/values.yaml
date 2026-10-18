@@ -17,6 +17,65 @@ grafana:
       searchNamespace: ALL
 
 kube-state-metrics:
+  rbac:
+    extraRules:
+      - apiGroups: [kaniop.rs]
+        resources: [kanidmgroups, kanidmoauth2clients, kanidmpersonaccounts]
+        verbs: [list, watch]
+  customResourceState:
+    enabled: true
+    config:
+      kind: CustomResourceStateMetrics
+      spec:
+        resources:
+          - groupVersionKind:
+              group: kaniop.rs
+              version: v1beta1
+              kind: KanidmGroup
+            metricNamePrefix: kube_kanidm
+            metrics:
+              - name: group_info
+                help: Kaniop-managed Kanidm groups.
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      name: [metadata, name]
+                      resource_namespace: [metadata, namespace]
+                      kanidm: [spec, kanidmRef, name]
+                      kanidm_namespace: [spec, kanidmRef, namespace]
+          - groupVersionKind:
+              group: kaniop.rs
+              version: v1beta1
+              kind: KanidmOAuth2Client
+            metricNamePrefix: kube_kanidm
+            metrics:
+              - name: oauth2client_info
+                help: Kaniop-managed Kanidm OAuth2 clients.
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      name: [metadata, name]
+                      resource_namespace: [metadata, namespace]
+                      kanidm: [spec, kanidmRef, name]
+                      kanidm_namespace: [spec, kanidmRef, namespace]
+          - groupVersionKind:
+              group: kaniop.rs
+              version: v1beta1
+              kind: KanidmPersonAccount
+            metricNamePrefix: kube_kanidm
+            metrics:
+              - name: personaccount_info
+                help: Kaniop-managed Kanidm users.
+                each:
+                  type: Info
+                  info:
+                    labelsFromPath:
+                      name: [metadata, name]
+                      resource_namespace: [metadata, namespace]
+                      kanidm: [spec, kanidmRef, name]
+                      kanidm_namespace: [spec, kanidmRef, namespace]
   resources:
     requests:
       cpu: 100m
