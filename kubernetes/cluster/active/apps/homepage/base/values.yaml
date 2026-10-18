@@ -81,6 +81,29 @@ configmap:
           image: https://picsum.photos/3840/2160
           opacity: 100
           saturate: 100
+        layout:
+          Documents & Notes:
+            tab: Home
+          Downloaders:
+            tab: Home
+          Media Automation (4K Ultra HD Video):
+            tab: Home
+          Media Automation (Configuration):
+            tab: Home
+          Media Automation (HD Video):
+            tab: Home
+          Media Libraries:
+            tab: Home
+          Media Trackers:
+            tab: Home
+          Operations:
+            tab: Home
+          Planners:
+            tab: Home
+          Reading:
+            tab: Home
+          Toolkits:
+            tab: Home
         providers:
           longhorn:
             url: http://longhorn-frontend.longhorn-system.svc.cluster.local
