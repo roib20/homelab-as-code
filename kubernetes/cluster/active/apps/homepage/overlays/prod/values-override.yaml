@@ -62,6 +62,19 @@ configmap:
                       service_group: Media Automation (Ultra HD Video)
                       service_name: Sonarr UHD
         - Cloud Services:
+            - Bitwarden:
+                description: Password and secrets management.
+                href: https://vault.bitwarden.com
+                icon: bitwarden.svg
+                widget:
+                  type: prometheusmetric
+                  url: http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428
+                  refreshInterval: 900000
+                  metrics:
+                    - label: External Secrets
+                      query: 'sum(externalsecret_status_condition{condition="Ready"})'
+                      format:
+                        type: number
             - Cloudflare:
                 description: DNS and domain management.
                 href: https://dash.cloudflare.com/
