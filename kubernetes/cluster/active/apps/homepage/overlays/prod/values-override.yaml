@@ -118,14 +118,17 @@ configmap:
       widgets.yaml: |
         ---
         - glances:
+            href: "https://pve-node-01.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
             label: pve-node-01
             url: http://pve-node-01.homepage.svc.cluster.local:61208
             version: 4
         - glances:
+            href: "https://pve-node-02.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
             label: pve-node-02
             url: http://pve-node-02.homepage.svc.cluster.local:61208
             version: 4
         - glances:
+            href: "https://pve-node-03.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
             label: pve-node-03
             url: http://pve-node-03.homepage.svc.cluster.local:61208
             version: 4
