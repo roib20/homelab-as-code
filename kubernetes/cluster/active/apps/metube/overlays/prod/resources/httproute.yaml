@@ -4,12 +4,23 @@ kind: HTTPRoute
 metadata:
   name: metube
   annotations:
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: YouTube downloader (Web UI for yt-dlp).
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Media
     gethomepage.dev/icon: metube.svg
     gethomepage.dev/name: MeTube
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=metube"
+    gethomepage.dev/widget.mappings.0.field: "done"
+    gethomepage.dev/widget.mappings.0.format: "size"
+    gethomepage.dev/widget.mappings.0.label: "Done"
+    gethomepage.dev/widget.mappings.1.field: "pending"
+    gethomepage.dev/widget.mappings.1.format: "size"
+    gethomepage.dev/widget.mappings.1.label: "Pending"
+    gethomepage.dev/widget.mappings.2.field: "queue"
+    gethomepage.dev/widget.mappings.2.format: "size"
+    gethomepage.dev/widget.mappings.2.label: "Queue"
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://metube.metube.svc.cluster.local:10216/history"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

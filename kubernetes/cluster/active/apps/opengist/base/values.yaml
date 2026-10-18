@@ -4,7 +4,7 @@ replicaCount: 1
 config:
   log-level: warn
   log-output: stdout
-  metrics.enabled: false
+  metrics.enabled: true
   index:
     type: meilisearch
 

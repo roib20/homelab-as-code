@@ -5,10 +5,15 @@ ingress:
   host: "longhorn.${FQDN_02}"
   tls: true
   annotations:
-    tailscale.com/proxy-group: ingress-proxies
-    gethomepage.dev/enabled: "true"
-    gethomepage.dev/name: Longhorn
     gethomepage.dev/description: Distributed block storage for Kubernetes.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Storage
     gethomepage.dev/icon: longhorn.svg
+    gethomepage.dev/name: Longhorn
     gethomepage.dev/pod-selector: "app=longhorn-ui"
+    gethomepage.dev/widget.mappings.0.field: "data"
+    gethomepage.dev/widget.mappings.0.format: "size"
+    gethomepage.dev/widget.mappings.0.label: "Volumes"
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://longhorn-frontend.longhorn-system.svc.cluster.local/v1/volumes"
+    tailscale.com/proxy-group: ingress-proxies

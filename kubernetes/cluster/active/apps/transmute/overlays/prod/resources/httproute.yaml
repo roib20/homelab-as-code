@@ -4,12 +4,24 @@ kind: HTTPRoute
 metadata:
   name: transmute
   annotations:
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Self-hosted file converter.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Productivity
     gethomepage.dev/icon: sh-transmute.svg
     gethomepage.dev/name: Transmute
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=transmute"
+    gethomepage.dev/widget.headers.Authorization: "Bearer {{HOMEPAGE_VAR_TRANSMUTE_KEY}}"
+    gethomepage.dev/widget.mappings.0.field: "total_output_files"
+    gethomepage.dev/widget.mappings.0.format: "number"
+    gethomepage.dev/widget.mappings.0.label: "Outputs"
+    gethomepage.dev/widget.mappings.1.field: "total_storage_bytes"
+    gethomepage.dev/widget.mappings.1.format: "bytes"
+    gethomepage.dev/widget.mappings.1.label: "Storage"
+    gethomepage.dev/widget.mappings.2.field: "total_files_uploaded"
+    gethomepage.dev/widget.mappings.2.format: "number"
+    gethomepage.dev/widget.mappings.2.label: "Uploads"
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://transmute.transmute.svc.cluster.local:3313/api/stats"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

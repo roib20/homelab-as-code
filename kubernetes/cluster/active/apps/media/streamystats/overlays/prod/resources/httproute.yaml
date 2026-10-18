@@ -4,12 +4,17 @@ kind: HTTPRoute
 metadata:
   name: streamystats
   annotations:
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Jellyfin statistics and watch history dashboard.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Media
     gethomepage.dev/icon: streamystats.svg
     gethomepage.dev/name: Streamystats
     gethomepage.dev/pod-selector: "app.kubernetes.io/name=streamystats,app.kubernetes.io/controller=frontend"
+    gethomepage.dev/widget.mappings.0.field: "sessionPoller.totalTrackedSessions"
+    gethomepage.dev/widget.mappings.0.format: "number"
+    gethomepage.dev/widget.mappings.0.label: "Sessions"
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://streamystats-job-server.streamystats.svc.cluster.local:3005/api/jobs/server-status"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

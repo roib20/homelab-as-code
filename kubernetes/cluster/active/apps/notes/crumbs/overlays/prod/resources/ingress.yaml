@@ -4,13 +4,18 @@ kind: Ingress
 metadata:
   name: crumbs
   annotations:
-    tailscale.com/proxy-group: ingress-proxies
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Self-hosted notes and checklists.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Productivity
     gethomepage.dev/icon: sh-crumbs-notes.webp
     gethomepage.dev/name: Crumbs
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=crumbs"
+    gethomepage.dev/widget.headers.Authorization: "Bearer {{HOMEPAGE_VAR_CRUMBS_KEY}}"
+    gethomepage.dev/widget.mappings.0.format: "size"
+    gethomepage.dev/widget.mappings.0.label: "Notes"
+    gethomepage.dev/widget.type: "customapi"
+    gethomepage.dev/widget.url: "http://crumbs.bretzel.svc.cluster.local:3000/api/notes"
+    tailscale.com/proxy-group: ingress-proxies
 spec:
   ingressClassName: tailscale
   rules:

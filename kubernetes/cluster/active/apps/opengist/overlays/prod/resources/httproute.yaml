@@ -4,12 +4,17 @@ kind: HTTPRoute
 metadata:
   name: opengist
   annotations:
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Self-hosted Gist service with Git-backed snippets.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Development
     gethomepage.dev/icon: opengist.svg
     gethomepage.dev/name: Opengist
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=opengist"
+    gethomepage.dev/widget.metrics.0.format.type: "number"
+    gethomepage.dev/widget.metrics.0.label: "Gists"
+    gethomepage.dev/widget.metrics.0.query: 'max(opengist_gists_total{namespace="opengist"})'
+    gethomepage.dev/widget.type: "prometheusmetric"
+    gethomepage.dev/widget.url: "http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
