@@ -30,7 +30,7 @@ rawResources:
       kind: HTTPRoute
       metadata:
         annotations:
-          gethomepage.dev/description: Self-hosted podcasts server.
+          gethomepage.dev/description: Podcasts server.
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Media Libraries
           gethomepage.dev/icon: sh-pinepods.svg

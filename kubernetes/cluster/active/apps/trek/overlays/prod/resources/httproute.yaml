@@ -4,7 +4,7 @@ kind: HTTPRoute
 metadata:
   name: trek
   annotations:
-    gethomepage.dev/description: Collaborative travel planner.
+    gethomepage.dev/description: Collaborative travel and trip planner.
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Planners
     gethomepage.dev/icon: sh-trek.svg

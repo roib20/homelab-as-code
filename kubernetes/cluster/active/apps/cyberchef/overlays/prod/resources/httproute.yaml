@@ -5,7 +5,7 @@ metadata:
   name: cyberchef
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/description: The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis.
+    gethomepage.dev/description: Data transformation toolkit.
     gethomepage.dev/group: Toolkits
     gethomepage.dev/icon: cyberchef.svg
     gethomepage.dev/name: CyberChef

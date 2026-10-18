@@ -7,7 +7,7 @@ ingress:
     - hosts:
         - "renovate.${FQDN_02}"
   annotations:
-    gethomepage.dev/description: Operator to streamline renovate executions in Kubernetes.
+    gethomepage.dev/description: Operator managing Renovate jobs for dependency updates.
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Operations
     gethomepage.dev/icon: renovate.svg

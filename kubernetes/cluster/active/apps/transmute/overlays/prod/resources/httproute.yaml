@@ -4,7 +4,7 @@ kind: HTTPRoute
 metadata:
   name: transmute
   annotations:
-    gethomepage.dev/description: Self-hosted file converter.
+    gethomepage.dev/description: File conversion and compression.
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Toolkits
     gethomepage.dev/icon: sh-transmute.svg

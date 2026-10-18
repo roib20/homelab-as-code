@@ -5,7 +5,7 @@ metadata:
   name: it-tools
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/description: Useful tools for developer and people working in IT.
+    gethomepage.dev/description: Developer utilities.
     gethomepage.dev/group: Toolkits
     gethomepage.dev/icon: it-tools.svg
     gethomepage.dev/name: it-tools

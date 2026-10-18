@@ -5,7 +5,7 @@ metadata:
   name: mealie
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/description: Recipe manager and meal planner.
+    gethomepage.dev/description: Recipe and meal planner.
     gethomepage.dev/group: Planners
     gethomepage.dev/icon: mealie.svg
     gethomepage.dev/name: Mealie

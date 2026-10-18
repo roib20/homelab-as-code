@@ -4,7 +4,7 @@ kind: HTTPRoute
 metadata:
   name: metube
   annotations:
-    gethomepage.dev/description: YouTube downloader (Web UI for yt-dlp).
+    gethomepage.dev/description: Web video downloader.
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Downloaders
     gethomepage.dev/icon: metube.svg

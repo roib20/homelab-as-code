@@ -61,7 +61,7 @@ ingress:
     annotations:
       tailscale.com/proxy-group: ingress-proxies
       gethomepage.dev/enabled: "true"
-      gethomepage.dev/description: Movie organizer/manager for usenet and torrent users.
+      gethomepage.dev/description: Movie collection manager (HD).
       gethomepage.dev/group: Media Automation (HD Video)
       gethomepage.dev/icon: radarr.svg
       gethomepage.dev/name: Radarr HD

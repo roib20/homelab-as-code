@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: crumbs
   annotations:
-    gethomepage.dev/description: Self-hosted notes and checklists.
+    gethomepage.dev/description: Quick note-taking and checklists.
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Documents & Notes
     gethomepage.dev/icon: sh-crumbs-notes.webp
