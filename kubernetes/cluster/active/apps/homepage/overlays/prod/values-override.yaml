@@ -90,6 +90,20 @@ configmap:
                     - field: public_repos
                       format: number
                       label: Repositories
+            - Tailscale:
+                description: Private mesh network.
+                href: https://console.tailscale.com/
+                icon: tailscale.svg
+                widget:
+                  type: customapi
+                  url: https://api.tailscale.com/api/v2/tailnet/-/devices
+                  refreshInterval: 900000
+                  headers:
+                    Authorization: "Bearer {{`{{HOMEPAGE_VAR_TAILSCALE_TOKEN}}`}}"
+                  mappings:
+                    - field: devices
+                      format: size
+                      label: Machines
         - Systems:
             - pve-node-01:
                 href: "https://pve-node-01.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
