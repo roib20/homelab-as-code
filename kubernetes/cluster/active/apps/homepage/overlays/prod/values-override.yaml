@@ -5,7 +5,7 @@ configmap:
       services.yaml: |
         ---
         - Calendar:
-            - Calendar:
+            - Monthly:
                 widget:
                   type: calendar
                   firstDayInWeek: sunday
@@ -21,12 +21,12 @@ configmap:
                     - type: radarr
                       service_group: Media Automation (HD Video)
                       service_name: Radarr HD
-                    - type: radarr
-                      service_group: Media Automation (Ultra HD Video)
-                      service_name: Radarr UHD
                     - type: sonarr
                       service_group: Media Automation (HD Video)
                       service_name: Sonarr HD
+                    - type: radarr
+                      service_group: Media Automation (Ultra HD Video)
+                      service_name: Radarr UHD
                     - type: sonarr
                       service_group: Media Automation (Ultra HD Video)
                       service_name: Sonarr UHD
@@ -52,12 +52,12 @@ configmap:
                     - type: radarr
                       service_group: Media Automation (HD Video)
                       service_name: Radarr HD
-                    - type: radarr
-                      service_group: Media Automation (Ultra HD Video)
-                      service_name: Radarr UHD
                     - type: sonarr
                       service_group: Media Automation (HD Video)
                       service_name: Sonarr HD
+                    - type: radarr
+                      service_group: Media Automation (Ultra HD Video)
+                      service_name: Radarr UHD
                     - type: sonarr
                       service_group: Media Automation (Ultra HD Video)
                       service_name: Sonarr UHD
