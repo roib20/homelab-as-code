@@ -79,16 +79,25 @@ configmap:
                 description: Cloud infrastructure and security.
                 href: https://dash.cloudflare.com/
                 icon: cloudflare.svg
-                widget:
-                  type: customapi
-                  url: https://api.cloudflare.com/client/v4/zones?per_page=5
-                  refreshInterval: 900000
-                  headers:
-                    Authorization: "Bearer {{`{{HOMEPAGE_VAR_CLOUDFLARE_TOKEN}}`}}"
-                  mappings:
-                    - field: result_info.total_count
-                      format: number
-                      label: Domains
+                widgets:
+                  - type: customapi
+                    url: https://api.cloudflare.com/client/v4/zones?per_page=5
+                    refreshInterval: 900000
+                    headers:
+                      Authorization: "Bearer {{`{{HOMEPAGE_VAR_CLOUDFLARE_TOKEN}}`}}"
+                    mappings:
+                      - field: result_info.total_count
+                        format: number
+                        label: Domains
+                  - type: customapi
+                    url: "https://api.cloudflare.com/client/v4/accounts/{{`{{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNT_ID}}`}}/r2/buckets?per_page=1"
+                    refreshInterval: 900000
+                    headers:
+                      Authorization: "Bearer {{`{{HOMEPAGE_VAR_CLOUDFLARE_TOKEN}}`}}"
+                    mappings:
+                      - field: result_info.total_count
+                        format: number
+                        label: R2 Buckets
             - GitHub:
                 description: World's largest software forge.
                 href: https://github.com/
