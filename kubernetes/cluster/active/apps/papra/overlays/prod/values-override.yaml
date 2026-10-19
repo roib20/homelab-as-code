@@ -9,7 +9,7 @@ controllers:
         env:
           APP_BASE_URL: "https://papra.${FQDN_01}"
           AUTH_FIRST_USER_AS_ADMIN: "true"
-          AUTH_IS_REGISTRATION_ENABLED: "false"
+          AUTH_IS_REGISTRATION_ENABLED: "true"
           AUTH_CLIENT_ID:
             secretKeyRef:
               name: papra-kanidm-oauth2-credentials
