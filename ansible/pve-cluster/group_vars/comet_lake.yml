@@ -13,7 +13,7 @@ pve_gpu_iommugroup: 0  # Explicit IOMMU group ID for Comet Lake nodes; adjust pe
 pve_gpu_mdev: 0
 
 # Storage HBA configuration
-pve_lsi_id: "1000:0087"
+pve_lsi_id: "1000:00ac"
 pve_lsi_subsystem_id: "1d49:0201"
 pve_lsi_path: "0000:01:00.0"
 pve_lsi_iommugroup: 2
