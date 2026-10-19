@@ -59,7 +59,7 @@
       options:
         delimiter: "/"
         index: 2
-    # TRUSTED_ORIGINS public hostname (internal origin listed first)
+    # TRUSTED_ORIGINS public hostname (two internal origins listed first)
     - select:
         kind: Deployment
         name: papra
@@ -67,7 +67,7 @@
         - spec.template.spec.containers.[name=papra].env.[name=TRUSTED_ORIGINS].value
       options:
         delimiter: "/"
-        index: 4
+        index: 6
     # KanidmOAuth2Client origin and redirect URL
     - select:
         kind: KanidmOAuth2Client
