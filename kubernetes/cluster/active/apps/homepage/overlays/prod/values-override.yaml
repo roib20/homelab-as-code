@@ -62,6 +62,21 @@ configmap:
                       service_group: Media Automation (Ultra HD Video)
                       service_name: Sonarr UHD
         - Cloud Services:
+            - Backblaze:
+                description: Cloud storage and backups.
+                href: https://secure.backblaze.com/
+                icon: backblaze.svg
+                widget:
+                  type: customapi
+                  url: https://api.backblazeb2.com/b2api/v4/b2_authorize_account
+                  username: "{{`{{HOMEPAGE_VAR_B2_KEY_ID}}`}}"
+                  password: "{{`{{HOMEPAGE_VAR_B2_APP_KEY}}`}}"
+                  refreshInterval: 900000
+                  mappings:
+                    # ponytail: Counts key-assigned buckets only; use a server-side bucket listing for account totals.
+                    - field: apiInfo.storageApi.allowed.buckets
+                      label: B2 Buckets
+                      format: size
             - Bitwarden:
                 description: Password and secrets manager.
                 href: https://vault.bitwarden.com
