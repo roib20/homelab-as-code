@@ -79,9 +79,9 @@ configmap:
                       format: size
             - Bitwarden:
                 description: Password and secrets manager.
-                href: https://vault.bitwarden.com
+                href: https://vault.bitwarden.com/
                 icon: bitwarden.svg
-                siteMonitor: https://vault.bitwarden.com
+                siteMonitor: https://vault.bitwarden.com/
                 widget:
                   type: prometheusmetric
                   url: http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428
