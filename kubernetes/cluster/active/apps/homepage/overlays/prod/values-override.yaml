@@ -63,7 +63,7 @@ configmap:
                       service_name: Sonarr UHD
         - Cloud Services:
             - Bitwarden:
-                description: Password and secrets management.
+                description: Password and secrets manager.
                 href: https://vault.bitwarden.com
                 icon: bitwarden.svg
                 widget:
@@ -76,7 +76,7 @@ configmap:
                       format:
                         type: number
             - Cloudflare:
-                description: DNS and domain management.
+                description: Cloud infrastructure and security.
                 href: https://dash.cloudflare.com/
                 icon: cloudflare.svg
                 widget:
@@ -90,7 +90,7 @@ configmap:
                       format: number
                       label: Domains
             - GitHub:
-                description: Source code hosting.
+                description: World's largest software forge.
                 href: https://github.com/
                 icon: github.svg
                 widget:
