@@ -20,7 +20,9 @@ controllers:
           repository: ghcr.io/papra-hq/papra
           tag: 26.7.0-rootless@sha256:bf4a66e776d0a40d71543747a2e17af800204b4a81d19f7951b8552c8032dbeb
         env:
+          BETTER_AUTH_TELEMETRY: "0"
           HOME: "/home/nonroot"
+          POSTHOG_ENABLED: "false"
           TMPDIR: "/tmp"
           XDG_CACHE_HOME: "/tmp/cache"
         probes:

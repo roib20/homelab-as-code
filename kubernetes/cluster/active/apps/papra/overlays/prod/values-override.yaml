@@ -8,9 +8,6 @@ controllers:
       papra:
         env:
           APP_BASE_URL: "https://papra.${FQDN_01}"
-          AUTH_FIRST_USER_AS_ADMIN: "true"
-          AUTH_IS_PASSWORD_RESET_ENABLED: "false"
-          AUTH_IS_REGISTRATION_ENABLED: "true"
           AUTH_CLIENT_ID:
             secretKeyRef:
               name: papra-kanidm-oauth2-credentials
@@ -19,6 +16,9 @@ controllers:
             secretKeyRef:
               name: papra-kanidm-oauth2-credentials
               key: CLIENT_SECRET
+          AUTH_FIRST_USER_AS_ADMIN: "true"
+          AUTH_IS_PASSWORD_RESET_ENABLED: "false"
+          AUTH_IS_REGISTRATION_ENABLED: "true"
           AUTH_PROVIDERS_CUSTOMS: >-
             [{"providerId":"kanidm","providerName":"Kanidm",
             "clientId":"$(AUTH_CLIENT_ID)","clientSecret":"$(AUTH_CLIENT_SECRET)",
