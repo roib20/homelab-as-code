@@ -198,6 +198,15 @@ configmap:
                       format: size
                       label: Machines
         - Systems:
+            - Home Assistant:
+                description: Home automation platform.
+                href: "{{`{{HOMEPAGE_VAR_HOMEASSISTANT_URL}}`}}"
+                icon: home-assistant.svg
+                widget:
+                  fields: ["lights_on", "switches_on"]
+                  key: "{{`{{HOMEPAGE_VAR_HOMEASSISTANT_KEY}}`}}"
+                  type: homeassistant
+                  url: "{{`{{HOMEPAGE_VAR_HOMEASSISTANT_URL}}`}}"
             - pve-node-01:
                 href: "https://pve-node-01.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
                 icon: proxmox.png
