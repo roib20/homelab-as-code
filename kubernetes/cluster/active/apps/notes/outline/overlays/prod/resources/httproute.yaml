@@ -4,7 +4,7 @@ kind: HTTPRoute
 metadata:
   name: outline
   annotations:
-    gethomepage.dev/description: Collaborative markdown knowledge base.
+    gethomepage.dev/description: Collaborative knowledge base.
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Documents & Notes
     gethomepage.dev/icon: outline.svg
