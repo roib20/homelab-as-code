@@ -306,6 +306,10 @@ rawResources:
       kind: Cluster
       spec:
         instances: 1
+        affinity:
+          enablePodAntiAffinity: true
+          topologyKey: kubernetes.io/hostname
+          podAntiAffinityType: required
         bootstrap:
           initdb:
             database: pinepods_database

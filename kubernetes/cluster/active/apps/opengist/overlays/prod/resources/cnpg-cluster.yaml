@@ -6,6 +6,10 @@ metadata:
   namespace: opengist
 spec:
   instances: 1
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
   postgresql:
     pg_hba:
       - hostssl opengist opengist all scram-sha-256
