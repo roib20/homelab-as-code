@@ -36,6 +36,11 @@ controllers:
               name: papra-secrets
               key: DATABASE_ENCRYPTION_KEY
           DOCUMENTS_OCR_LANGUAGES: "eng,heb"
+          DOCUMENT_STORAGE_DOCUMENT_KEY_ENCRYPTION_KEYS:
+            secretKeyRef:
+              name: papra-secrets
+              key: DOCUMENT_STORAGE_DOCUMENT_KEY_ENCRYPTION_KEYS
+          DOCUMENT_STORAGE_ENCRYPTION_IS_ENABLED: "true"
           DOCUMENT_STORAGE_MAX_UPLOAD_SIZE: "104857600"
           INGESTION_FOLDER_ERROR_FOLDER_PATH: "/app/app-data/ingestion-error"
           INGESTION_FOLDER_IS_ENABLED: "true"
