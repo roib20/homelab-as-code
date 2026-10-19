@@ -66,6 +66,7 @@ configmap:
                 description: Cloud storage and backups.
                 href: https://secure.backblaze.com/
                 icon: backblaze.svg
+                siteMonitor: https://secure.backblaze.com/
                 widget:
                   type: customapi
                   url: https://api.backblazeb2.com/b2api/v4/b2_authorize_account
@@ -80,6 +81,7 @@ configmap:
                 description: Password and secrets manager.
                 href: https://vault.bitwarden.com
                 icon: bitwarden.svg
+                siteMonitor: https://vault.bitwarden.com
                 widget:
                   type: prometheusmetric
                   url: http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428
@@ -93,6 +95,7 @@ configmap:
                 description: Cloud infrastructure and security.
                 href: https://dash.cloudflare.com/
                 icon: cloudflare.svg
+                siteMonitor: https://dash.cloudflare.com/
                 widgets:
                   - type: customapi
                     url: https://api.cloudflare.com/client/v4/zones?per_page=5
@@ -126,6 +129,7 @@ configmap:
                 description: World's largest software forge.
                 href: https://github.com/
                 icon: github.svg
+                siteMonitor: https://github.com/
                 widget:
                   type: customapi
                   url: https://api.github.com/users/roib20
@@ -140,6 +144,7 @@ configmap:
                 description: Certificate Authority. Automated TLS certificates via cert-manager.
                 href: https://letsencrypt.org/
                 icon: lets-encrypt.svg
+                siteMonitor: https://letsencrypt.org/
                 widget:
                   type: prometheusmetric
                   url: http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428
@@ -187,6 +192,7 @@ configmap:
                 description: Private mesh network.
                 href: https://console.tailscale.com/
                 icon: tailscale.svg
+                siteMonitor: https://console.tailscale.com/
                 widget:
                   type: customapi
                   url: https://api.tailscale.com/api/v2/tailnet/-/devices
@@ -202,6 +208,7 @@ configmap:
                 description: Home automation platform.
                 href: "{{`{{HOMEPAGE_VAR_HOMEASSISTANT_URL}}`}}"
                 icon: home-assistant.svg
+                siteMonitor: "{{`{{HOMEPAGE_VAR_HOMEASSISTANT_URL}}`}}"
                 widget:
                   fields: ["lights_on", "switches_on"]
                   key: "{{`{{HOMEPAGE_VAR_HOMEASSISTANT_KEY}}`}}"
