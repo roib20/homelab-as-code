@@ -10,7 +10,6 @@ import tomllib
 MODULE = Path(__file__).resolve().parents[1]
 TEMPLATES = MODULE.parents[1] / "templates"
 SOURCE = (MODULE / "config.tf").read_text()
-# ponytail: extracts this block by layout; use an HCL parser if its structure changes.
 PATCHES = SOURCE.split("config_patches = ", 1)[1].split("\n}\n", 1)[0].strip()
 SWAP_ENABLED = SOURCE.split("zswap_patches_enabled = ", 1)[1].splitlines()[0]
 TALOS_VERSION = "v1.14.1"

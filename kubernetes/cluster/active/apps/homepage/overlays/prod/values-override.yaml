@@ -61,6 +61,142 @@ configmap:
                     - type: sonarr
                       service_group: Media Automation (Ultra HD Video)
                       service_name: Sonarr UHD
+        - Cloud Services:
+            - Backblaze:
+                description: Cloud storage and backups.
+                href: https://secure.backblaze.com/
+                icon: backblaze.svg
+                widget:
+                  type: customapi
+                  url: https://api.backblazeb2.com/b2api/v4/b2_authorize_account
+                  username: "{{`{{HOMEPAGE_VAR_B2_KEY_ID}}`}}"
+                  password: "{{`{{HOMEPAGE_VAR_B2_APP_KEY}}`}}"
+                  refreshInterval: 900000
+                  mappings:
+                    - field: apiInfo.storageApi.allowed.buckets
+                      label: B2 Buckets
+                      format: size
+            - Bitwarden:
+                description: Password and secrets manager.
+                href: https://vault.bitwarden.com
+                icon: bitwarden.svg
+                widget:
+                  type: prometheusmetric
+                  url: http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428
+                  refreshInterval: 900000
+                  metrics:
+                    - label: External Secrets
+                      query: 'sum(externalsecret_status_condition{condition="Ready"})'
+                      format:
+                        type: number
+            - Cloudflare:
+                description: Cloud infrastructure and security.
+                href: https://dash.cloudflare.com/
+                icon: cloudflare.svg
+                widgets:
+                  - type: customapi
+                    url: https://api.cloudflare.com/client/v4/zones?per_page=5
+                    refreshInterval: 900000
+                    headers:
+                      Authorization: "Bearer {{`{{HOMEPAGE_VAR_CLOUDFLARE_TOKEN}}`}}"
+                    mappings:
+                      - field: result_info.total_count
+                        format: number
+                        label: Domains
+                  - type: customapi
+                    url: "https://api.cloudflare.com/client/v4/accounts/{{`{{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNT_ID}}`}}/r2/buckets?per_page=1"
+                    refreshInterval: 900000
+                    headers:
+                      Authorization: "Bearer {{`{{HOMEPAGE_VAR_CLOUDFLARE_TOKEN}}`}}"
+                    mappings:
+                      - field: result_info.total_count
+                        format: number
+                        label: R2 Buckets
+                  - type: customapi
+                    url: "https://api.cloudflare.com/client/v4/accounts/{{`{{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNT_ID}}`}}/r2/buckets?per_page=1"
+                    refreshInterval: 900000
+                    headers:
+                      Authorization: "Bearer {{`{{HOMEPAGE_VAR_CLOUDFLARE_TOKEN}}`}}"
+                      cf-r2-jurisdiction: eu
+                    mappings:
+                      - field: result_info.total_count
+                        format: number
+                        label: R2 Buckets (EU)
+            - GitHub:
+                description: World's largest software forge.
+                href: https://github.com/
+                icon: github.svg
+                widget:
+                  type: customapi
+                  url: https://api.github.com/users/roib20
+                  refreshInterval: 900000
+                  headers:
+                    User-Agent: Homepage
+                  mappings:
+                    - field: public_repos
+                      format: number
+                      label: Repositories
+            - Let's Encrypt:
+                description: Certificate Authority. Automated TLS certificates via cert-manager.
+                href: https://letsencrypt.org/
+                icon: lets-encrypt.svg
+                widget:
+                  type: prometheusmetric
+                  url: http://vmsingle-victoria-metrics-k8s-stack.monitoring.svc.cluster.local:8428
+                  refreshInterval: 900000
+                  metrics:
+                    - label: Certificates
+                      query: >-
+                        count(count by (exported_namespace, name) (
+                          certmanager_certificate_ready_status{issuer_name=~"letsencrypt-.*", condition="True"}
+                        ))
+                      format:
+                        type: number
+                    - label: Issuers
+                      # ClusterIssuers are shared across namespaces; Issuers are namespace-scoped.
+                      query: >-
+                        count(
+                          count by (issuer_name, issuer_group) (
+                            label_replace(
+                              certmanager_certificate_ready_status{issuer_name=~"letsencrypt-.*", issuer_kind="ClusterIssuer", condition="True"},
+                              "issuer_group", "cert-manager.io", "issuer_group", "^$"
+                            )
+                          )
+                          or count by (exported_namespace, issuer_name, issuer_group) (
+                            label_replace(
+                              certmanager_certificate_ready_status{issuer_name=~"letsencrypt-.*", issuer_kind=~"Issuer|", condition="True"},
+                              "issuer_group", "cert-manager.io", "issuer_group", "^$"
+                            )
+                          )
+                        )
+                      format:
+                        type: number
+                    - label: Next Expiry
+                      query: >-
+                        min(certmanager_certificate_expiration_timestamp_seconds{issuer_name=~"letsencrypt-.*"} > 0)
+                      format:
+                        type: relativeDate
+                        scale: 1000
+                    - label: Next Renewal
+                      query: >-
+                        min(certmanager_certificate_renewal_timestamp_seconds{issuer_name=~"letsencrypt-.*"} > 0)
+                      format:
+                        type: relativeDate
+                        scale: 1000
+            - Tailscale:
+                description: Private mesh network.
+                href: https://console.tailscale.com/
+                icon: tailscale.svg
+                widget:
+                  type: customapi
+                  url: https://api.tailscale.com/api/v2/tailnet/-/devices
+                  refreshInterval: 900000
+                  headers:
+                    Authorization: "Bearer {{`{{HOMEPAGE_VAR_TAILSCALE_TOKEN}}`}}"
+                  mappings:
+                    - field: devices
+                      format: size
+                      label: Machines
         - Systems:
             - pve-node-01:
                 href: "https://pve-node-01.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
@@ -116,6 +252,8 @@ configmap:
           opacity: 100
           saturate: 100
         layout:
+          Cloud Services:
+            tab: Home
           Documents & Notes:
             tab: Home
           Downloaders:
