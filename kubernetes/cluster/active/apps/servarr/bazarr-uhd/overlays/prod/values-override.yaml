@@ -10,7 +10,7 @@ workload:
   main:
     podSpec:
       annotations:
-        secret.reloader.stakater.com/reload: "bazarr-provider-secrets,servarr-postgres-app,servarr-secrets"
+        secret.reloader.stakater.com/reload: "bazarr-jellyfin-secret,bazarr-provider-secrets,servarr-postgres-app,servarr-secrets"
       containers:
         main:
           env:
@@ -28,9 +28,14 @@ workload:
             DYNACONF_general__hi_extension: sdh
             DYNACONF_general__instance_name: Bazarr UHD
             DYNACONF_general__theme: auto
+            DYNACONF_general__use_jellyfin: true
             DYNACONF_general__use_radarr: true
             DYNACONF_general__use_sonarr: true
             DYNACONF_general__utf8_encode: true
+            DYNACONF_jellyfin__refresh_method: immediate
+            DYNACONF_jellyfin__update_movie_library: true
+            DYNACONF_jellyfin__update_series_library: true
+            DYNACONF_jellyfin__url: http://jellyfin.jellyfin.svc.cluster.local:8096
             DYNACONF_opensubtitlescom__include_ai_translated: false
             DYNACONF_opensubtitlescom__include_machine_translated: false
             DYNACONF_radarr__apikey:
@@ -75,6 +80,9 @@ workload:
                 key: user
                 expandObjectName: false
           envFrom:
+            - secretRef:
+                name: bazarr-jellyfin-secret
+                expandObjectName: false
             - secretRef:
                 name: bazarr-provider-secrets
                 expandObjectName: false
