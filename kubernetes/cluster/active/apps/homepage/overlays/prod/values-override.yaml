@@ -324,6 +324,12 @@ configmap:
         providers:
           longhorn:
             url: http://longhorn-frontend.longhorn-system.svc.cluster.local
+        quicklaunch:
+          hideInternetSearch: false
+          hideVisitURL: false
+          provider: google
+          searchDescriptions: true
+          showSearchSuggestions: true
       widgets.yaml: |
         ---
         - glances:
@@ -358,11 +364,6 @@ configmap:
             total: true
             labels: true
             nodes: true
-        - search:
-            provider: google
-            focus: false
-            showSearchSuggestions: true
-            target: _blank
 global:
   fallbackDefaults:
     storageClass: longhorn
