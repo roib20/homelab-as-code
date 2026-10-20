@@ -8,25 +8,25 @@ configmap:
         .bookmark > a,
         .service .service-card {
           --glass-specular: rgb(255 255 255 / 50%);
-          --glass-specular-soft: rgb(255 255 255 / 16%);
-          --glass-bloom: rgb(var(--color-200) / 12%);
+          --glass-specular-soft: rgb(255 255 255 / 20%);
+          --glass-bloom: rgb(var(--color-200) / 10%);
           --glass-rim-width: 2px;
-          --glass-rim-color: rgb(var(--color-200) / 45%);
-          --glass-shine: rgb(255 255 255 / 85%);
+          --glass-rim-color: rgb(var(--color-200) / 50%);
+          --glass-shine: rgb(255 255 255 / 90%);
           --glass-rim-soft: rgb(var(--color-400) / 20%);
-          --glass-hover-outline: rgb(var(--color-200) / 65%);
-          --glass-shadow-hover: rgb(0 0 0 / 14%);
+          --glass-hover-outline: rgb(var(--color-200) / 70%);
+          --glass-shadow-hover: rgb(0 0 0 / 10%);
           --glass-shadow: rgb(0 0 0 / 10%);
-          --glass-well: rgb(0 0 0 / 12%);
-          --glass-outline: rgb(var(--color-400) / 35%);
-          --glass-tab: rgb(var(--bg-color) / 55%);
+          --glass-well: rgb(0 0 0 / 10%);
+          --glass-outline: rgb(var(--color-400) / 40%);
+          --glass-tab: rgb(var(--bg-color) / 60%);
           --glass-opaque: rgb(var(--bg-color));
           position: relative;
           isolation: isolate;
-          background: rgb(var(--bg-color) / 88%);
-          border: 1px solid rgb(255 255 255 / 18%);
+          background: rgb(var(--bg-color) / 90%);
+          border: 1px solid rgb(255 255 255 / 20%);
           border-radius: 24px;
-          box-shadow: 0 2px 8px rgb(0 0 0 / 10%), inset 0 1px 2px rgb(255 255 255 / 20%), inset 0 -1px 2px rgb(255 255 255 / 8%);
+          box-shadow: 0 2px 8px rgb(0 0 0 / 10%), inset 0 1px 2px rgb(255 255 255 / 20%), inset 0 -1px 2px rgb(255 255 255 / 10%);
         }
 
         #information-widgets::before {
@@ -35,7 +35,7 @@ configmap:
           inset: 0;
           border-radius: inherit;
           padding: 1px;
-          background: linear-gradient(135deg, rgb(255 255 255 / 80%), transparent 35%, rgb(255 255 255 / 8%) 65%, rgb(255 255 255 / 45%));
+          background: linear-gradient(140deg, rgb(255 255 255 / 80%), transparent 40%, rgb(255 255 255 / 10%) 70%, rgb(255 255 255 / 50%));
           -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
           mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
           -webkit-mask-composite: xor;
@@ -60,16 +60,16 @@ configmap:
           pointer-events: none;
           border-radius: inherit;
           background:
-            radial-gradient(ellipse 94% 72% at 1% -13%,
-              var(--glass-specular-soft), transparent 71%),
-            radial-gradient(ellipse 82% 54% at 100% 114%,
-              var(--glass-bloom), transparent 77%),
-            linear-gradient(112deg,
-              transparent 25%,
-              var(--glass-specular-soft) 47%,
-              transparent 59%);
-          opacity: .63;
-          transition: opacity 230ms ease;
+            radial-gradient(ellipse 90% 70% at 0% -10%,
+              var(--glass-specular-soft), transparent 70%),
+            radial-gradient(ellipse 80% 50% at 100% 110%,
+              var(--glass-bloom), transparent 80%),
+            linear-gradient(110deg,
+              transparent 30%,
+              var(--glass-specular-soft) 50%,
+              transparent 60%);
+          opacity: .6;
+          transition: opacity 200ms ease;
         }
 
         /* Masked optical rim: a separate backdrop filter near the curved edge. */
@@ -83,21 +83,21 @@ configmap:
           pointer-events: none;
           border-radius: inherit;
           padding: var(--glass-rim-width);
-          background: conic-gradient(from 225deg,
+          background: conic-gradient(from 230deg,
             var(--glass-rim-color) 0deg,
-            var(--glass-shine) 48deg,
+            var(--glass-shine) 50deg,
             transparent 120deg,
-            var(--glass-rim-soft) 193deg,
-            var(--glass-shine) 275deg,
+            var(--glass-rim-soft) 190deg,
+            var(--glass-shine) 280deg,
             var(--glass-rim-color) 360deg);
           -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
           -webkit-mask-composite: xor;
           mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
           mask-composite: exclude;
-          -webkit-backdrop-filter: blur(2px) saturate(220%) brightness(1.04);
-          backdrop-filter: blur(2px) saturate(220%) brightness(1.04);
-          opacity: .78;
-          transition: opacity 230ms ease;
+          -webkit-backdrop-filter: blur(2px) saturate(220%);
+          backdrop-filter: blur(2px) saturate(220%);
+          opacity: .8;
+          transition: opacity 200ms ease;
         }
 
         /* Hover preserves the selected palette: only variables, no fixed cyan/pink. */
@@ -156,7 +156,7 @@ configmap:
 
         #tabs button[role="tab"][aria-selected="true"] {
           background:
-            linear-gradient(145deg, var(--glass-specular-soft), transparent 75%),
+            linear-gradient(150deg, var(--glass-specular-soft), transparent 80%),
             var(--glass-tab) !important;
           border-color: var(--glass-outline);
           box-shadow:
@@ -166,7 +166,7 @@ configmap:
 
         .service .service-card,
         .bookmark > a {
-          transition: transform 230ms ease, border-color 230ms ease, box-shadow 230ms ease;
+          transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -184,14 +184,14 @@ configmap:
           #myTab,
           .bookmark > a,
           .service .service-card {
-            background-color: rgb(var(--bg-color) / 62%);
+            background-color: rgb(var(--bg-color) / 60%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             backdrop-filter: blur(20px) saturate(180%);
           }
 
           #information-widgets,
           #myTab {
-            background-color: rgb(var(--bg-color) / 44%);
+            background-color: rgb(var(--bg-color) / 40%);
           }
         }
 
@@ -215,12 +215,12 @@ configmap:
           --readable-text: rgb(var(--color-900));
           color: var(--readable-text);
           font-weight: 500;
-          text-shadow: 0 1px 1px rgb(255 255 255 / 45%);
+          text-shadow: 0 1px 1px rgb(255 255 255 / 40%);
         }
 
         .dark #page_wrapper {
           --readable-text: #fff;
-          text-shadow: 0 1px 1px rgb(0 0 0 / 45%);
+          text-shadow: 0 1px 1px rgb(0 0 0 / 40%);
         }
 
         #page_wrapper button {
