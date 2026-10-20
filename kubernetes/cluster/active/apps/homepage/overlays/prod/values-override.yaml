@@ -135,7 +135,7 @@ configmap:
                   url: https://api.github.com/users/roib20
                   refreshInterval: 900000
                   headers:
-                    User-Agent: Homepage
+                    User-Agent: homepage
                   mappings:
                     - field: public_repos
                       format: number
