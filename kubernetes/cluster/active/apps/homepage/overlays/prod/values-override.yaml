@@ -184,7 +184,7 @@ configmap:
           #myTab,
           .bookmark > a,
           .service .service-card {
-            background-color: rgb(var(--bg-color) / 52%);
+            background-color: rgb(var(--bg-color) / 62%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             backdrop-filter: blur(20px) saturate(180%);
           }
@@ -215,12 +215,12 @@ configmap:
           --readable-text: rgb(var(--color-900));
           color: var(--readable-text);
           font-weight: 500;
-          text-shadow: 0 1px 2px rgb(255 255 255 / 90%);
+          text-shadow: 0 1px 1px rgb(255 255 255 / 45%);
         }
 
         .dark #page_wrapper {
           --readable-text: #fff;
-          text-shadow: 0 1px 2px rgb(0 0 0 / 95%), 0 0 4px rgb(0 0 0 / 70%);
+          text-shadow: 0 1px 1px rgb(0 0 0 / 45%);
         }
 
         #page_wrapper button {
