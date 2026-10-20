@@ -32,6 +32,7 @@ workload:
               "{{`{{subtitles}}`}}"
               --silent
             DYNACONF_general__theme: auto
+            DYNACONF_general__use_embedded_subs: true
             DYNACONF_general__use_jellyfin: true
             DYNACONF_general__use_postprocessing: true
             DYNACONF_general__use_radarr: true
