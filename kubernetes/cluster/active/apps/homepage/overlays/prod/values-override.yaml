@@ -132,14 +132,32 @@ configmap:
                 siteMonitor: https://github.com/
                 widget:
                   type: customapi
-                  url: https://api.github.com/users/roib20
+                  url: https://api.github.com/graphql
+                  method: POST
                   refreshInterval: 900000
                   headers:
+                    Authorization: "Bearer {{`{{HOMEPAGE_VAR_GITHUB_TOKEN}}`}}"
+                    Content-Type: application/json
                     User-Agent: homepage
+                  requestBody:
+                    query: >-
+                      query {
+                        viewer {
+                          privateRepos: repositories(privacy: PRIVATE, affiliations: OWNER) { totalCount }
+                          publicRepos: repositories(privacy: PUBLIC, affiliations: OWNER) { totalCount }
+                          allRepos: repositories(affiliations: OWNER) { totalCount }
+                        }
+                      }
                   mappings:
-                    - field: public_repos
+                    - field: data.viewer.privateRepos.totalCount
                       format: number
-                      label: Repositories
+                      label: Private Repos
+                    - field: data.viewer.publicRepos.totalCount
+                      format: number
+                      label: Public Repos
+                    - field: data.viewer.allRepos.totalCount
+                      format: number
+                      label: Total Repos
             - Let's Encrypt:
                 description: Certificate Authority. Automated TLS certificates via cert-manager.
                 href: https://letsencrypt.org/
