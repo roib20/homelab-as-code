@@ -27,10 +27,6 @@ workload:
               "subf2m", "subsource", "subtitlecat", "subtitulamostv", "supersubtitles", "tvsubtitles", "wizdom", "yifysubtitles"]
             DYNACONF_general__hi_extension: sdh
             DYNACONF_general__instance_name: Bazarr HD
-            DYNACONF_general__movie_default_enabled: true
-            DYNACONF_general__movie_default_profile: 1
-            DYNACONF_general__serie_default_enabled: true
-            DYNACONF_general__serie_default_profile: 1
             DYNACONF_general__theme: auto
             DYNACONF_general__use_radarr: true
             DYNACONF_general__use_sonarr: true
