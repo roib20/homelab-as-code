@@ -51,11 +51,17 @@ workload:
             DYNACONF_subdl__ai_translate: false
             DYNACONF_subdl__include_ai_translated: false
             DYNACONF_subtitlecat__include_machine_translated: false
+            POSTGRES_DATABASE: bazarr-uhd
             POSTGRES_ENABLED: true
             POSTGRES_HOST:
               secretKeyRef:
                 name: servarr-postgres-app
                 key: host
+                expandObjectName: false
+            POSTGRES_PASSWORD:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: password
                 expandObjectName: false
             POSTGRES_PORT:
               secretKeyRef:
@@ -67,12 +73,6 @@ workload:
                 name: servarr-postgres-app
                 key: user
                 expandObjectName: false
-            POSTGRES_PASSWORD:
-              secretKeyRef:
-                name: servarr-postgres-app
-                key: password
-                expandObjectName: false
-            POSTGRES_DATABASE: bazarr-uhd
           envFrom:
             - secretRef:
                 name: bazarr-provider-secrets
