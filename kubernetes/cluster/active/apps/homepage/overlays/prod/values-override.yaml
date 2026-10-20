@@ -180,13 +180,13 @@ configmap:
                       query: >-
                         min(certmanager_certificate_expiration_timestamp_seconds{issuer_name=~"letsencrypt-.*"} > 0) - time()
                       format:
-                        suffix: " until"
+                        suffix: " to"
                         type: duration
                     - label: Next Renewal
                       query: >-
                         min(certmanager_certificate_renewal_timestamp_seconds{issuer_name=~"letsencrypt-.*"} > 0) - time()
                       format:
-                        suffix: " until"
+                        suffix: " to"
                         type: duration
             - Tailscale:
                 description: Private mesh network.
