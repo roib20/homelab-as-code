@@ -2,6 +2,288 @@
 configmap:
   config:
     data:
+      custom.css: |
+        #page_wrapper .select-none, #tabs [role="tab"] { -webkit-user-select: text; user-select: text; }
+        #information-widgets,
+        #myTab,
+        .bookmark > a,
+        .service .service-card {
+          --glass-specular: rgb(255 255 255 / 50%);
+          --glass-specular-soft: rgb(255 255 255 / 20%);
+          --glass-bloom: rgb(var(--color-200) / 10%);
+          --glass-rim-width: 2px;
+          --glass-rim-color: rgb(var(--color-200) / 50%);
+          --glass-shine: rgb(255 255 255 / 90%);
+          --glass-rim-soft: rgb(var(--color-400) / 20%);
+          --glass-hover-outline: rgb(var(--color-200) / 70%);
+          --glass-shadow-hover: rgb(0 0 0 / 10%);
+          --glass-shadow: rgb(0 0 0 / 10%);
+          --glass-well: rgb(0 0 0 / 10%);
+          --glass-outline: rgb(var(--color-400) / 40%);
+          --glass-tab: rgb(var(--bg-color) / 60%);
+          --glass-opaque: rgb(var(--bg-color));
+          position: relative;
+          isolation: isolate;
+          background: rgb(var(--bg-color) / 90%);
+          border: 1px solid rgb(255 255 255 / 20%);
+          border-radius: 24px;
+          box-shadow: 0 2px 8px rgb(0 0 0 / 10%), inset 0 1px 2px rgb(255 255 255 / 20%), inset 0 -1px 2px rgb(255 255 255 / 10%);
+        }
+
+        #information-widgets::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          padding: 1px;
+          background: linear-gradient(140deg, rgb(255 255 255 / 80%), transparent 40%, rgb(255 255 255 / 10%) 70%, rgb(255 255 255 / 50%));
+          -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
+        }
+
+        .service-card > *,
+        .bookmark > a > *,
+        #myTab > * {
+          position: relative;
+          z-index: 1;
+        }
+
+        .service-card::before,
+        .bookmark > a::before,
+        #tabs > ul::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+          border-radius: inherit;
+          background:
+            radial-gradient(ellipse 90% 70% at 0% -10%,
+              var(--glass-specular-soft), transparent 70%),
+            radial-gradient(ellipse 80% 50% at 100% 110%,
+              var(--glass-bloom), transparent 80%),
+            linear-gradient(110deg,
+              transparent 30%,
+              var(--glass-specular-soft) 50%,
+              transparent 60%);
+          opacity: .6;
+          transition: opacity 200ms ease;
+        }
+
+        /* Masked optical rim: a separate backdrop filter near the curved edge. */
+        .service-card::after,
+        .bookmark > a::after,
+        #tabs > ul::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 2;
+          pointer-events: none;
+          border-radius: inherit;
+          padding: var(--glass-rim-width);
+          background: conic-gradient(from 230deg,
+            var(--glass-rim-color) 0deg,
+            var(--glass-shine) 50deg,
+            transparent 120deg,
+            var(--glass-rim-soft) 190deg,
+            var(--glass-shine) 280deg,
+            var(--glass-rim-color) 360deg);
+          -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask-composite: exclude;
+          -webkit-backdrop-filter: blur(2px) saturate(220%);
+          backdrop-filter: blur(2px) saturate(220%);
+          opacity: .8;
+          transition: opacity 200ms ease;
+        }
+
+        /* Hover preserves the selected palette: only variables, no fixed cyan/pink. */
+        @media (hover: hover) {
+          .service-card:hover,
+          .bookmark > a:hover {
+            transform: translateY(-2px);
+            border-color: var(--glass-hover-outline) !important;
+            box-shadow:
+              inset 0 1px 0 var(--glass-specular),
+              inset 1px 0 0 var(--glass-specular-soft),
+              0 14px 32px var(--glass-shadow-hover) !important;
+          }
+          .service-card:hover::before,
+          .bookmark > a:hover::before,
+          .service-card:hover::after,
+          .bookmark > a:hover::after { opacity: 1; }
+        }
+
+        /* Preserve widget backgrounds and blockHighlights status colors. */
+        .service .service-card {
+          padding: 8px;
+        }
+
+        .service-card .service-name {
+          padding-block: 4px;
+        }
+
+        .service-block {
+          padding: 2px 4px;
+          margin: 2px;
+          border-radius: 10px !important;
+          box-shadow:
+            inset 0 1px 2px var(--glass-well),
+            0 1px 0 var(--glass-specular-soft);
+        }
+
+        .service-block > * {
+          line-height: 1.25;
+        }
+
+        .bookmark > a .bookmark-icon {
+          border-right: 1px solid var(--glass-outline);
+        }
+
+        #myTab,
+        #myTab button {
+          border-radius: 999px;
+        }
+
+        #tabs button[role="tab"] {
+          border: 1px solid transparent;
+          transition: background 200ms ease, box-shadow 200ms ease,
+                      border-color 200ms ease;
+        }
+
+        #tabs button[role="tab"][aria-selected="true"] {
+          background:
+            linear-gradient(150deg, var(--glass-specular-soft), transparent 80%),
+            var(--glass-tab) !important;
+          border-color: var(--glass-outline);
+          box-shadow:
+            inset 0 1px 0 var(--glass-specular),
+            0 3px 10px var(--glass-shadow);
+        }
+
+        .service .service-card,
+        .bookmark > a {
+          transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .service-card, .bookmark > a, #tabs > ul,
+          #tabs button[role="tab"],
+          .service-card::before, .bookmark > a::before, #tabs > ul::before,
+          .service-card::after, .bookmark > a::after, #tabs > ul::after {
+            transition: none !important;
+          }
+          .service-card:hover, .bookmark > a:hover { transform: none; }
+        }
+
+        @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+          #information-widgets,
+          #myTab,
+          .bookmark > a,
+          .service .service-card {
+            background-color: rgb(var(--bg-color) / 60%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(20px) saturate(180%);
+          }
+
+          #information-widgets,
+          #myTab {
+            background-color: rgb(var(--bg-color) / 40%);
+          }
+        }
+
+        @media (prefers-reduced-transparency: reduce) {
+          #information-widgets,
+          #myTab,
+          #myTab button[role="tab"][aria-selected="true"],
+          .bookmark > a,
+          .service .service-card {
+            background: var(--glass-opaque) !important;
+            -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+          }
+          .service-card::after, .bookmark > a::after, #tabs > ul::after {
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+          }
+        }
+
+        #page_wrapper {
+          --readable-text: rgb(var(--color-900));
+          color: var(--readable-text);
+          font-weight: 500;
+          text-shadow: 0 1px 1px rgb(255 255 255 / 40%);
+        }
+
+        .dark #page_wrapper {
+          --readable-text: #fff;
+          text-shadow: 0 1px 1px rgb(0 0 0 / 40%);
+        }
+
+        #page_wrapper button {
+          text-shadow: inherit;
+        }
+
+        #page_wrapper .animate-pulse {
+          animation: none;
+        }
+
+        #page_wrapper [class*="text-theme-"],
+        .service-card .site-monitor-status > .uppercase.opacity-20 {
+          color: var(--readable-text);
+          opacity: 1;
+        }
+
+        #page_wrapper .text-gray-500 {
+          color: color-mix(in srgb, var(--readable-text) 80%, rgb(var(--bg-color)));
+        }
+
+        #page_wrapper .text-xs {
+          font-size: 13px;
+        }
+
+        .font-thin,
+        .font-light {
+          font-weight: 500;
+        }
+
+        .services-group .service-group-name,
+        .bookmarks-group .bookmark-group-name,
+        #tabs button,
+        .service-card .service-name,
+        .service-card .service-block > :first-child {
+          font-weight: 600;
+        }
+
+        #information-widgets {
+          padding: 8px;
+        }
+
+        #information-widgets .information-widget-resource {
+          padding-block: 2px;
+          margin-right: 6px;
+        }
+
+        #information-widgets .information-widget-resource > div,
+        #information-widgets .widget-inner-text {
+          margin-left: 6px;
+        }
+
+        .service-card .site-monitor-status > .uppercase {
+          font-size: 10px;
+        }
+
+        #myTab button:focus-visible,
+        .bookmark > a:focus-visible,
+        .service-card :is(a, button):focus-visible {
+          outline: 2px solid currentColor;
+          outline-offset: -3px;
+        }
+
       services.yaml: |
         ---
         - Calendar:
@@ -280,11 +562,10 @@ configmap:
       settings.yaml: |
         ---
         background:
-          blur: sm
-          brightness: 50
           image: https://picsum.photos/3840/2160
-          opacity: 100
-          saturate: 100
+          opacity: 70
+        cardBlur: md
+        headerStyle: boxed
         layout:
           Cloud Services:
             tab: Home
@@ -324,6 +605,12 @@ configmap:
         providers:
           longhorn:
             url: http://longhorn-frontend.longhorn-system.svc.cluster.local
+        quicklaunch:
+          hideInternetSearch: false
+          hideVisitURL: false
+          provider: google
+          searchDescriptions: true
+          showSearchSuggestions: true
       widgets.yaml: |
         ---
         - glances:
@@ -358,11 +645,6 @@ configmap:
             total: true
             labels: true
             nodes: true
-        - search:
-            provider: google
-            focus: false
-            showSearchSuggestions: true
-            target: _blank
 global:
   fallbackDefaults:
     storageClass: longhorn
