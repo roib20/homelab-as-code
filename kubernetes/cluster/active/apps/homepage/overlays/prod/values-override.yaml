@@ -178,16 +178,16 @@ configmap:
                         type: number
                     - label: Next Expiry
                       query: >-
-                        min(certmanager_certificate_expiration_timestamp_seconds{issuer_name=~"letsencrypt-.*"} > 0)
+                        min(certmanager_certificate_expiration_timestamp_seconds{issuer_name=~"letsencrypt-.*"} > 0) - time()
                       format:
-                        type: relativeDate
-                        scale: 1000
+                        suffix: " until"
+                        type: duration
                     - label: Next Renewal
                       query: >-
-                        min(certmanager_certificate_renewal_timestamp_seconds{issuer_name=~"letsencrypt-.*"} > 0)
+                        min(certmanager_certificate_renewal_timestamp_seconds{issuer_name=~"letsencrypt-.*"} > 0) - time()
                       format:
-                        type: relativeDate
-                        scale: 1000
+                        suffix: " until"
+                        type: duration
             - Tailscale:
                 description: Private mesh network.
                 href: https://console.tailscale.com/
