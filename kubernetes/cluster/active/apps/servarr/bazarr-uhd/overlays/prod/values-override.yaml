@@ -10,7 +10,7 @@ workload:
   main:
     podSpec:
       annotations:
-        secret.reloader.stakater.com/reload: "bazarr-provider-secrets,servarr-postgres-app,servarr-secrets"
+        secret.reloader.stakater.com/reload: "bazarr-jellyfin-secret,bazarr-provider-secrets,servarr-postgres-app,servarr-secrets"
       containers:
         main:
           env:
@@ -27,10 +27,20 @@ workload:
               "subf2m", "subsource", "subtitlecat", "subtitulamostv", "supersubtitles", "tvsubtitles", "wizdom", "yifysubtitles"]
             DYNACONF_general__hi_extension: sdh
             DYNACONF_general__instance_name: Bazarr UHD
+            DYNACONF_general__postprocessing_cmd: >-
+              python3 "/config/subcleaner/subcleaner.py"
+              "{{`{{subtitles}}`}}"
+              --silent
             DYNACONF_general__theme: auto
+            DYNACONF_general__use_jellyfin: true
+            DYNACONF_general__use_postprocessing: true
             DYNACONF_general__use_radarr: true
             DYNACONF_general__use_sonarr: true
             DYNACONF_general__utf8_encode: true
+            DYNACONF_jellyfin__refresh_method: immediate
+            DYNACONF_jellyfin__update_movie_library: true
+            DYNACONF_jellyfin__update_series_library: true
+            DYNACONF_jellyfin__url: http://jellyfin.jellyfin.svc.cluster.local:8096
             DYNACONF_opensubtitlescom__include_ai_translated: false
             DYNACONF_opensubtitlescom__include_machine_translated: false
             DYNACONF_radarr__apikey:
@@ -51,6 +61,7 @@ workload:
             DYNACONF_sonarr__ssl: false
             DYNACONF_subdl__ai_translate: false
             DYNACONF_subdl__include_ai_translated: false
+            DYNACONF_subsync__use_subsync: true
             DYNACONF_subtitlecat__include_machine_translated: false
             POSTGRES_DATABASE: bazarr-uhd
             POSTGRES_ENABLED: true
@@ -76,6 +87,9 @@ workload:
                 expandObjectName: false
           envFrom:
             - secretRef:
+                name: bazarr-jellyfin-secret
+                expandObjectName: false
+            - secretRef:
                 name: bazarr-provider-secrets
                 expandObjectName: false
         exportarr:
@@ -85,6 +99,28 @@ workload:
                 name: servarr-secrets
                 key: bazarr_uhd_api_key
                 expandObjectName: false
+      initContainers:
+        subcleaner:
+          enabled: true
+          type: init
+          imageSelector: image
+          command:
+            - /bin/sh
+            - -ec
+          args:
+            - |
+              COMMIT="f2022c522fc580edb7597ef53e17b1ba1801957a"
+              if grep -qx "${COMMIT}" "/config/subcleaner/.commit" 2>/dev/null; then
+                exit 0
+              fi
+              mkdir -p "/config/subcleaner"
+              curl -fsSL "https://codeload.github.com/KBlixt/subcleaner/tar.gz/${COMMIT}" -o "/tmp/subcleaner.tar.gz"
+              echo "c2eb987d9184faa014e620be3b2e57ae5aa6c32419ab8d84f6f9ea9937edfc03  /tmp/subcleaner.tar.gz" | sha256sum -c -
+              rm -f "/config/subcleaner/.commit"
+              tar -xzf "/tmp/subcleaner.tar.gz" --strip-components=1 -C "/config/subcleaner"
+              rm "/tmp/subcleaner.tar.gz"
+              cp "/config/subcleaner/default_config/subcleaner.conf" "/config/subcleaner/subcleaner.conf"
+              echo "${COMMIT}" > "/config/subcleaner/.commit"
 ingress:
   main:
     enabled: true
@@ -119,6 +155,8 @@ persistence:
         exportarr:
           mountPath: /config
           readOnly: true
+        subcleaner:
+          mountPath: "/config"
   mediadata:
     enabled: true
     type: pvc
