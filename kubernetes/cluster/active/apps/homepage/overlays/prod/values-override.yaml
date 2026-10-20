@@ -3,6 +3,7 @@ configmap:
   config:
     data:
       custom.css: |
+        #page_wrapper .select-none, #tabs [role="tab"] { -webkit-user-select: text; user-select: text; }
         #information-widgets,
         #myTab,
         .bookmark > a,
