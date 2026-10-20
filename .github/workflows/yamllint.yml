@@ -3,14 +3,14 @@ name: yamllint
 'on':
   pull_request:
     paths:
-      - '**/yaml'
-      - '**/yml'
+      - '**/*.yaml'
+      - '**/*.yml'
       - '.github/workflows/yamllint.yml'
   push:
     branches: [main]
     paths:
-      - '**/yaml'
-      - '**/yml'
+      - '**/*.yaml'
+      - '**/*.yml'
       - '.github/workflows/yamllint.yml'
   workflow_dispatch:
 jobs:
