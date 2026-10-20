@@ -25,6 +25,7 @@ workload:
             DYNACONF_general__enabled_providers: >-
               ["addic7ed", "betaseries", "gestdown", "ktuvit", "opensubtitlescom", "soustitreseu", "subdl",
               "subf2m", "subsource", "subtitlecat", "subtitulamostv", "supersubtitles", "tvsubtitles", "wizdom", "yifysubtitles"]
+            DYNACONF_general__hi_extension: sdh
             DYNACONF_general__instance_name: Bazarr HD
             DYNACONF_general__theme: auto
             DYNACONF_general__use_radarr: true
