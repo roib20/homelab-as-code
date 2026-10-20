@@ -56,6 +56,7 @@ workload:
             DYNACONF_sonarr__ssl: false
             DYNACONF_subdl__ai_translate: false
             DYNACONF_subdl__include_ai_translated: false
+            DYNACONF_subsync__use_subsync: true
             DYNACONF_subtitlecat__include_machine_translated: false
             POSTGRES_DATABASE: bazarr-hd
             POSTGRES_ENABLED: true
