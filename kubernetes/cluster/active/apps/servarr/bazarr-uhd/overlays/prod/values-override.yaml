@@ -10,7 +10,7 @@ workload:
   main:
     podSpec:
       annotations:
-        secret.reloader.stakater.com/reload: "servarr-postgres-app,servarr-secrets"
+        secret.reloader.stakater.com/reload: "bazarr-provider-secrets,servarr-postgres-app,servarr-secrets"
       containers:
         main:
           env:
@@ -22,10 +22,17 @@ workload:
                 expandObjectName: false
             DYNACONF_auth__TYPE: "@null"
             DYNACONF_general__debug: false
+            DYNACONF_general__enabled_providers: >-
+              ["addic7ed", "betaseries", "gestdown", "ktuvit", "opensubtitlescom", "soustitreseu", "subdl",
+              "subf2m", "subsource", "subtitlecat", "subtitulamostv", "supersubtitles", "tvsubtitles", "wizdom", "yifysubtitles"]
+            DYNACONF_general__hi_extension: sdh
             DYNACONF_general__instance_name: Bazarr UHD
             DYNACONF_general__theme: auto
             DYNACONF_general__use_radarr: true
             DYNACONF_general__use_sonarr: true
+            DYNACONF_general__utf8_encode: true
+            DYNACONF_opensubtitlescom__include_ai_translated: false
+            DYNACONF_opensubtitlescom__include_machine_translated: false
             DYNACONF_radarr__apikey:
               secretKeyRef:
                 name: servarr-secrets
@@ -42,11 +49,20 @@ workload:
             DYNACONF_sonarr__ip: sonarr-uhd.servarr.svc.cluster.local
             DYNACONF_sonarr__port: 8989
             DYNACONF_sonarr__ssl: false
+            DYNACONF_subdl__ai_translate: false
+            DYNACONF_subdl__include_ai_translated: false
+            DYNACONF_subtitlecat__include_machine_translated: false
+            POSTGRES_DATABASE: bazarr-uhd
             POSTGRES_ENABLED: true
             POSTGRES_HOST:
               secretKeyRef:
                 name: servarr-postgres-app
                 key: host
+                expandObjectName: false
+            POSTGRES_PASSWORD:
+              secretKeyRef:
+                name: servarr-postgres-app
+                key: password
                 expandObjectName: false
             POSTGRES_PORT:
               secretKeyRef:
@@ -58,12 +74,10 @@ workload:
                 name: servarr-postgres-app
                 key: user
                 expandObjectName: false
-            POSTGRES_PASSWORD:
-              secretKeyRef:
-                name: servarr-postgres-app
-                key: password
+          envFrom:
+            - secretRef:
+                name: bazarr-provider-secrets
                 expandObjectName: false
-            POSTGRES_DATABASE: bazarr-uhd
         exportarr:
           env:
             API_KEY:
