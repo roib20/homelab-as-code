@@ -27,8 +27,13 @@ workload:
               "subf2m", "subsource", "subtitlecat", "subtitulamostv", "supersubtitles", "tvsubtitles", "wizdom", "yifysubtitles"]
             DYNACONF_general__hi_extension: sdh
             DYNACONF_general__instance_name: Bazarr HD
+            DYNACONF_general__postprocessing_cmd: >-
+              python3 "/config/subcleaner/subcleaner.py"
+              "{{`{{subtitles}}`}}"
+              --silent
             DYNACONF_general__theme: auto
             DYNACONF_general__use_jellyfin: true
+            DYNACONF_general__use_postprocessing: true
             DYNACONF_general__use_radarr: true
             DYNACONF_general__use_sonarr: true
             DYNACONF_general__utf8_encode: true
@@ -94,6 +99,28 @@ workload:
                 name: servarr-secrets
                 key: bazarr_hd_api_key
                 expandObjectName: false
+      initContainers:
+        subcleaner:
+          enabled: true
+          type: init
+          imageSelector: image
+          command:
+            - /bin/sh
+            - -ec
+          args:
+            - |
+              COMMIT="f2022c522fc580edb7597ef53e17b1ba1801957a"
+              if grep -qx "${COMMIT}" "/config/subcleaner/.commit" 2>/dev/null; then
+                exit 0
+              fi
+              mkdir -p "/config/subcleaner"
+              curl -fsSL "https://codeload.github.com/KBlixt/subcleaner/tar.gz/${COMMIT}" -o "/tmp/subcleaner.tar.gz"
+              echo "c2eb987d9184faa014e620be3b2e57ae5aa6c32419ab8d84f6f9ea9937edfc03  /tmp/subcleaner.tar.gz" | sha256sum -c -
+              rm -f "/config/subcleaner/.commit"
+              tar -xzf "/tmp/subcleaner.tar.gz" --strip-components=1 -C "/config/subcleaner"
+              rm "/tmp/subcleaner.tar.gz"
+              cp "/config/subcleaner/default_config/subcleaner.conf" "/config/subcleaner/subcleaner.conf"
+              echo "${COMMIT}" > "/config/subcleaner/.commit"
 ingress:
   main:
     enabled: true
@@ -128,6 +155,8 @@ persistence:
         exportarr:
           mountPath: /config
           readOnly: true
+        subcleaner:
+          mountPath: "/config"
   mediadata:
     enabled: true
     type: pvc
