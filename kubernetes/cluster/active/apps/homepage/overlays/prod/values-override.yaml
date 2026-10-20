@@ -118,11 +118,25 @@ configmap:
         }
 
         /* Preserve widget backgrounds and blockHighlights status colors. */
+        .service .service-card {
+          padding: 8px;
+        }
+
+        .service-card .service-name {
+          padding-block: 4px;
+        }
+
         .service-block {
+          padding: 2px 4px;
+          margin: 2px;
           border-radius: 10px !important;
           box-shadow:
             inset 0 1px 2px var(--glass-well),
             0 1px 0 var(--glass-specular-soft);
+        }
+
+        .service-block > * {
+          line-height: 1.25;
         }
 
         .bookmark > a .bookmark-icon {
@@ -170,14 +184,14 @@ configmap:
           #myTab,
           .bookmark > a,
           .service .service-card {
-            background-color: rgb(var(--bg-color) / 32%);
+            background-color: rgb(var(--bg-color) / 52%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             backdrop-filter: blur(20px) saturate(180%);
           }
 
           #information-widgets,
           #myTab {
-            background-color: rgb(var(--bg-color) / 24%);
+            background-color: rgb(var(--bg-color) / 44%);
           }
         }
 
@@ -197,25 +211,69 @@ configmap:
           }
         }
 
-        .services-group .service-group-name,
-        .service .service-card {
-          color: rgb(var(--color-900));
+        #page_wrapper {
+          --readable-text: rgb(var(--color-900));
+          color: var(--readable-text);
+          font-weight: 500;
+          text-shadow: 0 1px 2px rgb(255 255 255 / 90%);
         }
 
-        .dark .services-group .service-group-name,
-        .dark .service .service-card {
-          color: #f8fafc;
+        .dark #page_wrapper {
+          --readable-text: #fff;
+          text-shadow: 0 1px 2px rgb(0 0 0 / 95%), 0 0 4px rgb(0 0 0 / 70%);
+        }
+
+        #page_wrapper button {
+          text-shadow: inherit;
+        }
+
+        #page_wrapper .animate-pulse {
+          animation: none;
+        }
+
+        #page_wrapper [class*="text-theme-"],
+        .service-card .site-monitor-status > .uppercase.opacity-20 {
+          color: var(--readable-text);
+          opacity: 1;
+        }
+
+        #page_wrapper .text-gray-500 {
+          color: color-mix(in srgb, var(--readable-text) 80%, rgb(var(--bg-color)));
+        }
+
+        #page_wrapper .text-xs {
+          font-size: 13px;
+        }
+
+        .font-thin,
+        .font-light {
+          font-weight: 500;
         }
 
         .services-group .service-group-name,
+        .bookmarks-group .bookmark-group-name,
+        #tabs button,
         .service-card .service-name,
         .service-card .service-block > :first-child {
           font-weight: 600;
         }
 
-        .service-card .service-description {
-          color: inherit;
-          font-weight: 500;
+        #information-widgets {
+          padding: 8px;
+        }
+
+        #information-widgets .information-widget-resource {
+          padding-block: 2px;
+          margin-right: 6px;
+        }
+
+        #information-widgets .information-widget-resource > div,
+        #information-widgets .widget-inner-text {
+          margin-left: 6px;
+        }
+
+        .service-card .site-monitor-status > .uppercase {
+          font-size: 10px;
         }
 
         #myTab button:focus-visible,
