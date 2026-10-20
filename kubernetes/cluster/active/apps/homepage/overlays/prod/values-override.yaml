@@ -2,6 +2,37 @@
 configmap:
   config:
     data:
+      custom.css: |
+        #information-widgets,
+        #myTab,
+        .service .service-card {
+          background: linear-gradient(135deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 2%)), rgb(var(--bg-color) / 88%);
+          border: 1px solid rgb(var(--color-400) / 35%);
+          border-top-color: rgb(255 255 255 / 42%);
+          border-radius: 18px;
+          box-shadow: 0 8px 24px rgb(0 0 0 / 24%), inset 0 1px 0 rgb(255 255 255 / 12%);
+        }
+
+        .service .service-card:hover,
+        .service .service-card:focus-within {
+          background-color: rgb(var(--bg-color) / 96%);
+          border-color: rgb(var(--color-400) / 75%);
+        }
+
+        .service-card .service-name {
+          font-weight: 600;
+        }
+
+        .service-card .service-description {
+          color: inherit;
+        }
+
+        #myTab button:focus-visible,
+        .service-card :is(a, button):focus-visible {
+          outline: 2px solid currentColor;
+          outline-offset: -3px;
+        }
+
       services.yaml: |
         ---
         - Calendar:
@@ -280,11 +311,10 @@ configmap:
       settings.yaml: |
         ---
         background:
-          blur: sm
-          brightness: 50
           image: https://picsum.photos/3840/2160
-          opacity: 100
-          saturate: 100
+          opacity: 70
+        cardBlur: md
+        headerStyle: boxed
         layout:
           Cloud Services:
             tab: Home
