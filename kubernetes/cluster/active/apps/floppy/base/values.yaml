@@ -13,7 +13,7 @@ controllers:
   floppy:
     pod:
       annotations:
-        secret.reloader.stakater.com/reload: "floppy-kanidm-oauth2-credentials,floppy-postgres-app,floppy-postgres-ca,floppy-secrets"
+        secret.reloader.stakater.com/reload: "floppy-kanidm-oauth2-credentials,floppy-postgres-app,floppy-postgres-ca,floppy-app-secrets,floppy-mcp-secrets"
       # Omnibus image (nginx+gunicorn+celery) runs as root and drops to PUID/PGID.
       securityContext:
         runAsUser: 0
@@ -112,16 +112,6 @@ controllers:
           DB_SSL_MODE: verify-full
           PGSSLROOTCERT: "/postgres-ca/ca.crt"
           REDIS_URL: redis://floppy-valkey:6379
-          SECRET:
-            valueFrom:
-              secretKeyRef:
-                name: floppy-secrets
-                key: SECRET
-          TMDB_API:
-            valueFrom:
-              secretKeyRef:
-                name: floppy-secrets
-                key: TMDB_API
           # $(CLIENT_ID)/$(CLIENT_SECRET)/$(AUTH_HOST) are expanded by k8s at runtime.
           SOCIAL_PROVIDERS: allauth.socialaccount.providers.openid_connect
           SOCIALACCOUNT_ONLY: "True"
@@ -143,6 +133,9 @@ controllers:
             "client_id":"$(CLIENT_ID)","secret":"$(CLIENT_SECRET)",
             "settings":{"server_url":"https://$(AUTH_HOST)/oauth2/openid/$(CLIENT_ID)/.well-known/openid-configuration",
             "token_auth_method":"client_secret_post"}}]}}
+        envFrom:
+          - secretRef:
+              name: floppy-app-secrets
         probes:
           # Probes use an allowed Host for Django's ALLOWED_HOSTS check.
           liveness:
@@ -224,7 +217,7 @@ controllers:
           FLOPPY_TOKEN:
             valueFrom:
               secretKeyRef:
-                name: floppy-secrets
+                name: floppy-mcp-secrets
                 key: FLOPPY_TOKEN_1
         resources:
           requests:
@@ -242,7 +235,7 @@ controllers:
           FLOPPY_TOKEN:
             valueFrom:
               secretKeyRef:
-                name: floppy-secrets
+                name: floppy-mcp-secrets
                 key: FLOPPY_TOKEN_2
 
   valkey:
