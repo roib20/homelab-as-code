@@ -1009,6 +1009,7 @@ level = "supervised"
 # state, feed deletions, and category changes require confirmation.
 auto_approve = [
   "ask_user",
+  "browser_open",
   "calculator",
   "content_search",
   "file_edit",
@@ -1026,9 +1027,9 @@ auto_approve = [
   "sessions_current",
   "sessions_history",
   "sessions_list",
+  "TodoWrite",
   "tool_list",
   "tool_search",
-  "TodoWrite",
   "weather",
   "web_fetch",
   "web_search_tool",
