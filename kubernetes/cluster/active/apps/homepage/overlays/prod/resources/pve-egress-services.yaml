@@ -55,3 +55,22 @@ spec:
     - name: https
       port: 8006
       protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pve-node-04
+  namespace: homepage
+  annotations:
+    tailscale.com/proxy-group: egress-proxies
+    tailscale.com/tailnet-fqdn: pve-node-04.${FQDN_02}
+spec:
+  type: ExternalName
+  externalName: placeholder
+  ports:
+    - name: glances
+      port: 61208
+      protocol: TCP
+    - name: https
+      port: 8006
+      protocol: TCP

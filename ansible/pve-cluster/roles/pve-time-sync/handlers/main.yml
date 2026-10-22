@@ -1,0 +1,4 @@
+---
+- name: Reload systemd for PVE time synchronization
+  ansible.builtin.systemd_service:
+    daemon_reload: true
