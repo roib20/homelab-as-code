@@ -15,7 +15,7 @@ workload:
       containers:
         main:
           env:
-            AUTH: oidc
+            AUTH: "on"
             ORIGIN: "https://profilarr.${FQDN_02}"
             OIDC_CLIENT_ID:
               secretKeyRef:
