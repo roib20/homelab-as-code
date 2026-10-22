@@ -1,0 +1,27 @@
+---
+# Overrides for Tiger Lake nodes (pve-node-04)
+
+# Mask system sleep targets when enabled; false leaves them unchanged.
+disable_sleep: true
+
+# Wait for NTP synchronization before starting the cluster filesystem.
+pve_wait_for_time_sync: true
+
+# Intel TigerLake-LP GT2 [Iris Xe Graphics] device ID
+pve_pci_device_ids:
+  - id: "8086:9a49"
+
+# PCI Resource Mapping configuration
+pve_gpu_id: "{{ (pve_pci_device_ids | map(attribute='id') | first) | default(omit) }}"
+pve_gpu_subsystem_id: "1414:0045"
+pve_gpu_path: "0000:00:02.0"
+pve_gpu_iommugroup: 1
+pve_gpu_mdev: 0
+
+# Network interface configuration
+bridge_port_autodetect: true
+
+# Swap on ZRAM
+zram_generator_config:
+  - {state: present, section: zram0, option: zram-size, value: "min(ram / 2, 8192)"}
+  - {state: present, section: zram0, option: compression-algorithm, value: "lzo-rle zstd(level=3) (type=idle)"}

@@ -7,6 +7,10 @@ all:
           hosts:
             pve-node-01:
               ansible_host: pve-node-01
+        tiger_lake:
+          hosts:
+            pve-node-04:
+              ansible_host: pve-node-04
         twin_lake:
           hosts:
             pve-node-02:

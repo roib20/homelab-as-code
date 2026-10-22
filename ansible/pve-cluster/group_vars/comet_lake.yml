@@ -1,6 +1,9 @@
 ---
 # Overrides for Comet Lake nodes (pve-node-01)
 
+# Mask system sleep targets when enabled; false leaves them unchanged.
+disable_sleep: false
+
 # Intel CometLake-S GT2 [UHD Graphics 630] device ID
 pve_pci_device_ids:
   - id: "8086:9bc8"

@@ -4,12 +4,21 @@
   become: true
   gather_facts: true
   tasks:
+    - name: Disable system sleep states
+      ansible.builtin.include_role:
+        name: disable-sleep
+        apply:
+          tags: disable-sleep
+      tags: disable-sleep
     - name: Configure Proxmox node DNS
       ansible.builtin.include_role:
         name: pve-node-dns
         apply:
           tags: pve-node-dns
       tags: pve-node-dns
+    - name: Autodetect the bridge port
+      ansible.builtin.include_tasks: tasks/detect-bridge-port.yml
+      when: bridge_port_autodetect | default(false)
     - name: Configure /etc/network/interfaces
       ansible.builtin.template:
         src: "{{ interfaces_template }}"
@@ -56,6 +65,12 @@
         apply:
           tags: install-packages
       tags: install-packages
+    - name: Configure cluster startup time synchronization
+      ansible.builtin.include_role:
+        name: pve-time-sync
+        apply:
+          tags: pve-time-sync
+      tags: pve-time-sync
     - name: Configure Glances web service
       ansible.builtin.include_role:
         name: glances

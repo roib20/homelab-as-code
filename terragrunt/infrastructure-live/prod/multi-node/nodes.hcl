@@ -11,6 +11,9 @@ locals {
     "pve-node-03" = {
       address = "https://pve-node-03:8006/"
     }
+    "pve-node-04" = {
+      address = "https://pve-node-04:8006/"
+    }
   }
   # For backward compatibility
   node_name    = keys(local.nodes)[0]

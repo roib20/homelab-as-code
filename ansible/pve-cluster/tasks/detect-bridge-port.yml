@@ -1,0 +1,23 @@
+---
+- name: Find physical wired Ethernet interfaces
+  ansible.builtin.shell: |
+    set -eu
+    for interface in /sys/class/net/*; do
+      [ -e "$interface/device" ] || continue
+      [ ! -d "$interface/wireless" ] || continue
+      [ "$(cat "$interface/type")" = 1 ] || continue
+      printf '%s\n' "${interface##*/}"
+    done
+  changed_when: false
+  check_mode: false
+  register: _bridge_port_candidates
+- name: Require exactly one wired Ethernet interface
+  ansible.builtin.assert:
+    that:
+      - _bridge_port_candidates.stdout_lines | length == 1
+    fail_msg: >-
+      Expected one wired Ethernet interface, found {{ _bridge_port_candidates.stdout_lines }}.
+      Disable bridge_port_autodetect and set bridge_port explicitly if multiple wired interfaces are connected.
+- name: Use the detected bridge port
+  ansible.builtin.set_fact:
+    bridge_port: "{{ _bridge_port_candidates.stdout_lines | first }}"
