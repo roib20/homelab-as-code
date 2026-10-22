@@ -31,6 +31,7 @@ workload:
               python3 "/config/subcleaner/subcleaner.py"
               "{{`{{subtitles}}`}}"
               --silent
+            DYNACONF_general__subzero_mods: "common,OCR_fixes"
             DYNACONF_general__theme: auto
             DYNACONF_general__use_embedded_subs: true
             DYNACONF_general__use_jellyfin: true
