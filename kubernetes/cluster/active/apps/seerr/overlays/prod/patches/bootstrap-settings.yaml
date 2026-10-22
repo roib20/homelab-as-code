@@ -7,7 +7,7 @@
   value:
     name: bootstrap-settings-json
     # renovate: datasource=docker depName=python versioning=docker
-    image: python:3.14.8-alpine
+    image: python:3.14.9-alpine
     command:
       - python
       - -c
