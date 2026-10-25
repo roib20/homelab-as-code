@@ -68,7 +68,20 @@ locals {
     },
   ]
 
-  worker_nodes = []
+  worker_nodes = [
+    {
+      name        = "worker-01"
+      ip          = "192.168.1.64"
+      endpoint    = "192.168.1.64"
+      vm_id       = 1004
+      cpu_cores   = 4
+      memory      = 12288
+      system_disk = 100
+      data_disk   = 300
+      swap_disk   = local.default_swap_disk
+      node_name   = local.node_names[3] # pve-node-04
+    },
+  ]
 
   talos_nodes = concat(local.controlplane_nodes, local.worker_nodes)
 
@@ -318,6 +331,52 @@ unit "$${local.controlplane_nodes[2].name}" {
     pci_mapping = "GPU_${local.controlplane_nodes[2].node_name}"
 
     meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.controlplane_nodes[2].name}.yaml"
+  }
+}
+
+unit "cloud-config-$${local.worker_nodes[0].name}" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/cloud-controller-manager"
+  path   = "cloud-config/${local.worker_nodes[0].name}"
+
+  values = {
+    node_name              = "${local.worker_nodes[0].node_name}"
+    datastore_id           = "local"
+    user_data_cloud_config = "${get_terragrunt_dir()}/user-data-cloud-config.yaml"
+
+    hostname = "${local.worker_nodes[0].name}"
+    vm_id    = "${local.worker_nodes[0].vm_id}"
+    region   = "${local.cluster_name}"
+    zone     = "${local.worker_nodes[0].node_name}"
+    cpu      = "${local.worker_nodes[0].cpu_cores}"
+    memory   = "${local.worker_nodes[0].memory}"
+
+    meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.worker_nodes[0].name}.yaml"
+  }
+}
+
+unit "$${local.worker_nodes[0].name}" {
+  source = "${local.terragrunt_dir}/infrastructure-catalog/units/talos-vm"
+  path   = "${local.worker_nodes[0].name}"
+
+  values = {
+    node_name    = "${local.worker_nodes[0].node_name}"
+    vm_name      = "${local.worker_nodes[0].name}"
+    ipv4_address = "${local.worker_nodes[0].ip}"
+
+    hostname    = "${local.worker_nodes[0].name}"
+    vm_id       = "${local.worker_nodes[0].vm_id}"
+    region      = "${local.cluster_name}"
+    zone        = "${local.worker_nodes[0].node_name}"
+    cpu_cores   = "${local.worker_nodes[0].cpu_cores}"
+    memory      = "${local.worker_nodes[0].memory}"
+    system_disk = "${local.worker_nodes[0].system_disk}"
+    data_disk   = "${local.worker_nodes[0].data_disk}"
+    swap_disk   = local.worker_nodes[0].swap_disk
+
+    # PCI passthrough mapping for Intel GPU
+    pci_mapping = "GPU_${local.worker_nodes[0].node_name}"
+
+    meta_data_cloud_config_file_name = "meta-data-cloud-config_${local.worker_nodes[0].name}.yaml"
   }
 }
 
