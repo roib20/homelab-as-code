@@ -18,8 +18,8 @@ locals {
   # ─── Versions ────────────────────────────────────────────────────────────────
   versions = {
     # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-    kubernetes_version    = "1.37.1",
-    initial_talos_version = "1.12.5", # Do not change this value after initial deployment
+    kubernetes_version         = "1.37.1",
+    provisioning_talos_version = "1.14.4", # Used for new VMs; existing disks are unchanged
     # renovate: datasource=github-releases depName=siderolabs/talos extractVersion=^v(?<version>.+)$
     talos_version = "1.14.4", # Change this value to safely upgrade the Talos version
     # renovate: datasource=docker depName=ghcr.io/external-secrets/charts/external-secrets
@@ -188,7 +188,7 @@ unit "download_file" {
   values = {
     node_names          = local.node_names
     datastore_id        = "local"
-    talos_version       = "${local.versions.initial_talos_version}"
+    talos_version       = "${local.versions.provisioning_talos_version}"
     talos_platform      = "nocloud"
     talos_arch          = "amd64"
     talos_secureboot    = true
