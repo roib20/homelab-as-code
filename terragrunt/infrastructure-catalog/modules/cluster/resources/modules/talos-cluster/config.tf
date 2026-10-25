@@ -42,7 +42,7 @@ data "talos_machine_configuration" "this" {
   kubernetes_version = "v${var.versions.kubernetes_version}"
   talos_version      = "v${var.versions.talos_version}"
 
-  config_patches = compact([
+  config_patches = sensitive(compact([
     # Upgraded nodes need a reboot to start sandboxd.
     yamlencode({
       apiVersion        = "v1alpha1"
@@ -130,7 +130,7 @@ data "talos_machine_configuration" "this" {
       TS_AUTHKEY  = var.ts_authkey
       TS_HOSTNAME = each.key
     }),
-  ])
+  ]))
 }
 
 data "talos_client_configuration" "this" {
