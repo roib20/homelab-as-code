@@ -547,6 +547,17 @@ configmap:
                   type: proxmox
                   url: https://pve-node-03.homepage.svc.cluster.local:8006
                   username: "{{`{{HOMEPAGE_VAR_PVE_USERNAME}}`}}"
+            - pve-node-04:
+                href: "https://pve-node-04.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
+                icon: proxmox.png
+                siteMonitor: https://pve-node-04.homepage.svc.cluster.local:8006
+                widget:
+                  fields: ["vms", "lxc", "resources.cpu", "resources.mem"]
+                  node: pve-node-04
+                  password: "{{`{{HOMEPAGE_VAR_PVE_PASSWORD}}`}}"
+                  type: proxmox
+                  url: https://pve-node-04.homepage.svc.cluster.local:8006
+                  username: "{{`{{HOMEPAGE_VAR_PVE_USERNAME}}`}}"
             - TrueNAS:
                 href: https://192.168.1.5
                 icon: truenas.png

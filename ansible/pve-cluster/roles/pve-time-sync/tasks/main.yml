@@ -1,0 +1,36 @@
+---
+- name: Require synchronized time before starting the cluster filesystem
+  when: pve_wait_for_time_sync | bool
+  block:
+    - name: Create the cluster filesystem systemd drop-in directory
+      ansible.builtin.file:
+        path: /etc/systemd/system/pve-cluster.service.d
+        state: directory
+        mode: "0755"
+    - name: Wait for Chrony synchronization before pmxcfs starts
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/pve-cluster.service.d/time-sync.conf
+        mode: "0644"
+        content: |
+          [Unit]
+          Wants=chrony.service
+          After=chrony.service
+
+          [Service]
+          ExecStartPre=/usr/bin/chronyc waitsync 60 0.1 0 1
+          TimeoutStartSec=90
+      notify: Reload systemd for PVE time synchronization
+- name: Remove the synchronization gate when disabled
+  ansible.builtin.file:
+    path: /etc/systemd/system/pve-cluster.service.d/time-sync.conf
+    state: absent
+  when: not (pve_wait_for_time_sync | bool)
+  notify: Reload systemd for PVE time synchronization
+- name: Remove the drop-in directory only if empty
+  ansible.builtin.command:
+    cmd: find /etc/systemd/system/pve-cluster.service.d -maxdepth 0 -type d -empty -delete -print
+    removes: /etc/systemd/system/pve-cluster.service.d
+  register: _pve_time_sync_cleanup
+  changed_when: _pve_time_sync_cleanup.stdout | length > 0
+  when: not (pve_wait_for_time_sync | bool)
+  notify: Reload systemd for PVE time synchronization

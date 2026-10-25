@@ -1,6 +1,9 @@
 ---
 # Overrides for Twin Lake nodes (pve-node-02, pve-node-03)
 
+# Mask system sleep targets when enabled; false leaves them unchanged.
+disable_sleep: false
+
 # Intel Alder Lake-N [Intel Graphics] device ID
 pve_pci_device_ids:
   - id: "8086:46d4"

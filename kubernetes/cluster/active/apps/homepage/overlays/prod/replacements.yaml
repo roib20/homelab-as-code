@@ -7,7 +7,7 @@
     # PVE egress targets
     - select:
         kind: Service
-        name: pve-node-0[123]
+        name: pve-node-0[1234]
       fieldPaths:
         - metadata.annotations.[tailscale.com/tailnet-fqdn]
       options:
