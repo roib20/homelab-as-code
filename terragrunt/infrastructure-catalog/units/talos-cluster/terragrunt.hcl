@@ -17,13 +17,8 @@ include "common" {
   expose = true
 }
 
-# Talos-cluster depends on the three VM directories created by this same stack
 dependencies {
-  paths = [
-    "../control-plane-01",
-    "../control-plane-02",
-    "../control-plane-03",
-  ]
+  paths = [for name in keys(values.machines) : "../${name}"]
 }
 
 # Pass everything through with the familiar "try(values…, fallback)" idiom

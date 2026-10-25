@@ -12,6 +12,7 @@ variable "secret_yaml_files" {
 variable "template_vars" {
   description = "Optional map of variables to substitute in template manifests"
   type        = map(string)
+  sensitive   = true
   default     = {}
 }
 

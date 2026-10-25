@@ -123,7 +123,7 @@ variable "tablet_device" {
 variable "tags" {
   description = "(Optional) A list of tags of the VM."
   type        = list(string)
-  default     = ["Terragrunt"]
+  default     = ["terragrunt"]
 }
 
 variable "template" {

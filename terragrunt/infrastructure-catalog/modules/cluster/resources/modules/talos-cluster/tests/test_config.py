@@ -89,7 +89,7 @@ with tempfile.TemporaryDirectory(prefix="talos-config-check-") as directory:
             for old, new in replacements.items():
                 expression = expression.replace(old, new)
             patch_args = []
-            for index, patch in enumerate(render(expression)):
+            for index, patch in enumerate(render(f"nonsensitive({expression})")):
                 path = Path(directory) / f"patch-{index}.yaml"
                 path.write_text(patch)
                 patch_args.extend(["--config-patch", f"@{path}"])
