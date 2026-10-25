@@ -24,7 +24,7 @@ terraform {
 # ── DEPENDENCY ON FILE DOWNLOAD UNIT ──
 ########################################
 dependency "download_file" {
-  config_path = "../download_file"
+  config_path = try(values.download_file_path, "../download_file")
 
   # Let ‘terragrunt plan’ succeed before the first real apply:
   mock_outputs = {
@@ -33,11 +33,7 @@ dependency "download_file" {
 }
 
 dependencies {
-  paths = [
-    "../cloud-config/control-plane-01",
-    "../cloud-config/control-plane-02",
-    "../cloud-config/control-plane-03",
-  ]
+  paths = ["../cloud-config/${values.hostname}"]
 }
 
 inputs = {

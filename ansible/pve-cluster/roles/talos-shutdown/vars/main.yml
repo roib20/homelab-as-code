@@ -1,5 +1,5 @@
 ---
-# Map PVE nodes to their Talos VM control plane endpoints
+# Map PVE nodes to their Talos VM endpoints
 talos_vm_map:
   pve-node-01: "control-plane-01"
   pve-node-02: "control-plane-02"
