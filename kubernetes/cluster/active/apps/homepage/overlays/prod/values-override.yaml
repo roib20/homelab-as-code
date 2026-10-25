@@ -639,6 +639,11 @@ configmap:
             label: pve-node-03
             url: http://pve-node-03.homepage.svc.cluster.local:61208
             version: 4
+        - glances:
+            href: "https://pve-node-04.{{`{{HOMEPAGE_VAR_FQDN_02}}`}}:8006"
+            label: pve-node-04
+            url: http://pve-node-04.homepage.svc.cluster.local:61208
+            version: 4
         - kubernetes:
             cluster:
               show: true
