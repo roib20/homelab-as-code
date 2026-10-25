@@ -11,7 +11,7 @@ components:
 helmCharts:
   - name: tandoor-recipes
     repo: oci://oci.trueforge.org/truecharts
-    version: 22.0.3
+    version: 22.1.0
     releaseName: tandoor-recipes
     namespace: tandoor
     valuesFile: ../../base/values.yaml
