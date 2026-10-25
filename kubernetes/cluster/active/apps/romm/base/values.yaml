@@ -47,7 +47,7 @@ controllers:
       romm:
         image:
           repository: ghcr.io/rommapp/romm
-          tag: 5.2.0@sha256:6a2a16f74ce55c4d528eafda5f49993357731cb638a55932abec8dde14e3a93f
+          tag: 5.4.1@sha256:8677fb7b81b1d3db20b849e989a1dadc2a11159e51eb34a2acdcb01102274edf
         env:
           DB_HOST:
             valueFrom:
