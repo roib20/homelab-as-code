@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "nextcloud-aio",
+  "destName": "in-cluster",
+  "destNamespace": "nextcloud",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "nextcloud-aio"
+}

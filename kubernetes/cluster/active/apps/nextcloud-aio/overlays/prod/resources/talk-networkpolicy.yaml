@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nextcloud-aio-turn-allow
+spec:
+  podSelector:
+    matchLabels:
+      io.kompose.service: nextcloud-aio-talk
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 3478
+        - protocol: UDP
+          port: 3478

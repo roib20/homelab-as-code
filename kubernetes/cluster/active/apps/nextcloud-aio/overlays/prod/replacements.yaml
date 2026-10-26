@@ -1,0 +1,98 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: HTTPRoute
+        name: nextcloud-aio
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: Deployment
+        name: nextcloud-aio-(apache|nextcloud|talk|talk-recording)
+      fieldPaths:
+        - spec.template.spec.containers.*.env.[name=NC_DOMAIN].value
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: Deployment
+        name: nextcloud-aio-(nextcloud|talk)
+      fieldPaths:
+        - spec.template.spec.containers.*.env.[name=TURN_DOMAIN].value
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: Service
+        name: nextcloud-aio-talk-public
+      fieldPaths:
+        - metadata.annotations.[external-dns.kubernetes.io/hostname]
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: Deployment
+        name: nextcloud-aio-whiteboard
+      fieldPaths:
+        - spec.template.spec.containers.[name=nextcloud-aio-whiteboard].env.[name=NEXTCLOUD_URL].value
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: Deployment
+        name: nextcloud-aio-harp
+      fieldPaths:
+        - spec.template.spec.containers.[name=nextcloud-aio-harp].env.[name=NC_INSTANCE_URL].value
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: ConfigMap
+        name: nextcloud-aio-proxy
+      fieldPaths:
+        - data.COLLABORA_AUTHORITY
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: HTTPRoute
+    name: nextcloud-aio
+    fieldPath: spec.hostnames.0
+  targets:
+    - select:
+        kind: HTTPRoute
+        name: nextcloud-aio
+      fieldPaths:
+        - spec.rules.*.filters.[type=RequestHeaderModifier].requestHeaderModifier.set.[name=X-Forwarded-Host].value
+    - select:
+        kind: Deployment
+        name: nextcloud-aio-collabora
+      fieldPaths:
+        - spec.template.spec.containers.[name=nextcloud-aio-collabora].env.[name=server_name].value
+    - select:
+        kind: Deployment
+        name: nextcloud-aio-collabora
+      fieldPaths:
+        - spec.template.spec.containers.[name=nextcloud-aio-collabora].env.[name=extra_params].value
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: nextcloud-aio-proxy
+    fieldPath: data.COLLABORA_AUTHORITY
+  targets:
+    - select:
+        kind: Deployment
+        name: nextcloud-aio-collabora
+      fieldPaths:
+        - spec.template.spec.containers.[name=nextcloud-aio-collabora].env.[name=aliasgroup1].value
+      options:
+        delimiter: ":"
+        index: 1

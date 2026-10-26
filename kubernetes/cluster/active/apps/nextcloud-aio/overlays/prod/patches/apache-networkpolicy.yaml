@@ -1,0 +1,15 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nextcloud-aio-webserver-allow
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: envoy-gateway-ingress
+      ports:
+        - protocol: TCP
+          port: 11000
+  # The upstream namespace policy separately permits AIO callbacks and shared-volume services.

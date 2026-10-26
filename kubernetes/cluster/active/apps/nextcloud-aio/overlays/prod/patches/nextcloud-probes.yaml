@@ -1,0 +1,19 @@
+---
+# First install runs db migrations for several minutes; without a startup probe the
+# liveness probe kills the container mid-install and the install never completes.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-aio-nextcloud
+spec:
+  template:
+    spec:
+      containers:
+        - name: nextcloud-aio-nextcloud
+          startupProbe:
+            exec:
+              command:
+                - /healthcheck.sh
+            periodSeconds: 10
+            timeoutSeconds: 30
+            failureThreshold: 360

@@ -1,0 +1,17 @@
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: nextcloud-aio
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: nextcloud-aio
+  httpUpgrade:
+    - type: websocket
+  timeout:
+    http:
+      streamIdleTimeout: 3600s
+      maxStreamDuration: "0s"
+  # Do not enable requestBuffer: uploads must stream and HPBs need WebSockets.

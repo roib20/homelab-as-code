@@ -1,0 +1,6 @@
+---
+NAMESPACE: nextcloud
+NC_DOMAIN: nextcloud.${FQDN_01}
+ADDITIONAL_TRUSTED_PROXY: 10.244.0.0/16
+# Keep the upstream PVC names, access modes and sizes; never change classes on existing claims.
+STORAGE_CLASS: longhorn

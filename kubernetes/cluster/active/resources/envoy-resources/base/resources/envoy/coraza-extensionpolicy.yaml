@@ -123,6 +123,10 @@ spec:
             - SecRule REQUEST_METHOD "@streq PUT" "id:100031,phase:1,pass,nolog,chain"
             - SecRule REQUEST_HEADERS:Host "@rx ^flare\." "chain"
             - SecRule REQUEST_FILENAME "@rx ^/api/files/chunks/[0-9a-f]{32}/part/[0-9]+$" "ctl:requestBodyAccess=Off"
+            # Nextcloud DAV: uploads contain arbitrary, potentially large files (stream bodies without WAF buffering), and every
+            # DAV call (PROPFIND/REPORT included) sends text/plain, which trips 920420 (content-type policy) and 403s the Files UI.
+            - SecRule REQUEST_HEADERS:Host "@rx ^nextcloud\." "id:100032,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_FILENAME "@rx ^/(remote\.php/(dav|webdav)(/|$)|index\.php/apps/files/ajax/upload\.php$)" "ctl:requestBodyAccess=Off,ctl:ruleRemoveById=920420"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---

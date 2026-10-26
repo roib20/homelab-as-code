@@ -1,0 +1,105 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: nextcloud
+resources:
+  - ../../base
+  - external-secrets
+  - resources/httproute.yaml
+  - resources/backendtrafficpolicy.yaml
+  - resources/talk-networkpolicy.yaml
+helmCharts:
+  - name: nextcloud-aio-helm-chart
+    repo: https://nextcloud.github.io/all-in-one/
+    version: 14.4.1
+    releaseName: nextcloud-aio
+    namespace: nextcloud
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+  - name: nextcloud-aio-proxy
+    literals:
+      - COLLABORA_AUTHORITY=//nextcloud.${FQDN_01}
+replacements:
+  - path: replacements.yaml
+patches:
+  # Explicit targets make disabled optional components a no-op, not newly created Deployments.
+  - path: patches/nextcloud-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-nextcloud
+  - path: patches/nextcloud-probes.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-nextcloud
+  - path: patches/nextcloud-cacerts.yaml
+    target:
+      kind: PersistentVolumeClaim
+      name: nextcloud-aio-nextcloud-trusted-cacerts
+  - path: patches/database-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-database
+  - path: patches/redis-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-redis
+  - path: patches/talk-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-talk
+  - path: patches/talk-recording-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-talk-recording
+  - path: patches/imaginary-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-imaginary
+  - path: patches/fulltextsearch-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-fulltextsearch
+  - path: patches/onlyoffice-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-onlyoffice
+  - path: patches/eurooffice-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-eurooffice
+  - path: patches/whiteboard-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-whiteboard
+  - path: patches/harp-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-harp
+  - path: patches/apache-service.yaml
+    target:
+      kind: Service
+      name: nextcloud-aio-apache
+  - path: patches/apache-wopi.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-apache
+  - path: patches/apache-networkpolicy.yaml
+    target:
+      kind: NetworkPolicy
+      name: nextcloud-aio-webserver-allow
+  - target:
+      kind: Service
+      name: nextcloud-aio-talk-public
+    patch: |-
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: nextcloud-aio-talk-public
+        annotations:
+          external-dns.kubernetes.io/hostname: turn.${FQDN_01}
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
