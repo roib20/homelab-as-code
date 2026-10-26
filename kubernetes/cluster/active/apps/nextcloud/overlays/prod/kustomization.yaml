@@ -27,6 +27,10 @@ configMapGenerator:
 replacements:
   - path: replacements.yaml
 patches:
+  - path: patches/admin-user-secret.yaml
+    target:
+      kind: Deployment
+      name: nextcloud
   - path: patches/notify-push-setup-config.yaml
     target:
       kind: ConfigMap

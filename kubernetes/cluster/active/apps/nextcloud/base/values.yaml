@@ -30,4 +30,4 @@ redis:
     existingSecretPasswordKey: REDIS_PASSWORD
 podAnnotations:
   configmap.reloader.stakater.com/reload: nextcloud
-  secret.reloader.stakater.com/reload: nextcloud-admin-password,nextcloud-redis-password,nextcloud-postgres-app
+  secret.reloader.stakater.com/reload: nextcloud-admin-user,nextcloud-admin-password,nextcloud-redis-password,nextcloud-postgres-app

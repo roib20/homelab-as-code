@@ -21,6 +21,25 @@ externalSecrets:
               conversionStrategy: Default
               decodingStrategy: None
               metadataPolicy: None
+    - fullnameOverride: nextcloud-admin-user
+      spec:
+        refreshInterval: 1h
+        secretStoreRef:
+          name: bitwarden-secretsmanager
+          kind: ClusterSecretStore
+        target:
+          name: nextcloud-admin-user
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            type: Opaque
+        data:
+          - secretKey: ADMIN_USER
+            remoteRef:
+              key: nextcloud-admin-user
+              conversionStrategy: Default
+              decodingStrategy: None
+              metadataPolicy: None
     - fullnameOverride: nextcloud-redis-password
       spec:
         refreshInterval: 1h
