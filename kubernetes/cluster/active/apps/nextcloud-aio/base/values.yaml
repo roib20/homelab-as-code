@@ -4,4 +4,6 @@ APACHE_PORT: 11000
 NETWORK_POLICY_ENABLED: "yes"
 IMAGINARY_ENABLED: "yes"
 TALK_ENABLED: "no"
+# Applies on first install only; the OIDC sidecar also enables user_oidc on existing installs.
+NEXTCLOUD_STARTUP_APPS: "deck twofactor_totp tasks calendar contacts notes user_oidc"
 # No credentials here: patches replace every upstream credential environment entry.
