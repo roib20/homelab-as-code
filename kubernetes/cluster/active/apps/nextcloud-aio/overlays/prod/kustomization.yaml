@@ -7,7 +7,6 @@ resources:
   - external-secrets
   - resources/httproute.yaml
   - resources/backendtrafficpolicy.yaml
-  - resources/talk-networkpolicy.yaml
 helmCharts:
   - name: nextcloud-aio-helm-chart
     repo: https://nextcloud.github.io/all-in-one/
@@ -92,14 +91,3 @@ patches:
     target:
       kind: NetworkPolicy
       name: nextcloud-aio-webserver-allow
-  - target:
-      kind: Service
-      name: nextcloud-aio-talk-public
-    patch: |-
-      apiVersion: v1
-      kind: Service
-      metadata:
-        name: nextcloud-aio-talk-public
-        annotations:
-          external-dns.kubernetes.io/hostname: turn.${FQDN_01}
-          external-dns.kubernetes.io/cloudflare-proxied: "false"
