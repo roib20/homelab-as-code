@@ -29,14 +29,6 @@
         delimiter: "."
         index: 1
     - select:
-        kind: Service
-        name: nextcloud-aio-talk-public
-      fieldPaths:
-        - metadata.annotations.[external-dns.kubernetes.io/hostname]
-      options:
-        delimiter: "."
-        index: 1
-    - select:
         kind: Deployment
         name: nextcloud-aio-whiteboard
       fieldPaths:
