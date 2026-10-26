@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-aio-notify-push
+spec:
+  template:
+    spec:
+      containers:
+        - name: nextcloud-aio-notify-push
+          env:
+            - name: PGSSLMODE
+              value: verify-full
+            - name: PGSSLROOTCERT
+              value: /postgres-ca/ca.crt
+          volumeMounts:
+            - name: postgres-ca
+              mountPath: /postgres-ca
+              readOnly: true
+      volumes:
+        - name: postgres-ca
+          secret:
+            secretName: nextcloud-aio-postgres-ca
+            items:
+              - key: ca.crt
+                path: ca.crt

@@ -44,6 +44,10 @@ spec:
               run_occ config:system:set lost_password_link --value="$AUTH_URL/ui/update_credentials"
               exec sleep infinity
           env:
+            - name: PGSSLMODE
+              value: verify-full
+            - name: PGSSLROOTCERT
+              value: /postgres-ca/ca.crt
             - name: OIDC_CLIENT_ID
               valueFrom:
                 secretKeyRef:
@@ -65,6 +69,9 @@ spec:
             limits:
               memory: 128Mi
           volumeMounts:
+            - name: postgres-ca
+              mountPath: /postgres-ca
+              readOnly: true
             - mountPath: /var/www/html
               name: nextcloud-aio-nextcloud
             - mountPath: /mnt/ncdata
