@@ -7,6 +7,7 @@ resources:
   - external-secrets
   - resources/httproute.yaml
   - resources/backendtrafficpolicy.yaml
+  - resources/kanidm-oauth2.yaml
 helmCharts:
   - name: nextcloud-aio-helm-chart
     repo: https://nextcloud.github.io/all-in-one/
@@ -23,6 +24,12 @@ configMapGenerator:
   - name: nextcloud-aio-proxy
     literals:
       - COLLABORA_AUTHORITY=//nextcloud.${FQDN_01}
+  - name: nextcloud-oidc
+    literals:
+      - AUTH_HOST=auth.${FQDN_01}
+      - NEXTCLOUD_HOST=nextcloud.${FQDN_01}
+    options:
+      disableNameSuffixHash: true
 replacements:
   - path: replacements.yaml
 patches:
@@ -39,6 +46,10 @@ patches:
     target:
       kind: PersistentVolumeClaim
       name: nextcloud-aio-nextcloud-trusted-cacerts
+  - path: patches/nextcloud-oidc.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-nextcloud
   - path: patches/database-secrets.yaml
     target:
       kind: Deployment

@@ -88,3 +88,54 @@
       options:
         delimiter: ":"
         index: 1
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: ConfigMap
+        name: nextcloud-oidc
+      fieldPaths:
+        - data.AUTH_HOST
+        - data.NEXTCLOUD_HOST
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: nextcloud-oidc
+    fieldPath: data.AUTH_HOST
+  targets:
+    - select:
+        kind: Deployment
+        name: nextcloud-aio-nextcloud
+      fieldPaths:
+        - spec.template.spec.initContainers.[name=nextcloud-oidc].env.[name=OIDC_DISCOVERY_URI].value
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: nextcloud-oidc
+    fieldPath: data.NEXTCLOUD_HOST
+  targets:
+    - select:
+        kind: KanidmOAuth2Client
+        name: nextcloud
+      fieldPaths:
+        - spec.origin
+        - spec.redirectUrl.0
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: Deployment
+    name: nextcloud-aio-nextcloud
+    fieldPath: spec.template.spec.containers.[name=nextcloud-aio-nextcloud].image
+  targets:
+    - select:
+        kind: Deployment
+        name: nextcloud-aio-nextcloud
+      fieldPaths:
+        - spec.template.spec.initContainers.[name=nextcloud-oidc].image

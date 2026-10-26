@@ -1,0 +1,23 @@
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmOAuth2Client
+metadata:
+  name: nextcloud
+spec:
+  kanidmRef:
+    name: idm
+    namespace: kaniop
+  displayname: Nextcloud
+  image:
+    url: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/nextcloud.svg
+  origin: https://nextcloud.${FQDN_01}/apps/user_oidc/login/1
+  redirectUrl:
+    - https://nextcloud.${FQDN_01}/apps/user_oidc/code
+  # The secret nextcloud-kanidm-oauth2-credentials is created by kaniop from this
+  # client. The group must already exist in Kanidm.
+  scopeMap:
+    - group: nextcloud-users
+      scopes:
+        - email
+        - openid
+        - profile
