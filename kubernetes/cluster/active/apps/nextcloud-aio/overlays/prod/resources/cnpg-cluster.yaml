@@ -11,6 +11,10 @@ spec:
     topologyKey: kubernetes.io/hostname
     podAntiAffinityType: required
   imageName: ghcr.io/cloudnative-pg/postgresql:18
+  postgresql:
+    pg_hba:
+      - hostssl nextcloud_database oc_nextcloud all scram-sha-256
+      - host nextcloud_database oc_nextcloud all reject
   bootstrap:
     initdb:
       database: nextcloud_database

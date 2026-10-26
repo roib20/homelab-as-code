@@ -89,6 +89,10 @@ patches:
     target:
       kind: Deployment
       name: nextcloud-aio-nextcloud
+  - path: patches/notify-push-tls.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-notify-push
   - path: patches/redis-secrets.yaml
     target:
       kind: Deployment
