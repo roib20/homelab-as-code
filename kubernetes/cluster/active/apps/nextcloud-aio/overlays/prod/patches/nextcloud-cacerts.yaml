@@ -1,11 +1,9 @@
 ---
+# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
 # Upstream creates this claim ReadWriteOnce but Nextcloud and Talk both mount it
 # and may land on different nodes, deadlocking on the attach. ReadWriteMany lets
 # Longhorn serve it from a share-manager; the cert dir is read-only for both.
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: nextcloud-aio-nextcloud-trusted-cacerts
-spec:
-  accessModes:
+- op: replace
+  path: /spec/accessModes
+  value:
     - ReadWriteMany

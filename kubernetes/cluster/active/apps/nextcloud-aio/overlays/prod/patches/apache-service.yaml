@@ -1,14 +1,14 @@
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: nextcloud-aio-apache
-spec:
-  type: ClusterIP
-  # The chart ships a LoadBalancer service with Local policy; delete it so ClusterIP validates.
-  externalTrafficPolicy: null
-  ports:
-    - $patch: replace
+# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
+- op: replace
+  path: /spec/type
+  value: ClusterIP
+# The chart ships a LoadBalancer service with Local policy; remove it so ClusterIP validates.
+- op: remove
+  path: /spec/externalTrafficPolicy
+- op: replace
+  path: /spec/ports
+  value:
     - name: http
       port: 11000
       targetPort: 11000

@@ -1,78 +1,77 @@
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nextcloud-aio-nextcloud
-spec:
-  template:
-    metadata:
-      annotations:
-        secret.reloader.stakater.com/reload: nextcloud-kanidm-oauth2-credentials
-    spec:
-      initContainers:
-        # Native sidecar: postStart runs concurrently with the AIO entrypoint and can
-        # race the first-time install, so wait for php-fpm instead.
-        - name: nextcloud-oidc
-          image: ghcr.io/nextcloud-releases/aio-nextcloud:latest # replaced with the main container image by kustomize
-          restartPolicy: Always
-          args: []
-          command:
-            - /bin/sh
-            - -ec
-            - |
-              set -eu
-              run_occ() {
-                if [ "$(id -u)" = 0 ]; then
-                  su-exec www-data php /var/www/html/occ "$@"
-                else
-                  php /var/www/html/occ "$@"
-                fi
-              }
-              # php-fpm listens only after the AIO entrypoint finished install/upgrade.
-              until nc -z 127.0.0.1 9000; do sleep 5; done
-              # STARTUP_APPS installs on first boot only; cover existing installs too.
-              run_occ app:enable user_oidc 2>/dev/null || run_occ app:install user_oidc
-              run_occ user_oidc:provider kanidm \
-                --clientid="$OIDC_CLIENT_ID" \
-                --clientsecret-env=OIDC_CLIENT_SECRET \
-                --discoveryuri="$OIDC_DISCOVERY_URI"
-              # OIDC-only login; local admin remains reachable via '/login?direct=1'.
-              run_occ config:app:set --type=string --value=0 user_oidc allow_multiple_user_backends
-              # Identity fields come from Kanidm; point password changes at Kanidm too.
-              run_occ config:system:set allow_user_to_change_display_name --type=boolean --value=false
-              run_occ config:system:set allow_user_to_change_email --type=boolean --value=false
-              run_occ config:system:set lost_password_link --value="$AUTH_URL/ui/update_credentials"
-              exec sleep infinity
-          env:
-            - name: PGSSLMODE
-              value: verify-full
-            - name: PGSSLROOTCERT
-              value: /postgres-ca/ca.crt
-            - name: OIDC_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: nextcloud-kanidm-oauth2-credentials
-                  key: CLIENT_ID
-            - name: OIDC_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: nextcloud-kanidm-oauth2-credentials
-                  key: CLIENT_SECRET
-            - name: OIDC_DISCOVERY_URI
-              value: https://auth.${FQDN_01}/oauth2/openid/$(OIDC_CLIENT_ID)/.well-known/openid-configuration
-            - name: AUTH_URL
-              value: https://auth.${FQDN_01}
-          resources:
-            requests:
-              cpu: 5m
-              memory: 32Mi
-            limits:
-              memory: 128Mi
-          volumeMounts:
-            - name: postgres-ca
-              mountPath: /postgres-ca
-              readOnly: true
-            - mountPath: /var/www/html
-              name: nextcloud-aio-nextcloud
-            - mountPath: /mnt/ncdata
-              name: nextcloud-aio-nextcloud-data
+# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
+- op: add
+  path: /spec/template/metadata/annotations/secret.reloader.stakater.com~1reload
+  value: nextcloud-kanidm-oauth2-credentials
+- op: test
+  path: /spec/template/spec/initContainers/0/name
+  value: init-volumes
+# Native sidecar: postStart runs concurrently with the AIO entrypoint and can
+# race the first-time install, so wait for php-fpm instead.
+- op: add
+  path: /spec/template/spec/initContainers/0
+  value:
+    name: nextcloud-oidc
+    image: ghcr.io/nextcloud-releases/aio-nextcloud:latest # replaced with the main container image by kustomize
+    restartPolicy: Always
+    args: []
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        set -eu
+        run_occ() {
+          if [ "$(id -u)" = 0 ]; then
+            su-exec www-data php /var/www/html/occ "$@"
+          else
+            php /var/www/html/occ "$@"
+          fi
+        }
+        # php-fpm listens only after the AIO entrypoint finished install/upgrade.
+        until nc -z 127.0.0.1 9000; do sleep 5; done
+        # STARTUP_APPS installs on first boot only; cover existing installs too.
+        run_occ app:enable user_oidc 2>/dev/null || run_occ app:install user_oidc
+        run_occ user_oidc:provider kanidm \
+          --clientid="$OIDC_CLIENT_ID" \
+          --clientsecret-env=OIDC_CLIENT_SECRET \
+          --discoveryuri="$OIDC_DISCOVERY_URI"
+        # OIDC-only login; local admin remains reachable via '/login?direct=1'.
+        run_occ config:app:set --type=string --value=0 user_oidc allow_multiple_user_backends
+        # Identity fields come from Kanidm; point password changes at Kanidm too.
+        run_occ config:system:set allow_user_to_change_display_name --type=boolean --value=false
+        run_occ config:system:set allow_user_to_change_email --type=boolean --value=false
+        run_occ config:system:set lost_password_link --value="$AUTH_URL/ui/update_credentials"
+        exec sleep infinity
+    env:
+      - name: PGSSLMODE
+        value: verify-full
+      - name: PGSSLROOTCERT
+        value: /postgres-ca/ca.crt
+      - name: OIDC_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: nextcloud-kanidm-oauth2-credentials
+            key: CLIENT_ID
+      - name: OIDC_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: nextcloud-kanidm-oauth2-credentials
+            key: CLIENT_SECRET
+      - name: OIDC_DISCOVERY_URI
+        value: https://auth.${FQDN_01}/oauth2/openid/$(OIDC_CLIENT_ID)/.well-known/openid-configuration
+      - name: AUTH_URL
+        value: https://auth.${FQDN_01}
+    resources:
+      requests:
+        cpu: 5m
+        memory: 32Mi
+      limits:
+        memory: 128Mi
+    volumeMounts:
+      - name: postgres-ca
+        mountPath: /postgres-ca
+        readOnly: true
+      - mountPath: /var/www/html
+        name: nextcloud-aio-nextcloud
+      - mountPath: /mnt/ncdata
+        name: nextcloud-aio-nextcloud-data

@@ -37,6 +37,7 @@ configMapGenerator:
 replacements:
   - path: replacements.yaml
 patches:
+  # Kustomize requires strategic merge for whole-resource deletion; JSON 6902 cannot remove the root.
   - patch: |-
       $patch: delete
       apiVersion: apps/v1
@@ -65,13 +66,10 @@ patches:
       metadata:
         name: nextcloud-aio-database-dump
         namespace: nextcloud
-  - target:
+  - path: patches/cnpg-backup-destination.yaml
+    target:
       kind: ObjectStore
       name: cnpg-backups
-    patch: |-
-      - op: replace
-        path: /spec/configuration/destinationPath
-        value: s3://k8s-backups-b2/cnpg/nextcloud-aio
   # Explicit targets make disabled optional components a no-op, not newly created Deployments.
   - path: patches/nextcloud-secrets.yaml
     target:
