@@ -8,7 +8,7 @@ resources:
 helmCharts:
   - name: mealie
     repo: oci://oci.trueforge.org/truecharts
-    version: 28.1.3
+    version: 28.1.4
     releaseName: mealie
     namespace: mealie
     valuesFile: ../../base/values.yaml
