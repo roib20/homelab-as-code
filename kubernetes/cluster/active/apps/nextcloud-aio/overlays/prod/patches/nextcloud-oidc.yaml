@@ -38,6 +38,10 @@ spec:
                 --discoveryuri="$OIDC_DISCOVERY_URI"
               # OIDC-only login; local admin remains reachable via '/login?direct=1'.
               run_occ config:app:set --type=string --value=0 user_oidc allow_multiple_user_backends
+              # Identity fields come from Kanidm; point password changes at Kanidm too.
+              run_occ config:system:set allow_user_to_change_display_name --type=boolean --value=false
+              run_occ config:system:set allow_user_to_change_email --type=boolean --value=false
+              run_occ config:system:set lost_password_link --value="$AUTH_URL/ui/update_credentials"
               exec sleep infinity
           env:
             - name: OIDC_CLIENT_ID
@@ -52,6 +56,8 @@ spec:
                   key: CLIENT_SECRET
             - name: OIDC_DISCOVERY_URI
               value: https://auth.${FQDN_01}/oauth2/openid/$(OIDC_CLIENT_ID)/.well-known/openid-configuration
+            - name: AUTH_URL
+              value: https://auth.${FQDN_01}
           resources:
             requests:
               cpu: 5m
