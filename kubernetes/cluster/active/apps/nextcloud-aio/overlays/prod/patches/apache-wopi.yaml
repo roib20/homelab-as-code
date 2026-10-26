@@ -1,0 +1,13 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-aio-apache
+spec:
+  template:
+    spec:
+      containers:
+        - name: nextcloud-aio-apache
+          ports:
+            - containerPort: 23973
+              protocol: TCP

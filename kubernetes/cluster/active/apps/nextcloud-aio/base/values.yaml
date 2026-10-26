@@ -1,0 +1,7 @@
+---
+NAMESPACE_DISABLED: "yes"
+APACHE_PORT: 11000
+NETWORK_POLICY_ENABLED: "yes"
+IMAGINARY_ENABLED: "yes"
+TALK_ENABLED: "yes"
+# No credentials here: patches replace every upstream credential environment entry.

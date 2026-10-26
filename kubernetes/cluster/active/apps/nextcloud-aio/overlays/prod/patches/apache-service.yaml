@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-aio-apache
+spec:
+  type: ClusterIP
+  # The chart ships a LoadBalancer service with Local policy; delete it so ClusterIP validates.
+  externalTrafficPolicy: null
+  ports:
+    - $patch: replace
+    - name: http
+      port: 11000
+      targetPort: 11000
+      protocol: TCP
+      appProtocol: http
+    # Upstream Caddy listens here for Collabora callbacks, but the chart omits the Service port.
+    - name: wopi
+      port: 23973
+      targetPort: 23973
+      protocol: TCP
+      appProtocol: http
