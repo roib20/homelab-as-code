@@ -112,6 +112,7 @@
         name: nextcloud-aio-nextcloud
       fieldPaths:
         - spec.template.spec.initContainers.[name=nextcloud-oidc].env.[name=OIDC_DISCOVERY_URI].value
+        - spec.template.spec.initContainers.[name=nextcloud-oidc].env.[name=AUTH_URL].value
       options:
         delimiter: "/"
         index: 2
