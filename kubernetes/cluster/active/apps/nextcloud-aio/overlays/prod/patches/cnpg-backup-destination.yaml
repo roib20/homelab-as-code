@@ -1,0 +1,5 @@
+---
+# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
+- op: replace
+  path: /spec/configuration/destinationPath
+  value: s3://k8s-backups-b2/cnpg/nextcloud-aio
