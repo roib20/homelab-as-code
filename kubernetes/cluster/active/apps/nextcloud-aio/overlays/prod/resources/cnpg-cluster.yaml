@@ -1,0 +1,37 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: nextcloud-aio-postgres
+spec:
+  instances: 2
+  primaryUpdateMethod: switchover
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
+  bootstrap:
+    initdb:
+      database: nextcloud_database
+      # AIO's entrypoint prefixes POSTGRES_USER with oc_.
+      owner: oc_nextcloud
+  managed:
+    services:
+      disabledDefaultServices:
+        - ro
+        - r
+  storage:
+    size: 1Gi
+    storageClass: longhorn-cnpg
+  resources:
+    requests:
+      cpu: 20m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: cnpg-backups

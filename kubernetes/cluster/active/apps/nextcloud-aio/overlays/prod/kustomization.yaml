@@ -8,6 +8,10 @@ resources:
   - resources/httproute.yaml
   - resources/backendtrafficpolicy.yaml
   - resources/kanidm-oauth2.yaml
+  - resources/cnpg-cluster.yaml
+  - resources/cnpg-networkpolicy.yaml
+components:
+  - ../../../../../../components/cnpg-backup
 helmCharts:
   - name: nextcloud-aio-helm-chart
     repo: https://nextcloud.github.io/all-in-one/
@@ -33,6 +37,41 @@ configMapGenerator:
 replacements:
   - path: replacements.yaml
 patches:
+  - patch: |-
+      $patch: delete
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: nextcloud-aio-database
+        namespace: nextcloud
+  - patch: |-
+      $patch: delete
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: nextcloud-aio-database
+        namespace: nextcloud
+  - patch: |-
+      $patch: delete
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: nextcloud-aio-database
+        namespace: nextcloud
+  - patch: |-
+      $patch: delete
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: nextcloud-aio-database-dump
+        namespace: nextcloud
+  - target:
+      kind: ObjectStore
+      name: cnpg-backups
+    patch: |-
+      - op: replace
+        path: /spec/configuration/destinationPath
+        value: s3://k8s-backups-b2/cnpg/nextcloud-aio
   # Explicit targets make disabled optional components a no-op, not newly created Deployments.
   - path: patches/nextcloud-secrets.yaml
     target:
@@ -50,10 +89,6 @@ patches:
     target:
       kind: Deployment
       name: nextcloud-aio-nextcloud
-  - path: patches/database-secrets.yaml
-    target:
-      kind: Deployment
-      name: nextcloud-aio-database
   - path: patches/redis-secrets.yaml
     target:
       kind: Deployment
