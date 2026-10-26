@@ -12,6 +12,21 @@ spec:
     podAntiAffinityType: required
   imageName: ghcr.io/cloudnative-pg/postgresql:18
   postgresql:
+    parameters:
+      autovacuum_analyze_scale_factor: "0.02"
+      autovacuum_vacuum_scale_factor: "0.05"
+      checkpoint_timeout: "15min"
+      effective_cache_size: "1GB"
+      effective_io_concurrency: "200"
+      idle_session_timeout: "0"
+      log_checkpoints: "off"
+      log_min_messages: "warning"
+      maintenance_work_mem: "256MB"
+      max_connections: "5000"
+      random_page_cost: "1.1"
+      shared_buffers: "256MB"
+      wal_buffers: "16MB"
+      work_mem: "16MB"
     pg_hba:
       - hostssl nextcloud_database oc_nextcloud all scram-sha-256
       - host nextcloud_database oc_nextcloud all reject
@@ -31,7 +46,7 @@ spec:
   resources:
     requests:
       cpu: 20m
-      memory: 128Mi
+      memory: 256Mi
     limits:
       memory: 512Mi
   plugins:
