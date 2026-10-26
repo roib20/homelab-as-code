@@ -1,0 +1,12 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nextcloud-notify-push-setup
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-options: Force=true,Replace=true
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 900
+  template: {}

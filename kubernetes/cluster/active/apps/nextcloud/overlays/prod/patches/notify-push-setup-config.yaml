@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
+---
+- op: add
+  path: /data/notify-push-setup.sh
+  value: |
+    set -eu
+    cd /var/www/html
+    exec 9>nextcloud-init-sync.lock
+    flock -x 9
+    test ! -d .helmforge-backup-lock
+    php -d apc.enable_cli=1 occ app:enable --no-interaction notify_push
+    php -d apc.enable_cli=1 occ notify_push:setup --no-interaction "${URL%/}/push"

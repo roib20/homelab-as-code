@@ -1,0 +1,89 @@
+---
+externalSecrets:
+  enabled: true
+  items:
+    - fullnameOverride: nextcloud-admin-password
+      spec:
+        refreshInterval: 1h
+        secretStoreRef:
+          name: bitwarden-secretsmanager
+          kind: ClusterSecretStore
+        target:
+          name: nextcloud-admin-password
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            type: Opaque
+        data:
+          - secretKey: ADMIN_PASSWORD
+            remoteRef:
+              key: nextcloud-admin-password
+              conversionStrategy: Default
+              decodingStrategy: None
+              metadataPolicy: None
+    - fullnameOverride: nextcloud-redis-password
+      spec:
+        refreshInterval: 1h
+        secretStoreRef:
+          name: bitwarden-secretsmanager
+          kind: ClusterSecretStore
+        target:
+          name: nextcloud-redis-password
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            type: Opaque
+        data:
+          - secretKey: REDIS_PASSWORD
+            remoteRef:
+              key: nextcloud-redis-password
+              conversionStrategy: Default
+              decodingStrategy: None
+              metadataPolicy: None
+gatewayAPI:
+  enabled: true
+  httpRoutes:
+    - name: nextcloud
+      annotations:
+        gethomepage.dev/description: Private file storage and sync.
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/group: Documents & Notes
+        gethomepage.dev/icon: nextcloud.svg
+        gethomepage.dev/name: Nextcloud
+        gethomepage.dev/pod-selector: "app.kubernetes.io/instance=nextcloud,app.kubernetes.io/component=app"
+      parentRefs:
+        - group: gateway.networking.k8s.io
+          kind: Gateway
+          name: http-gateway-api
+          namespace: envoy-gateway-ingress
+      hostnames:
+        - nextcloud.${FQDN_01}
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+persistence:
+  enabled: true
+  storageClass: longhorn
+  size: 10Gi
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    cpu: null
+    memory: 3Gi
+redis:
+  standalone:
+    persistence:
+      storageClass: longhorn
+      size: 1Gi
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 256Mi
+  podAnnotations:
+    secret.reloader.stakater.com/reload: nextcloud-redis-password

@@ -1,0 +1,77 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: HTTPRoute
+        name: nextcloud
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: ConfigMap
+        name: nextcloud-public-url
+      fieldPaths:
+        - data.URL
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: HTTPRoute
+    name: nextcloud
+    fieldPath: spec.hostnames.0
+  targets:
+    - select:
+        kind: ConfigMap
+        name: nextcloud
+      fieldPaths:
+        - data.[settings.json]
+      options:
+        delimiter: '"'
+        index: 27
+- source:
+    kind: ConfigMap
+    name: nextcloud-public-url
+    fieldPath: data.URL
+  targets:
+    - select:
+        kind: ConfigMap
+        name: nextcloud
+      fieldPaths:
+        - data.[settings.json]
+      options:
+        delimiter: '"'
+        index: 13
+- source:
+    kind: CronJob
+    name: nextcloud-cron
+    fieldPath: spec.jobTemplate.spec.template
+  targets:
+    - select:
+        kind: Job
+        name: nextcloud-notify-push-setup
+      fieldPaths:
+        - spec.template
+- sourceValue: /opt/helmforge/notify-push-setup.sh
+  targets:
+    - select:
+        kind: Job
+        name: nextcloud-notify-push-setup
+      fieldPaths:
+        - spec.template.spec.containers.[name=cron].command.1
+- source:
+    kind: ConfigMap
+    name: nextcloud-public-url
+    fieldPath: data.URL
+  targets:
+    - select:
+        kind: Job
+        name: nextcloud-notify-push-setup
+      fieldPaths:
+        - spec.template.spec.containers.[name=cron].env.[name=URL].value
+      options:
+        create: true

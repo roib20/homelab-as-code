@@ -1,0 +1,33 @@
+---
+nextcloud:
+  defaultPhoneRegion: IL
+  existingSecret: nextcloud-admin-password
+  existingSecretPasswordKey: ADMIN_PASSWORD
+  trustedDomains:
+    - localhost
+    - nextcloud.${FQDN_01}
+  trustedProxies:
+    - 10.244.0.0/16
+  overwriteCliUrl: https://nextcloud.${FQDN_01}
+  overwriteProtocol: https
+imaginary:
+  enabled: true
+notifyPush:
+  enabled: true
+postgresql:
+  enabled: false
+externalDatabase:
+  host: nextcloud-postgres-rw
+  database: nextcloud
+  username: nextcloud
+  existingSecret: nextcloud-postgres-app
+  existingSecretPasswordKey: password
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    existingSecret: nextcloud-redis-password
+    existingSecretPasswordKey: REDIS_PASSWORD
+podAnnotations:
+  configmap.reloader.stakater.com/reload: nextcloud
+  secret.reloader.stakater.com/reload: nextcloud-admin-password,nextcloud-redis-password,nextcloud-postgres-app
