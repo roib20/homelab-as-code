@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Game library and ROM manager.
-    gethomepage.dev/group: Media
+    gethomepage.dev/group: Media Libraries
     gethomepage.dev/icon: romm.svg
     gethomepage.dev/name: RomM
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=romm"
