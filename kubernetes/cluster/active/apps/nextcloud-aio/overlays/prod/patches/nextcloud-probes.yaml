@@ -1,16 +1,29 @@
 ---
 # yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
-# First install runs db migrations for several minutes; without a startup probe the
-# liveness probe kills the container mid-install and the install never completes.
+# Let first-install migrations finish before liveness checks can restart PHP-FPM.
 - op: test
   path: /spec/template/spec/containers/0/name
   value: nextcloud-aio-nextcloud
 - op: add
   path: /spec/template/spec/containers/0/startupProbe
   value:
-    exec:
-      command:
-        - /healthcheck.sh
+    tcpSocket:
+      port: 9000
     periodSeconds: 10
     timeoutSeconds: 30
     failureThreshold: 360
+- op: remove
+  path: /spec/template/spec/containers/0/livenessProbe/exec
+- op: add
+  path: /spec/template/spec/containers/0/livenessProbe/tcpSocket
+  value:
+    port: 9000
+- op: replace
+  path: /spec/template/spec/containers/0/readinessProbe/exec/command
+  value:
+    - /bin/sh
+    - -ec
+    - |
+      nc -z -w 2 127.0.0.1 9000
+      nc -z -w 2 "$POSTGRES_HOST" "$POSTGRES_PORT"
+      nc -z -w 2 "$REDIS_HOST" "$REDIS_PORT"

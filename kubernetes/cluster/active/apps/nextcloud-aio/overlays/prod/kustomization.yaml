@@ -91,7 +91,15 @@ patches:
     target:
       kind: Deployment
       name: nextcloud-aio-notify-push
+  - path: patches/notify-push-probes.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-notify-push
   - path: patches/redis-secrets.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-redis
+  - path: patches/redis-probes.yaml
     target:
       kind: Deployment
       name: nextcloud-aio-redis
@@ -111,6 +119,10 @@ patches:
     target:
       kind: Deployment
       name: nextcloud-aio-fulltextsearch
+  - path: patches/fulltextsearch-probes.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-fulltextsearch
   - path: patches/onlyoffice-secrets.yaml
     target:
       kind: Deployment
@@ -123,6 +135,10 @@ patches:
     target:
       kind: Deployment
       name: nextcloud-aio-whiteboard
+  - path: patches/whiteboard-probes.yaml
+    target:
+      kind: Deployment
+      name: nextcloud-aio-whiteboard
   - path: patches/harp-secrets.yaml
     target:
       kind: Deployment
@@ -130,6 +146,10 @@ patches:
   - path: patches/apache-service.yaml
     target:
       kind: Service
+      name: nextcloud-aio-apache
+  - path: patches/apache-probes.yaml
+    target:
+      kind: Deployment
       name: nextcloud-aio-apache
   - path: patches/apache-wopi.yaml
     target:

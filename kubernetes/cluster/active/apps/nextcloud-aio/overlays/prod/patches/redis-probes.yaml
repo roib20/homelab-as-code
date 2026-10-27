@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
+- op: test
+  path: /spec/template/spec/containers/0/name
+  value: nextcloud-aio-redis
+# redis-cli otherwise returns success for authentication and command errors.
+- op: replace
+  path: /spec/template/spec/containers/0/readinessProbe/exec/command
+  value:
+    - /bin/sh
+    - -ec
+    - REDISCLI_AUTH="$REDIS_HOST_PASSWORD" redis-cli -e PING
+- op: copy
+  from: /spec/template/spec/containers/0/readinessProbe/exec/command
+  path: /spec/template/spec/containers/0/livenessProbe/exec/command
