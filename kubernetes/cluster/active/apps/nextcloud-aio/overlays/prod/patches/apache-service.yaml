@@ -3,7 +3,7 @@
 - op: replace
   path: "/spec/type"
   value: ClusterIP
-# The chart ships a LoadBalancer service with Local policy; remove it so ClusterIP validates.
+# Remove the chart's externalTrafficPolicy; it is invalid for a ClusterIP Service without external IPs.
 - op: remove
   path: "/spec/externalTrafficPolicy"
 - op: replace
@@ -14,7 +14,7 @@
       targetPort: 11000
       protocol: TCP
       appProtocol: http
-    # Upstream Caddy listens here for Collabora callbacks, but the chart omits the Service port.
+    # Expose Caddy's Collabora callback listener; the chart omits this Service port.
     - name: wopi
       port: 23973
       targetPort: 23973

@@ -3,7 +3,7 @@
 - op: test
   path: "/spec/template/spec/containers/0/name"
   value: nextcloud-aio-redis
-# redis-cli otherwise returns success for authentication and command errors.
+# Use redis-cli -e so authentication and command errors fail readiness and liveness checks.
 - op: replace
   path: "/spec/template/spec/containers/0/readinessProbe/exec/command"
   value:

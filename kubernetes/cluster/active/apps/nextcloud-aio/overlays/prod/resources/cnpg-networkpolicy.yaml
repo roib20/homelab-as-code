@@ -9,7 +9,7 @@ spec:
       cnpg.io/cluster: nextcloud-aio-postgres
   policyTypes:
     - Ingress
-  # AIO otherwise denies ingress from the operator's namespace.
+  # Allow CNPG operator health checks from cnpg-system; AIO's default policy blocks this ingress.
   ingress:
     - from:
         - namespaceSelector:

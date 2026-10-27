@@ -33,7 +33,7 @@ spec:
   bootstrap:
     initdb:
       database: nextcloud_database
-      # AIO's entrypoint prefixes POSTGRES_USER with oc_.
+      # Match AIO's database role name; its entrypoint prefixes POSTGRES_USER with oc_.
       owner: oc_nextcloud
   managed:
     services:

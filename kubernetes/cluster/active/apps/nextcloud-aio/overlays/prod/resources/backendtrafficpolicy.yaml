@@ -14,4 +14,4 @@ spec:
     http:
       streamIdleTimeout: 3600s
       maxStreamDuration: "0s"
-  # Do not enable requestBuffer: uploads must stream and HPBs need WebSockets.
+  # Leave requestBuffer disabled so uploads can stream and high-performance backends can use WebSockets.

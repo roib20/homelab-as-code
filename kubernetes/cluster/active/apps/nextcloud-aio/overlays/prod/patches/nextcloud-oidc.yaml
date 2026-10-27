@@ -6,13 +6,12 @@
 - op: test
   path: "/spec/template/spec/initContainers/0/name"
   value: init-volumes
-# Native sidecar: postStart runs concurrently with the AIO entrypoint and can
-# race the first-time install, so wait for php-fpm instead.
+# Use a native sidecar to wait for PHP-FPM; a postStart hook can race AIO initialization.
 - op: add
   path: "/spec/template/spec/initContainers/0"
   value:
     name: nextcloud-oidc
-    image: ghcr.io/nextcloud-releases/aio-nextcloud:latest # replaced with the main container image by kustomize
+    image: ghcr.io/nextcloud-releases/aio-nextcloud:latest  # Kustomize replaces this with the main Nextcloud container image.
     restartPolicy: Always
     args: []
     command:
@@ -28,23 +27,23 @@
             php "/var/www/html/occ" "$@"
           fi
         }
-        # php-fpm listens only after the AIO entrypoint finished install/upgrade.
+        # Wait for PHP-FPM; AIO starts it only after installation or upgrade completes.
         until nc -z 127.0.0.1 9000; do sleep 5; done
-        # STARTUP_APPS installs on first boot only; cover existing installs too.
+        # Enable user_oidc on existing installations; NEXTCLOUD_STARTUP_APPS only applies on first startup.
         run_occ app:enable user_oidc 2>"/dev/null" || run_occ app:install user_oidc
         run_occ user_oidc:provider kanidm \
           --clientid="$OIDC_CLIENT_ID" \
           --clientsecret-env=OIDC_CLIENT_SECRET \
           --discoveryuri="$OIDC_DISCOVERY_URI"
-        # OIDC-only login; local admin remains reachable via '/login?direct=1'.
+        # Require OIDC login by default; local administrators can still use '/login?direct=1'.
         run_occ config:app:set --type=string --value=0 user_oidc allow_multiple_user_backends
-        # Identity fields come from Kanidm; point password changes at Kanidm too.
+        # Manage names, email addresses, and passwords in Kanidm rather than Nextcloud.
         run_occ config:system:set allow_user_to_change_display_name --type=boolean --value=false
         run_occ config:system:set allow_user_to_change_email --type=boolean --value=false
         run_occ config:system:set lost_password_link --value="$AUTH_URL/ui/update_credentials"
         touch "/tmp/oidc-configured"
         exec sleep infinity
-    # A startup probe here would block the main container that this sidecar waits for.
+    # Omit a startup probe; it would block the main Nextcloud container that this sidecar waits for.
     readinessProbe:
       exec:
         command:

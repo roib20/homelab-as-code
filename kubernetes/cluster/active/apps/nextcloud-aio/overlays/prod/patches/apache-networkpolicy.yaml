@@ -10,4 +10,4 @@
       ports:
         - protocol: TCP
           port: 11000
-# The upstream namespace policy separately permits AIO callbacks and shared-volume services.
+# Keep AIO callbacks and shared-volume traffic allowed by the chart's separate namespace-wide policy.

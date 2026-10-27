@@ -3,7 +3,7 @@
 - op: test
   path: "/spec/template/spec/containers/0/name"
   value: nextcloud-aio-notify-push
-# notify-push also waits for the first Nextcloud installation to finish.
+# Allow an hour for initial Nextcloud installation before notify-push starts its listener and liveness checks begin.
 - op: add
   path: "/spec/template/spec/containers/0/startupProbe"
   value:
