@@ -10,6 +10,7 @@ metadata:
     gethomepage.dev/icon: romm.svg
     gethomepage.dev/name: RomM
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=romm"
+    gethomepage.dev/widget.fields: '["platforms", "totalRoms", "totalfilesize"]'
     gethomepage.dev/widget.type: "romm"
     gethomepage.dev/widget.url: "http://romm.romm.svc.cluster.local:8080"
 spec:
