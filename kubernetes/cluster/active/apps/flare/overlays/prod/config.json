@@ -1,0 +1,10 @@
+{
+  "annotations": {},
+  "appName": "flare",
+  "destName": "in-cluster",
+  "destNamespace": "flare",
+  "destServer": "https://kubernetes.default.svc",
+  "labels": {},
+  "project": "default",
+  "userGivenName": "flare"
+}

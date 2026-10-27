@@ -1,0 +1,58 @@
+---
+- source:
+    kind: ConfigMap
+    name: env-vars
+    fieldPath: data.FQDN_01
+  targets:
+    - select:
+        kind: ConfigMap
+        name: flare-hosts
+      fieldPaths:
+        - data.APP_HOST
+        - data.AUTH_HOST
+      options:
+        delimiter: "."
+        index: 1
+    - select:
+        kind: HTTPRoute
+        name: flare
+      fieldPaths:
+        - spec.hostnames.0
+      options:
+        delimiter: "."
+        index: 1
+- source:
+    kind: ConfigMap
+    name: flare-hosts
+    fieldPath: data.APP_HOST
+  targets:
+    - select:
+        kind: Deployment
+        name: flare
+      fieldPaths:
+        - spec.template.spec.containers.[name=app].env.[name=NEXTAUTH_URL].value
+      options:
+        delimiter: "/"
+        index: 2
+    - select:
+        kind: KanidmOAuth2Client
+        name: flare
+      fieldPaths:
+        - spec.origin
+        - spec.redirectUrl.0
+      options:
+        delimiter: "/"
+        index: 2
+- source:
+    kind: ConfigMap
+    name: flare-hosts
+    fieldPath: data.AUTH_HOST
+  targets:
+    - select:
+        kind: Deployment
+        name: flare
+      fieldPaths:
+        - spec.template.spec.initContainers.[name=bootstrap].env.[name=OIDC_ISSUER].value
+      options:
+        delimiter: "/"
+        index: 2

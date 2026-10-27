@@ -1,0 +1,32 @@
+---
+persistence:
+  bootstrap-config:
+    type: configMap
+    name: flare-bootstrap
+    advancedMounts:
+      flare:
+        migrations:
+          - path: /bootstrap
+            readOnly: true
+  uploads:
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    storageClass: longhorn
+    advancedMounts:
+      flare:
+        app:
+          - path: /app/uploads
+  postgres-ca:
+    type: secret
+    name: flare-postgres-ca
+    # Never expose CNPG's ca.key to application containers.
+    items:
+      - key: ca.crt
+        path: ca.crt
+    globalMounts:
+      - path: /postgres-ca
+        readOnly: true
+  tmp:
+    type: emptyDir
+    globalMounts:
+      - path: /tmp

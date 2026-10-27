@@ -1,0 +1,60 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: flare-postgres
+  namespace: flare
+spec:
+  instances: 2
+  enableSuperuserAccess: false
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
+  postgresql:
+    parameters:
+      password_encryption: scram-sha-256
+    pg_hba:
+      - hostssl flare flare all scram-sha-256
+      - host all flare all reject
+  bootstrap:
+    initdb:
+      database: flare
+      owner: flare
+  managed:
+    services:
+      disabledDefaultServices:
+        - ro
+        - r
+  storage:
+    size: 4Gi
+    storageClass: longhorn-cnpg
+  resources:
+    requests:
+      cpu: 60m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+  # Temporarily disabled with the backup component until its secret is available.
+  # plugins:
+  #   - name: barman-cloud.cloudnative-pg.io
+  #     isWALArchiver: true
+  #     parameters:
+  #       barmanObjectName: cnpg-backups
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: flare-database
+  namespace: flare
+spec:
+  name: flare
+  owner: flare
+  cluster:
+    name: flare-postgres
+  databaseReclaimPolicy: retain
+  extensions:
+    - name: pgcrypto
+      ensure: present
+      schema: public
