@@ -12,7 +12,7 @@ metadata:
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=flare"
     gethomepage.dev/widget.type: customapi
     gethomepage.dev/widget.url: "http://flare.flare.svc.cluster.local:3000/api/files?limit=1"
-    gethomepage.dev/widget.headers.Authorization: "Bearer {{HOMEPAGE_VAR_FLARE_KEY}}"
+    gethomepage.dev/widget.headers.Authorization: "Bearer {{HOMEPAGE_VAR_FLARE_TOKEN}}"
     gethomepage.dev/widget.mappings.0.field: pagination.total
     gethomepage.dev/widget.mappings.0.format: number
     gethomepage.dev/widget.mappings.0.label: Files
