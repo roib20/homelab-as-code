@@ -1,8 +1,5 @@
 ---
 # yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
-- op: add
-  path: "/spec/template/metadata/annotations/secret.reloader.stakater.com~1reload"
-  value: nextcloud-kanidm-oauth2-credentials
 - op: test
   path: "/spec/template/spec/initContainers/0/name"
   value: init-volumes
