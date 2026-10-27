@@ -1,0 +1,98 @@
+---
+global:
+  createDefaultServiceAccount: true
+defaultPodOptions:
+  automountServiceAccountToken: false
+  enableServiceLinks: false
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile:
+      type: RuntimeDefault
+controllers:
+  flare:
+    replicas: 1
+    strategy: Recreate
+    pod:
+      annotations:
+        configmap.reloader.stakater.com/reload: "flare-bootstrap"
+        secret.reloader.stakater.com/reload: "flare-kanidm-oauth2-credentials,flare-postgres-app,flare-postgres-ca,flare-secrets"
+    defaultContainerOptionsStrategy: merge
+    defaultContainerOptions:
+      image:
+        repository: ghcr.io/flintsh/flare
+        tag: 3.0.1@sha256:3233145ca472d60a53ef5372352fd76e13d7f65e25fddc21add4eeabc5dec2e3
+      env:
+        HOME: /tmp
+        NODE_ENV: production
+        NEXT_TELEMETRY_DISABLED: "1"
+        DATABASE_CONN_URI:
+          valueFrom:
+            secretKeyRef:
+              name: flare-postgres-app
+              key: uri
+        DATABASE_URL: "$(DATABASE_CONN_URI)?sslmode=require&sslaccept=strict&sslcert=/postgres-ca/ca.crt"
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: false
+        capabilities:
+          drop: [ALL]
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+        limits:
+          memory: 1Gi
+    initContainers:
+      migrations:
+        command: ["/bin/sh", "/bootstrap/init.sh"]
+    containers:
+      app:
+        # Kubernetes starts HTTP only after migrations and SQL bootstrap finish.
+        command: ["pnpm", "start"]
+        env:
+          PORT: &port 3000
+          NEXTAUTH_URL: "https://flare.${FQDN_01}"
+          NEXTAUTH_SECRET:
+            valueFrom:
+              secretKeyRef:
+                name: flare-secrets
+                key: NEXTAUTH_SECRET
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/health
+                port: *port
+              periodSeconds: 30
+              timeoutSeconds: 5
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/health
+                port: *port
+              periodSeconds: 10
+              timeoutSeconds: 5
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /api/health
+                port: *port
+              failureThreshold: 60
+              periodSeconds: 5
+              timeoutSeconds: 5
+service:
+  app:
+    controller: flare
+    ports:
+      http:
+        port: *port

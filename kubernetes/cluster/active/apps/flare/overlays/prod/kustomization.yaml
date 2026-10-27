@@ -1,0 +1,59 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - external-secrets
+  - resources/cnpg-cluster.yaml
+  - resources/httproute.yaml
+  - resources/kanidm-oauth2.yaml
+components:
+  - ../../../../../../components/cnpg-backup
+helmCharts:
+  - name: app-template
+    repo: oci://ghcr.io/bjw-s-labs/helm
+    version: 5.3.0
+    releaseName: flare
+    namespace: flare
+    valuesFile: ../../base/values.yaml
+    additionalValuesFiles:
+      - values-override.yaml
+    includeCRDs: true
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - /tmp/env-vars.env
+  - name: flare-bootstrap
+    files:
+      - files/bootstrap.sql
+      - files/init.sh
+    options:
+      disableNameSuffixHash: true
+  - name: flare-hosts
+    literals:
+      - APP_HOST=flare.${FQDN_01}
+      - AUTH_HOST=auth.${FQDN_01}
+    options:
+      disableNameSuffixHash: true
+replacements:
+  - path: replacements.yaml
+patches:
+  - path: patches/bootstrap.yaml
+    target:
+      kind: Deployment
+      name: flare
+      namespace: flare
+  - target:
+      kind: ObjectStore
+      name: cnpg-backups
+    patch: |-
+      - op: replace
+        path: /spec/configuration/destinationPath
+        value: s3://k8s-backups-b2/cnpg/flare
+  - target:
+      kind: ScheduledBackup
+      name: cnpg-backup
+    patch: |-
+      - op: replace
+        path: /spec/schedule
+        value: "0 0 22 * * *"

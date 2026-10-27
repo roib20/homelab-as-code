@@ -1,0 +1,58 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: flare
+  annotations:
+    gethomepage.dev/description: Files, screenshots, and pastes storage, plus URL shortener.
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Documents & Notes
+    gethomepage.dev/icon: https://raw.githubusercontent.com/FlintSH/Flare/v3.0.1/public/icon.svg
+    gethomepage.dev/name: Flare
+    gethomepage.dev/pod-selector: "app.kubernetes.io/instance=flare"
+    gethomepage.dev/widget.type: customapi
+    gethomepage.dev/widget.url: "http://flare.flare.svc.cluster.local:3000/api/files?limit=1"
+    gethomepage.dev/widget.headers.Authorization: "Bearer {{HOMEPAGE_VAR_FLARE_KEY}}"
+    gethomepage.dev/widget.mappings.0.field: pagination.total
+    gethomepage.dev/widget.mappings.0.format: number
+    gethomepage.dev/widget.mappings.0.label: Files
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: http-gateway-api
+      namespace: envoy-gateway-ingress
+  hostnames:
+    - "flare.${FQDN_01}"
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: flare
+          namespace: flare
+          port: 3000
+          weight: 1
+      timeouts:
+        request: 5m
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+    # Initial setup is SQL-owned, never a public account-creation flow.
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /setup
+        - path:
+            type: Exact
+            value: /api/setup
+        - path:
+            type: Exact
+            value: /api/setup/
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /auth/login
+            statusCode: 302

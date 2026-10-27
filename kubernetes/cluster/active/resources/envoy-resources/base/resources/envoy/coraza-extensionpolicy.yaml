@@ -119,6 +119,10 @@ spec:
             - SecRule REQUEST_METHOD "@rx ^(POST|PUT)$" "id:100030,phase:1,pass,nolog,chain"
             - SecRule REQUEST_HEADERS:Host "@rx ^media\." "chain"
             - SecRule REQUEST_FILENAME "@rx ^/Items/[^/]+/Images/" "ctl:ruleRemoveById=920420,ctl:requestBodyAccess=Off"
+            # Flare binary chunks trip injection rules; skip body inspection only for chunk-part PUTs.
+            - SecRule REQUEST_METHOD "@streq PUT" "id:100031,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^flare\." "chain"
+            - SecRule REQUEST_FILENAME "@rx ^/api/files/chunks/[0-9a-f]{32}/part/[0-9]+$" "ctl:requestBodyAccess=Off"
             - Include @crs-setup-conf
             - Include @owasp_crs/*.conf
             # --- Rule Exclusions ---

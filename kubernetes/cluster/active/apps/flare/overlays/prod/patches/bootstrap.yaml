@@ -1,0 +1,70 @@
+---
+- op: add
+  path: /spec/template/spec/initContainers/-
+  value:
+    name: bootstrap
+    image: ghcr.io/cloudnative-pg/postgresql:18
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        CONN="${POSTGRES_URI}?sslmode=verify-full&sslrootcert=/postgres-ca/ca.crt&connect_timeout=10"
+        echo "Bootstrap: applying initial setup and OIDC..."
+        result="$(psql "${CONN}" -qAt -v ON_ERROR_STOP=1 -f /bootstrap/bootstrap.sql)"
+        [ "$(printf '%s' "${result}" | tr -d '[:space:]')" = 1 ] || { echo "Bootstrap: setup is not complete." >&2; exit 1; }
+        echo "Bootstrap: initial setup and Kanidm configured; local registration disabled."
+    env:
+      - name: HOME
+        value: /tmp
+      - name: POSTGRES_URI
+        valueFrom:
+          secretKeyRef:
+            name: flare-postgres-app
+            key: uri
+      - name: OIDC_ISSUER
+        value: "https://auth.${FQDN_01}/oauth2/openid/flare"
+      - name: OIDC_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: flare-kanidm-oauth2-credentials
+            key: CLIENT_ID
+      - name: OIDC_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: flare-kanidm-oauth2-credentials
+            key: CLIENT_SECRET
+      - name: BOOTSTRAP_ADMIN_NAME
+        valueFrom:
+          secretKeyRef:
+            name: flare-secrets
+            key: BOOTSTRAP_ADMIN_NAME
+      - name: BOOTSTRAP_ADMIN_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: flare-secrets
+            key: BOOTSTRAP_ADMIN_EMAIL
+      - name: BOOTSTRAP_ADMIN_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: flare-secrets
+            key: BOOTSTRAP_ADMIN_PASSWORD
+    volumeMounts:
+      - name: postgres-ca
+        mountPath: /postgres-ca
+        readOnly: true
+      - name: bootstrap-config
+        mountPath: /bootstrap
+        readOnly: true
+      - name: tmp
+        mountPath: /tmp
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop: [ALL]
+    resources:
+      requests:
+        cpu: 5m
+        memory: 16Mi
+      limits:
+        memory: 64Mi

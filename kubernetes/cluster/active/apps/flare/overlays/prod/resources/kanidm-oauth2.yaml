@@ -1,0 +1,24 @@
+---
+apiVersion: kaniop.rs/v1beta1
+kind: KanidmOAuth2Client
+metadata:
+  name: flare
+  namespace: flare
+spec:
+  kanidmRef:
+    name: idm
+    namespace: kaniop
+  displayname: Flare
+  image:
+    url: https://raw.githubusercontent.com/FlintSH/Flare/v3.0.1/public/icon.svg
+  # Flare's generic NextAuth OIDC provider expects RS256-signed ID tokens.
+  jwtLegacyCryptoEnable: true
+  origin: https://flare.${FQDN_01}/auth/login?local=0
+  redirectUrl:
+    - https://flare.${FQDN_01}/api/auth/callback/oidc
+  scopeMap:
+    - group: flare-users
+      scopes:
+        - email
+        - openid
+        - profile
