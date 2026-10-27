@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
+- op: test
+  path: /spec/template/spec/containers/0/name
+  value: nextcloud-aio-notify-push
+# notify-push also waits for the first Nextcloud installation to finish.
+- op: add
+  path: /spec/template/spec/containers/0/startupProbe
+  value:
+    tcpSocket:
+      port: 7867
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 360
+- op: remove
+  path: /spec/template/spec/containers/0/livenessProbe/exec
+- op: add
+  path: /spec/template/spec/containers/0/livenessProbe/tcpSocket
+  value:
+    port: 7867
+- op: replace
+  path: /spec/template/spec/containers/0/readinessProbe/exec/command
+  value:
+    - /bin/sh
+    - -ec
+    - |
+      nc -z -w 2 "$NEXTCLOUD_HOST" 9001
+      nc -z -w 2 127.0.0.1 7867

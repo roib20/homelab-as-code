@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
+- op: test
+  path: /spec/template/spec/containers/0/name
+  value: nextcloud-aio-apache
+# Apache waits for Nextcloud's first install before starting its own listeners.
+- op: add
+  path: /spec/template/spec/containers/0/startupProbe
+  value:
+    exec:
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          nc -z -w 2 127.0.0.1 8000
+          nc -z -w 2 127.0.0.1 "$APACHE_PORT"
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 360
+- op: replace
+  path: /spec/template/spec/containers/0/livenessProbe/exec/command
+  value:
+    - /bin/sh
+    - -ec
+    - |
+      nc -z -w 2 127.0.0.1 8000
+      nc -z -w 2 127.0.0.1 "$APACHE_PORT"
+- op: replace
+  path: /spec/template/spec/containers/0/readinessProbe/exec/command
+  value:
+    - /bin/sh
+    - -ec
+    - |
+      nc -z -w 2 "$NEXTCLOUD_HOST" 9000
+      nc -z -w 2 127.0.0.1 8000
+      nc -z -w 2 127.0.0.1 "$APACHE_PORT"

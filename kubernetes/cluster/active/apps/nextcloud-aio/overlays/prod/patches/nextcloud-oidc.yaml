@@ -20,6 +20,7 @@
       - -ec
       - |
         set -eu
+        rm -f /tmp/oidc-configured
         run_occ() {
           if [ "$(id -u)" = 0 ]; then
             su-exec www-data php /var/www/html/occ "$@"
@@ -41,7 +42,17 @@
         run_occ config:system:set allow_user_to_change_display_name --type=boolean --value=false
         run_occ config:system:set allow_user_to_change_email --type=boolean --value=false
         run_occ config:system:set lost_password_link --value="$AUTH_URL/ui/update_credentials"
+        touch /tmp/oidc-configured
         exec sleep infinity
+    # A startup probe here would block the main container that this sidecar waits for.
+    readinessProbe:
+      exec:
+        command:
+          - test
+          - -f
+          - /tmp/oidc-configured
+      periodSeconds: 5
+      failureThreshold: 1
     env:
       - name: PGSSLMODE
         value: verify-full
