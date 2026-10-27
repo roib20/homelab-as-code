@@ -16,7 +16,7 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /
+            value: "/"
       filters:
         - type: RequestHeaderModifier
           requestHeaderModifier:

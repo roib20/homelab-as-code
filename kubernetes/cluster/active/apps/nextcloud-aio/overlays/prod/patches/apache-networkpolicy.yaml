@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
 - op: replace
-  path: /spec/ingress
+  path: "/spec/ingress"
   value:
     - from:
         - namespaceSelector:

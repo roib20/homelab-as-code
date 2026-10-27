@@ -4,6 +4,6 @@
 # and may land on different nodes, deadlocking on the attach. ReadWriteMany lets
 # Longhorn serve it from a share-manager; the cert dir is read-only for both.
 - op: replace
-  path: /spec/accessModes
+  path: "/spec/accessModes"
   value:
     - ReadWriteMany

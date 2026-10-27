@@ -3,28 +3,28 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: nextcloud
 resources:
-  - ../../base
-  - external-secrets
-  - resources/httproute.yaml
-  - resources/backendtrafficpolicy.yaml
-  - resources/kanidm-oauth2.yaml
-  - resources/cnpg-cluster.yaml
-  - resources/cnpg-networkpolicy.yaml
+  - "../../base"
+  - "external-secrets"
+  - "resources/httproute.yaml"
+  - "resources/backendtrafficpolicy.yaml"
+  - "resources/kanidm-oauth2.yaml"
+  - "resources/cnpg-cluster.yaml"
+  - "resources/cnpg-networkpolicy.yaml"
 components:
-  - ../../../../../../components/cnpg-backup
+  - "../../../../../../components/cnpg-backup"
 helmCharts:
   - name: nextcloud-aio-helm-chart
     repo: https://nextcloud.github.io/all-in-one/
     version: 14.4.1
     releaseName: nextcloud-aio
     namespace: nextcloud
-    valuesFile: ../../base/values.yaml
+    valuesFile: "../../base/values.yaml"
     additionalValuesFiles:
-      - values-override.yaml
+      - "values-override.yaml"
 configMapGenerator:
   - name: env-vars
     envs:
-      - /tmp/env-vars.env
+      - "/tmp/env-vars.env"
   - name: nextcloud-aio-proxy
     literals:
       - COLLABORA_AUTHORITY=//nextcloud.${FQDN_01}
@@ -35,7 +35,7 @@ configMapGenerator:
     options:
       disableNameSuffixHash: true
 replacements:
-  - path: replacements.yaml
+  - path: "replacements.yaml"
 patches:
   # Kustomize requires strategic merge for whole-resource deletion; JSON 6902 cannot remove the root.
   - patch: |-
@@ -66,96 +66,96 @@ patches:
       metadata:
         name: nextcloud-aio-database-dump
         namespace: nextcloud
-  - path: patches/cnpg-backup-destination.yaml
+  - path: "patches/cnpg-backup-destination.yaml"
     target:
       kind: ObjectStore
       name: cnpg-backups
   # Explicit targets make disabled optional components a no-op, not newly created Deployments.
-  - path: patches/nextcloud-secrets.yaml
+  - path: "patches/nextcloud-secrets.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-nextcloud
-  - path: patches/nextcloud-probes.yaml
+  - path: "patches/nextcloud-probes.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-nextcloud
-  - path: patches/nextcloud-cacerts.yaml
+  - path: "patches/nextcloud-cacerts.yaml"
     target:
       kind: PersistentVolumeClaim
       name: nextcloud-aio-nextcloud-trusted-cacerts
-  - path: patches/nextcloud-oidc.yaml
+  - path: "patches/nextcloud-oidc.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-nextcloud
-  - path: patches/notify-push-tls.yaml
+  - path: "patches/notify-push-tls.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-notify-push
-  - path: patches/notify-push-probes.yaml
+  - path: "patches/notify-push-probes.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-notify-push
-  - path: patches/redis-secrets.yaml
+  - path: "patches/redis-secrets.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-redis
-  - path: patches/redis-probes.yaml
+  - path: "patches/redis-probes.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-redis
-  - path: patches/talk-secrets.yaml
+  - path: "patches/talk-secrets.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-talk
-  - path: patches/talk-recording-secrets.yaml
+  - path: "patches/talk-recording-secrets.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-talk-recording
-  - path: patches/imaginary-secrets.yaml
+  - path: "patches/imaginary-secrets.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-imaginary
-  - path: patches/fulltextsearch-secrets.yaml
+  - path: "patches/fulltextsearch-secrets.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-fulltextsearch
-  - path: patches/fulltextsearch-probes.yaml
+  - path: "patches/fulltextsearch-probes.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-fulltextsearch
-  - path: patches/onlyoffice-secrets.yaml
+  - path: "patches/onlyoffice-secrets.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-onlyoffice
-  - path: patches/eurooffice-secrets.yaml
+  - path: "patches/eurooffice-secrets.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-eurooffice
-  - path: patches/whiteboard-secrets.yaml
+  - path: "patches/whiteboard-secrets.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-whiteboard
-  - path: patches/whiteboard-probes.yaml
+  - path: "patches/whiteboard-probes.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-whiteboard
-  - path: patches/harp-secrets.yaml
+  - path: "patches/harp-secrets.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-harp
-  - path: patches/apache-service.yaml
+  - path: "patches/apache-service.yaml"
     target:
       kind: Service
       name: nextcloud-aio-apache
-  - path: patches/apache-probes.yaml
+  - path: "patches/apache-probes.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-apache
-  - path: patches/apache-wopi.yaml
+  - path: "patches/apache-wopi.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-apache
-  - path: patches/apache-networkpolicy.yaml
+  - path: "patches/apache-networkpolicy.yaml"
     target:
       kind: NetworkPolicy
       name: nextcloud-aio-webserver-allow
