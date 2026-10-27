@@ -4,7 +4,7 @@ kind: HTTPRoute
 metadata:
   name: flare
   annotations:
-    gethomepage.dev/description: Files, screenshots, and pastes storage, plus URL shortener.
+    gethomepage.dev/description: Files, screenshots, and paste storage, plus URL shortener.
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Documents & Notes
     gethomepage.dev/icon: https://raw.githubusercontent.com/FlintSH/Flare/v3.0.1/public/icon.svg
