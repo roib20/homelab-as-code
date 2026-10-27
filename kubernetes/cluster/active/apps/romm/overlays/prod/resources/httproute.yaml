@@ -4,8 +4,8 @@ kind: HTTPRoute
 metadata:
   name: romm
   annotations:
-    gethomepage.dev/enabled: "true"
     gethomepage.dev/description: Game library and ROM manager.
+    gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Media Libraries
     gethomepage.dev/icon: romm.svg
     gethomepage.dev/name: RomM
