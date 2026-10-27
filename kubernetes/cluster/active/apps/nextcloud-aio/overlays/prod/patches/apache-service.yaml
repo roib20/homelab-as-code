@@ -1,13 +1,13 @@
 ---
 # yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
 - op: replace
-  path: /spec/type
+  path: "/spec/type"
   value: ClusterIP
 # The chart ships a LoadBalancer service with Local policy; remove it so ClusterIP validates.
 - op: remove
-  path: /spec/externalTrafficPolicy
+  path: "/spec/externalTrafficPolicy"
 - op: replace
-  path: /spec/ports
+  path: "/spec/ports"
   value:
     - name: http
       port: 11000

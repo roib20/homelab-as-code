@@ -1,30 +1,30 @@
 ---
 # yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
 - op: test
-  path: /spec/template/spec/containers/0/name
+  path: "/spec/template/spec/containers/0/name"
   value: nextcloud-aio-notify-push
 - op: add
-  path: /spec/template/spec/containers/0/env/-
+  path: "/spec/template/spec/containers/0/env/-"
   value:
     name: PGSSLMODE
     value: verify-full
 - op: add
-  path: /spec/template/spec/containers/0/env/-
+  path: "/spec/template/spec/containers/0/env/-"
   value:
     name: PGSSLROOTCERT
-    value: /postgres-ca/ca.crt
+    value: "/postgres-ca/ca.crt"
 - op: add
-  path: /spec/template/spec/containers/0/volumeMounts/-
+  path: "/spec/template/spec/containers/0/volumeMounts/-"
   value:
     name: postgres-ca
-    mountPath: /postgres-ca
+    mountPath: "/postgres-ca"
     readOnly: true
 - op: add
-  path: /spec/template/spec/volumes/-
+  path: "/spec/template/spec/volumes/-"
   value:
     name: postgres-ca
     secret:
       secretName: nextcloud-aio-postgres-ca
       items:
         - key: ca.crt
-          path: ca.crt
+          path: "ca.crt"
