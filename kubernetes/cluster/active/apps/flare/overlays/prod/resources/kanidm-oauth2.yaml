@@ -11,6 +11,8 @@ spec:
   displayname: Flare
   image:
     url: https://raw.githubusercontent.com/FlintSH/Flare/v3.0.1/public/icon.svg
+  # Flare's generic NextAuth OIDC provider expects RS256-signed ID tokens.
+  jwtLegacyCryptoEnable: true
   origin: https://flare.${FQDN_01}/auth/login?local=0
   redirectUrl:
     - https://flare.${FQDN_01}/api/auth/callback/oidc
