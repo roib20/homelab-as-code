@@ -11,7 +11,7 @@
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 60
-# Check HTTP responsiveness here; search-data availability belongs in readiness.
+# Check local HTTP responsiveness for liveness; leave search-data availability to readiness checks.
 - op: replace
   path: "/spec/template/spec/containers/0/livenessProbe/exec/command"
   value:

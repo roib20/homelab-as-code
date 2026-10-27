@@ -37,7 +37,7 @@ configMapGenerator:
 replacements:
   - path: "replacements.yaml"
 patches:
-  # Kustomize requires strategic merge for whole-resource deletion; JSON 6902 cannot remove the root.
+  # Use strategic merge to delete bundled database resources; Kustomize cannot delete whole resources with JSON 6902.
   - patch: |-
       $patch: delete
       apiVersion: apps/v1
@@ -70,7 +70,7 @@ patches:
     target:
       kind: ObjectStore
       name: cnpg-backups
-  # Explicit targets make disabled optional components a no-op, not newly created Deployments.
+  # Use explicit targets so patches for disabled optional components do not create Deployments.
   - path: "patches/nextcloud-secrets.yaml"
     target:
       kind: Deployment

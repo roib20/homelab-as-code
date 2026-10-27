@@ -3,7 +3,7 @@
 - op: test
   path: "/spec/template/spec/containers/0/name"
   value: nextcloud-aio-apache
-# Apache waits for Nextcloud's first install before starting its own listeners.
+# Allow an hour for initial Nextcloud installation before Apache starts its listeners and liveness checks begin.
 - op: add
   path: "/spec/template/spec/containers/0/startupProbe"
   value:

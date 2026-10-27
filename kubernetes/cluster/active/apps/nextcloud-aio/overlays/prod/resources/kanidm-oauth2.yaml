@@ -13,8 +13,8 @@ spec:
   origin: https://nextcloud.${FQDN_01}/apps/user_oidc/login/1
   redirectUrl:
     - https://nextcloud.${FQDN_01}/apps/user_oidc/code
-  # The secret nextcloud-kanidm-oauth2-credentials is created by kaniop from this
-  # client. The group must already exist in Kanidm.
+  # Kaniop creates the nextcloud-kanidm-oauth2-credentials Secret from this client.
+  # Create the nextcloud-users group in Kanidm before applying this scope mapping.
   scopeMap:
     - group: nextcloud-users
       scopes:
