@@ -36,12 +36,11 @@ spec:
       memory: 128Mi
     limits:
       memory: 512Mi
-  # Temporarily disabled with the backup component until its secret is available.
-  # plugins:
-  #   - name: barman-cloud.cloudnative-pg.io
-  #     isWALArchiver: true
-  #     parameters:
-  #       barmanObjectName: cnpg-backups
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: cnpg-backups
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
