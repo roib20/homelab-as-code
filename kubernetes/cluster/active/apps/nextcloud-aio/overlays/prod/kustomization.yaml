@@ -37,6 +37,27 @@ configMapGenerator:
 replacements:
   - path: "replacements.yaml"
 patches:
+  - target:
+      kind: Deployment
+      name: nextcloud-aio-(eurooffice|fulltextsearch|harp|imaginary|onlyoffice|redis|talk|talk-recording|whiteboard)
+    patch: |-
+      - op: add
+        path: "/metadata/annotations/secret.reloader.stakater.com~1reload"
+        value: nextcloud-aio-secrets
+  - target:
+      kind: Deployment
+      name: nextcloud-aio-nextcloud
+    patch: |-
+      - op: add
+        path: "/metadata/annotations/secret.reloader.stakater.com~1reload"
+        value: nextcloud-aio-postgres-app,nextcloud-aio-postgres-ca,nextcloud-aio-secrets,nextcloud-kanidm-oauth2-credentials
+  - target:
+      kind: Deployment
+      name: nextcloud-aio-notify-push
+    patch: |-
+      - op: add
+        path: "/metadata/annotations/secret.reloader.stakater.com~1reload"
+        value: nextcloud-aio-postgres-ca
   # Use strategic merge to delete bundled database resources; Kustomize cannot delete whole resources with JSON 6902.
   - patch: |-
       $patch: delete
