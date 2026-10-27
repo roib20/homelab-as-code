@@ -34,7 +34,6 @@ controllers:
             secretKeyRef:
               name: flare-postgres-app
               key: uri
-        # Prisma 6 uses sslcert/sslaccept, not libpq's sslrootcert/verify-full.
         DATABASE_URL: "$(DATABASE_CONN_URI)?sslmode=require&sslaccept=strict&sslcert=/postgres-ca/ca.crt"
       securityContext:
         allowPrivilegeEscalation: false
