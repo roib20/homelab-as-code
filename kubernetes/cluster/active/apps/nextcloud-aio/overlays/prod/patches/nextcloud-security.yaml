@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-aio-nextcloud
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: init-volumes
+          # ponytail: the chart's chmod needs root/FOWNER; remove when PVC initialization supports non-root ownership.
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - FOWNER
+      containers:
+        - name: nextcloud-aio-nextcloud
+          # ponytail: AIO startup needs root for permissions, su-exec and dinit; remove when the image supports rootless startup.
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
+                - KILL
+                - SETGID
+                - SETUID
