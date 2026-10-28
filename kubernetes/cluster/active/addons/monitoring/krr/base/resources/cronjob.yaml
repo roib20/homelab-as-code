@@ -33,7 +33,7 @@ spec:
                   LOGS_FORMAT = "table"
                   OUTPUT_DIRECTORY = Path("/output")
                   OUTPUT_FORMAT = "json"
-                  REPORT_RETENTION = 10
+                  REPORT_RETENTION = 24
                   STALE_TEMP_MAX_AGE_SECONDS = 3600
                   STRATEGY = "simple"
 
