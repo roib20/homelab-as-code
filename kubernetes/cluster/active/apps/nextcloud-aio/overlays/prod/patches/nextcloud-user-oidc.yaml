@@ -31,10 +31,11 @@ spec:
               }
               # Wait for PHP-FPM; AIO starts it only after installation or upgrade completes.
               until nc -z 127.0.0.1 9000; do sleep 5; done
-              # Show the app store link to accounts without admin rights.
+              # Applications configuration.
               run_occ config:app:set --no-interaction --type=boolean --value=true core appstore_link_shown
-              # Allow custom share URLs while requiring passwords for public links.
               run_occ config:app:set --no-interaction --type=boolean --value=true core shareapi_allow_custom_tokens
+              run_occ config:app:set --no-interaction --type=boolean --value=false core shareapi_default_expire_date
+              run_occ config:app:set --no-interaction --type=boolean --value=false core shareapi_enforce_expire_date
               run_occ config:app:set --no-interaction --type=boolean --value=true core shareapi_enforce_links_password
               # New profiles are private by default; public profiles require explicit opt-in.
               run_occ config:app:set --type=string --value=0 settings profile_enabled_by_default
