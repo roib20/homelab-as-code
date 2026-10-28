@@ -117,10 +117,14 @@ patches:
     target:
       kind: Deployment
       name: nextcloud-aio-nextcloud
-  - path: "patches/nextcloud-cacerts.yaml"
+  - path: "patches/shared-volume-rwo.yaml"
     target:
       kind: PersistentVolumeClaim
-      name: nextcloud-aio-nextcloud-trusted-cacerts
+      name: nextcloud-aio-nextcloud(-trusted-cacerts)?
+  - path: "patches/shared-volume-affinity.yaml"
+    target:
+      kind: Deployment
+      name: nextcloud-aio-(apache|notify-push|talk)
   - path: "patches/nextcloud-user-oidc.yaml"
     target:
       kind: Deployment
