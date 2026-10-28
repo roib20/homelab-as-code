@@ -2,5 +2,4 @@
 NAMESPACE: nextcloud
 NC_DOMAIN: nextcloud.${FQDN_01}
 ADDITIONAL_TRUSTED_PROXY: 10.244.0.0/16
-# Preserve the chart's PVC names, access modes, and sizes; never change the storage class of an existing PVC.
 STORAGE_CLASS: longhorn

@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nextcloud-aio-nextcloud
+spec:
+  # Avoid Longhorn's NFS layer; shared-volume consumers are colocated by pod affinity.
+  accessModes:
+    - ReadWriteOnce

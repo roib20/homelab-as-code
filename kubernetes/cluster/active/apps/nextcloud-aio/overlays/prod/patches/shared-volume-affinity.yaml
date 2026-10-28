@@ -1,0 +1,16 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-aio
+spec:
+  template:
+    spec:
+      # Nextcloud chooses the node; every other consumer of its RWO claims follows.
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  io.kompose.service: nextcloud-aio-nextcloud
+              topologyKey: kubernetes.io/hostname
