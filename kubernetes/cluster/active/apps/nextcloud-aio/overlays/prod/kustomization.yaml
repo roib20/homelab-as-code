@@ -37,6 +37,14 @@ configMapGenerator:
 replacements:
   - path: "replacements.yaml"
 patches:
+  - path: "patches/restricted-security.yaml"
+    target:
+      kind: Deployment
+      name: nextcloud-aio-(apache|imaginary|notify-push|redis)
+  - path: "patches/nextcloud-security.yaml"
+    target:
+      kind: Deployment
+      name: nextcloud-aio-nextcloud
   - target:
       kind: Deployment
       name: nextcloud-aio-(eurooffice|fulltextsearch|harp|imaginary|onlyoffice|redis|talk|talk-recording|whiteboard)

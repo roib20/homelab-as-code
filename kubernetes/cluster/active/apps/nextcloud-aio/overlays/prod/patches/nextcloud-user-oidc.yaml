@@ -10,6 +10,14 @@
     name: nextcloud-user-oidc
     image: ghcr.io/nextcloud-releases/aio-nextcloud:latest  # Kustomize replaces this with the main Nextcloud container image.
     restartPolicy: Always
+    securityContext:
+      runAsUser: 33
+      runAsGroup: 33
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
     args: []
     command:
       - "/bin/sh"
@@ -18,11 +26,7 @@
         set -eu
         rm -f "/tmp/user_oidc-configured"
         run_occ() {
-          if [ "$(id -u)" = 0 ]; then
-            su-exec www-data php "/var/www/html/occ" "$@"
-          else
-            php "/var/www/html/occ" "$@"
-          fi
+          php "/var/www/html/occ" "$@"
         }
         # Wait for PHP-FPM; AIO starts it only after installation or upgrade completes.
         until nc -z 127.0.0.1 9000; do sleep 5; done
