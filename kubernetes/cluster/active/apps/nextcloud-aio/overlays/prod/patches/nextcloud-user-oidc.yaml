@@ -44,6 +44,7 @@ spec:
               # Manage names, email addresses, and passwords in Kanidm rather than Nextcloud.
               run_occ config:system:set allow_user_to_change_display_name --type=boolean --value=false
               run_occ config:system:set allow_user_to_change_email --type=boolean --value=false
+              run_occ config:system:set default_phone_region --value=IL
               run_occ config:system:set lost_password_link --value="$AUTH_URL/ui/update_credentials"
               touch "/tmp/user_oidc-configured"
               exec sleep infinity
