@@ -30,6 +30,8 @@
         }
         # Wait for PHP-FPM; AIO starts it only after installation or upgrade completes.
         until nc -z 127.0.0.1 9000; do sleep 5; done
+        # New profiles are private by default; public profiles require explicit opt-in.
+        run_occ config:app:set --type=string --value=0 settings profile_enabled_by_default
         # Enable user_oidc on existing installations; NEXTCLOUD_STARTUP_APPS only applies on first startup.
         run_occ app:enable user_oidc 2>"/dev/null" || run_occ app:install user_oidc
         run_occ user_oidc:provider kanidm \
