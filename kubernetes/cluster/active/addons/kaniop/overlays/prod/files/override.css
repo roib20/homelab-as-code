@@ -15,19 +15,20 @@
   main .col-md-3:has(img#karakeep) { order: 13; }
   main .col-md-3:has(img#metube) { order: 14; }
   main .col-md-3:has(img#miniflux) { order: 15; }
-  main .col-md-3:has(img#omnitools) { order: 16; }
-  main .col-md-3:has(img#opengist) { order: 17; }
-  main .col-md-3:has(img#outline) { order: 18; }
-  main .col-md-3:has(img#papra) { order: 19; }
-  main .col-md-3:has(img#pinepods) { order: 20; }
-  main .col-md-3:has(img#profilarr) { order: 21; }
-  main .col-md-3:has(img#pve) { order: 22; }
-  main .col-md-3:has(img#renovate-operator) { order: 23; }
-  main .col-md-3:has(img#romm) { order: 24; }
-  main .col-md-3:has(img#seerr) { order: 25; }
-  main .col-md-3:has(img#streamystats) { order: 26; }
-  main .col-md-3:has(img#tandoor) { order: 27; }
-  main .col-md-3:has(img#transmute) { order: 28; }
-  main .col-md-3:has(img#trek) { order: 29; }
-  main .col-md-3:has(img#yuvomi) { order: 30; }
+  main .col-md-3:has(img#nextcloud) { order: 16; }
+  main .col-md-3:has(img#omnitools) { order: 17; }
+  main .col-md-3:has(img#opengist) { order: 18; }
+  main .col-md-3:has(img#outline) { order: 19; }
+  main .col-md-3:has(img#papra) { order: 20; }
+  main .col-md-3:has(img#pinepods) { order: 21; }
+  main .col-md-3:has(img#profilarr) { order: 22; }
+  main .col-md-3:has(img#pve) { order: 23; }
+  main .col-md-3:has(img#renovate-operator) { order: 24; }
+  main .col-md-3:has(img#romm) { order: 25; }
+  main .col-md-3:has(img#seerr) { order: 26; }
+  main .col-md-3:has(img#streamystats) { order: 27; }
+  main .col-md-3:has(img#tandoor) { order: 28; }
+  main .col-md-3:has(img#transmute) { order: 29; }
+  main .col-md-3:has(img#trek) { order: 30; }
+  main .col-md-3:has(img#yuvomi) { order: 31; }
 }
