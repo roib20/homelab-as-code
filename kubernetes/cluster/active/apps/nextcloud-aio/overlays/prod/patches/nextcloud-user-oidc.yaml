@@ -44,7 +44,9 @@ spec:
               run_occ user_oidc:provider kanidm \
                 --clientid="$OIDC_CLIENT_ID" \
                 --clientsecret-env=OIDC_CLIENT_SECRET \
-                --discoveryuri="$OIDC_DISCOVERY_URI"
+                --discoveryuri="$OIDC_DISCOVERY_URI" \
+                --mapping-uid=preferred_username \
+                --unique-uid=0
               # Require OIDC login by default; local administrators can still use '/login?direct=1'.
               run_occ config:app:set --type=string --value=0 user_oidc allow_multiple_user_backends
               # Manage names, email addresses, and passwords in Kanidm rather than Nextcloud.
