@@ -7,7 +7,7 @@
 - op: add
   path: "/spec/template/spec/initContainers/0"
   value:
-    name: nextcloud-oidc
+    name: nextcloud-user-oidc
     image: ghcr.io/nextcloud-releases/aio-nextcloud:latest  # Kustomize replaces this with the main Nextcloud container image.
     restartPolicy: Always
     args: []
@@ -16,7 +16,7 @@
       - -ec
       - |
         set -eu
-        rm -f "/tmp/oidc-configured"
+        rm -f "/tmp/user_oidc-configured"
         run_occ() {
           if [ "$(id -u)" = 0 ]; then
             su-exec www-data php "/var/www/html/occ" "$@"
@@ -38,7 +38,7 @@
         run_occ config:system:set allow_user_to_change_display_name --type=boolean --value=false
         run_occ config:system:set allow_user_to_change_email --type=boolean --value=false
         run_occ config:system:set lost_password_link --value="$AUTH_URL/ui/update_credentials"
-        touch "/tmp/oidc-configured"
+        touch "/tmp/user_oidc-configured"
         exec sleep infinity
     # Omit a startup probe; it would block the main Nextcloud container that this sidecar waits for.
     readinessProbe:
@@ -46,7 +46,7 @@
         command:
           - test
           - -f
-          - "/tmp/oidc-configured"
+          - "/tmp/user_oidc-configured"
       periodSeconds: 5
       failureThreshold: 1
     env:

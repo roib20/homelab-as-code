@@ -95,7 +95,7 @@
   targets:
     - select:
         kind: ConfigMap
-        name: nextcloud-oidc
+        name: nextcloud-user-oidc
       fieldPaths:
         - "data.AUTH_HOST"
         - "data.NEXTCLOUD_HOST"
@@ -104,21 +104,21 @@
         index: 1
 - source:
     kind: ConfigMap
-    name: nextcloud-oidc
+    name: nextcloud-user-oidc
     fieldPath: "data.AUTH_HOST"
   targets:
     - select:
         kind: Deployment
         name: nextcloud-aio-nextcloud
       fieldPaths:
-        - "spec.template.spec.initContainers.[name=nextcloud-oidc].env.[name=OIDC_DISCOVERY_URI].value"
-        - "spec.template.spec.initContainers.[name=nextcloud-oidc].env.[name=AUTH_URL].value"
+        - "spec.template.spec.initContainers.[name=nextcloud-user-oidc].env.[name=OIDC_DISCOVERY_URI].value"
+        - "spec.template.spec.initContainers.[name=nextcloud-user-oidc].env.[name=AUTH_URL].value"
       options:
         delimiter: "/"
         index: 2
 - source:
     kind: ConfigMap
-    name: nextcloud-oidc
+    name: nextcloud-user-oidc
     fieldPath: "data.NEXTCLOUD_HOST"
   targets:
     - select:
@@ -139,4 +139,4 @@
         kind: Deployment
         name: nextcloud-aio-nextcloud
       fieldPaths:
-        - "spec.template.spec.initContainers.[name=nextcloud-oidc].image"
+        - "spec.template.spec.initContainers.[name=nextcloud-user-oidc].image"

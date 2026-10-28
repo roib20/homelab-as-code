@@ -28,7 +28,7 @@ configMapGenerator:
   - name: nextcloud-aio-proxy
     literals:
       - COLLABORA_AUTHORITY=//nextcloud.${FQDN_01}
-  - name: nextcloud-oidc
+  - name: nextcloud-user-oidc
     literals:
       - AUTH_HOST=auth.${FQDN_01}
       - NEXTCLOUD_HOST=nextcloud.${FQDN_01}
@@ -104,7 +104,7 @@ patches:
     target:
       kind: PersistentVolumeClaim
       name: nextcloud-aio-nextcloud-trusted-cacerts
-  - path: "patches/nextcloud-oidc.yaml"
+  - path: "patches/nextcloud-user-oidc.yaml"
     target:
       kind: Deployment
       name: nextcloud-aio-nextcloud
