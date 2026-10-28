@@ -3,6 +3,16 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: nextcloud-aio
+  annotations:
+    gethomepage.dev/description: Files and collaboration platform.
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Documents & Notes
+    gethomepage.dev/icon: nextcloud.svg
+    gethomepage.dev/name: Nextcloud
+    gethomepage.dev/pod-selector: "io.kompose.service=nextcloud-aio-nextcloud"
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_NEXTCLOUD_TOKEN}}"
+    gethomepage.dev/widget.type: "nextcloud"
+    gethomepage.dev/widget.url: "https://nextcloud.${FQDN_01}"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
