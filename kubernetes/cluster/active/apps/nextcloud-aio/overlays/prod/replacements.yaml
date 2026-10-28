@@ -61,6 +61,14 @@
         kind: HTTPRoute
         name: nextcloud-aio
       fieldPaths:
+        - "metadata.annotations.[gethomepage.dev/widget.url]"
+      options:
+        delimiter: "/"
+        index: 2
+    - select:
+        kind: HTTPRoute
+        name: nextcloud-aio
+      fieldPaths:
         - "spec.rules.*.filters.[type=RequestHeaderModifier].requestHeaderModifier.set.[name=X-Forwarded-Host].value"
     - select:
         kind: Deployment
