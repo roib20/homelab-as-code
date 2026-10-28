@@ -52,6 +52,8 @@ spec:
               run_occ config:system:set allow_user_to_change_email --type=boolean --value=false
               run_occ config:system:set default_phone_region --value=IL
               run_occ config:system:set lost_password_link --value="$AUTH_URL/ui/update_credentials"
+              # Enforce Windows-compatible filenames without renaming existing files.
+              run_occ files:windows-compatible-filenames --enable
               touch "/tmp/user_oidc-configured"
               exec sleep infinity
           # Omit a startup probe; it would block the main Nextcloud container that this sidecar waits for.
