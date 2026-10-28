@@ -1,8 +1,10 @@
 ---
-# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
-- op: replace
-  path: "/spec/ingress"
-  value:
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nextcloud-aio-webserver-allow
+spec:
+  ingress:
     - from:
         - namespaceSelector:
             matchLabels:

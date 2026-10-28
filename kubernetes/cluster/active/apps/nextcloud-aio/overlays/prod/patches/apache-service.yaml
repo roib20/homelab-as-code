@@ -1,14 +1,14 @@
 ---
-# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
-- op: replace
-  path: "/spec/type"
-  value: ClusterIP
-# Remove the chart's externalTrafficPolicy; it is invalid for a ClusterIP Service without external IPs.
-- op: remove
-  path: "/spec/externalTrafficPolicy"
-- op: replace
-  path: "/spec/ports"
-  value:
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-aio-apache
+spec:
+  type: ClusterIP
+  # Remove the chart's externalTrafficPolicy; it is invalid for a ClusterIP Service without external IPs.
+  externalTrafficPolicy: null
+  ports:
+    - $patch: replace
     - name: http
       port: 11000
       targetPort: 11000

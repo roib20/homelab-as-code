@@ -1,90 +1,91 @@
 ---
-# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
-- op: test
-  path: "/spec/template/spec/initContainers/0/name"
-  value: init-volumes
-# Use a native sidecar to wait for PHP-FPM; a postStart hook can race AIO initialization.
-- op: add
-  path: "/spec/template/spec/initContainers/0"
-  value:
-    name: nextcloud-user-oidc
-    image: ghcr.io/nextcloud-releases/aio-nextcloud:latest  # Kustomize replaces this with the main Nextcloud container image.
-    restartPolicy: Always
-    securityContext:
-      runAsUser: 33
-      runAsGroup: 33
-      runAsNonRoot: true
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-    args: []
-    command:
-      - "/bin/sh"
-      - -ec
-      - |
-        set -eu
-        rm -f "/tmp/user_oidc-configured"
-        run_occ() {
-          php "/var/www/html/occ" "$@"
-        }
-        # Wait for PHP-FPM; AIO starts it only after installation or upgrade completes.
-        until nc -z 127.0.0.1 9000; do sleep 5; done
-        # New profiles are private by default; public profiles require explicit opt-in.
-        run_occ config:app:set --type=string --value=0 settings profile_enabled_by_default
-        # Enable user_oidc on existing installations; NEXTCLOUD_STARTUP_APPS only applies on first startup.
-        run_occ app:enable user_oidc 2>"/dev/null" || run_occ app:install user_oidc
-        run_occ user_oidc:provider kanidm \
-          --clientid="$OIDC_CLIENT_ID" \
-          --clientsecret-env=OIDC_CLIENT_SECRET \
-          --discoveryuri="$OIDC_DISCOVERY_URI"
-        # Require OIDC login by default; local administrators can still use '/login?direct=1'.
-        run_occ config:app:set --type=string --value=0 user_oidc allow_multiple_user_backends
-        # Manage names, email addresses, and passwords in Kanidm rather than Nextcloud.
-        run_occ config:system:set allow_user_to_change_display_name --type=boolean --value=false
-        run_occ config:system:set allow_user_to_change_email --type=boolean --value=false
-        run_occ config:system:set lost_password_link --value="$AUTH_URL/ui/update_credentials"
-        touch "/tmp/user_oidc-configured"
-        exec sleep infinity
-    # Omit a startup probe; it would block the main Nextcloud container that this sidecar waits for.
-    readinessProbe:
-      exec:
-        command:
-          - test
-          - -f
-          - "/tmp/user_oidc-configured"
-      periodSeconds: 5
-      failureThreshold: 1
-    env:
-      - name: PGSSLMODE
-        value: verify-full
-      - name: PGSSLROOTCERT
-        value: "/postgres-ca/ca.crt"
-      - name: OIDC_CLIENT_ID
-        valueFrom:
-          secretKeyRef:
-            name: nextcloud-kanidm-oauth2-credentials
-            key: CLIENT_ID
-      - name: OIDC_CLIENT_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: nextcloud-kanidm-oauth2-credentials
-            key: CLIENT_SECRET
-      - name: OIDC_DISCOVERY_URI
-        value: https://auth.${FQDN_01}/oauth2/openid/$(OIDC_CLIENT_ID)/.well-known/openid-configuration
-      - name: AUTH_URL
-        value: https://auth.${FQDN_01}
-    resources:
-      requests:
-        cpu: 5m
-        memory: 32Mi
-      limits:
-        memory: 256Mi
-    volumeMounts:
-      - name: postgres-ca
-        mountPath: "/postgres-ca"
-        readOnly: true
-      - mountPath: "/var/www/html"
-        name: nextcloud-aio-nextcloud
-      - mountPath: "/mnt/ncdata"
-        name: nextcloud-aio-nextcloud-data
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-aio-nextcloud
+spec:
+  template:
+    spec:
+      # Use a native sidecar to wait for PHP-FPM; a postStart hook can race AIO initialization.
+      initContainers:
+        - name: nextcloud-user-oidc
+          image: ghcr.io/nextcloud-releases/aio-nextcloud:latest  # Kustomize replaces this with the main Nextcloud container image.
+          restartPolicy: Always
+          securityContext:
+            runAsUser: 33
+            runAsGroup: 33
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          args: []
+          command:
+            - "/bin/sh"
+            - -ec
+            - |
+              set -eu
+              rm -f "/tmp/user_oidc-configured"
+              run_occ() {
+                php "/var/www/html/occ" "$@"
+              }
+              # Wait for PHP-FPM; AIO starts it only after installation or upgrade completes.
+              until nc -z 127.0.0.1 9000; do sleep 5; done
+              # New profiles are private by default; public profiles require explicit opt-in.
+              run_occ config:app:set --type=string --value=0 settings profile_enabled_by_default
+              # Enable user_oidc on existing installations; NEXTCLOUD_STARTUP_APPS only applies on first startup.
+              run_occ app:enable user_oidc 2>"/dev/null" || run_occ app:install user_oidc
+              run_occ user_oidc:provider kanidm \
+                --clientid="$OIDC_CLIENT_ID" \
+                --clientsecret-env=OIDC_CLIENT_SECRET \
+                --discoveryuri="$OIDC_DISCOVERY_URI"
+              # Require OIDC login by default; local administrators can still use '/login?direct=1'.
+              run_occ config:app:set --type=string --value=0 user_oidc allow_multiple_user_backends
+              # Manage names, email addresses, and passwords in Kanidm rather than Nextcloud.
+              run_occ config:system:set allow_user_to_change_display_name --type=boolean --value=false
+              run_occ config:system:set allow_user_to_change_email --type=boolean --value=false
+              run_occ config:system:set lost_password_link --value="$AUTH_URL/ui/update_credentials"
+              touch "/tmp/user_oidc-configured"
+              exec sleep infinity
+          # Omit a startup probe; it would block the main Nextcloud container that this sidecar waits for.
+          readinessProbe:
+            exec:
+              command:
+                - test
+                - -f
+                - "/tmp/user_oidc-configured"
+            periodSeconds: 5
+            failureThreshold: 1
+          env:
+            - name: PGSSLMODE
+              value: verify-full
+            - name: PGSSLROOTCERT
+              value: "/postgres-ca/ca.crt"
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-kanidm-oauth2-credentials
+                  key: CLIENT_ID
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-kanidm-oauth2-credentials
+                  key: CLIENT_SECRET
+            - name: OIDC_DISCOVERY_URI
+              value: https://auth.${FQDN_01}/oauth2/openid/$(OIDC_CLIENT_ID)/.well-known/openid-configuration
+            - name: AUTH_URL
+              value: https://auth.${FQDN_01}
+          resources:
+            requests:
+              cpu: 5m
+              memory: 32Mi
+            limits:
+              memory: 256Mi
+          volumeMounts:
+            - name: postgres-ca
+              mountPath: "/postgres-ca"
+              readOnly: true
+            - mountPath: "/var/www/html"
+              name: nextcloud-aio-nextcloud
+            - mountPath: "/mnt/ncdata"
+              name: nextcloud-aio-nextcloud-data

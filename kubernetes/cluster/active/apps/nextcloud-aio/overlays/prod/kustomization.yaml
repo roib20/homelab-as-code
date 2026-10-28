@@ -49,24 +49,33 @@ patches:
       kind: Deployment
       name: nextcloud-aio-(eurooffice|fulltextsearch|harp|imaginary|onlyoffice|redis|talk|talk-recording|whiteboard)
     patch: |-
-      - op: add
-        path: "/metadata/annotations/secret.reloader.stakater.com~1reload"
-        value: nextcloud-aio-secrets
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: nextcloud-aio
+        annotations:
+          secret.reloader.stakater.com/reload: nextcloud-aio-secrets
   - target:
       kind: Deployment
       name: nextcloud-aio-nextcloud
     patch: |-
-      - op: add
-        path: "/metadata/annotations/secret.reloader.stakater.com~1reload"
-        value: nextcloud-aio-postgres-app,nextcloud-aio-postgres-ca,nextcloud-aio-secrets,nextcloud-kanidm-oauth2-credentials
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: nextcloud-aio-nextcloud
+        annotations:
+          secret.reloader.stakater.com/reload: nextcloud-aio-postgres-app,nextcloud-aio-postgres-ca,nextcloud-aio-secrets,nextcloud-kanidm-oauth2-credentials
   - target:
       kind: Deployment
       name: nextcloud-aio-notify-push
     patch: |-
-      - op: add
-        path: "/metadata/annotations/secret.reloader.stakater.com~1reload"
-        value: nextcloud-aio-postgres-ca
-  # Use strategic merge to delete bundled database resources; Kustomize cannot delete whole resources with JSON 6902.
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: nextcloud-aio-notify-push
+        annotations:
+          secret.reloader.stakater.com/reload: nextcloud-aio-postgres-ca
+  # Remove the chart's database resources; PostgreSQL is managed by CNPG.
   - patch: |-
       $patch: delete
       apiVersion: apps/v1

@@ -1,13 +1,12 @@
 ---
-# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
-- op: add
-  path: "/spec/template/spec/automountServiceAccountToken"
-  value: false
-- op: add
-  path: "/spec/template/spec/securityContext/seccompProfile"
-  value:
-    type: RuntimeDefault
-- op: replace
-  path: "/spec/template/spec/containers/0/securityContext/capabilities/drop"
-  value:
-    - ALL
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-aio
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

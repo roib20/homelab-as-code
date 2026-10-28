@@ -1,20 +1,23 @@
 ---
-# yaml-language-server: $schema=https://www.schemastore.org/json-patch.json
-- op: test
-  path: "/spec/template/spec/containers/0/name"
-  value: nextcloud-aio-fulltextsearch
-- op: add
-  path: "/spec/template/spec/containers/0/startupProbe"
-  value:
-    tcpSocket:
-      port: 9200
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 60
-# Check local HTTP responsiveness for liveness; leave search-data availability to readiness checks.
-- op: replace
-  path: "/spec/template/spec/containers/0/livenessProbe/exec/command"
-  value:
-    - "/bin/sh"
-    - -ec
-    - curl -fs --max-time 4 -u "elastic:$ELASTIC_PASSWORD" "http://127.0.0.1:9200/" >"/dev/null"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-aio-fulltextsearch
+spec:
+  template:
+    spec:
+      containers:
+        - name: nextcloud-aio-fulltextsearch
+          startupProbe:
+            tcpSocket:
+              port: 9200
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 60
+          # Check local HTTP responsiveness for liveness; leave search-data availability to readiness checks.
+          livenessProbe:
+            exec:
+              command:
+                - "/bin/sh"
+                - -ec
+                - curl -fs --max-time 4 -u "elastic:$ELASTIC_PASSWORD" "http://127.0.0.1:9200/" >"/dev/null"
