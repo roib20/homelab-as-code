@@ -13,7 +13,7 @@ patches:
 helmCharts:
   - name: homepage
     repo: oci://oci.trueforge.org/truecharts
-    version: 14.2.1
+    version: 14.4.0
     releaseName: homepage
     namespace: homepage
     valuesFile: ../../base/values.yaml
