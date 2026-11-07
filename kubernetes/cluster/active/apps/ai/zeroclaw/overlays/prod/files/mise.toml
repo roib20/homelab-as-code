@@ -3,7 +3,7 @@
 "github:BtbN/FFmpeg-Builds" = { exe = "ffmpeg", matching = "lgpl.tar.xz", version = "latest" }
 "github:MikkoParkkola/trvl" = { exe = "trvl", matching = "linux", version = "latest" }
 "github:linebender/resvg" = { exe = "resvg", matching = "resvg-linux", version = "latest" }
-"node" = "24"
+"node" = "26"
 "npm:@karakeep/mcp" = "0.34.0"
 "npm:@cliftonz/tandoor-recipes-mcp" = { version = "2.0.1", allow_low_downloads = true }
 "pipx:edge-tts" = "latest"
