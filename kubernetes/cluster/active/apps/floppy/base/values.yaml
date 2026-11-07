@@ -52,7 +52,7 @@ controllers:
       app:
         image: &floppy-image
           repository: ghcr.io/dannyvfilms/floppy
-          tag: 26.10.22@sha256:c4959b1f2544f3cc6f8f305118ba4cd80360bf33f4e9562d66de7a4404b69b50
+          tag: 26.10.29@sha256:5e88307d4af68ee397f0233670b4f35f50d6ce5d12c34fde6b9ecab74ac4836e
         securityContext:
           capabilities:
             drop:
