@@ -53,6 +53,8 @@ data:
       ('library_upload'),
       ('library_edit_metadata'),
       ('library_delete_books'),
+      ('library_merge_books'),
+      ('library_generate_read_aloud'),
       ('book_dock_access'),
       ('book_request_access'),
       ('demo_restricted'),

@@ -21,7 +21,21 @@ persistence:
           - path: "/textbooks"
             subPath: "Media/Books/BookOrbit/textbooks"
             readOnly: false
+        read-aloud-worker:
+          - path: "/audiobooks"
+            subPath: "Media/Books/BookOrbit/Audiobooks"
+            readOnly: true
+          - path: "/books"
+            subPath: "Media/Books/BookOrbit/eBooks"
+            readOnly: true
+          - path: "/comics"
+            subPath: "Media/Books/BookOrbit/Comics"
+            readOnly: true
+          - path: "/textbooks"
+            subPath: "Media/Books/BookOrbit/textbooks"
+            readOnly: true
   data:
+    forceRename: bookorbit
     accessMode: ReadWriteOnce
     size: 5Gi
     storageClass: longhorn
@@ -31,6 +45,16 @@ persistence:
           - path: "/data"
         bootstrap-plugins:
           - path: "/data"
+  read-aloud:
+    accessMode: ReadWriteOnce
+    size: 10Gi
+    storageClass: longhorn
+    advancedMounts:
+      bookorbit:
+        app:
+          - path: "/data/read-aloud"
+        read-aloud-worker:
+          - path: "/data/read-aloud"
   postgres-ca:
     type: secret
     name: bookorbit-postgres-ca

@@ -64,6 +64,15 @@
       ]
     },
     {
+      "description": "Keep the BookOrbit server and read-aloud worker on matching releases",
+      "groupName": "BookOrbit",
+      "matchPackageNames": [
+        "ghcr.io/bookorbit/bookorbit",
+        "ghcr.io/bookorbit/bookorbit-read-aloud-worker"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
       "description": "Cilium Group",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
