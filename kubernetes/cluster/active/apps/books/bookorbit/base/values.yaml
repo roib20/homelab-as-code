@@ -5,11 +5,13 @@ defaultPodOptions:
   automountServiceAccountToken: false
 controllers:
   bookorbit:
+    replicas: 1
+    strategy: Recreate
     pod:
       annotations:
         secret.reloader.stakater.com/reload: "bookorbit-postgres-app,bookorbit-postgres-ca,bookorbit-secrets,bookorbit-kanidm-oauth2-credentials"
         configmap.reloader.stakater.com/reload: "bookorbit-oidc"
-      terminationGracePeriodSeconds: 30
+      terminationGracePeriodSeconds: 60
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -73,6 +75,7 @@ controllers:
           PGID: "1000"
           NODE_MAX_OLD_SPACE_SIZE: "2048"
           DISABLE_LOCAL_AUTH: "false"
+          READ_ALOUD_WORKER_URL: "http://127.0.0.1:8787"
         envFrom:
           - secretRef:
               name: bookorbit-secrets
@@ -119,6 +122,57 @@ controllers:
             memory: 96Mi
           limits:
             memory: 2Gi
+      read-aloud-worker:
+        image:
+          repository: ghcr.io/bookorbit/bookorbit-read-aloud-worker
+          tag: 3.7.0@sha256:451dad18a5772716b3383552c40ac329836178a48058cdee6a31c3051569dc4f
+        env:
+          READ_ALOUD_WORKER_HOST: "127.0.0.1"
+          PORT: 8787
+          READ_ALOUD_WORKER_TOKEN:
+            valueFrom:
+              secretKeyRef:
+                name: bookorbit-secrets
+                key: READ_ALOUD_WORKER_TOKEN
+          READ_ALOUD_LIBRARY_ROOTS: "/books,/audiobooks,/comics,/textbooks"
+          READ_ALOUD_WORK_ROOT: "/data/read-aloud/jobs"
+          READ_ALOUD_CTC_DEVICE: cpu
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec: &worker-health
+              exec:
+                command:
+                  - node
+                  - -e
+                  - >-
+                    fetch('http://127.0.0.1:8787/health', {
+                      headers: {authorization: 'Bearer ' + process.env.READ_ALOUD_WORKER_TOKEN.trim()},
+                      signal: AbortSignal.timeout(5000)
+                    }).then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 5
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              <<: *worker-health
+              periodSeconds: 10
+              failureThreshold: 30
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            memory: 4Gi
 service:
   app:
     ports:
