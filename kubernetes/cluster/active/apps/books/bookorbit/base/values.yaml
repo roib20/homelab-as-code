@@ -74,7 +74,7 @@ controllers:
           PUID: "1000"
           PGID: "1000"
           NODE_MAX_OLD_SPACE_SIZE: "2048"
-          DISABLE_LOCAL_AUTH: "false"
+          DISABLE_LOCAL_AUTH: "true"
           READ_ALOUD_WORKER_URL: "http://127.0.0.1:8787"
         envFrom:
           - secretRef:
