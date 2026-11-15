@@ -134,7 +134,7 @@ controllers:
               secretKeyRef:
                 name: bookorbit-secrets
                 key: READ_ALOUD_WORKER_TOKEN
-          READ_ALOUD_LIBRARY_ROOTS: "/books,/audiobooks,/comics,/textbooks"
+          READ_ALOUD_LIBRARY_ROOTS: "/library"
           READ_ALOUD_WORK_ROOT: "/data/read-aloud/jobs"
           READ_ALOUD_CTC_DEVICE: cpu
         probes:
