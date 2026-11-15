@@ -24,7 +24,7 @@ controllers:
     defaultContainerOptions:
       image:
         repository: ghcr.io/flintsh/flare
-        tag: 3.0.1@sha256:3233145ca472d60a53ef5372352fd76e13d7f65e25fddc21add4eeabc5dec2e3
+        tag: 3.1.0@sha256:138b5d525d3bf08c05e9e822066628338c6ac3c2572715eb46914a028716b765
       env:
         HOME: /tmp
         NODE_ENV: production
