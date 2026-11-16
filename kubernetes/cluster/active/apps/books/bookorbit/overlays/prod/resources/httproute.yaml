@@ -11,10 +11,9 @@ metadata:
     gethomepage.dev/name: BookOrbit
     gethomepage.dev/pod-selector: "app.kubernetes.io/instance=bookorbit"
     gethomepage.dev/widget.fields: '["books", "authors", "series", "storage", "reading", "finished"]'
-    gethomepage.dev/widget.password: "{{HOMEPAGE_VAR_BOOKORBIT_PASSWORD}}"
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_BOOKORBIT_KEY}}"
     gethomepage.dev/widget.type: "bookorbit"
     gethomepage.dev/widget.url: "http://bookorbit.bookorbit.svc.cluster.local:3000"
-    gethomepage.dev/widget.username: "{{HOMEPAGE_VAR_BOOKORBIT_USERNAME}}"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
