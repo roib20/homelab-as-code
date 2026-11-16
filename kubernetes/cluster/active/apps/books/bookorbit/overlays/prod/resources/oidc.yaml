@@ -64,6 +64,7 @@ data:
       ('readwise_sync'),
       ('storygraph_sync'),
       ('opds_access'),
+      ('api_keys'),
       ('email_send'),
       ('manage_email'),
       ('manage_libraries'),
