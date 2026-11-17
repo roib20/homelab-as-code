@@ -140,7 +140,7 @@ controllers:
           READ_ALOUD_LIBRARY_ROOTS: "/library"
           READ_ALOUD_WORK_ROOT: "/data/read-aloud/jobs"
           READ_ALOUD_CTC_DEVICE: webgpu
-          XDG_CACHE_HOME: "/data/read-aloud/cache"
+          XDG_CACHE_HOME: "/cache"
         probes:
           liveness:
             enabled: true
@@ -184,3 +184,12 @@ service:
     ports:
       http:
         port: *port
+persistence:
+  shader-cache:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: longhorn
+    advancedMounts:
+      bookorbit:
+        read-aloud-worker:
+          - path: "/cache"
