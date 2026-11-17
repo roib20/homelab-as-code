@@ -1,4 +1,7 @@
 ---
+image:
+  repository: oci.trueforge.org/containerforge/qbittorrent
+  tag: 5.2.4@sha256:91c0e7318fd3d2dae8001c910e260dcc473a417ec2f6c46b7b6b9acbc9f84ab1
 qbitportforward:
   enabled: false
 service:
