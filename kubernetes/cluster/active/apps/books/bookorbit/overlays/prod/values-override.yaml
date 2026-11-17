@@ -56,3 +56,5 @@ persistence:
           - path: "/tmp"
         edge-tts:
           - path: "/tmp"
+        edge-tts-proxy:
+          - path: "/tmp"

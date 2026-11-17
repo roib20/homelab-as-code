@@ -226,7 +226,7 @@ controllers:
                 name: bookorbit-secrets
                 key: EDGE_TTS_API_KEY
           HOST: "127.0.0.1"
-          PORT: 8880
+          PORT: 8080
           REQUIRE_API_KEY: "true"
           SERVE_STATIC: "false"
         probes:
@@ -239,7 +239,7 @@ controllers:
                   - bun
                   - -e
                   - >-
-                    fetch('http://127.0.0.1:8880/health', {
+                    fetch('http://127.0.0.1:8080/health', {
                       signal: AbortSignal.timeout(5000)
                     }).then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))
               periodSeconds: 30
@@ -264,12 +264,52 @@ controllers:
             memory: 64Mi
           limits:
             memory: 256Mi
+      edge-tts-proxy:
+        image:
+          repository: mirror.gcr.io/library/caddy
+          tag: 2.11.9-alpine@sha256:003a97808e781aa9f7e75cc2f43d34d461099031faf5e20faefb9f61126836f0
+        env:
+          XDG_CONFIG_HOME: "/tmp"
+          XDG_DATA_HOME: "/tmp"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 5m
+            memory: 16Mi
+          limits:
+            memory: 128Mi
+configMaps:
+  edge-tts-proxy:
+    data:
+      Caddyfile: |
+        {
+          admin off
+          persist_config off
+        }
+        :8880 {
+          bind 127.0.0.1 ::1
+          rewrite /v1/audio/voices /api/voices
+          reverse_proxy 127.0.0.1:8080
+        }
 service:
   app:
     ports:
       http:
         port: *port
 persistence:
+  edge-tts-proxy-config:
+    type: configMap
+    identifier: edge-tts-proxy
+    advancedMounts:
+      bookorbit:
+        edge-tts-proxy:
+          - path: "/etc/caddy"
+            readOnly: true
   vulkan:
     type: emptyDir
     advancedMounts:
