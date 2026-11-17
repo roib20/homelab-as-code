@@ -220,10 +220,14 @@ controllers:
           repository: ghcr.io/dejavumoe/edgetts
           tag: 1.0.3@sha256:420878ad9542bdfb01ebdf9da588645e9f375362540e1e1be0ea0ca864931691
         env:
+          API_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: bookorbit-secrets
+                key: EDGE_TTS_API_KEY
           HOST: "127.0.0.1"
           PORT: 8880
-          # Only BookOrbit's pod can reach this loopback-only API.
-          REQUIRE_API_KEY: "false"
+          REQUIRE_API_KEY: "true"
           SERVE_STATIC: "false"
         probes:
           liveness:
