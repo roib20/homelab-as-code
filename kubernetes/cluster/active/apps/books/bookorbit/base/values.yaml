@@ -12,6 +12,9 @@ controllers:
         secret.reloader.stakater.com/reload: "bookorbit-postgres-app,bookorbit-postgres-ca,bookorbit-secrets,bookorbit-kanidm-oauth2-credentials"
         configmap.reloader.stakater.com/reload: "bookorbit-oidc"
       terminationGracePeriodSeconds: 60
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: bookorbit-gpu-claim
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -136,7 +139,8 @@ controllers:
                 key: READ_ALOUD_WORKER_TOKEN
           READ_ALOUD_LIBRARY_ROOTS: "/library"
           READ_ALOUD_WORK_ROOT: "/data/read-aloud/jobs"
-          READ_ALOUD_CTC_DEVICE: cpu
+          READ_ALOUD_CTC_DEVICE: webgpu
+          XDG_CACHE_HOME: "/data/read-aloud/cache"
         probes:
           liveness:
             enabled: true
@@ -168,6 +172,8 @@ controllers:
             drop:
               - ALL
         resources:
+          claims:
+            - name: gpu
           requests:
             cpu: 100m
             memory: 512Mi
