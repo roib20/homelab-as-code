@@ -221,7 +221,7 @@ controllers:
           tag: 1.0.3@sha256:420878ad9542bdfb01ebdf9da588645e9f375362540e1e1be0ea0ca864931691
         env:
           HOST: "127.0.0.1"
-          PORT: 8080
+          PORT: 8880
           # Only BookOrbit's pod can reach this loopback-only API.
           REQUIRE_API_KEY: "false"
           SERVE_STATIC: "false"
@@ -235,7 +235,7 @@ controllers:
                   - bun
                   - -e
                   - >-
-                    fetch('http://127.0.0.1:8080/health', {
+                    fetch('http://127.0.0.1:8880/health', {
                       signal: AbortSignal.timeout(5000)
                     }).then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))
               periodSeconds: 30
