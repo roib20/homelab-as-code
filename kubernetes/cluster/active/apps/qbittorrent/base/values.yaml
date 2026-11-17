@@ -7,6 +7,9 @@ qbitportforward:
 service:
   torrent:
     enabled: true
+    ports:
+      torrent:
+        port: 6481
   gluetun:
     enabled: false
 workload:
