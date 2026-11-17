@@ -12,6 +12,9 @@ controllers:
         secret.reloader.stakater.com/reload: "bookorbit-postgres-app,bookorbit-postgres-ca,bookorbit-secrets,bookorbit-kanidm-oauth2-credentials"
         configmap.reloader.stakater.com/reload: "bookorbit-oidc"
       terminationGracePeriodSeconds: 60
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: bookorbit-gpu-claim
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -21,6 +24,40 @@ controllers:
         seccompProfile:
           type: RuntimeDefault
     initContainers:
+      install-vulkan:
+        image:
+          repository: ghcr.io/bookorbit/bookorbit-read-aloud-worker
+          tag: 3.8.0@sha256:830f4ea19d3ff74c53526a470525da926f5a2cd751c636eb2abdfb95c19d57a8
+        command:
+          - /bin/sh
+          - -ec
+          - |
+            apt-get update
+            DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes --no-install-recommends mesa-vulkan-drivers
+            cp --dereference "/usr/lib/x86_64-linux-gnu/libvulkan_intel.so" "/vulkan/libvulkan_intel.so"
+            sed 's#[^"]*libvulkan_intel\.so#/vulkan/libvulkan_intel.so#' \
+              "/usr/share/vulkan/icd.d/intel_icd.json" > "/vulkan/intel_icd.json"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false
+          runAsUser: 0
+          runAsGroup: 0
+          capabilities:
+            drop:
+              - ALL
+            add:
+              - CHOWN
+              - DAC_OVERRIDE
+              - FOWNER
+              - SETGID
+              - SETUID
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            memory: 512Mi
       wait-for-postgres:
         image:
           repository: ghcr.io/wait4x/wait4x
@@ -136,7 +173,10 @@ controllers:
                 key: READ_ALOUD_WORKER_TOKEN
           READ_ALOUD_LIBRARY_ROOTS: "/library"
           READ_ALOUD_WORK_ROOT: "/data/read-aloud/jobs"
-          READ_ALOUD_CTC_DEVICE: cpu
+          READ_ALOUD_CTC_DEVICE: webgpu
+          LD_LIBRARY_PATH: "/vulkan"
+          VK_DRIVER_FILES: "/vulkan/intel_icd.json"
+          XDG_CACHE_HOME: "/cache"
         probes:
           liveness:
             enabled: true
@@ -168,13 +208,122 @@ controllers:
             drop:
               - ALL
         resources:
+          claims:
+            - name: gpu
           requests:
             cpu: 100m
             memory: 512Mi
           limits:
             memory: 4Gi
+      edge-tts:
+        image:
+          repository: ghcr.io/dejavumoe/edgetts
+          tag: 1.0.3@sha256:420878ad9542bdfb01ebdf9da588645e9f375362540e1e1be0ea0ca864931691
+        env:
+          API_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: bookorbit-secrets
+                key: EDGE_TTS_API_KEY
+          HOST: "127.0.0.1"
+          PORT: 8080
+          REQUIRE_API_KEY: "true"
+          SERVE_STATIC: "false"
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec: &edge-tts-health
+              exec:
+                command:
+                  - bun
+                  - -e
+                  - >-
+                    fetch('http://127.0.0.1:8080/health', {
+                      signal: AbortSignal.timeout(5000)
+                    }).then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 3
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              <<: *edge-tts-health
+              periodSeconds: 10
+              failureThreshold: 30
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            memory: 256Mi
+      edge-tts-proxy:
+        image:
+          repository: mirror.gcr.io/library/caddy
+          tag: 2.11.9-alpine@sha256:003a97808e781aa9f7e75cc2f43d34d461099031faf5e20faefb9f61126836f0
+        env:
+          XDG_CONFIG_HOME: "/tmp"
+          XDG_DATA_HOME: "/tmp"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 5m
+            memory: 16Mi
+          limits:
+            memory: 128Mi
+configMaps:
+  edge-tts-proxy:
+    data:
+      Caddyfile: |
+        {
+          admin off
+          persist_config off
+        }
+        :8880 {
+          bind 127.0.0.1 ::1
+          rewrite /v1/audio/voices /api/voices
+          reverse_proxy 127.0.0.1:8080
+        }
 service:
   app:
     ports:
       http:
         port: *port
+persistence:
+  edge-tts-proxy-config:
+    type: configMap
+    identifier: edge-tts-proxy
+    advancedMounts:
+      bookorbit:
+        edge-tts-proxy:
+          - path: "/etc/caddy"
+            readOnly: true
+  vulkan:
+    type: emptyDir
+    advancedMounts:
+      bookorbit:
+        install-vulkan:
+          - path: "/vulkan"
+        read-aloud-worker:
+          - path: "/vulkan"
+            readOnly: true
+  shader-cache:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: longhorn
+    advancedMounts:
+      bookorbit:
+        read-aloud-worker:
+          - path: "/cache"
