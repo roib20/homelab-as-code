@@ -67,6 +67,13 @@ spec:
             # BookOrbit search: free-text queries (e.g. unix command names like "fd") trip RCE/SQLi rules; do not inspect the body
             - SecRule REQUEST_METHOD "@streq POST" "id:100018,phase:1,pass,nolog,chain"
             - SecRule REQUEST_FILENAME "@streq /api/v1/books/query" "ctl:requestBodyAccess=Off"
+            # BookOrbit TTS provider URLs: exclude only baseUrl from the IP-address RFI/SSRF rules.
+            - SecRule REQUEST_METHOD "@streq POST" "id:100032,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^books\." "chain"
+            - SecRule REQUEST_FILENAME "@streq /api/v1/tts/admin/providers" "ctl:ruleRemoveTargetById=931100;ARGS:json.baseUrl,ctl:ruleRemoveTargetById=934110;ARGS:json.baseUrl"
+            - SecRule REQUEST_METHOD "@streq PUT" "id:100033,phase:1,pass,nolog,chain"
+            - SecRule REQUEST_HEADERS:Host "@rx ^books\." "chain"
+            - SecRule REQUEST_FILENAME "@rx ^/api/v1/tts/admin/providers/[0-9]+$" "ctl:ruleRemoveTargetById=931100;ARGS:json.baseUrl,ctl:ruleRemoveTargetById=934110;ARGS:json.baseUrl"
             # Immich Android app sends Content-Type: text/plain, which trips 920420 (content-type policy); allow it for the Immich host
             - SecRule REQUEST_HEADERS:Host "@rx ^photos\." "id:100019,phase:1,pass,nolog,ctl:ruleRemoveById=920420"
             # Grimmory reading sessions false positive (932130: RCE unix shell expr - EPUB CFI bracket notation in endLocation)
