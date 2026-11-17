@@ -54,3 +54,5 @@ persistence:
       bookorbit:
         app:
           - path: "/tmp"
+        edge-tts:
+          - path: "/tmp"
