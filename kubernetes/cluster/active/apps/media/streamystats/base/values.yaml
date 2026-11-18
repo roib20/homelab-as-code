@@ -20,7 +20,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/fredrikburmester/streamystats-nextjs
-          tag: v2.20.0@sha256:45f93e6233eac3802d056c237293482704ae5dd9502a2566f6df5aa8a4fa214c
+          tag: v2.22.3@sha256:251d4ad094946d9711922b38878aacad0721c1f0db43c042df172f98a4294732
         env:
           NODE_ENV: production
           HOSTNAME: 0.0.0.0
@@ -57,7 +57,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/fredrikburmester/streamystats-job-server
-          tag: v2.20.0@sha256:b9e6fc640b02ede44f379970cf3f8e81a20bb82bb846e2f738c5db650784137c
+          tag: v2.22.3@sha256:9bce17604d1a853044871edf53f8edcecf4e4139c46589c9f43521df37508b13
         env:
           NODE_ENV: production
           HOST: 0.0.0.0
