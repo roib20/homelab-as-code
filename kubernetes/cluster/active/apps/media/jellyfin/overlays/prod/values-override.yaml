@@ -14,6 +14,7 @@ persistence:
   data:
     enabled: true
     mountPath: "/data"
+    size: 15Gi
     storageClass: longhorn
   logs:
     enabled: true
