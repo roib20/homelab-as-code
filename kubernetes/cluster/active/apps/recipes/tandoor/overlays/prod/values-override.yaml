@@ -65,32 +65,6 @@ workload:
             HIDE_LOGIN_FORM: 1
             SOCIAL_DEFAULT_ACCESS: 1
             SOCIAL_DEFAULT_GROUP: user
-            # Wire Django to the repo-managed CNPG cluster (tandoor-postgres-app).
-            DB_ENGINE: django.db.backends.postgresql
-            # verify the CNPG server cert against its CA mounted at `/postgres-ca`
-            DB_OPTIONS: "{'sslmode': 'verify-full', 'sslrootcert': '/postgres-ca/ca.crt'}"
-            POSTGRES_HOST:
-              secretKeyRef:
-                name: tandoor-postgres-app
-                key: host
-                expandObjectName: false
-            POSTGRES_PORT:
-              secretKeyRef:
-                name: tandoor-postgres-app
-                key: port
-                expandObjectName: false
-            POSTGRES_DB:
-              secretKeyRef:
-                name: tandoor-postgres-app
-                key: dbname
-                expandObjectName: false
-            POSTGRES_USER:
-              secretKeyRef:
-                name: tandoor-postgres-app
-                key: user
-                expandObjectName: false
-            POSTGRES_PASSWORD:
-              secretKeyRef:
-                name: tandoor-postgres-app
-                key: password
-                expandObjectName: false
+            # Suppress the bundled CNPG Secret references before Helm renders.
+            POSTGRES_HOST: null
+            POSTGRES_PASSWORD: null

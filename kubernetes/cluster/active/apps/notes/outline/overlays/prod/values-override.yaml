@@ -33,8 +33,5 @@ workload:
               cpu: 10m
               memory: 224Mi
           env:
-            DATABASE_URL:
-              secretKeyRef:
-                name: outline-postgres-app
-                key: uri
-                expandObjectName: false
+            # Suppress the bundled CNPG Secret reference before Helm renders.
+            DATABASE_URL: null

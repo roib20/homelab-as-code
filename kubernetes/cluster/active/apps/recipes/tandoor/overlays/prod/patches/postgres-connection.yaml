@@ -1,0 +1,63 @@
+---
+# Mount the CNPG CA so the app can `sslmode=verify-full` the server cert
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tandoor-recipes
+  namespace: tandoor
+spec:
+  template:
+    spec:
+      volumes:
+        - name: postgres-ca
+          secret:
+            secretName: tandoor-postgres-ca
+      containers:
+        - name: tandoor-recipes
+          # Keep the external database settings independent of chart defaults.
+          env:
+            - name: DB_ENGINE
+              value: django.db.backends.postgresql
+              valueFrom: null
+            - name: DB_OPTIONS
+              value: "{'sslmode': 'verify-full', 'sslrootcert': '/postgres-ca/ca.crt'}"
+              valueFrom: null
+            - name: POSTGRES_DB
+              value: null
+              valueFrom:
+                $patch: replace
+                secretKeyRef:
+                  name: tandoor-postgres-app
+                  key: dbname
+            - name: POSTGRES_HOST
+              value: null
+              valueFrom:
+                $patch: replace
+                secretKeyRef:
+                  name: tandoor-postgres-app
+                  key: host
+            - name: POSTGRES_PASSWORD
+              value: null
+              valueFrom:
+                $patch: replace
+                secretKeyRef:
+                  name: tandoor-postgres-app
+                  key: password
+            - name: POSTGRES_PORT
+              value: null
+              valueFrom:
+                $patch: replace
+                secretKeyRef:
+                  name: tandoor-postgres-app
+                  key: port
+            - name: POSTGRES_USER
+              value: null
+              valueFrom:
+                $patch: replace
+                secretKeyRef:
+                  name: tandoor-postgres-app
+                  key: user
+          volumeMounts:
+            - name: postgres-ca
+              mountPath: /postgres-ca
+              readOnly: true

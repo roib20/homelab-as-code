@@ -31,7 +31,7 @@ replacements:
   - path: replacements.yaml
 patches:
   - path: patches/chart-secret-cleanup.yaml
-  - path: patches/postgres-ca-mount.yaml
+  - path: patches/postgres-connection.yaml
   - target:
       kind: ObjectStore
       name: cnpg-backups

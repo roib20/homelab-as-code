@@ -26,3 +26,26 @@ configMapGenerator:
       disableNameSuffixHash: true
 replacements:
   - path: replacements.yaml
+patches:
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: mealie
+        namespace: mealie
+      spec:
+        template:
+          spec:
+            containers:
+              - name: mealie
+                env:
+                  - name: DB_ENGINE
+                    value: postgres
+                    valueFrom: null
+                  - name: POSTGRES_URL_OVERRIDE
+                    value: null
+                    valueFrom:
+                      $patch: replace
+                      secretKeyRef:
+                        name: mealie-postgres-app
+                        key: uri

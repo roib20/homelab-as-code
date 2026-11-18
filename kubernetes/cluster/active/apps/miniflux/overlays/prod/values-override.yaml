@@ -30,11 +30,8 @@ workload:
             ADMIN_USERNAME: ""
             BASE_URL: "https://miniflux.${FQDN_01}"
             CREATE_ADMIN: 0
-            DATABASE_URL:
-              secretKeyRef:
-                expandObjectName: false
-                key: uri
-                name: miniflux-postgres-app
+            # Suppress the bundled CNPG Secret reference before Helm renders.
+            DATABASE_URL: null
             DISABLE_LOCAL_AUTH: 1
             FETCH_BILIBILI_WATCH_TIME: 1
             FETCH_NEBULA_WATCH_TIME: 1
