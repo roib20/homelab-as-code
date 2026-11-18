@@ -1,4 +1,7 @@
 ---
+resources:
+  limits:
+    cpu: 0
 global:
   fallbackDefaults:
     pvcRetain: true

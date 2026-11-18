@@ -32,6 +32,22 @@ patches:
       kind: Deployment
       name: outline
   - target:
+      kind: Deployment
+      name: outline
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: outline
+      spec:
+        template:
+          spec:
+            initContainers:
+              - name: outline-system-redis-wait
+                resources:
+                  limits:
+                    cpu: null
+  - target:
       kind: ObjectStore
       name: cnpg-backups
     patch: |-
