@@ -9,6 +9,7 @@ defaultSettings:
   detachManuallyAttachedVolumesWhenCordoned: true
   offlineReplicaRebuilding: true
   orphanResourceAutoDeletion: instance;replica-data
+  storageMinimalAvailablePercentage: 15
   storageOverProvisioningPercentage: 1000
   systemManagedCSIComponentsResourceLimits: >-
     {"csi-attacher":{"requests":{"cpu":"10m","memory":"64Mi"}},
