@@ -5,6 +5,9 @@ image:
   repository: ghcr.io/sharevb/it-tools
   pullPolicy: IfNotPresent
   tag: 2026.10.25@sha256:c6e68a94af10c73cb4e53eaa78726d8abbbb4ad1a89a3f127a69f85a9ae029ab
+resources:
+  limits:
+    cpu: 0
 podOptions:
   hostUsers: false
 service:

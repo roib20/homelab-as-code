@@ -12,7 +12,7 @@ persistence:
     mountPath: /downloads
 resources:
   limits:
-    cpu: null
+    cpu: 0
     memory: 512Mi
   requests:
     cpu: 10m

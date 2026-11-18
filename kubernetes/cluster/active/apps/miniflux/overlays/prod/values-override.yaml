@@ -16,7 +16,7 @@ workload:
         main:
           resources:
             limits:
-              cpu: null
+              cpu: 0
               memory: 256Mi
             requests:
               cpu: 10m

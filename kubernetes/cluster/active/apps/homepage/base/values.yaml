@@ -1,5 +1,8 @@
 ---
 forceConfigFromValues: true
+resources:
+  limits:
+    cpu: 0
 workload:
   main:
     replicas: 1
