@@ -4,5 +4,5 @@ image:
   repository: seerr-team/seerr
   pullPolicy: IfNotPresent
   tag: 'preview-new-oidc'
-  sha: '6970dc3fbfa1d335583937f1bc85794266a8d8a4c5b348716fede906085fc540'
+  sha: '2b714a6d17590b554d388d70adc6c4ea6507d9367c23eb42e4319693b55aa054'
 nameOverride: 'seerr'
