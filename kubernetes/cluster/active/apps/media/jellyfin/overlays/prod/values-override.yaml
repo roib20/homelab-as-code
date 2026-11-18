@@ -1,4 +1,7 @@
 ---
+resources:
+  limits:
+    cpu: 0
 global:
   fallbackDefaults:
     pvcRetain: true
@@ -38,7 +41,7 @@ workload:
         broadcastproxy:
           resources:
             limits:
-              cpu: null
+              cpu: 0
               memory: 64Mi
             requests:
               cpu: 10m
@@ -49,7 +52,7 @@ workload:
         main:
           resources:
             limits:
-              cpu: null
+              cpu: 0
               memory: 8Gi
             requests:
               cpu: 150m

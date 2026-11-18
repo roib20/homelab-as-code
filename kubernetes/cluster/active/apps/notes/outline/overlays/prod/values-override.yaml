@@ -1,4 +1,7 @@
 ---
+resources:
+  limits:
+    cpu: 0
 global:
   fallbackDefaults:
     storageClass: longhorn
@@ -10,7 +13,7 @@ cnpg:
 redis:
   resources:
     limits:
-      cpu: null
+      cpu: 0
       memory: 128Mi
     requests:
       cpu: 15m
@@ -24,14 +27,11 @@ workload:
         main:
           resources:
             limits:
-              cpu: null
+              cpu: 0
               memory: 512Mi
             requests:
               cpu: 10m
               memory: 224Mi
           env:
-            DATABASE_URL:
-              secretKeyRef:
-                name: outline-postgres-app
-                key: uri
-                expandObjectName: false
+            # Suppress the bundled CNPG Secret reference before Helm renders.
+            DATABASE_URL: null
