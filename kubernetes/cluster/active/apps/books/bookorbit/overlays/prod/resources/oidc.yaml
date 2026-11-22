@@ -55,6 +55,7 @@ data:
       ('library_delete_books'),
       ('library_merge_books'),
       ('library_generate_read_aloud'),
+      ('library_generate_story_guide'),
       ('book_dock_access'),
       ('book_request_access'),
       ('demo_restricted'),
