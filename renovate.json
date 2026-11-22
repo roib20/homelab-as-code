@@ -334,10 +334,17 @@
     },
     {
       "allowedVersions": "<10.0.0",
+      "description": "Cloudflare Operator Group",
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "groupName": "Cloudflare Operator",
+      "groupSlug": "cloudflare-operator",
       "matchPackageNames": [
         "adyanth/cloudflare-operator",
         "ghcr.io/adyanth/cloudflare-operator"
-      ]
+      ],
+      "minimumGroupSize": 2
     }
   ],
   "terragrunt": {
