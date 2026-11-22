@@ -16,13 +16,37 @@ controllers:
         zeroclaw-telegram-smart-homer-bot,zeroclaw-telegram-travel-agent-bot,\
         zeroclaw-karakeep-mcp,zeroclaw-miniflux-mcp,zeroclaw-trek-mcp,zeroclaw-yuvomi-mcp"
     initContainers:
+      install-libatomic:
+        image:
+          repository: gcr.io/distroless/nodejs26-debian13
+          tag: latest
+        command:
+          - "/nodejs/bin/node"
+          - -e
+        args:
+          - |
+            const { copyFileSync, globSync } = require('node:fs');
+            copyFileSync(globSync('/usr/lib/*/libatomic.so.1')[0], '/node-libs/libatomic.so.1');
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            memory: 128Mi
       bootstrap:
+        dependsOn: install-libatomic
         image:
           repository: ghcr.io/zeroclaw-labs/zeroclaw
           # renovate: datasource=docker depName=ghcr.io/zeroclaw-labs/zeroclaw
           tag: v0.8.5-debian@sha256:1876f4cfc85d1fd3f418e0607fc9207ef6525113e985092ac09b8dcd179df05e
         command:
-          - /bin/sh
+          - "/bin/sh"
           - -c
         args:
           - |
@@ -38,6 +62,7 @@ controllers:
             fi
         env:
           HOME: "/zeroclaw-data"
+          LD_LIBRARY_PATH: &node-libs "/node-libs"
           MISE_GLOBAL_CONFIG_FILE: "$(HOME)/mise.toml"
           PATH: "$(HOME)/.local/bin:$(HOME)/.local/share/mise/shims\
                  :\
@@ -74,7 +99,7 @@ controllers:
             custom: true
             spec:
               httpGet:
-                path: /healthz
+                path: "/healthz"
                 port: 8590
               failureThreshold: 30
               periodSeconds: 1
@@ -259,6 +284,8 @@ controllers:
             memory: 64Mi
     containers:
       app:
+        env:
+          LD_LIBRARY_PATH: *node-libs
         envFrom:
           - secretRef:
               name: zeroclaw-garmin-mcp
@@ -336,6 +363,18 @@ persistence:
           - path: "/tmp"
         bootstrap:
           - path: "/tmp"
+  node-libs:
+    type: emptyDir
+    advancedMounts:
+      zeroclaw:
+        app:
+          - path: "/node-libs"
+            readOnly: true
+        bootstrap:
+          - path: "/node-libs"
+            readOnly: true
+        install-libatomic:
+          - path: "/node-libs"
   codex-auth:
     type: secret
     name: zeroclaw-auth-codex
