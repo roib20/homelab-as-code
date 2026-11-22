@@ -1,4 +1,4 @@
-schema_version = 3
+schema_version = 4
 
 [agents.arr-bot]
 channels = ["telegram.arr_bot"]
@@ -1232,6 +1232,9 @@ memory_recall_limit = 10
 parallel_tools = true
 shell_timeout_secs = 600
 tool_call_dedup_exempt = []
+
+[tools]
+optional = ["*"]
 
 [transcription]
 api_key = ""
