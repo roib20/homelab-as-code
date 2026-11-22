@@ -64,6 +64,23 @@
       ]
     },
     {
+      "description": "Only propose Karakeep server and MCP updates to the same published version",
+      "group": {
+        "branchTopic": "karakeep-{{{newVersion}}}"
+      },
+      "groupName": "Karakeep",
+      "matchPackageNames": [
+        "ghcr.io/karakeep-app/karakeep",
+        "@karakeep/mcp"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ],
+      "minimumGroupSize": 2
+    },
+    {
       "description": "Keep the BookOrbit server and read-aloud worker on matching releases",
       "groupName": "BookOrbit",
       "matchPackageNames": [
